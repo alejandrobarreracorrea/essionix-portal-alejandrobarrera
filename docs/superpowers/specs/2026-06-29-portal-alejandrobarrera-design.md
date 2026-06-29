@@ -38,7 +38,10 @@ Verificado el 2026-06-29 en la cuenta `484005000536`:
 | Infra | **Infra nueva por Terraform** (bucket privado + OAC + CloudFront), reapuntando el dominio. |
 | Cert ACM | **Reutilizar el existente** por ARN (`data "aws_acm_certificate"`). Sin esperar validación. |
 | Proyectos destacados | **Portales corporativos AWS** (S3+CloudFront+Terraform+OIDC) y **Automatización / pipelines IA** (Claude Agent SDK, jobfinder/scorers). |
-| Contacto | Reutilizar `alejandro.barrera.correa@gmail.com`, `+57 310-249-4886`, Bogotá. LinkedIn/GitHub: huecos opcionales. |
+| Contacto | Reutilizar `alejandro.barrera.correa@gmail.com`, `+57 310-249-4886`, Bogotá. LinkedIn `https://www.linkedin.com/in/alejobarrera/`; GitHub: hueco opcional. |
+| Certificaciones AWS | Sección dedicada con los badges/certs de AWS. **Origen:** LinkedIn (`/in/alejobarrera/`). **Pendiente:** el perfil está tras login y se decidió avanzar sin los datos por ahora → la sección se construye con **placeholders** y se rellena cuando Alejandro inicie sesión en Chrome (lectura vía Claude-in-Chrome) o pegue la lista. |
+| Habilidades | Sección de **aptitudes/skills** ampliada (técnicas + cloud + datos). Origen: LinkedIn + las ya conocidas. Placeholders hasta confirmar lista final. |
+| Asesoría / formación | Nuevo eje de oferta: además de ejecutar, Alejandro **asesora y forma a profesionales y empresas** en estas habilidades (mentoría / advisory / upskilling). Va en "Qué hago" y como CTA. |
 
 ## 4. Dirección visual
 
@@ -59,9 +62,14 @@ Marca personal estilo creator/influencer de EE. UU., *networking-first*:
 2. **Sobre mí** — bio real reescrita (cloud architect, AWS, 7+ años, Bogotá), foto, "Descargar CV".
 3. **Stats / stack** — números grandes (+7 años, N proyectos, 100% serverless) + stack
    (AWS, Kubernetes, Terraform, Azure, OCI, SQL Server, Oracle).
-4. **Qué hago** — 3 servicios: Arquitectura cloud · Migraciones a la nube · Plataformas serverless/IaC.
-5. **Proyectos destacados** — Portales corporativos AWS · Automatización / pipelines IA.
-6. **Contacto / Let's connect** — email, teléfono, Bogotá, + huecos LinkedIn/GitHub.
+4. **Certificaciones AWS** — grid de badges/credenciales (nombre + emisor + año + credential ID
+   cuando exista). **Datos pendientes** de LinkedIn → se maqueta con placeholders y se rellena luego.
+5. **Habilidades / aptitudes** — skills agrupadas (Cloud & DevOps · Datos & DB · Lenguajes/Tooling),
+   con énfasis en que estas mismas habilidades son las que Alejandro **enseña y asesora**.
+6. **Qué hago** — servicios: Arquitectura cloud · Migraciones a la nube · Plataformas serverless/IaC,
+   **+ Asesoría y formación** a profesionales y empresas en estas habilidades (mentoría / advisory / upskilling).
+7. **Proyectos destacados** — Portales corporativos AWS · Automatización / pipelines IA.
+8. **Contacto / Let's connect** — email, teléfono, Bogotá, LinkedIn (`/in/alejobarrera/`), + hueco GitHub.
 
 Cada bloque de texto tiene su variante `data-es` / `data-en` (o equivalente) para el toggle.
 
@@ -146,6 +154,14 @@ docs/superpowers/specs/2026-06-29-portal-alejandrobarrera-design.md  (este doc)
    y Route53 apunta a ella.
 4. Verificar `https://alejandrobarrera.net/`. Una vez estable, **decomisionar** la distro vieja
    `EZ6LM98O6TRNJ` y el bucket público `alejandrobarrera.net` (fuera de Terraform).
+
+## 10.b Datos pendientes de confirmar (no bloquean la implementación)
+
+- **Certificaciones AWS:** lista exacta (nombre, emisor, año, credential ID) — extraer de
+  `linkedin.com/in/alejobarrera/` con sesión iniciada, o que Alejandro las pegue. Hasta entonces, placeholders.
+- **Habilidades:** lista final de aptitudes a mostrar.
+- **GitHub:** URL (opcional).
+- **Foto** de alta resolución para el hero.
 
 ## 11. Fuera de alcance (YAGNI)
 
