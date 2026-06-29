@@ -1,0 +1,36 @@
+# Alejandro Barrera
+
+> Cloud Architect con más de 7 años de experiencia en AWS. Diseña, migra y
+> moderniza infraestructura en la nube (serverless, IaC, FinOps) y asesora/forma
+> a profesionales y empresas en estas habilidades. Bogotá, Colombia.
+
+## Perfil
+- Nombre: Alejandro Barrera
+- Rol: Cloud Architect / Arquitecto de soluciones en la nube
+- Experiencia: +7 años
+- Ubicación: Bogotá, Colombia
+- Idiomas del sitio: español (es-CO) e inglés
+
+## Servicios
+- Arquitectura cloud (Kubernetes, serverless, modernización de TI)
+- Migración a la nube (IaaS, PaaS, SaaS)
+- Plataformas serverless con Infraestructura como Código (Terraform, CI/CD)
+- Asesoría y formación: mentoría técnica y upskilling de equipos y empresas
+
+## Habilidades
+- Cloud & DevOps: AWS, Azure, Oracle OCI, Kubernetes, Docker, Terraform, GitHub Actions, Lambda
+- Datos & Bases de datos: SQL Server, Oracle Database, PostgreSQL, FinOps, migraciones
+- Arquitectura: IaC, arquitectura de soluciones, migración a la nube, mentoría y formación
+
+## Proyectos destacados
+- Portales corporativos serverless: S3 privado + OAC + CloudFront, Terraform y GitHub Actions (OIDC).
+- Automatización con pipelines de IA: scoring/clasificación con LLMs, ejecución programada y reportes.
+
+## Certificaciones
+- Certificaciones AWS (listado en actualización desde LinkedIn).
+
+## Contacto
+- Email: alejandro.barrera.correa@gmail.com
+- Teléfono: +57 310 249 4886
+- LinkedIn: https://www.linkedin.com/in/alejobarrera/
+- Web: https://alejandrobarrera.net/

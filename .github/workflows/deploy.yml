@@ -1,0 +1,130 @@
+name: Deploy Alejandro Barrera
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  AWS_REGION: us-east-1
+  TF_WORKING_DIR: terraform
+  SITE_DIR: site
+  ENVIRONMENT: pdn
+  # Encender SOLO tras liberar el alias alejandrobarrera.net en la distro legacy
+  # (EZ6LM98O6TRNJ). Ver README -> "Runbook de cutover".
+  ENABLE_CUSTOM_DOMAIN: "false"
+  TF_BACKEND_BUCKET: essionix-s3-pdn-us-east-1-remotestates
+  OIDC_ROLE_ARN: arn:aws:iam::484005000536:role/essionix-role-pdn-us-east-1-oidc
+
+jobs:
+  infra:
+    name: Provisionar infraestructura (Terraform)
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    outputs:
+      BUCKET_NAME: ${{ steps.tf-output.outputs.bucket_name }}
+      DISTRIBUTION_ID: ${{ steps.tf-output.outputs.distribution_id }}
+
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar credenciales de AWS (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4.2.1
+        with:
+          role-to-assume: ${{ env.OIDC_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Instalar Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.8.0
+
+      - name: Terraform init (backend remoto S3)
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: |
+          terraform init -input=false \
+            -backend-config="bucket=${TF_BACKEND_BUCKET}" \
+            -backend-config="key=${{ github.event.repository.name }}/${ENVIRONMENT}/terraform.tfstate" \
+            -backend-config="region=${AWS_REGION}"
+
+      - name: Terraform validate
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform validate
+
+      - name: Terraform apply
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        env:
+          TF_VAR_environment: ${{ env.ENVIRONMENT }}
+          TF_VAR_enable_custom_domain: ${{ env.ENABLE_CUSTOM_DOMAIN }}
+        run: terraform apply -auto-approve -input=false
+
+      - name: Exportar outputs de Terraform
+        id: tf-output
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: |
+          echo "bucket_name=$(terraform output -raw bucket_name)" >> "$GITHUB_OUTPUT"
+          echo "distribution_id=$(terraform output -raw distribution_id)" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    name: Publicar sitio (S3 sync + invalidación CloudFront)
+    runs-on: ubuntu-latest
+    needs: infra
+
+    permissions:
+      id-token: write
+      contents: read
+
+    env:
+      BUCKET_NAME: ${{ needs.infra.outputs.BUCKET_NAME }}
+      DISTRIBUTION_ID: ${{ needs.infra.outputs.DISTRIBUTION_ID }}
+
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar credenciales de AWS (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4.2.1
+        with:
+          role-to-assume: ${{ env.OIDC_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Cache-busting de CSS/JS (versionar por commit)
+        run: |
+          # styles.css -> styles.css?v=<sha>  y  script.js -> script.js?v=<sha>
+          # URL nueva en cada deploy: el navegador baja la version nueva sin
+          # hard-reload, complementando la invalidacion de CloudFront.
+          VER="${GITHUB_SHA::8}"
+          sed -i "s/styles\.css\"/styles.css?v=${VER}\"/g; s/script\.js\"/script.js?v=${VER}\"/g" "${SITE_DIR}/index.html"
+          echo "Assets versionados con ?v=${VER}"
+          grep -o 'styles\.css?v=[a-f0-9]*\|script\.js?v=[a-f0-9]*' "${SITE_DIR}/index.html" || true
+
+      - name: Sincronizar assets (img/css/js/svg) con caché moderada
+        run: |
+          if [ -z "${BUCKET_NAME}" ]; then
+            echo "BUCKET_NAME vacio; revisa el output de Terraform."
+            exit 1
+          fi
+          # Caché de 1h (no immutable). CSS/JS van versionados con ?v=<sha>.
+          aws s3 sync "${SITE_DIR}/" "s3://${BUCKET_NAME}/" \
+            --delete \
+            --exclude "*.html" --exclude "*.xml" --exclude "*.txt" \
+            --cache-control "public,max-age=3600"
+
+      - name: Sincronizar HTML/SEO con caché corta
+        run: |
+          aws s3 sync "${SITE_DIR}/" "s3://${BUCKET_NAME}/" \
+            --exclude "*" \
+            --include "*.html" --include "*.xml" --include "*.txt" \
+            --cache-control "public,max-age=300"
+
+      - name: Invalidar caché de CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "${DISTRIBUTION_ID}" \
+            --paths "/*"
