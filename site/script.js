@@ -49,7 +49,7 @@
   });
 
   /* ---------- scroll-reveal escalonado ---------- */
-  document.querySelectorAll(".bento, .block").forEach(function (group) {
+  document.querySelectorAll(".strip, .movement").forEach(function (group) {
     group.querySelectorAll(".reveal").forEach(function (el, i) {
       el.style.setProperty("--rd", (i % 6) * 0.06 + "s");
     });
@@ -79,22 +79,6 @@
       gx = e.clientX; gy = e.clientY;
       if (!raf) { raf = true; requestAnimationFrame(loop); }
     }, { passive: true });
-  }
-
-  /* ---------- tilt 3D en celdas ---------- */
-  if (fine && motionOK) {
-    document.querySelectorAll(".cell").forEach(function (cell) {
-      cell.classList.add("tilt");
-      cell.addEventListener("mousemove", function (e) {
-        var r = cell.getBoundingClientRect();
-        var px = (e.clientX - r.left) / r.width - 0.5;
-        var py = (e.clientY - r.top) / r.height - 0.5;
-        var max = 5;
-        cell.style.transform =
-          "perspective(900px) rotateX(" + (-py * max).toFixed(2) + "deg) rotateY(" + (px * max).toFixed(2) + "deg) translateY(-3px)";
-      });
-      cell.addEventListener("mouseleave", function () { cell.style.transform = ""; });
-    });
   }
 
   /* ---------- botones magnéticos ---------- */

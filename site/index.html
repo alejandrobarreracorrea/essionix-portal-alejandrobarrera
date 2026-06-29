@@ -8,7 +8,6 @@
   <link rel="canonical" href="https://alejandrobarrera.net/" />
   <meta name="theme-color" content="#08080b" />
 
-  <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Alejandro Barrera — Cloud Architect AWS" />
   <meta property="og:description" content="+7 años diseñando y migrando infraestructura en la nube. Arquitectura, serverless, IaC, y formación a equipos." />
@@ -65,254 +64,195 @@
         <span class="nav__name">Alejandro Barrera</span>
         <span class="nav__status"><i></i><span data-es="disponible" data-en="available">disponible</span></span>
       </a>
-
       <nav class="nav__links" aria-label="Primary">
         <a data-scroll="certs" data-es="Certificaciones" data-en="Certifications">Certificaciones</a>
         <a data-scroll="skills" data-es="Habilidades" data-en="Skills">Habilidades</a>
         <a data-scroll="services" data-es="Servicios" data-en="Services">Servicios</a>
         <a data-scroll="work" data-es="Proyectos" data-en="Work">Proyectos</a>
       </nav>
-
       <div class="nav__actions">
         <button class="lang" id="lang" type="button" aria-label="Cambiar idioma">
           <span class="lang__opt is-active" data-lang="es">ES</span>
           <span class="lang__sep">/</span>
           <span class="lang__opt" data-lang="en">EN</span>
         </button>
-        <a class="btn btn--solid" data-scroll="contact" data-es="Conversemos" data-en="Let's talk">Conversemos</a>
+        <a class="btn btn--solid magnetic" data-scroll="contact" data-es="Conversemos" data-en="Let's talk">Conversemos</a>
       </div>
     </div>
   </header>
 
   <main class="shell">
-
     <!-- ============ HERO CINEMÁTICO ============ -->
     <section class="hero" aria-label="Intro">
       <span class="hero__eyebrow"><i class="dot"></i><span data-es="Cloud Architect · AWS · Bogotá" data-en="Cloud Architect · AWS · Bogotá">Cloud Architect · AWS · Bogotá</span></span>
-
       <h1 class="kinetic">
         <span class="kin"><span data-es="ALEJANDRO" data-en="ALEJANDRO">ALEJANDRO</span></span>
         <span class="kin"><span class="kinetic__accent" data-es="BARRERA" data-en="BARRERA">BARRERA</span></span>
       </h1>
-
       <p class="hero__lead"
          data-es="Diseño, migro y modernizo infraestructura en AWS — y formo a los equipos que la operan. +7 años llevando la nube al límite."
          data-en="I design, migrate and modernize AWS infrastructure — and train the teams that run it. +7 years pushing the cloud to its edge.">
         Diseño, migro y modernizo infraestructura en AWS — y formo a los equipos que la operan. +7 años llevando la nube al límite.
       </p>
-
       <div class="hero__cta">
         <a class="btn btn--solid magnetic" data-scroll="contact" data-es="Conversemos" data-en="Let's talk">Conversemos</a>
         <a class="btn btn--ghost magnetic" data-scroll="work" data-es="Ver proyectos" data-en="See my work">Ver proyectos</a>
       </div>
-
       <a class="scrollcue" data-scroll="facts" aria-label="Scroll">
-        <span data-es="desliza" data-en="scroll">desliza</span>
-        <i></i>
+        <span data-es="desliza" data-en="scroll">desliza</span><i></i>
       </a>
     </section>
 
-    <!-- ============ FACTS BENTO ============ -->
-    <section class="bento bento--facts" id="facts" aria-label="Facts">
-      <article class="cell cell--stat reveal">
-        <span class="bignum">+7</span>
-        <span class="cell__label" data-es="años diseñando en la nube" data-en="years architecting in the cloud">años diseñando en la nube</span>
-      </article>
-
-      <article class="cell cell--accent reveal">
-        <span class="cell__eyebrow">AWS</span>
-        <span class="cell__big" data-es="Multi-cloud" data-en="Multi-cloud">Multi-cloud</span>
-        <span class="cell__label">Azure · Oracle OCI</span>
-      </article>
-
-      <article class="cell cell--loc reveal">
-        <span class="cell__eyebrow" data-es="Base" data-en="Based in">Base</span>
-        <span class="cell__big">Bogotá</span>
-        <span class="cell__label">Colombia · GMT-5</span>
-      </article>
-
-      <article class="cell cell--stack reveal">
-        <span class="cell__eyebrow" data-es="Stack" data-en="Stack">Stack</span>
-        <ul class="chips">
-          <li>AWS</li><li>Kubernetes</li><li>Terraform</li><li>Docker</li><li>Lambda</li><li>CloudFront</li><li>SQL Server</li><li>Oracle</li><li>FinOps</li>
-        </ul>
-      </article>
+    <!-- ============ FACTS (banda tipográfica) ============ -->
+    <section class="strip" id="facts" aria-label="Facts">
+      <div class="strip__item reveal"><span class="strip__num">+7</span><span class="strip__label" data-es="años en la nube" data-en="years in the cloud">años en la nube</span></div>
+      <div class="strip__item reveal"><span class="strip__num">100%</span><span class="strip__label" data-es="serverless · IaC" data-en="serverless · IaC">serverless · IaC</span></div>
+      <div class="strip__item reveal"><span class="strip__num">AWS</span><span class="strip__label" data-es="Azure · Oracle OCI" data-en="Azure · Oracle OCI">Azure · Oracle OCI</span></div>
+      <div class="strip__item reveal"><span class="strip__num">Bogotá</span><span class="strip__label">Colombia · GMT-5</span></div>
     </section>
 
-    <!-- ============ CERTIFICATIONS ============ -->
-    <section class="block" id="certs">
-      <header class="block__head reveal">
+    <!-- ============ ABOUT (manifiesto) ============ -->
+    <section class="movement" id="about">
+      <span class="kicker reveal">01 — <span data-es="Sobre mí" data-en="About">Sobre mí</span></span>
+      <p class="statement reveal"
+         data-es="Soy Alejandro Barrera. Llevo +7 años llevando empresas a la nube: arquitecturas serverless, infraestructura como código y control de costos. Y porque la mejor inversión es el conocimiento, también formo a los equipos que la operan."
+         data-en="I'm Alejandro Barrera. I've spent 7+ years moving companies to the cloud: serverless architectures, infrastructure as code and cost control. And because knowledge is the best investment, I also train the teams that run it.">
+        Soy Alejandro Barrera. Llevo +7 años llevando empresas a la nube: arquitecturas serverless, infraestructura como código y control de costos. Y porque la mejor inversión es el conocimiento, también formo a los equipos que la operan.
+      </p>
+    </section>
+
+    <!-- ============ CERTIFICATIONS (lista) ============ -->
+    <section class="movement" id="certs">
+      <header class="movement__head reveal">
         <span class="kicker">02 — <span data-es="Certificaciones" data-en="Certifications">Certificaciones</span></span>
         <h2 data-es="Credenciales AWS" data-en="AWS credentials">Credenciales AWS</h2>
-        <p class="block__sub" data-es="Verificables. Listado en actualización desde LinkedIn." data-en="Verifiable. List being updated from LinkedIn.">Verificables. Listado en actualización desde LinkedIn.</p>
       </header>
-
-      <div class="bento bento--certs">
-        <!-- PLACEHOLDER: reemplazar por certificaciones reales (nombre, emisor, año, credential ID). -->
-        <article class="cell cert is-placeholder reveal">
-          <div class="cert__badge">AWS</div>
-          <h3 data-es="Certificación AWS" data-en="AWS Certification">Certificación AWS</h3>
-          <p class="cell__label" data-es="Amazon Web Services · año" data-en="Amazon Web Services · year">Amazon Web Services · año</p>
-        </article>
-        <article class="cell cert is-placeholder reveal">
-          <div class="cert__badge">AWS</div>
-          <h3 data-es="Certificación AWS" data-en="AWS Certification">Certificación AWS</h3>
-          <p class="cell__label" data-es="Amazon Web Services · año" data-en="Amazon Web Services · year">Amazon Web Services · año</p>
-        </article>
-        <article class="cell cert is-placeholder reveal">
-          <div class="cert__badge">AWS</div>
-          <h3 data-es="Certificación AWS" data-en="AWS Certification">Certificación AWS</h3>
-          <p class="cell__label" data-es="Amazon Web Services · año" data-en="Amazon Web Services · year">Amazon Web Services · año</p>
-        </article>
-        <article class="cell cert cert--cta reveal">
-          <h3 data-es="Más en LinkedIn" data-en="More on LinkedIn">Más en LinkedIn</h3>
-          <a href="https://www.linkedin.com/in/alejobarrera/" target="_blank" rel="noopener" class="cell__link">/in/alejobarrera →</a>
-        </article>
-      </div>
+      <!-- PLACEHOLDER: reemplazar por certificaciones reales (nombre, emisor, año, credential ID). -->
+      <ul class="list">
+        <li class="row is-placeholder reveal">
+          <span class="row__lead"><span class="row__idx">AWS</span><span class="row__title" data-es="Certificación AWS" data-en="AWS Certification">Certificación AWS</span></span>
+          <span class="row__meta" data-es="Amazon Web Services · año" data-en="Amazon Web Services · year">Amazon Web Services · año</span>
+        </li>
+        <li class="row is-placeholder reveal">
+          <span class="row__lead"><span class="row__idx">AWS</span><span class="row__title" data-es="Certificación AWS" data-en="AWS Certification">Certificación AWS</span></span>
+          <span class="row__meta" data-es="Amazon Web Services · año" data-en="Amazon Web Services · year">Amazon Web Services · año</span>
+        </li>
+        <li class="row is-placeholder reveal">
+          <span class="row__lead"><span class="row__idx">AWS</span><span class="row__title" data-es="Certificación AWS" data-en="AWS Certification">Certificación AWS</span></span>
+          <span class="row__meta" data-es="Amazon Web Services · año" data-en="Amazon Web Services · year">Amazon Web Services · año</span>
+        </li>
+        <li class="row reveal">
+          <a class="row__lead row__link" href="https://www.linkedin.com/in/alejobarrera/" target="_blank" rel="noopener">
+            <span class="row__idx">↗</span><span class="row__title" data-es="Ver todas en LinkedIn" data-en="See all on LinkedIn">Ver todas en LinkedIn</span>
+          </a>
+          <span class="row__meta">/in/alejobarrera</span>
+        </li>
+      </ul>
     </section>
 
-    <!-- ============ SKILLS ============ -->
-    <section class="block" id="skills">
-      <header class="block__head reveal">
+    <!-- ============ SKILLS (flujo de texto) ============ -->
+    <section class="movement" id="skills">
+      <header class="movement__head reveal">
         <span class="kicker">03 — <span data-es="Habilidades" data-en="Skills">Habilidades</span></span>
         <h2 data-es="Lo que domino — y lo que enseño" data-en="What I master — and teach">Lo que domino — y lo que enseño</h2>
-        <p class="block__sub" data-es="Las habilidades con las que construyo, y en las que asesoro y formo equipos." data-en="The skills I build with — and the ones I advise and train teams on.">Las habilidades con las que construyo, y en las que asesoro y formo equipos.</p>
       </header>
-
-      <div class="bento bento--skills">
-        <article class="cell skillgroup reveal">
-          <h3 data-es="Cloud &amp; DevOps" data-en="Cloud &amp; DevOps">Cloud &amp; DevOps</h3>
-          <ul class="chips">
-            <li>AWS</li><li>Azure</li><li>Oracle OCI</li><li>Kubernetes</li><li>Docker</li><li>Terraform</li><li>GitHub Actions</li><li>Serverless</li>
-          </ul>
-        </article>
-        <article class="cell skillgroup reveal">
-          <h3 data-es="Datos &amp; Bases de datos" data-en="Data &amp; Databases">Datos &amp; Bases de datos</h3>
-          <ul class="chips">
-            <li>SQL Server</li><li>Oracle DB</li><li>PostgreSQL</li><li>FinOps</li><li data-es="Migraciones" data-en="Migrations">Migraciones</li>
-          </ul>
-        </article>
-        <article class="cell skillgroup reveal">
-          <h3 data-es="Arquitectura &amp; Práctica" data-en="Architecture &amp; Practice">Arquitectura &amp; Práctica</h3>
-          <ul class="chips">
-            <li data-es="IaC" data-en="IaC">IaC</li><li data-es="Arquitectura de soluciones" data-en="Solution architecture">Arquitectura de soluciones</li><li data-es="Migración a la nube" data-en="Cloud migration">Migración a la nube</li><li data-es="Mentoría técnica" data-en="Technical mentoring">Mentoría técnica</li><li data-es="Formación a equipos" data-en="Team training">Formación a equipos</li>
-          </ul>
-        </article>
+      <div class="skills">
+        <div class="skillrow reveal">
+          <span class="skillrow__cat" data-es="Cloud &amp; DevOps" data-en="Cloud &amp; DevOps">Cloud &amp; DevOps</span>
+          <p class="skillrow__items">AWS · Azure · Oracle OCI · Kubernetes · Docker · Terraform · GitHub Actions · Serverless</p>
+        </div>
+        <div class="skillrow reveal">
+          <span class="skillrow__cat" data-es="Datos &amp; Bases de datos" data-en="Data &amp; Databases">Datos &amp; Bases de datos</span>
+          <p class="skillrow__items" data-es="SQL Server · Oracle DB · PostgreSQL · FinOps · Migraciones" data-en="SQL Server · Oracle DB · PostgreSQL · FinOps · Migrations">SQL Server · Oracle DB · PostgreSQL · FinOps · Migraciones</p>
+        </div>
+        <div class="skillrow reveal">
+          <span class="skillrow__cat" data-es="Arquitectura &amp; Práctica" data-en="Architecture &amp; Practice">Arquitectura &amp; Práctica</span>
+          <p class="skillrow__items" data-es="IaC · Arquitectura de soluciones · Migración a la nube · Mentoría técnica · Formación a equipos" data-en="IaC · Solution architecture · Cloud migration · Technical mentoring · Team training">IaC · Arquitectura de soluciones · Migración a la nube · Mentoría técnica · Formación a equipos</p>
+        </div>
       </div>
     </section>
 
-    <!-- ============ SERVICES ============ -->
-    <section class="block" id="services">
-      <header class="block__head reveal">
+    <!-- ============ SERVICES (lista numerada) ============ -->
+    <section class="movement" id="services">
+      <header class="movement__head reveal">
         <span class="kicker">04 — <span data-es="Servicios" data-en="Services">Servicios</span></span>
         <h2 data-es="Qué hago" data-en="What I do">Qué hago</h2>
       </header>
-
-      <div class="bento bento--services">
-        <article class="cell service reveal">
-          <span class="service__no">01</span>
-          <h3 data-es="Arquitectura cloud" data-en="Cloud architecture">Arquitectura cloud</h3>
-          <p data-es="Evalúo tu infraestructura y la modernizo con componentes de nueva generación como Kubernetes y serverless."
-             data-en="I assess your infrastructure and modernize it with next-gen components like Kubernetes and serverless.">
-            Evalúo tu infraestructura y la modernizo con componentes de nueva generación como Kubernetes y serverless.
-          </p>
-        </article>
-        <article class="cell service reveal">
-          <span class="service__no">02</span>
-          <h3 data-es="Migración a la nube" data-en="Cloud migration">Migración a la nube</h3>
-          <p data-es="Recomiendo y ejecuto escenarios de migración hacia IaaS, PaaS y SaaS según la realidad de tu empresa."
-             data-en="I recommend and execute migration scenarios toward IaaS, PaaS and SaaS based on your company's reality.">
-            Recomiendo y ejecuto escenarios de migración hacia IaaS, PaaS y SaaS según la realidad de tu empresa.
-          </p>
-        </article>
-        <article class="cell service reveal">
-          <span class="service__no">03</span>
-          <h3 data-es="Plataformas serverless · IaC" data-en="Serverless platforms · IaC">Plataformas serverless · IaC</h3>
-          <p data-es="Diseño y despliego plataformas 100% serverless versionadas con Terraform y pipelines automatizados."
-             data-en="I design and deploy 100% serverless platforms versioned with Terraform and automated pipelines.">
-            Diseño y despliego plataformas 100% serverless versionadas con Terraform y pipelines automatizados.
-          </p>
-        </article>
-        <article class="cell service service--feature reveal">
-          <span class="service__no">04</span>
-          <h3 data-es="Asesoría &amp; formación" data-en="Advisory &amp; training">Asesoría &amp; formación</h3>
-          <p data-es="Asesoro y capacito a profesionales y empresas en estas habilidades: mentoría técnica, upskilling de equipos y acompañamiento para que tu organización sea autónoma en la nube."
-             data-en="I advise and train professionals and companies in these skills: technical mentoring, team upskilling and hands-on guidance so your organization becomes cloud-autonomous.">
-            Asesoro y capacito a profesionales y empresas en estas habilidades: mentoría técnica, upskilling de equipos y acompañamiento para que tu organización sea autónoma en la nube.
-          </p>
-          <a class="cell__link" data-scroll="contact" data-es="Formemos a tu equipo →" data-en="Let's upskill your team →">Formemos a tu equipo →</a>
-        </article>
-      </div>
+      <ul class="list list--services">
+        <li class="srow reveal">
+          <span class="srow__no">01</span>
+          <span class="srow__title" data-es="Arquitectura cloud" data-en="Cloud architecture">Arquitectura cloud</span>
+          <span class="srow__desc" data-es="Evalúo tu infraestructura y la modernizo con componentes de nueva generación como Kubernetes y serverless." data-en="I assess your infrastructure and modernize it with next-gen components like Kubernetes and serverless.">Evalúo tu infraestructura y la modernizo con componentes de nueva generación como Kubernetes y serverless.</span>
+        </li>
+        <li class="srow reveal">
+          <span class="srow__no">02</span>
+          <span class="srow__title" data-es="Migración a la nube" data-en="Cloud migration">Migración a la nube</span>
+          <span class="srow__desc" data-es="Recomiendo y ejecuto escenarios de migración hacia IaaS, PaaS y SaaS según la realidad de tu empresa." data-en="I recommend and execute migration scenarios toward IaaS, PaaS and SaaS based on your company's reality.">Recomiendo y ejecuto escenarios de migración hacia IaaS, PaaS y SaaS según la realidad de tu empresa.</span>
+        </li>
+        <li class="srow reveal">
+          <span class="srow__no">03</span>
+          <span class="srow__title" data-es="Plataformas serverless · IaC" data-en="Serverless platforms · IaC">Plataformas serverless · IaC</span>
+          <span class="srow__desc" data-es="Diseño y despliego plataformas 100% serverless versionadas con Terraform y pipelines automatizados." data-en="I design and deploy 100% serverless platforms versioned with Terraform and automated pipelines.">Diseño y despliego plataformas 100% serverless versionadas con Terraform y pipelines automatizados.</span>
+        </li>
+        <li class="srow srow--feature reveal">
+          <span class="srow__no">04</span>
+          <span class="srow__title" data-es="Asesoría &amp; formación" data-en="Advisory &amp; training">Asesoría &amp; formación</span>
+          <span class="srow__desc" data-es="Asesoro y capacito a profesionales y empresas en estas habilidades: mentoría técnica, upskilling de equipos y acompañamiento para que tu organización sea autónoma en la nube." data-en="I advise and train professionals and companies in these skills: technical mentoring, team upskilling and hands-on guidance so your organization becomes cloud-autonomous.">Asesoro y capacito a profesionales y empresas en estas habilidades: mentoría técnica, upskilling de equipos y acompañamiento para que tu organización sea autónoma en la nube.</span>
+        </li>
+      </ul>
     </section>
 
-    <!-- ============ WORK ============ -->
-    <section class="block" id="work">
-      <header class="block__head reveal">
+    <!-- ============ WORK (entradas editoriales) ============ -->
+    <section class="movement" id="work">
+      <header class="movement__head reveal">
         <span class="kicker">05 — <span data-es="Proyectos" data-en="Work">Proyectos</span></span>
         <h2 data-es="Proyectos destacados" data-en="Featured work">Proyectos destacados</h2>
       </header>
 
-      <div class="bento bento--work">
-        <article class="cell project reveal">
-          <div class="project__tag">AWS · Terraform · CloudFront</div>
+      <article class="entry reveal">
+        <div class="entry__meta">
+          <span class="entry__no">P/01</span>
+          <span class="entry__tag">AWS · Terraform · CloudFront</span>
+        </div>
+        <div class="entry__body">
           <h3 data-es="Portales corporativos serverless" data-en="Serverless corporate portals">Portales corporativos serverless</h3>
           <p data-es="Sitios estáticos de alto rendimiento sobre S3 privado + OAC + CloudFront, provisionados con Terraform y desplegados por GitHub Actions con OIDC. Cero servidores, certificados gestionados y caché versionada por commit."
              data-en="High-performance static sites on private S3 + OAC + CloudFront, provisioned with Terraform and deployed via GitHub Actions with OIDC. Zero servers, managed certificates and commit-versioned caching.">
             Sitios estáticos de alto rendimiento sobre S3 privado + OAC + CloudFront, provisionados con Terraform y desplegados por GitHub Actions con OIDC. Cero servidores, certificados gestionados y caché versionada por commit.
           </p>
-          <ul class="project__points">
-            <li data-es="Infraestructura como código reproducible" data-en="Reproducible infrastructure as code">Infraestructura como código reproducible</li>
-            <li data-es="Despliegue automático en cada push" data-en="Automatic deploy on every push">Despliegue automático en cada push</li>
-            <li data-es="HTTPS, SEO y optimización para IA" data-en="HTTPS, SEO and AI-readiness">HTTPS, SEO y optimización para IA</li>
-          </ul>
-        </article>
+          <p class="entry__points"><span data-es="Infraestructura como código" data-en="Infrastructure as code">Infraestructura como código</span> · <span data-es="Deploy automático en cada push" data-en="Automatic deploy on every push">Deploy automático en cada push</span> · <span data-es="HTTPS, SEO y optimización para IA" data-en="HTTPS, SEO and AI-readiness">HTTPS, SEO y optimización para IA</span></p>
+        </div>
+      </article>
 
-        <article class="cell project reveal">
-          <div class="project__tag">IA · Pipelines · Automatización</div>
+      <article class="entry reveal">
+        <div class="entry__meta">
+          <span class="entry__no">P/02</span>
+          <span class="entry__tag">IA · Pipelines · Automatización</span>
+        </div>
+        <div class="entry__body">
           <h3 data-es="Automatización con pipelines de IA" data-en="AI-powered automation pipelines">Automatización con pipelines de IA</h3>
           <p data-es="Flujos automatizados que combinan fuentes de datos con modelos de IA para puntuar, filtrar y reportar. Orquestados con cron en la nube y agentes que ejecutan tareas de principio a fin."
              data-en="Automated flows combining data sources with AI models to score, filter and report. Orchestrated with cloud cron and agents that run tasks end to end.">
             Flujos automatizados que combinan fuentes de datos con modelos de IA para puntuar, filtrar y reportar. Orquestados con cron en la nube y agentes que ejecutan tareas de principio a fin.
           </p>
-          <ul class="project__points">
-            <li data-es="Scoring y clasificación con LLMs" data-en="Scoring and classification with LLMs">Scoring y clasificación con LLMs</li>
-            <li data-es="Ejecución programada sin intervención" data-en="Scheduled, hands-off execution">Ejecución programada sin intervención</li>
-            <li data-es="Reportes y notificaciones automáticas" data-en="Automated reports and notifications">Reportes y notificaciones automáticas</li>
-          </ul>
-        </article>
-      </div>
+          <p class="entry__points"><span data-es="Scoring con LLMs" data-en="Scoring with LLMs">Scoring con LLMs</span> · <span data-es="Ejecución programada" data-en="Scheduled execution">Ejecución programada</span> · <span data-es="Reportes automáticos" data-en="Automated reports">Reportes automáticos</span></p>
+        </div>
+      </article>
     </section>
 
     <!-- ============ CONTACT ============ -->
-    <section class="block" id="contact">
-      <div class="bento bento--contact">
-        <article class="cell cell--cta-big reveal">
-          <span class="kicker">06 — <span data-es="Contacto" data-en="Contact">Contacto</span></span>
-          <h2 data-es="Conectemos" data-en="Let's connect">Conectemos</h2>
-          <p data-es="¿Tienes un proyecto cloud o quieres formar a tu equipo? Escríbeme y lo conversamos."
-             data-en="Got a cloud project or want to upskill your team? Write me and let's talk.">
-            ¿Tienes un proyecto cloud o quieres formar a tu equipo? Escríbeme y lo conversamos.
-          </p>
-          <a class="btn btn--solid" href="mailto:alejandro.barrera.correa@gmail.com" data-es="Escríbeme" data-en="Email me">Escríbeme</a>
-        </article>
-
-        <a class="cell contact-card reveal" href="mailto:alejandro.barrera.correa@gmail.com">
-          <span class="cell__label">Email</span>
-          <span class="contact-card__v">alejandro.barrera.correa@gmail.com</span>
-        </a>
-        <a class="cell contact-card reveal" href="tel:+573102494886">
-          <span class="cell__label" data-es="Teléfono" data-en="Phone">Teléfono</span>
-          <span class="contact-card__v">+57 310 249 4886</span>
-        </a>
-        <a class="cell contact-card reveal" href="https://www.linkedin.com/in/alejobarrera/" target="_blank" rel="noopener">
-          <span class="cell__label">LinkedIn</span>
-          <span class="contact-card__v">/in/alejobarrera</span>
-        </a>
-        <div class="cell contact-card contact-card--static reveal">
-          <span class="cell__label" data-es="Ubicación" data-en="Location">Ubicación</span>
-          <span class="contact-card__v" data-es="Bogotá, Colombia" data-en="Bogotá, Colombia">Bogotá, Colombia</span>
-        </div>
-      </div>
+    <section class="movement movement--contact" id="contact">
+      <span class="kicker reveal">06 — <span data-es="Contacto" data-en="Contact">Contacto</span></span>
+      <h2 class="contact__title reveal">
+        <span data-es="Construyamos" data-en="Let's build">Construyamos</span>
+        <a class="contact__mail" href="mailto:alejandro.barrera.correa@gmail.com" data-es="algo en la nube." data-en="something on the cloud.">algo en la nube.</a>
+      </h2>
+      <ul class="links">
+        <li class="reveal"><a class="linkrow" href="mailto:alejandro.barrera.correa@gmail.com"><span class="linkrow__k">Email</span><span class="linkrow__v">alejandro.barrera.correa@gmail.com</span></a></li>
+        <li class="reveal"><a class="linkrow" href="tel:+573102494886"><span class="linkrow__k" data-es="Teléfono" data-en="Phone">Teléfono</span><span class="linkrow__v">+57 310 249 4886</span></a></li>
+        <li class="reveal"><a class="linkrow" href="https://www.linkedin.com/in/alejobarrera/" target="_blank" rel="noopener"><span class="linkrow__k">LinkedIn</span><span class="linkrow__v">/in/alejobarrera</span></a></li>
+        <li class="reveal"><div class="linkrow linkrow--static"><span class="linkrow__k" data-es="Ubicación" data-en="Location">Ubicación</span><span class="linkrow__v" data-es="Bogotá, Colombia" data-en="Bogotá, Colombia">Bogotá, Colombia</span></div></li>
+      </ul>
     </section>
   </main>
 
