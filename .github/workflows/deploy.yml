@@ -11,9 +11,9 @@ env:
   TF_WORKING_DIR: terraform
   SITE_DIR: site
   ENVIRONMENT: pdn
-  # Encender SOLO tras liberar el alias alejandrobarrera.net en la distro legacy
-  # (EZ6LM98O6TRNJ). Ver README -> "Runbook de cutover".
-  ENABLE_CUSTOM_DOMAIN: "false"
+  # Alias alejandrobarrera.net ya liberado de la distro legacy (EZ6LM98O6TRNJ).
+  # Cutover activado: la distro nueva reclama el alias + Route53 apunta a ella.
+  ENABLE_CUSTOM_DOMAIN: "true"
   TF_BACKEND_BUCKET: essionix-s3-pdn-us-east-1-remotestates
   OIDC_ROLE_ARN: arn:aws:iam::484005000536:role/essionix-role-pdn-us-east-1-oidc
 

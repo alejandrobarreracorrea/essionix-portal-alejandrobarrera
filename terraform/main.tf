@@ -158,9 +158,10 @@ resource "aws_s3_bucket_policy" "site" {
 resource "aws_route53_record" "ipv4" {
   for_each = var.enable_custom_domain ? toset(local.aliases) : toset([])
 
-  zone_id = data.aws_route53_zone.site[0].zone_id
-  name    = each.value
-  type    = "A"
+  zone_id         = data.aws_route53_zone.site[0].zone_id
+  name            = each.value
+  type            = "A"
+  allow_overwrite = true # sobrescribe el registro apex legacy (apunta a la distro vieja)
 
   alias {
     name                   = aws_cloudfront_distribution.site.domain_name
@@ -172,9 +173,10 @@ resource "aws_route53_record" "ipv4" {
 resource "aws_route53_record" "ipv6" {
   for_each = var.enable_custom_domain ? toset(local.aliases) : toset([])
 
-  zone_id = data.aws_route53_zone.site[0].zone_id
-  name    = each.value
-  type    = "AAAA"
+  zone_id         = data.aws_route53_zone.site[0].zone_id
+  name            = each.value
+  type            = "AAAA"
+  allow_overwrite = true # sobrescribe el registro apex legacy (apunta a la distro vieja)
 
   alias {
     name                   = aws_cloudfront_distribution.site.domain_name
