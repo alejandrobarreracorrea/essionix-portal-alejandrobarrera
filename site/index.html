@@ -54,6 +54,8 @@
 </head>
 <body>
   <div class="bg-aura" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor-glow" aria-hidden="true"></div>
 
   <!-- ============ NAV ============ -->
   <header class="nav" id="top">
@@ -84,55 +86,51 @@
 
   <main class="shell">
 
-    <!-- ============ HERO BENTO ============ -->
-    <section class="bento bento--hero" aria-label="Intro">
-      <!-- main -->
-      <article class="cell cell--main reveal">
-        <div class="cell__top">
-          <span class="tag"><i class="dot"></i><span data-es="Cloud Architect · Bogotá" data-en="Cloud Architect · Bogotá">Cloud Architect · Bogotá</span></span>
-        </div>
-        <h1 class="display">
-          <span data-es="Diseño nubes" data-en="I design clouds">Diseño nubes</span>
-          <span class="display__accent" data-es="que escalan." data-en="that scale.">que escalan.</span>
-        </h1>
-        <p class="lead"
-           data-es="Soy Alejandro Barrera. +7 años llevando infraestructura a AWS con arquitecturas serverless, IaC y FinOps — y formando a los equipos que la operan."
-           data-en="I'm Alejandro Barrera. +7 years moving infrastructure to AWS with serverless architectures, IaC and FinOps — and training the teams that run it.">
-          Soy Alejandro Barrera. +7 años llevando infraestructura a AWS con arquitecturas serverless, IaC y FinOps — y formando a los equipos que la operan.
-        </p>
-        <div class="cell__cta">
-          <a class="btn btn--solid" data-scroll="contact" data-es="Conversemos" data-en="Let's talk">Conversemos</a>
-          <a class="btn btn--ghost" data-scroll="work" data-es="Ver proyectos" data-en="See my work">Ver proyectos</a>
-        </div>
-      </article>
+    <!-- ============ HERO CINEMÁTICO ============ -->
+    <section class="hero" aria-label="Intro">
+      <span class="hero__eyebrow"><i class="dot"></i><span data-es="Cloud Architect · AWS · Bogotá" data-en="Cloud Architect · AWS · Bogotá">Cloud Architect · AWS · Bogotá</span></span>
 
-      <!-- monogram / avatar -->
-      <article class="cell cell--avatar reveal" aria-hidden="true">
-        <div class="ring"></div>
-        <span class="avatar__mono">AB</span>
-      </article>
+      <h1 class="kinetic">
+        <span class="kin"><span data-es="ALEJANDRO" data-en="ALEJANDRO">ALEJANDRO</span></span>
+        <span class="kin"><span class="kinetic__accent" data-es="BARRERA" data-en="BARRERA">BARRERA</span></span>
+      </h1>
 
-      <!-- stat years -->
+      <p class="hero__lead"
+         data-es="Diseño, migro y modernizo infraestructura en AWS — y formo a los equipos que la operan. +7 años llevando la nube al límite."
+         data-en="I design, migrate and modernize AWS infrastructure — and train the teams that run it. +7 years pushing the cloud to its edge.">
+        Diseño, migro y modernizo infraestructura en AWS — y formo a los equipos que la operan. +7 años llevando la nube al límite.
+      </p>
+
+      <div class="hero__cta">
+        <a class="btn btn--solid magnetic" data-scroll="contact" data-es="Conversemos" data-en="Let's talk">Conversemos</a>
+        <a class="btn btn--ghost magnetic" data-scroll="work" data-es="Ver proyectos" data-en="See my work">Ver proyectos</a>
+      </div>
+
+      <a class="scrollcue" data-scroll="facts" aria-label="Scroll">
+        <span data-es="desliza" data-en="scroll">desliza</span>
+        <i></i>
+      </a>
+    </section>
+
+    <!-- ============ FACTS BENTO ============ -->
+    <section class="bento bento--facts" id="facts" aria-label="Facts">
       <article class="cell cell--stat reveal">
         <span class="bignum">+7</span>
         <span class="cell__label" data-es="años diseñando en la nube" data-en="years architecting in the cloud">años diseñando en la nube</span>
       </article>
 
-      <!-- aws gradient badge -->
       <article class="cell cell--accent reveal">
         <span class="cell__eyebrow">AWS</span>
         <span class="cell__big" data-es="Multi-cloud" data-en="Multi-cloud">Multi-cloud</span>
         <span class="cell__label">Azure · Oracle OCI</span>
       </article>
 
-      <!-- location -->
       <article class="cell cell--loc reveal">
         <span class="cell__eyebrow" data-es="Base" data-en="Based in">Base</span>
         <span class="cell__big">Bogotá</span>
         <span class="cell__label">Colombia · GMT-5</span>
       </article>
 
-      <!-- stack -->
       <article class="cell cell--stack reveal">
         <span class="cell__eyebrow" data-es="Stack" data-en="Stack">Stack</span>
         <ul class="chips">
