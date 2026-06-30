@@ -1,6 +1,6 @@
 # Alejandro Barrera
 
-> Enterprise Cloud Architect con más de 7 años diseñando arquitecturas de alta
+> Enterprise Cloud Architect con más de 10 años diseñando arquitecturas de alta
 > concurrencia y sistemas distribuidos en AWS, OCI y Azure. Arquitectura, DevOps,
 > migraciones multi-cloud a escala — y formación a los equipos que las operan.
 > Bogotá, Colombia.
@@ -9,7 +9,7 @@
 - Nombre: Alejandro Barrera
 - Rol: Enterprise Cloud Architect / Arquitecto de soluciones en la nube
 - Enfoque: arquitecturas de alta concurrencia, sistemas distribuidos, multi-cloud (AWS · OCI · Azure), DevOps
-- Experiencia: +7 años
+- Experiencia: +10 años
 - Ubicación: Bogotá, Colombia
 - Idiomas del sitio: español (es-CO) e inglés
 
