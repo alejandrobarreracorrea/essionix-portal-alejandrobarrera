@@ -69,6 +69,7 @@
         <a data-scroll="skills" data-es="Habilidades" data-en="Skills">Habilidades</a>
         <a data-scroll="services" data-es="Servicios" data-en="Services">Servicios</a>
         <a data-scroll="work" data-es="Proyectos" data-en="Work">Proyectos</a>
+        <a data-scroll="book" data-es="Agenda" data-en="Booking">Agenda</a>
       </nav>
       <div class="nav__actions">
         <button class="lang" id="lang" type="button" aria-label="Cambiar idioma">
@@ -300,9 +301,22 @@
       </article>
     </section>
 
+    <!-- ============ BOOKING / REUNIONES ============ -->
+    <section class="movement" id="book">
+      <span class="kicker reveal">06 — <span data-es="Reuniones" data-en="Meetings">Reuniones</span></span>
+      <h2 class="contact__title reveal">
+        <span data-es="¿Hablamos?" data-en="Shall we talk?">¿Hablamos?</span>
+        <a class="contact__mail" href="https://cal.com/alejandrobarrera" data-cal-link="alejandrobarrera" data-cal-config='{"theme":"dark"}' target="_blank" rel="noopener" data-es="Agenda una reunión." data-en="Book a meeting.">Agenda una reunión.</a>
+      </h2>
+      <p class="movement__sub reveal" data-es="Reserva un espacio en mi calendario y cuéntame tu reto cloud — sin compromiso." data-en="Grab a slot on my calendar and tell me about your cloud challenge — no strings attached.">Reserva un espacio en mi calendario y cuéntame tu reto cloud — sin compromiso.</p>
+      <div class="book__cta reveal">
+        <a class="btn btn--solid magnetic" href="https://cal.com/alejandrobarrera" data-cal-link="alejandrobarrera" data-cal-config='{"theme":"dark"}' target="_blank" rel="noopener" data-es="Reservar en Cal.com →" data-en="Book on Cal.com →">Reservar en Cal.com →</a>
+      </div>
+    </section>
+
     <!-- ============ CONTACT ============ -->
     <section class="movement movement--contact" id="contact">
-      <span class="kicker reveal">06 — <span data-es="Contacto" data-en="Contact">Contacto</span></span>
+      <span class="kicker reveal">07 — <span data-es="Contacto" data-en="Contact">Contacto</span></span>
       <h2 class="contact__title reveal">
         <span data-es="Construyamos" data-en="Let's build">Construyamos</span>
         <a class="contact__mail" href="mailto:alejandro.barrera.correa@gmail.com" data-es="algo en la nube." data-en="something on the cloud.">algo en la nube.</a>
@@ -324,6 +338,13 @@
   </footer>
 
   <a class="fab" data-scroll="contact" href="#" data-es="Conversemos" data-en="Let's talk">Conversemos</a>
+
+  <!-- Cal.com embed (popup overlay, tema oscuro). Fallback: los enlaces abren cal.com/alejandrobarrera -->
+  <script type="text/javascript">
+    (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+    Cal("init", { origin: "https://cal.com" });
+    Cal("ui", { theme: "dark", cssVarsPerTheme: { dark: { "cal-brand": "#8b7bff" } }, hideEventTypeDetails: false, layout: "month_view" });
+  </script>
 
   <script src="script.js"></script>
 </body>
