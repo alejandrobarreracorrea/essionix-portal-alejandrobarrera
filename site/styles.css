@@ -177,8 +177,14 @@ a { color: inherit; text-decoration: none; }
 .entry__body > p { color: var(--muted); font-size: clamp(1rem, 1.6vw, 1.12rem); max-width: 60ch; margin-bottom: 18px; }
 .entry__points { font-family: var(--font-mono); font-size: .85rem; color: var(--faint); }
 
-/* ---------- reuniones ---------- */
-.book__cta { margin-top: clamp(28px, 5vw, 44px); }
+/* ---------- asesoría / planes ---------- */
+.list--pricing { margin-top: clamp(28px, 5vw, 44px); }
+.list--pricing .row__idx { min-width: 70px; color: var(--accent); }
+.row__title .row__sub { display: block; margin-top: 5px; font-family: var(--font-body); font-weight: 400; font-size: .88rem; letter-spacing: 0; color: var(--muted); }
+.row__price { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.2rem, 2.4vw, 1.7rem); letter-spacing: -.02em; white-space: nowrap; }
+.row:hover .row__price { color: var(--accent); }
+.book__cta { margin-top: clamp(32px, 5vw, 48px); }
+.book__note { margin-top: 14px; font-family: var(--font-mono); font-size: .78rem; color: var(--faint); }
 
 /* ---------- contacto ---------- */
 .movement--contact { border-bottom: none; }

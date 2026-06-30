@@ -45,6 +45,12 @@
 - Oracle Database 12c Certified Professional, OCP (2018)
 - Oracle Database 11g Certified Associate, OCA (2016)
 
+## Asesoría 1:1 (paga)
+Sesiones de consultoría cloud pagas (arquitectura, alta concurrencia, migración multi-cloud, DevOps). Reserva y pago en https://cal.com/alejandrobarrera
+- Sesión exprés — 30 min — USD 50 (segunda opinión / Q&A puntual)
+- Asesoría 1:1 — 50 min — USD 80 (sesión de trabajo enfocada)
+- Architecture review — 90 min — USD 140 (revisión profunda / Well-Architected)
+
 ## Contacto
 - Email: alejandro.barrera.correa@gmail.com
 - Teléfono: +57 310 249 4886
