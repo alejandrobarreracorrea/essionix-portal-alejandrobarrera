@@ -1,30 +1,33 @@
 # Alejandro Barrera
 
-> Cloud Architect con más de 7 años de experiencia en AWS. Diseña, migra y
-> moderniza infraestructura en la nube (serverless, IaC, FinOps) y asesora/forma
-> a profesionales y empresas en estas habilidades. Bogotá, Colombia.
+> Enterprise Cloud Architect con más de 7 años diseñando arquitecturas de alta
+> concurrencia y sistemas distribuidos en AWS, OCI y Azure. Arquitectura, DevOps,
+> migraciones multi-cloud a escala — y formación a los equipos que las operan.
+> Bogotá, Colombia.
 
 ## Perfil
 - Nombre: Alejandro Barrera
-- Rol: Cloud Architect / Arquitecto de soluciones en la nube
+- Rol: Enterprise Cloud Architect / Arquitecto de soluciones en la nube
+- Enfoque: arquitecturas de alta concurrencia, sistemas distribuidos, multi-cloud (AWS · OCI · Azure), DevOps
 - Experiencia: +7 años
 - Ubicación: Bogotá, Colombia
 - Idiomas del sitio: español (es-CO) e inglés
 
 ## Servicios
-- Arquitectura cloud (Kubernetes, serverless, modernización de TI)
-- Migración a la nube (IaaS, PaaS, SaaS)
-- Plataformas serverless con Infraestructura como Código (Terraform, CI/CD)
-- Asesoría y formación: mentoría técnica y upskilling de equipos y empresas
+- Arquitectura cloud enterprise: alta concurrencia, alta disponibilidad, sistemas distribuidos y event-driven, multi-AZ/multi-región, Well-Architected.
+- Multi-cloud y migraciones: estrategias y migraciones enterprise en AWS, OCI y Azure (IaaS, PaaS, contenedores).
+- DevOps y automatización: CI/CD, IaC con Terraform, Kubernetes y observabilidad para entregar a escala.
+- Asesoría y formación: mentoría técnica y upskilling de equipos y empresas.
 
 ## Habilidades
-- Cloud & DevOps: AWS, Azure, Oracle OCI, Kubernetes, Docker, Terraform, GitHub Actions, Lambda
+- Cloud & DevOps: AWS, Azure, Oracle OCI, Kubernetes, Docker, Terraform, CI/CD, observabilidad, serverless
 - Datos & Bases de datos: SQL Server, Oracle Database, PostgreSQL, FinOps, migraciones
-- Arquitectura: IaC, arquitectura de soluciones, migración a la nube, mentoría y formación
+- Arquitectura: alta concurrencia, sistemas distribuidos, microservicios, event-driven, Well-Architected, migración multi-cloud, mentoría y formación
 
 ## Proyectos destacados
-- Portales corporativos serverless: S3 privado + OAC + CloudFront, Terraform y GitHub Actions (OIDC).
-- Automatización con pipelines de IA: scoring/clasificación con LLMs, ejecución programada y reportes.
+- Arquitecturas de alta concurrencia: sistemas distribuidos enterprise, microservicios en contenedores, autoescalado multi-AZ/multi-región, colas y streaming de eventos, observabilidad.
+- Migración & DevOps multi-cloud: modernización a AWS/OCI/Azure, refactor a microservicios, IaC con Terraform, CI/CD y FinOps.
+- Plataformas de datos & IA: scoring/clasificación con LLMs, orquestación de pipelines en la nube y reportes automáticos.
 
 ## Certificaciones (14)
 - AWS — AI Fundamentals
