@@ -1,33 +1,39 @@
-# Alejandro Barrera
+# Alejandro Barrera — IAOps
 
-> Enterprise Cloud Architect con más de 10 años diseñando arquitecturas de alta
-> concurrencia y sistemas distribuidos en AWS, OCI y Azure. Arquitectura, DevOps,
-> migraciones multi-cloud a escala — y formación a los equipos que las operan.
-> Bogotá, Colombia.
+> IAOps: agentes de IA ejecutan la operación cloud bajo criterio humano.
+> Alejandro Barrera (Cloud Architect, 10+ años, AWS · OCI · Azure, 14 certificaciones)
+> opera su propia infraestructura con agentes de IA y enseña esa ruta a veteranos
+> de TI, builders que empiezan y equipos de empresas. Bogotá, Colombia.
 
-## Perfil
-- Nombre: Alejandro Barrera
-- Rol: Enterprise Cloud Architect / Arquitecto de soluciones en la nube
-- Enfoque: arquitecturas de alta concurrencia, sistemas distribuidos, multi-cloud (AWS · OCI · Azure), DevOps
-- Experiencia: +10 años
-- Ubicación: Bogotá, Colombia
-- Idiomas del sitio: español (es-CO) e inglés
+## Qué es IAOps
+La evolución agéntica de AIOps: la IA no solo observa la operación — la ejecuta.
+Deploys, migraciones, DNS, FinOps e incidentes delegados a agentes (como Claude),
+con una regla: lo reversible se delega, lo irreversible exige firma humana.
 
-## Servicios
-- Arquitectura cloud enterprise: alta concurrencia, alta disponibilidad, sistemas distribuidos y event-driven, multi-AZ/multi-región, Well-Architected.
-- Multi-cloud y migraciones: estrategias y migraciones enterprise en AWS, OCI y Azure (IaaS, PaaS, contenedores).
-- DevOps y automatización: CI/CD, IaC con Terraform, Kubernetes y observabilidad para entregar a escala.
-- Mentoría y formación: mentoría técnica 1:1 y upskilling de equipos y empresas.
+## Manifiesto
+1. La IA ejecuta. Tú diriges. (El toil se delega; la firma es humana.)
+2. El criterio no se automatiza. (La experiencia es el activo que la IA no tiene.)
+3. Se aprende operando. (Infraestructura real en producción, no demos de juguete.)
 
-## Habilidades
-- Cloud & DevOps: AWS, Azure, Oracle OCI, Kubernetes, Docker, Terraform, CI/CD, observabilidad, serverless
-- Datos & Bases de datos: SQL Server, Oracle Database, PostgreSQL, FinOps, migraciones
-- Arquitectura: alta concurrencia, sistemas distribuidos, microservicios, event-driven, Well-Architected, migración multi-cloud, mentoría y formación
+## Rutas
+- R/01 · Veteranos (on-premise, click-ops, DBA, sysadmin): "De operador a director" —
+  el puente (una nube + Git + IaC) → dirigir agentes (límites y aprobaciones) → operación IAOps completa.
+- R/02 · Builders (juniors): "Entra a cloud en la era de los agentes" —
+  fundamentos que no caducan → código, no clicks (Terraform + pipeline) → laboratorio público con agentes.
+- R/03 · Equipos/empresas: "Tu operación con IA, sin apagar el negocio" —
+  diagnóstico → piloto IAOps en un flujo real → formación del equipo.
 
-## Proyectos destacados
-- Arquitecturas de alta concurrencia: sistemas distribuidos enterprise, microservicios en contenedores, autoescalado multi-AZ/multi-región, colas y streaming de eventos, observabilidad.
-- Migración & DevOps multi-cloud: modernización a AWS/OCI/Azure, refactor a microservicios, IaC con Terraform, CI/CD y FinOps.
-- Plataformas de datos & IA: scoring/clasificación con LLMs, orquestación de pipelines en la nube y reportes automáticos.
+## La prueba (operaciones reales del autor, ejecutadas por agentes)
+- Decomisión de infraestructura legacy sin downtime (backup, propagación DNS verificada, firma humana en lo irreversible).
+- Sitio publicado sin tocar consola: Terraform + pipeline OIDC + agente que escribe los cambios.
+- FinOps auditado por agentes en 3 nubes (recursos huérfanos, clases de almacenamiento, apagados).
+
+## Mentoría técnica 1:1 (paga)
+Reserva y pago en https://cal.com/alejandrobarrera
+- Sesión exprés — 30 min — USD 50 (segunda opinión / elegir ruta / Q&A)
+- Mentoría 1:1 — 50 min — USD 80 (sesión de trabajo sobre tu caso)
+- Architecture review — 90 min — USD 140 (revisión profunda / Well-Architected / plan IAOps)
+Formación de equipos: por email.
 
 ## Certificaciones (14)
 - AWS — AI Fundamentals
@@ -45,15 +51,11 @@
 - Oracle Database 12c Certified Professional, OCP (2018)
 - Oracle Database 11g Certified Associate, OCA (2016)
 
-## Mentoría técnica 1:1 (paga)
-Sesiones de mentoría técnica pagas (arquitectura, operación de la nube con IA, alta concurrencia, migración multi-cloud, DevOps). Reserva y pago en https://cal.com/alejandrobarrera
-- Sesión exprés — 30 min — USD 50 (segunda opinión / Q&A puntual)
-- Mentoría 1:1 — 50 min — USD 80 (sesión de trabajo enfocada)
-- Architecture review — 90 min — USD 140 (revisión profunda / Well-Architected)
-
 ## Contacto
 - Email: alejandro.barrera.correa@gmail.com
 - Teléfono: +57 310 249 4886
 - LinkedIn: https://www.linkedin.com/in/alejobarrera/
-- Agenda una reunión: https://cal.com/alejandrobarrera
+- Mentoría: https://cal.com/alejandrobarrera
 - Web: https://alejandrobarrera.net/
+
+Las nubes cambian. El criterio queda.
