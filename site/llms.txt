@@ -17,7 +17,7 @@
 - Arquitectura cloud enterprise: alta concurrencia, alta disponibilidad, sistemas distribuidos y event-driven, multi-AZ/multi-región, Well-Architected.
 - Multi-cloud y migraciones: estrategias y migraciones enterprise en AWS, OCI y Azure (IaaS, PaaS, contenedores).
 - DevOps y automatización: CI/CD, IaC con Terraform, Kubernetes y observabilidad para entregar a escala.
-- Asesoría y formación: mentoría técnica y upskilling de equipos y empresas.
+- Mentoría y formación: mentoría técnica 1:1 y upskilling de equipos y empresas.
 
 ## Habilidades
 - Cloud & DevOps: AWS, Azure, Oracle OCI, Kubernetes, Docker, Terraform, CI/CD, observabilidad, serverless
@@ -45,10 +45,10 @@
 - Oracle Database 12c Certified Professional, OCP (2018)
 - Oracle Database 11g Certified Associate, OCA (2016)
 
-## Asesoría 1:1 (paga)
-Sesiones de consultoría cloud pagas (arquitectura, alta concurrencia, migración multi-cloud, DevOps). Reserva y pago en https://cal.com/alejandrobarrera
+## Mentoría técnica 1:1 (paga)
+Sesiones de mentoría técnica pagas (arquitectura, operación de la nube con IA, alta concurrencia, migración multi-cloud, DevOps). Reserva y pago en https://cal.com/alejandrobarrera
 - Sesión exprés — 30 min — USD 50 (segunda opinión / Q&A puntual)
-- Asesoría 1:1 — 50 min — USD 80 (sesión de trabajo enfocada)
+- Mentoría 1:1 — 50 min — USD 80 (sesión de trabajo enfocada)
 - Architecture review — 90 min — USD 140 (revisión profunda / Well-Architected)
 
 ## Contacto
