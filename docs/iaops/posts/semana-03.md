@@ -31,7 +31,7 @@ FinOps es el punto de entrada perfecto para IAOps: bajo riesgo (solo lectura), r
 
 Si vas a empezar a operar con IA, empieza por tu factura. 🔖
 
-#IAOps #FinOps #CloudComputing #AWS
+#IAOps #AISRE #FinOps #CloudComputing #AWS
 
 ---
 
@@ -59,7 +59,7 @@ Dirigir agentes es una habilidad. Se aprende cometiendo estos errores — o leye
 
 ¿Cuál de los 3 te da más miedo en tu entorno? Te leo. 👇
 
-#IAOps #AIOps #CloudComputing #InteligenciaArtificial
+#IAOps #AISRE #AIOps #CloudComputing #InteligenciaArtificial
 
 ---
 
@@ -95,7 +95,7 @@ El puesto de "el que hace clicks" murió. El de "el que dirige la operación" ac
 
 Comparte esto con alguien que esté empezando. 📤
 
-#IAOps #CloudComputing #CarreraTI #AWS
+#IAOps #AISRE #CloudComputing #CarreraTI #AWS
 
 ---
 
@@ -128,4 +128,4 @@ Abrí espacios de 𝗺𝗲𝗻𝘁𝗼𝗿í𝗮 𝘁é𝗰𝗻𝗶𝗰𝗮 𝟭
 
 Y si esta serie te sirvió: sígueme, que el resto del año viene con todo. 🚀
 
-#IAOps #AIOps #CloudComputing #Mentoria
+#IAOps #AISRE #AIOps #CloudComputing #Mentoria

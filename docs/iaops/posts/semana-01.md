@@ -38,7 +38,7 @@ Reemplaza al ingeniero que opera a mano.
 
 Sígueme y acompáñame el resto del año. 🚀
 
-#IAOps #AIOps #CloudComputing #AWS #InteligenciaArtificial
+#IAOps #AISRE #AIOps #CloudComputing #AWS
 
 ---
 
@@ -66,7 +66,7 @@ La IA ejecuta. Tu criterio decide. Ese es el trato.
 
 ¿Cuál fue la transición que más te costó en tu carrera? Te leo 👇
 
-#IAOps #CloudComputing #CarreraTI #DevOps
+#IAOps #AISRE #CloudComputing #CarreraTI #DevOps
 
 ---
 
@@ -104,7 +104,7 @@ Esto es IAOps: la IA ejecuta el runbook, tú pones el criterio.
 
 Guarda este post si administras infraestructura — este patrón (verificar → backup → cambio → validar) es delegable HOY. 🔖
 
-#IAOps #AWS #CloudComputing #DevOps
+#IAOps #AISRE #AWS #CloudComputing #DevOps
 
 ---
 
@@ -141,4 +141,4 @@ Te quitó las excusas.
 
 Comparte esto con alguien que esté dudando de entrar a cloud. 📤
 
-#IAOps #CloudComputing #CarreraTI #InteligenciaArtificial
+#IAOps #AISRE #CloudComputing #CarreraTI #InteligenciaArtificial

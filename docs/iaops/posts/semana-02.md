@@ -29,7 +29,7 @@ La regla que me funciona:
 
 Guárdalo: es la línea que deberías dibujar antes de soltar un agente en tu infraestructura. 🔖
 
-#IAOps #AIOps #CloudComputing #DevOps
+#IAOps #AISRE #AIOps #CloudComputing #DevOps
 
 ---
 
@@ -64,7 +64,7 @@ No eres el pasado de la infraestructura. Eres el criterio que la IA no tiene.
 
 ¿Vienes de on-premise? Cuéntame en los comentarios qué te está frenando — respondo todos. 👇
 
-#IAOps #CarreraTI #CloudComputing #OnPremise
+#IAOps #AISRE #CarreraTI #CloudComputing #OnPremise
 
 ---
 
@@ -98,7 +98,7 @@ Si todavía operas con clicks, no necesitas IA primero. Necesitas código primer
 
 Guarda este stack como referencia. 🔖
 
-#IAOps #Terraform #DevOps #AWS
+#IAOps #AISRE #Terraform #DevOps #AWS
 
 ---
 
@@ -132,4 +132,4 @@ Los que defiendan sus clicks… van a defender un puesto que ya no existe.
 
 ¿De acuerdo o me equivoco? Argumenta en los comentarios — leo todos. 👇
 
-#IAOps #AIOps #CloudComputing #DevOps
+#IAOps #AISRE #AIOps #CloudComputing #DevOps

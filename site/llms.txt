@@ -6,9 +6,12 @@
 > de TI, builders que empiezan y equipos de empresas. Bogotá, Colombia.
 
 ## Qué es IAOps
-La evolución agéntica de AIOps: la IA no solo observa la operación — la ejecuta.
-Deploys, migraciones, DNS, FinOps e incidentes delegados a agentes (como Claude),
-con una regla: lo reversible se delega, lo irreversible exige firma humana.
+La evolución agéntica de AIOps — lo que el mercado estadounidense llama **AI SRE**
+(Azure SRE Agent, AWS DevOps Agent, Datadog Bits AI, Resolve.ai): la IA no solo
+observa la operación — la ejecuta. Deploys, migraciones, DNS, FinOps e incidentes
+delegados a agentes (como Claude), con una regla: lo reversible se delega, lo
+irreversible exige firma humana. IAOps = AI SRE en español, con énfasis en la
+dirección humana de los agentes.
 
 ## Manifiesto
 1. La IA ejecuta. Tú diriges. (El toil se delega; la firma es humana.)
