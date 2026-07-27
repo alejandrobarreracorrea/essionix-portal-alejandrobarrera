@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!-- Carrusel LinkedIn 1080×1350 por página. Editar textos → Chrome: Imprimir → Guardar como PDF
+     (tamaño de papel personalizado 1080×1350 px ≈ 285.75×357.19 mm, márgenes: ninguno).
+     El agente del Flujo 1 entrega el contenido de cada página; duplicar .page según haga falta. -->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; box-sizing: border-box; }
+  @page { size: 1080px 1350px; margin: 0; }
+  body { background: #333; }
+  .page {
+    position: relative; width: 1080px; height: 1350px; overflow: hidden; page-break-after: always;
+    background: #08080b; color: #f5f5f7; font-family: "Inter", sans-serif;
+    padding: 90px 84px; display: flex; flex-direction: column;
+  }
+  .aura { position: absolute; inset: -30% -20%;
+    background: radial-gradient(45% 40% at 80% 12%, rgba(139,123,255,.30), transparent 70%),
+                radial-gradient(40% 35% at 10% 90%, rgba(56,224,216,.16), transparent 70%);
+    filter: blur(12px); }
+  .z { position: relative; z-index: 2; }
+  .kicker { font-family: "JetBrains Mono", monospace; font-size: 26px; color: #9a8cff;
+    letter-spacing: .06em; text-transform: uppercase; margin-bottom: 28px; }
+  h1 { font-family: "Space Grotesk", sans-serif; font-size: 96px; font-weight: 700;
+    letter-spacing: -.03em; line-height: 1.04; }
+  h2 { font-family: "Space Grotesk", sans-serif; font-size: 64px; font-weight: 700;
+    letter-spacing: -.02em; line-height: 1.08; margin-bottom: 36px; }
+  .accent { background: linear-gradient(100deg, #8b7bff, #38e0d8 60%, #ff7ad9);
+    -webkit-background-clip: text; background-clip: text; color: transparent; }
+  p, li { font-size: 36px; line-height: 1.5; color: #c9c9d2; }
+  .body-list { list-style: none; display: grid; gap: 30px; margin-top: 10px; }
+  .body-list li { padding-left: 40px; position: relative; }
+  .body-list li::before { content: "→"; position: absolute; left: 0; color: #9a8cff; font-weight: 700; }
+  .num { font-family: "JetBrains Mono", monospace; font-size: 30px; color: #66666f; }
+  .footer { margin-top: auto; display: flex; justify-content: space-between; align-items: center;
+    font-family: "JetBrains Mono", monospace; font-size: 24px; color: #66666f; }
+  .footer b { color: #9a8cff; font-weight: 500; }
+  .swipe { font-family: "Space Grotesk", sans-serif; font-size: 30px; color: #f5f5f7; }
+  .spacer { flex: 1; }
+</style>
+</head>
+<body>
+
+  <!-- PÁGINA 1: PORTADA -->
+  <div class="page">
+    <div class="aura"></div>
+    <div class="kicker z">IAOps · #AISRE</div>
+    <div class="spacer"></div>
+    <h1 class="z">Título gancho<br><span class="accent">del carrusel.</span></h1>
+    <div class="spacer"></div>
+    <div class="footer z"><span><b>@alejobarrera</b> · alejandrobarrera.net</span><span class="swipe">Desliza →</span></div>
+  </div>
+
+  <!-- PÁGINA CONTENIDO (duplicar) -->
+  <div class="page">
+    <div class="aura"></div>
+    <div class="num z">02 / 06</div>
+    <div style="height:40px"></div>
+    <h2 class="z">Subtítulo de la <span class="accent">página.</span></h2>
+    <ul class="body-list z">
+      <li>Primer punto claro y corto.</li>
+      <li>Segundo punto con el dato.</li>
+      <li>Tercer punto con la lección.</li>
+    </ul>
+    <div class="footer z"><span><b>@alejobarrera</b></span><span class="swipe">→</span></div>
+  </div>
+
+  <!-- PÁGINA FINAL: CTA -->
+  <div class="page">
+    <div class="aura"></div>
+    <div class="kicker z">La IA ejecuta. Tú diriges.</div>
+    <div class="spacer"></div>
+    <h1 class="z">Sígueme para más<br><span class="accent">operación real.</span></h1>
+    <div style="height:50px"></div>
+    <p class="z">Documento cómo opero mi nube con agentes de IA — demos, runbooks y errores incluidos.</p>
+    <div class="spacer"></div>
+    <div class="footer z"><span><b>@alejobarrera</b> · alejandrobarrera.net</span><span class="swipe">🔖 Guarda este carrusel</span></div>
+  </div>
+
+</body>
+</html>
