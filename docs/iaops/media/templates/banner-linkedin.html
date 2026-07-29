@@ -7,10 +7,13 @@
 <style>
   * { margin: 0; box-sizing: border-box; }
   body { background: #333; }
+  /* SAFE ZONE: la foto de perfil de LinkedIn tapa aprox. el 25% izquierdo-inferior
+     del banner en desktop (y algo más en móvil). Todo el contenido importante vive
+     a la derecha de x=440px. La franja izquierda queda solo decorativa. */
   .banner {
     position: relative; width: 1584px; height: 396px; overflow: hidden;
     background: #08080b; font-family: "Space Grotesk", sans-serif; color: #f5f5f7;
-    display: flex; align-items: center; padding: 0 90px;
+    display: flex; align-items: center; padding: 0 90px 0 440px;
   }
   .aura {
     position: absolute; inset: -40% -10%;
@@ -43,6 +46,11 @@
   <div class="banner">
     <div class="aura"></div>
     <div class="grid-lines"></div>
+    <!-- decor de la franja izquierda (zona que tapa la foto): solo ornamental -->
+    <div style="position:absolute; left:120px; top:38px; width:210px; height:210px; border-radius:50%;
+                border:1px dashed rgba(154,140,255,.35); z-index:1;"></div>
+    <div style="position:absolute; left:96px; top:14px; width:258px; height:258px; border-radius:50%;
+                border:1px solid rgba(56,224,216,.14); z-index:1;"></div>
     <div class="content">
       <div class="eyebrow"><span class="dot"></span>IAOps · AI SRE en español</div>
       <h1>Deja de operar la nube.<br><span class="accent">Empieza a dirigirla.</span></h1>
