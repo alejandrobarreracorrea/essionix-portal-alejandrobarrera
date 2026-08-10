@@ -11,12 +11,14 @@
 | Lugar | UTP: Auditorio Jorge Roa Martínez, Pereira |
 | Audiencia | **300+ asistentes**, técnica pero NO especialista — "va gente de todos los niveles"; el evento busca inspirar (charlas de tech, trayectorias y motivación) |
 | Formato | Tipo TED/PyCon: **monólogo de 30 min + máx. 10 de preguntas** |
-| Rol de Alejandro | **Sponsor GOLD con Essionix** + speaker |
+| Rol de Alejandro | **Sponsor GOLD con Essionix** + speaker + **espacio de 5 min para promocionar servicios Essionix** |
 | Contacto | Sebastián Franco (Pereira Tech Talks) |
 
-**Nota de capas:** la charla es contenido educativo (marca personal IAOps); el patrocinio es
-de **Essionix** (capa comercial). En la charla: cero venta directa, cero mención del empleador.
-Essionix aparece como sponsor en el branding del evento — eso es del patrocinio, no del monólogo.
+**Separación de espacios (decisión de Alejandro, 2026-08-10):** en este evento se presenta con
+su carrera completa — **Cloud Architect en Globant** (10+ años: DBA on-premise → SRE → Cloud
+Ops/DevOps → arquitecto) y fundador de Essionix. La **charla de 30 min es educativa** (IAOps,
+cero venta); la **promoción de Essionix va en su espacio propio de 5 min como sponsor**. Esa
+separación protege la credibilidad de la charla y hace más efectivo el pitch.
 
 ## ✉️ Paquete para el organizador (enviado / por enviar)
 
@@ -24,7 +26,7 @@ Essionix aparece como sponsor en el branding del evento — eso es del patrocini
 > **"La IA no viene por tu trabajo: viene por tus madrugadas"**
 > (IAOps — dirigir en la era de los agentes)
 
-**Rol/Empresa:** Fundador & Cloud Architect — Essionix
+**Rol/Empresa:** Cloud Architect en Globant · Fundador de Essionix (sponsor Gold del evento)
 
 **Descripción (a grandes rasgos):**
 > Durante 10 años operé infraestructura crítica: datacenters fríos, ventanas de mantenimiento
@@ -37,12 +39,14 @@ Essionix aparece como sponsor en el branding del evento — eso es del patrocini
 > con lo único que la IA no tiene: criterio.
 
 **Bio:**
-> Alejandro Barrera es arquitecto de soluciones cloud con más de 10 años de experiencia:
-> empezó administrando bases de datos en datacenters y hoy diseña arquitecturas de alta
-> concurrencia en AWS, Oracle Cloud y Azure. Tiene 14 certificaciones (10 de AWS, incluidas
-> las 2 Professional). Es fundador de Essionix, donde construye productos de operación cloud
-> con IA, y opera su propia infraestructura con agentes de inteligencia artificial —
-> una práctica que llama IAOps y documenta en público. LinkedIn: linkedin.com/in/alejobarrera
+> Alejandro Barrera es Cloud Architect en Globant, con más de 10 años de carrera en operación
+> de infraestructura, Cloud Ops y DevOps: empezó como DBA en datacenters on-premise, fue Site
+> Reliability Engineer de la Bolsa Mercantil de Colombia y hoy diseña y opera arquitecturas de
+> alta concurrencia en AWS, Oracle Cloud y Azure. Tiene 14 certificaciones cloud (10 de AWS,
+> incluidas las 2 Professional). Es fundador de Essionix — patrocinador de este evento — donde
+> construye productos de operación cloud con IA, y opera su propia infraestructura con agentes
+> de inteligencia artificial: una práctica que llama IAOps y que documenta en público.
+> LinkedIn: linkedin.com/in/alejobarrera
 
 **Foto para el flyer:** la B/N profesional (la de Cal.com) mientras llega la sesión de fotos.
 Si la sesión ocurre antes del 15-ago, reemplazar por el retrato nuevo.
@@ -72,6 +76,22 @@ un solo mensaje**: *la IA ejecuta, tú diriges.*
 5. *"¿Y la seguridad/quién responde si falla?"* → El humano firma; permisos mínimos; el agente no va al post-mortem.
 6. *"¿Cuánto cuesta?"* → Menos que una madrugada de ingeniero: suscripción de IA + capa gratuita cloud.
 7. Pregunta hostil posible: *"eso va a dejar gente sin empleo"* → honestidad: transforma roles; el riesgo real es no aprender a dirigir; por eso doy esta charla.
+
+## 🏷️ Espacio sponsor Essionix (5 min — separado de la charla)
+
+Objetivo: **leads de empresas**, no aplausos. Estructura:
+
+| Min | Contenido |
+|---|---|
+| 0:00–0:45 | **Quiénes somos**: "Essionix — operación cloud con IA, hecha en Colombia. Lo que acaban de ver en la charla no es teoría: es como operamos nuestra propia plataforma." (Conectar con la charla sin repetirla.) |
+| 0:45–2:30 | **Qué hacemos** (3 líneas, sin catálogo): ① **Essionix Atlas** — plataforma FinOps: encuentra en tu factura cloud el dinero que se está fugando, con IA. ② **Arquitectura y migraciones** multi-cloud (AWS · OCI · Azure) de alta concurrencia. ③ **Adopción IAOps**: llevamos tu operación a agentes de IA y formamos a tu equipo para dirigirlos. |
+| 2:30–3:30 | **La prueba**: 1 lámina con una operación real (el decomisionado / auditoría FinOps) — "nuestra infraestructura corre así desde hace meses". |
+| 3:30–5:00 | **Oferta del evento + CTA**: *"Para las primeras 5 empresas que escaneen y agenden hoy: **diagnóstico de costos cloud sin costo** — les mostramos cuánto se les está fugando antes de cobrar un peso."* → **QR gigante** a essionix.com/evento (o Cal.com). Repetir el QR al cierre. |
+
+Reglas: cero jerga, un solo CTA (el QR), la oferta es de **diagnóstico** (bajo compromiso,
+alto valor percibido — patrón Hormozi). Los leads del QR se atienden la semana siguiente.
+
+Material necesario: 3–4 slides con marca Essionix + QR (generar) + página/formulario de destino.
 
 ## 📋 Plan de preparación (12 días — "debe salir perfecto")
 
