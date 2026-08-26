@@ -3,6 +3,47 @@
 **El documento rector.** Todo lo demás (`estrategia`, `programa`, `cadena-produccion`,
 `multimedia`, `benchmarking`) cuelga de aquí. Actualizado: 2026-07-27.
 
+---
+
+# ⚠️ REPRIORIZACIÓN — 2026-08-26
+
+**Cambió el terreno:**
+1. **Terremoto 7.4 (10-ago)** devastó Pereira (~95 muertos, desastre nacional) → Pereira Tech
+   Day del 22-ago no se realizó; charla queda pendiente de nueva fecha (confirmar con Sebastián).
+2. **Alejandro dictará cursos desde septiembre** (con Augusto Salazar): "Cloud Computing,
+   Redes y Ciberseguridad Esencial" — Mar/Jue 6:30–9:30 p.m. Y Mié/Vie 6:30–9:30 p.m.
+   = **12 h/semana de docencia nocturna**. Los estudiantes son el nuevo embudo principal.
+3. Nuevo objetivo: **meetup en su grupo de Pereira** — charla "IAOps como camino de carrera"
+   + donación de vouchers de certificación (solidaridad post-terremoto, cero venta).
+
+**Consecuencias sobre el plan original:**
+- ❌ **Cohorte propia de octubre: DIFERIDA a 2027** (imposible con 12 h/sem de docencia).
+  Los cursos del instituto SON la enseñanza de este semestre; el embudo cambia:
+  `estudiantes de cursos → web/LinkedIn → comunidad gratuita → mentoría 1:1 → (2027) cohorte propia`.
+- ⬇️ Cadencia LinkedIn: de 4 → **3 posts/semana** (los 13 listos duran ~4.5 semanas).
+- ⏫ **La automatización de la fábrica sube de prioridad** (con 12 h/sem menos, el PR dominical
+  automático deja de ser opcional).
+- ⏫ **Comunidad gratuita AHORA** (destino de los estudiantes): WhatsApp Comunidad "IAOps LATAM"
+  ($0, fricción cero en LatAm) → migrar a Skool cuando haya masa/monetización.
+- El webinar de sep se reemplaza por el **meetup** (ver `meetup-pereira.md`).
+
+## Nueva prioridad de ataque (P0 → P3)
+
+| P | Qué | Cuándo | Dueño |
+|---|---|---|---|
+| **P0** | Perfil LinkedIn terminado (about/titular ya entregados) + foto + banner + destacados | Esta semana | Alejandro |
+| **P0** | **Web al día para recibir estudiantes**: sección "Formación" (cursos, mentoría, comunidad, charlas) + QR/link corto para dictar en clase | Esta semana | Claude |
+| **P0** | **Arrancar publicación**: 3 posts/sem con el banco de 13 listos (programar lunes) | Lun 31-ago | Alejandro (15 min) |
+| **P1** | Comunidad WhatsApp "IAOps LATAM" creada y enlazada en web + clases | Sem 1 sep | Ambos |
+| **P1** | **Meetup Pereira**: logística (fecha, lugar/virtual, vouchers), charla adaptada "IAOps como camino" | Sep | Ambos |
+| **P1** | Redes sociales base: YouTube + Instagram/TikTok con marca (banners/bios desde plantillas) | Sem 1-2 sep | Claude genera, Alejandro crea cuentas |
+| **P2** | Automatizar fábrica (`content-drafts.yml` + `news-watch.yml`) | Sem 2 sep | Claude |
+| **P2** | Charla Tech Day: guion + deck listos para la nueva fecha | Cuando se confirme | Claude + ensayos |
+| **P3** | Demos en video (cuando el ritmo docente se estabilice, ~oct) | Oct | Alejandro |
+
+**Regla de supervivencia:** los cursos + el empleo son innegociables; todo lo demás se ejecuta
+con la fábrica o no se ejecuta. Una mala semana = 2 posts, nunca cero.
+
 ## La tesis (norte de todo)
 
 > **IAOps: la IA ejecuta la operación cloud. Tú diriges.**
