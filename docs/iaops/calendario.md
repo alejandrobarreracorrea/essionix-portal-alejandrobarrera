@@ -1,36 +1,41 @@
-# Calendario editorial — Ago–Dic 2026
+# Calendario editorial + docencia — Sep–Dic 2026
 
-**Vivo.** El agente del Flujo 1 lo lee y lo actualiza; Alejandro decide. Cadencia: Lun/Mié/Jue/Vie 7:30 a.m. COL.
+**Vivo.** Reescrito 2026-08-26 tras la repriorización (terremoto + cursos). Cadencia LinkedIn:
+**3 posts/semana (Lun/Mié/Vie 7:30 a.m.)**. La docencia manda; el contenido se acomoda.
 
-## Agosto (F1 — texto) — ✅ material listo
-| Semana | Contenido | Estado |
-|---|---|---|
-| Ago S1 | Posts 1–4 (`posts/semana-01.md`) — fundación | Listos para publicar |
-| Ago S2 | Posts 5–8 (`posts/semana-02.md`) — valor táctico | Listos |
-| Ago S3 | Posts 9–12 (`posts/semana-03.md`) — profundidad + CTA mentoría | Listos |
-| Ago S4 | Post 13 (puente AI SRE) + 3 por generar (Flujo 1) | Post 13 listo |
-| Continuo | Lista de espera del Programa IAOps abierta (CTA suave) | Por montar |
+## Capa docente (calendario del instituto — 2 franjas de 3 h/sem)
 
-## Septiembre (F2 — demos + preventa)
-- S1: Demo #1 en video ("Claude decomisionó mi legacy", guion listo) + 3 posts.
-- S2: Posts + news-jacking (revisar Issues del Flujo 2).
-- S3: **Demo #2**: "Probé el AWS DevOps Agent en mi nube" (first-mover ES) + posts.
-- S4: **Webinar gratuito** "Opera tu nube con IA: demo en vivo" → preventa cohorte fundadora.
+| Semana | Módulo | Hito docente | Impacto en contenido |
+|---|---|---|---|
+| Sep 1–6 | M1 Explorar | **Encuentro inicial híbrido + Master Class niveladora (presencial, 6h)** | Semana pesada: solo 2 posts |
+| Sep 7–20 | M1 Explorar | Sesiones sincrónicas + Master Class recap | Normal |
+| Sep 21–Oct 11 | M2 Construir | Clases-taller sincrónicas | Normal |
+| **Oct 12–18** | M2 | **BOOTCAMP (no fijo — proponer tema IAOps propio)** | Si ocurre: es LA fuente de contenido del mes |
+| Oct 19–Nov 1 | M3 Experimentar | Clases-taller + Master Class | Normal |
+| Nov 2–22 | M4 Innovar | Clases-taller + Master Class | Normal |
+| **Nov 23–29** | M4 | **BOOTCAMP #2 (no fijo)** | Ídem |
+| Nov 30–Dic 13 | M5 Transformar | Sincrónicas + **Semana Innovar Multidisciplinario (dic 7–13, presencial 8h)** | Semana pesada: 2 posts |
+| Dic 14–27 | Cierre programa | — | Recap del año |
 
-## Octubre (F3 — cara + clips + cohorte 1)
-- Video a cámara semanal (guiones del Flujo 1) + clips verticales (Flujo 4).
-- Cohorte 1 del Programa IAOps corre (los lives alimentan el contenido).
-- Demo #3: "Claude Code vs AWS DevOps Agent vs Azure SRE Agent".
+## Capa contenido (3 posts/sem con el banco existente)
 
-## Noviembre (F4 — lives + prueba social)
-- Demo Day cohorte 1 → posts de testimonios.
-- Live mensual en YouTube. Preventa cohorte 2 (precio pleno).
-- Post meta: "Mi contenido lo produce una cadena de agentes — yo solo firmo el PR".
+- **Sep 1–26**: banco de 13 posts listos (13 ÷ 3 = ~4.5 semanas → cubre casi todo sep). El
+  post 13 (AI SRE) se publica cuando haya noticia o en la semana 4.
+- **Desde sep**: `capture/` se alimenta de las CLASES (preguntas de estudiantes, mitos, momentos
+  aha) → el Flujo 1 convierte docencia en posts. La docencia es la nueva materia prima #1.
+- **Oct en adelante**: posts generados por la fábrica (automatizada en P2) + 1 carrusel/semana.
+- **Demos en video**: diferidas a oct-nov (cuando el ritmo docente esté estable).
 
-## Diciembre
-- Cohorte 2 o descanso según tracción · recap del año · plan 2027.
+## Hitos no-docentes (fechas por confirmar)
 
-## Backlog de ideas (el agente añade aquí; Alejandro prioriza)
-- Serie "runbook delegable de la semana" (repos companion).
-- "Cuánto me cuesta operar 3 nubes con agentes" (transparencia radical).
-- Colaboraciones: podcasts DevOps LATAM, comunidad DevOps Community Latam.
+| Hito | Estado |
+|---|---|
+| Meetup Pereira ("IAOps: un camino de carrera" + vouchers) | Sep — definir fecha/formato con el grupo |
+| Pereira Tech Day (charla TED) | Pospuesto por terremoto — esperar nueva fecha de Sebastián |
+| Comunidad WhatsApp "IAOps LATAM" | Crear ANTES del primer día de clase (sep 1) |
+| Web sección "Formación" | Esta semana (bloqueada por: nombre instituto + link inscripción) |
+| Automatización fábrica | Sem 2 de sep |
+
+## Regla de las semanas pesadas
+Semana con presencial ≥6h (kickoff, Master Class P, bootcamps, Semana Innovar) → **2 posts, y
+ambos salen de la fábrica sin redacción manual**. Nunca cero.

@@ -12,7 +12,7 @@
    Day del 22-ago no se realizó; charla queda pendiente de nueva fecha (confirmar con Sebastián).
 2. **Alejandro dictará cursos desde septiembre** (con Augusto Salazar): "Cloud Computing,
    Redes y Ciberseguridad Esencial" — Mar/Jue 6:30–9:30 p.m. Y Mié/Vie 6:30–9:30 p.m.
-   = **12 h/semana de docencia nocturna**. Los estudiantes son el nuevo embudo principal.
+   = **2 franjas de 3 h (~6 h/semana de dictado + preparación)**, programa modular sep-dic (M1 Explorar → M5 Transformar) con bootcamps opcionales oct 12-18 y nov 23-29. Los estudiantes son el nuevo embudo principal.
 3. Nuevo objetivo: **meetup en su grupo de Pereira** — charla "IAOps como camino de carrera"
    + donación de vouchers de certificación (solidaridad post-terremoto, cero venta).
 
