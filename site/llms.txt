@@ -31,6 +31,13 @@ dirección humana de los agentes.
 - Sitio publicado sin tocar consola: Terraform + pipeline OIDC + agente que escribe los cambios.
 - FinOps auditado por agentes en 3 nubes (recursos huérfanos, clases de almacenamiento, apagados).
 
+## Formación
+Alejandro es docente universitario de Cloud Computing, Redes y Ciberseguridad, y speaker.
+Tres formas de aprender con él:
+- Comunidad IAOps LATAM (gratuita — abre septiembre 2026; invitación vía LinkedIn)
+- Mentoría técnica 1:1 (paga, ver abajo)
+- Charlas y talleres para eventos, universidades y empresas
+
 ## Mentoría técnica 1:1 (paga)
 Reserva y pago en https://cal.com/alejandrobarrera
 - Sesión exprés — 30 min — USD 50 (segunda opinión / elegir ruta / Q&A)

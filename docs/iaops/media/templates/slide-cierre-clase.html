@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!-- Diapositiva de cierre de clase (1920×1080). Uso: última lámina de CADA clase en Esumer.
+     El QR apunta a alejandrobarrera.net (el hub). Renderizar con Chrome headless. -->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; box-sizing: border-box; }
+  body { background: #333; }
+  .slide {
+    position: relative; width: 1920px; height: 1080px; overflow: hidden;
+    background: #08080b; color: #f5f5f7; font-family: "Inter", sans-serif;
+    display: flex; align-items: center; padding: 0 130px; gap: 100px;
+  }
+  .aura { position: absolute; inset: -30% -15%;
+    background: radial-gradient(40% 50% at 80% 15%, rgba(139,123,255,.35), transparent 70%),
+                radial-gradient(38% 45% at 8% 85%, rgba(56,224,216,.20), transparent 70%);
+    filter: blur(12px); }
+  .grid-lines { position: absolute; inset: 0; opacity: .05;
+    background-image: linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px);
+    background-size: 52px 52px; }
+  .left { position: relative; z-index: 2; flex: 1; }
+  .kicker { font-family: "JetBrains Mono", monospace; font-size: 28px; letter-spacing: .08em;
+    color: #9a8cff; text-transform: uppercase; margin-bottom: 30px; }
+  .kicker .dot { display: inline-block; width: 13px; height: 13px; border-radius: 50%;
+    background: linear-gradient(135deg, #8b7bff, #38e0d8); margin-right: 12px; vertical-align: middle;
+    box-shadow: 0 0 16px 2px rgba(56,224,216,.6); }
+  h1 { font-family: "Space Grotesk", sans-serif; font-size: 104px; font-weight: 700;
+    letter-spacing: -.03em; line-height: 1.03; margin-bottom: 44px; }
+  h1 .accent { background: linear-gradient(100deg, #8b7bff, #38e0d8 60%, #ff7ad9);
+    -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .links { list-style: none; display: grid; gap: 22px; }
+  .links li { display: flex; align-items: baseline; gap: 20px; font-size: 34px; }
+  .links .k { font-family: "JetBrains Mono", monospace; font-size: 24px; color: #66666f;
+    min-width: 190px; text-transform: uppercase; letter-spacing: .05em; }
+  .links .v { font-family: "Space Grotesk", sans-serif; font-weight: 600; }
+  .links .v.hi { color: #38e0d8; }
+  .tagline { margin-top: 52px; font-family: "JetBrains Mono", monospace; font-size: 26px; color: #9c9caa; }
+  .right { position: relative; z-index: 2; text-align: center; }
+  .qr-frame { background: #fff; border-radius: 28px; padding: 34px; display: inline-block;
+    box-shadow: 0 30px 90px -30px rgba(139,123,255,.55); }
+  .qr-frame img { display: block; width: 460px; height: 460px; }
+  .scan { margin-top: 26px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 36px; }
+  .scan span { background: linear-gradient(100deg, #8b7bff, #38e0d8);
+    -webkit-background-clip: text; background-clip: text; color: transparent; }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <div class="aura"></div>
+    <div class="grid-lines"></div>
+    <div class="left">
+      <div class="kicker"><span class="dot"></span>IAOps · La IA ejecuta. Tú diriges.</div>
+      <h1>¿Te gustó la clase?<br><span class="accent">Sigamos.</span></h1>
+      <ul class="links">
+        <li><span class="k">LinkedIn</span><span class="v">/in/alejobarrera</span></li>
+        <li><span class="k">Web</span><span class="v hi">alejandrobarrera.net</span></li>
+        <li><span class="k">Comunidad</span><span class="v">IAOps LATAM — gratis, abre en septiembre</span></li>
+      </ul>
+      <div class="tagline">Demos reales de operación cloud con IA · runbooks · mentoría</div>
+    </div>
+    <div class="right">
+      <div class="qr-frame">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=460x460&margin=0&data=https%3A%2F%2Falejandrobarrera.net%2F" alt="QR alejandrobarrera.net">
+      </div>
+      <div class="scan">Escanea y <span>conectamos</span></div>
+    </div>
+  </div>
+</body>
+</html>
