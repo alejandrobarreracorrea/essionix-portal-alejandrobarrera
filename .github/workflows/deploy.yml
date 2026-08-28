@@ -108,9 +108,10 @@ jobs:
           # URL nueva en cada deploy: el navegador baja la version nueva sin
           # hard-reload, complementando la invalidacion de CloudFront.
           VER="${GITHUB_SHA::8}"
-          sed -i "s/styles\.css\"/styles.css?v=${VER}\"/g; s/script\.js\"/script.js?v=${VER}\"/g" "${SITE_DIR}/index.html"
-          # Inyectar la Function URL del registro de leads
-          sed -i "s|__REGISTER_ENDPOINT__|${REGISTER_URL}|g" "${SITE_DIR}/index.html"
+          find "${SITE_DIR}" -name "*.html" -print0 | xargs -0 sed -i \
+            -e "s|/styles\.css\"|/styles.css?v=${VER}\"|g" \
+            -e "s|/script\.js\"|/script.js?v=${VER}\"|g" \
+            -e "s|__REGISTER_ENDPOINT__|${REGISTER_URL}|g"
           echo "Assets versionados con ?v=${VER} y endpoint de registro inyectado"
           grep -o 'styles\.css?v=[a-f0-9]*\|script\.js?v=[a-f0-9]*' "${SITE_DIR}/index.html" || true
 

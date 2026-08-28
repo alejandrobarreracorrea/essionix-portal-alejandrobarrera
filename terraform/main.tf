@@ -66,6 +66,26 @@ resource "aws_cloudfront_origin_access_control" "site" {
   signing_protocol                  = "sigv4"
 }
 
+# URLs limpias multi-página: /manifiesto/ -> /manifiesto/index.html
+resource "aws_cloudfront_function" "url_rewrite" {
+  name    = "alejandrobarrera-url-rewrite-${var.environment}"
+  runtime = "cloudfront-js-2.0"
+  publish = true
+  comment = "Pretty URLs: agrega index.html a rutas de carpeta"
+
+  code = <<-EOT
+    function handler(event) {
+      var req = event.request;
+      if (req.uri.endsWith("/")) {
+        req.uri += "index.html";
+      } else if (!req.uri.includes(".")) {
+        req.uri += "/index.html";
+      }
+      return req;
+    }
+  EOT
+}
+
 resource "aws_cloudfront_distribution" "site" {
   enabled             = true
   is_ipv6_enabled     = true
@@ -90,9 +110,14 @@ resource "aws_cloudfront_distribution" "site" {
 
     # Managed policy "CachingOptimized".
     cache_policy_id = "658327ea-f89d-4fab-a63d-7e88639e58f6"
+
+    function_association {
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.url_rewrite.arn
+    }
   }
 
-  # Sitio de una sola página: rutas no encontradas devuelven index.html.
+  # Rutas no encontradas devuelven el home.
   custom_error_response {
     error_code            = 403
     response_code         = 200

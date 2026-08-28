@@ -320,3 +320,11 @@ a.linkrow:hover .linkrow__v { color: var(--accent); }
   .hero__eyebrow, .hero__lead, .hero__cta, .scrollcue { opacity: 1 !important; }
   .cursor-glow { display: none; }
 }
+
+/* ---------- multi-página ---------- */
+.page { padding-top: clamp(36px, 6vw, 70px); }
+.pagehead { margin-bottom: clamp(30px, 5vw, 52px); }
+.pagehead__title { font-size: clamp(2.2rem, 5.5vw, 3.6rem); letter-spacing: -.03em; }
+.nav__links a.is-current { color: var(--text); position: relative; }
+.nav__links a.is-current::after { content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px; background: var(--grad); border-radius: 2px; }
+.page .movement:first-child { padding-top: 0; }
