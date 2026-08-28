@@ -37,18 +37,16 @@
   if (langBtn) langBtn.addEventListener("click", function () { applyLang(current === "es" ? "en" : "es"); });
   applyLang(current);
 
-  /* ---------- smooth scroll sin # (robusto ante cualquier scroller) ---------- */
-  function scrollToId(id) {
-    var behavior = motionOK ? "smooth" : "auto";
-    if (id === "top") {
-      (document.scrollingElement || document.documentElement).scrollTo({ top: 0, behavior: behavior });
-      return;
-    }
-    var target = document.getElementById(id);
-    if (target) target.scrollIntoView({ behavior: behavior, block: "start" });
-  }
-  document.querySelectorAll("[data-scroll]").forEach(function (link) {
-    link.addEventListener("click", function (e) { e.preventDefault(); scrollToId(link.getAttribute("data-scroll")); });
+  /* ---------- scroll por anclas NATIVAS (href="#id") — el navegador hace el
+     trabajo (siempre funciona); el JS solo limpia el # de la URL después. ---------- */
+  document.querySelectorAll("a[data-scroll]").forEach(function (link) {
+    var id = link.getAttribute("data-scroll");
+    if (!link.getAttribute("href")) link.setAttribute("href", "#" + id);
+    link.addEventListener("click", function () {
+      setTimeout(function () {
+        history.replaceState(null, "", window.location.pathname + window.location.search);
+      }, 500);
+    });
   });
 
   /* ---------- scroll-reveal escalonado ---------- */
