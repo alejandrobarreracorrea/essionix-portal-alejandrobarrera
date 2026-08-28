@@ -5,6 +5,13 @@
   var yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
+  // Con sesión abierta, "Iniciar sesión" se vuelve "Mi aprendizaje".
+  var navAuth = document.getElementById("nav-auth");
+  if (navAuth && localStorage.getItem("iaops_token")) {
+    navAuth.textContent = "Mi aprendizaje";
+    navAuth.href = "/app/";
+  }
+
   var leadForm = document.getElementById("lead-form");
   if (!leadForm) return;
 
@@ -78,7 +85,6 @@
     setStatus(status1, "", "sending");
     post(data).then(function (j) {
       regEmail = data.email;
-      if (j.ok && j.verified) { show(3); return; }
       if (j.ok) {
         document.getElementById("reg-email-echo").textContent = regEmail;
         show(2); setStatus(status2, "ok", "codeSent"); cooldown(60); codeEl.focus();
@@ -93,7 +99,14 @@
     verifyBtn.disabled = true;
     setStatus(status2, "", "verifying");
     post({ action: "verify", email: regEmail, code: code }).then(function (j) {
-      if (j.ok && j.verified) { show(3); }
+      if (j.ok && j.verified) {
+        // La firma también abre sesión (mismo token que /entrar).
+        if (j.token) {
+          localStorage.setItem("iaops_token", j.token);
+          localStorage.setItem("iaops_nombre", j.nombre || "");
+        }
+        show(3);
+      }
       else if (j.error === "expirado") { setStatus(status2, "err", "expired"); }
       else if (j.error === "max_attempts") { setStatus(status2, "err", "maxTries"); }
       else { setStatus(status2, "err", "badCode"); }

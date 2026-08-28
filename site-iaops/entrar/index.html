@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iniciar sesión — IAOps LATAM</title>
+  <meta name="description" content="Entra con tu firma: sin contraseñas, te enviamos un código de 6 dígitos a tu correo." />
+  <link rel="canonical" href="https://iaopslatam.com/entrar/" />
+  <meta name="theme-color" content="#08080b" />
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body data-endpoint="__REGISTER_ENDPOINT__">
+  <header class="nav">
+    <div class="shell nav__inner">
+      <a class="nav__brand" href="/">IAOps <b>LATAM</b></a>
+      <nav class="nav__links">
+        <a href="/cursos/">Cursos</a>
+        <a href="/programa/">Programa</a>
+        <a href="/mentoria/">Mentoría</a>
+        <a class="eco" href="https://alejandrobarrera.net/">el fundador ↗</a>
+      </nav>
+      <a class="btn btn--primary" href="/unirme/">Únete gratis</a>
+    </div>
+  </header>
+  <main class="shell page">
+    <span class="kicker">Miembros</span>
+    <h1>Entra con tu <span class="grad">firma</span></h1>
+    <p class="lead">Sin contraseñas: te enviamos un código de 6 dígitos a tu correo, como siempre.</p>
+
+    <form id="login-form" novalidate>
+      <div id="login-step-1">
+        <div class="grid2" style="grid-template-columns: 1fr;">
+          <label>
+            <span>Email</span>
+            <input type="email" name="email" autocomplete="email" placeholder="tu@correo.com" required />
+          </label>
+        </div>
+        <input class="hp" type="text" name="web" tabindex="-1" autocomplete="off" />
+        <div class="actions">
+          <button class="btn btn--primary" type="submit">Enviarme el código →</button>
+          <span class="status" id="login-status-1"></span>
+        </div>
+        <p class="privacy">¿Primera vez? <a class="resend" href="/unirme/">Únete gratis</a> — te toma 10 segundos.</p>
+      </div>
+
+      <div id="login-step-2" class="is-hidden">
+        <p class="lead" style="margin-bottom:14px">Enviamos tu firma a <b id="login-email-echo"></b>.</p>
+        <div class="verify">
+          <input id="login-code" type="text" inputmode="numeric" maxlength="6" placeholder="······" autocomplete="one-time-code" />
+          <button class="btn btn--primary" type="button" id="login-verify-btn">Entrar ✍</button>
+        </div>
+        <div class="actions">
+          <span class="resend" id="login-resend">Reenviar código</span>
+          <span class="status" id="login-status-2"></span>
+        </div>
+      </div>
+    </form>
+  </main>
+  <footer class="footer">
+    <div class="shell footer__inner">
+      <span>© <span id="year">2026</span> IAOps LATAM · <a href="https://alejandrobarrera.net" target="_blank" rel="noopener">el fundador</a></span>
+      <span>La IA ejecuta. Tú diriges.</span>
+    </div>
+  </footer>
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -70,6 +70,13 @@ resource "aws_iam_role_policy" "leads_exec" {
   })
 }
 
+# Clave HMAC de los tokens de sesión (login sin contraseña). Vive solo en el
+# estado remoto y en el env del Lambda; rotarla invalida todas las sesiones.
+resource "random_password" "session_secret" {
+  length  = 48
+  special = false
+}
+
 resource "aws_lambda_function" "register" {
   function_name    = "ab-leads-register-${var.environment}"
   role             = aws_iam_role.leads_exec.arn
@@ -83,8 +90,9 @@ resource "aws_lambda_function" "register" {
 
   environment {
     variables = {
-      TABLE_NAME = aws_dynamodb_table.leads.name
-      SENDER     = "Alejandro Barrera · IAOps <hola@${var.domain_name}>"
+      TABLE_NAME     = aws_dynamodb_table.leads.name
+      SENDER         = "Alejandro Barrera · IAOps <hola@${var.domain_name}>"
+      SESSION_SECRET = random_password.session_secret.result
     }
   }
 }

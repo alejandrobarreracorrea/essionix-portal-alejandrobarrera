@@ -50,6 +50,7 @@ a { color: inherit; text-decoration: none; }
 .btn--ghost { border-color: var(--line); color: var(--text); }
 .btn--ghost:hover { border-color: var(--accent); }
 .btn--big { font-size: 1.1rem; padding: 1em 2.1em; }
+.btn.is-disabled { opacity: .55; pointer-events: none; }
 
 /* ---------- nav ---------- */
 .nav { position: sticky; top: 0; z-index: 50; background: rgba(8, 8, 11, .82); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
@@ -153,3 +154,38 @@ select option { background: #111116; }
 /* switcher de ecosistema (cross-link) */
 .eco { font-family: var(--mono); font-size: .8rem; color: var(--a2); }
 .eco:hover { opacity: .8; }
+
+/* ---------- catálogo: tabs, chips y badges ---------- */
+.navgroup { display: flex; gap: 16px; align-items: center; }
+.signin { color: var(--muted); font-size: .93rem; white-space: nowrap; }
+.signin:hover { color: var(--text); }
+.avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--grad); display: grid; place-items: center; font-family: var(--display); font-weight: 700; font-size: .9rem; color: #fff; }
+.tabs { display: flex; gap: 26px; border-bottom: 1px solid var(--line); margin: 26px 0 20px; overflow-x: auto; }
+.tabs a { font-family: var(--display); font-weight: 600; font-size: 1rem; color: var(--faint); padding-bottom: 12px; white-space: nowrap; cursor: pointer; }
+.tabs a.on { color: var(--text); border-bottom: 2px solid; border-image: var(--grad) 1; }
+.tabs .n { font-family: var(--mono); font-size: .72rem; color: var(--a2); margin-left: 6px; }
+.chips { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.chip { font-family: var(--mono); font-size: .75rem; padding: .45em 1em; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); cursor: pointer; }
+.chip.on { background: var(--grad); color: #fff; border-color: transparent; }
+.badge { font-family: var(--mono); font-size: .7rem; padding: .3em .7em; border-radius: 999px; white-space: nowrap; }
+.badge.free { color: var(--a2); border: 1px solid rgba(56, 224, 216, .35); }
+.badge.lock { color: var(--faint); border: 1px solid var(--line); }
+.badge.soon { color: var(--faint); border: 1px dashed var(--line); }
+.badge.lvl { color: var(--accent); }
+
+/* ---------- área de miembro: dashboard y player ---------- */
+.dots { display: flex; gap: 5px; }
+.dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+.dots i.on { background: var(--a2); }
+.welcome { font-size: clamp(1.6rem, 4vw, 2.4rem); margin: 34px 0 6px; }
+.welcome b { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.panel { border: 1px solid var(--line); border-radius: 16px; padding: 22px 24px; margin: 18px 0; display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap; }
+.panel .t { font-family: var(--display); font-weight: 600; font-size: 1.1rem; }
+.panel .t small { display: block; font-family: var(--body); font-weight: 400; color: var(--muted); font-size: .88rem; margin-top: 4px; }
+.video { aspect-ratio: 16/9; max-width: 760px; border: 1px solid var(--line); border-radius: 14px; display: grid; place-items: center; background: rgba(255, 255, 255, .02); margin: 20px 0; overflow: hidden; }
+.video span { font-family: var(--mono); color: var(--faint); }
+.video iframe, .video video { width: 100%; height: 100%; border: 0; }
+.play { width: 64px; height: 64px; border-radius: 50%; background: var(--grad); display: grid; place-items: center; color: #fff; font-size: 22px; margin-inline: auto; }
+.mision { border-left: 2px solid; border-image: var(--grad) 1; padding: 14px 18px; margin: 18px 0; }
+.mision .k { font-family: var(--mono); font-size: .72rem; letter-spacing: .06em; color: var(--a2); text-transform: uppercase; }
+.mision p { color: var(--muted); margin-top: 6px; max-width: 62ch; }

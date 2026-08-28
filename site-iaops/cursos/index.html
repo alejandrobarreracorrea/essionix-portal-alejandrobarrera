@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cursos — IAOps LATAM</title>
-  <meta name="description" content="Cursos gratuitos y premium para aprender a dirigir agentes de IA que operan la nube: fundamentos, retos prácticos y cohorte en vivo." />
+  <meta name="description" content="Catálogo IAOps: 12 clases para aprender a dirigir agentes de IA que operan la nube, 3 retos prácticos y el Programa IAOps con certificado. Navega libre, aprende con tu membresía gratis." />
   <link rel="canonical" href="https://iaopslatam.com/cursos/" />
   <meta name="theme-color" content="#08080b" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Cursos — IAOps LATAM" />
-  <meta property="og:description" content="Cursos gratuitos y premium para aprender a dirigir agentes de IA que operan la nube: fundamentos, retos prácticos y cohorte en vivo." />
+  <meta property="og:description" content="12 clases, 3 retos y el Programa IAOps: aprende a dirigir agentes de IA que operan infraestructura real." />
   <meta property="og:url" content="https://iaopslatam.com/cursos/" />
   <meta property="og:locale" content="es_CO" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -30,25 +30,74 @@
         <a href="/mentoria/">Mentoría</a>
         <a class="eco" href="https://alejandrobarrera.net/">el fundador ↗</a>
       </nav>
-      <a class="btn btn--primary" href="/unirme/">Únete gratis</a>
+      <div class="navgroup">
+        <a class="signin" id="nav-auth" href="/entrar/">Iniciar sesión</a>
+        <a class="btn btn--primary" href="/unirme/">Únete gratis</a>
+      </div>
     </div>
   </header>
   <main class="shell page">
-    <span class="kicker">Cursos</span>
+    <span class="kicker">Catálogo · navega libre, aprende con tu membresía gratis</span>
     <h1>Aprende <span class="grad">operando</span></h1>
-    <p class="lead">Nada de teoría suelta: cada curso termina con tu propia infraestructura corriendo. Los gratuitos abren primero para miembros.</p>
+    <p class="lead">Nada de teoría suelta: cada clase termina con una misión sobre TU infraestructura. Las primeras se graban en septiembre — los miembros las estrenan.</p>
 
-    <section class="sec">
-      <ul class="rows">
-        <li><span class="t">Fundamentos IAOps<small>Qué es dirigir agentes, la frontera de delegación y tu primer agente ejecutando. Grabado, a tu ritmo.</small></span><span class="m free">gratis · próximamente</span></li>
-        <li><span class="t">Reto: tu primera nube con agentes<small>7 días, capa gratuita de AWS, un agente y tu primer deploy sin tocar la consola.</small></span><span class="m free">gratis · próximamente</span></li>
-        <li><a class="rowlink" href="/programa/"><span class="t">Programa IAOps — cohorte en vivo<small>6 semanas, tu infraestructura operada por agentes, Demo Day final. Cupos limitados.</small></span></a><span class="m">USD 197 · lista de espera</span></li>
+    <div class="tabs" id="tabs">
+      <a class="on" data-tab="clases">Clases gratuitas<span class="n">12</span></a>
+      <a data-tab="retos">Retos<span class="n">3</span></a>
+      <a data-tab="programa">Programa<span class="n">1</span></a>
+    </div>
+
+    <section id="tab-clases">
+      <div class="chips" id="chips">
+        <span class="chip on" data-cat="todas">TODAS</span>
+        <span class="chip" data-cat="FUNDAMENTOS">FUNDAMENTOS</span>
+        <span class="chip" data-cat="AGENTES">AGENTES</span>
+        <span class="chip" data-cat="CÓDIGO">CÓDIGO</span>
+        <span class="chip" data-cat="OPERACIÓN">OPERACIÓN</span>
+        <span class="chip" data-cat="FINOPS">FINOPS</span>
+        <span class="chip" data-cat="GUARDRAILS">GUARDRAILS</span>
+        <span class="chip" data-cat="INCIDENTES">INCIDENTES</span>
+      </div>
+      <ul class="rows" id="clases">
+        <li data-cat="FUNDAMENTOS"><a class="rowlink" href="/app/clase/?c=a1"><span class="t">Qué es IAOps (y por qué en EE.UU. lo llaman AI SRE)<small>El mapa mental del campo en 25 min — del datacenter a los agentes, y el término dominado.</small></span></a><span class="m"><span class="badge lvl">BÁSICO</span> <span class="badge free">▶ gratis</span></span></li>
+        <li data-cat="FUNDAMENTOS"><a class="rowlink" href="/app/clase/?c=a2"><span class="t">La frontera de delegación: qué firma un humano<small>Reversible se delega, irreversible se firma — terminas con TU política escrita.</small></span></a><span class="m"><span class="badge lvl">BÁSICO</span> <span class="badge free">▶ gratis</span></span></li>
+        <li data-cat="AGENTES"><a class="rowlink" href="/app/clase/?c=a3"><span class="t">Tu primer agente ejecutando una tarea real<small>Demo en vivo: un agente inventaría una cuenta AWS y reporta con evidencia.</small></span></a><span class="m"><span class="badge lvl">BÁSICO</span> <span class="badge free">▶ gratis</span></span></li>
+        <li data-cat="AGENTES"><a class="rowlink" href="/app/clase/?c=a4"><span class="t">Claude Code para operar tu nube: setup completo<small>Instalación, perfiles de solo lectura y las reglas de la casa — tu entorno agéntico listo.</small></span></a><span class="m"><span class="badge lvl">BÁSICO</span> <span class="badge lock">🔒 con membresía</span></span></li>
+        <li data-cat="CÓDIGO"><a class="rowlink" href="/app/clase/?c=a5"><span class="t">De clicks a Terraform con un agente<small>El agente escribe el código de un recurso que ya tienes; tú revisas el plan.</small></span></a><span class="m"><span class="badge lvl">BÁSICO</span> <span class="badge lock">🔒 con membresía</span></span></li>
+        <li data-cat="CÓDIGO"><a class="rowlink" href="/app/clase/?c=a6"><span class="t">Pipeline OIDC: deploys sin llaves y sin consola<small>GitHub Actions asume un rol — push → plan → apply sin un secreto guardado.</small></span></a><span class="m"><span class="badge lvl">INTERMEDIO</span> <span class="badge lock">🔒 con membresía</span></span></li>
+        <li data-cat="FINOPS"><a class="rowlink" href="/app/clase/?c=a7"><span class="t">Audita tu factura AWS con un agente (FinOps en 30 min)<small>Huérfanos, tamaños, horarios y storage — el reporte de ahorro de TU cuenta.</small></span></a><span class="m"><span class="badge lvl">BÁSICO</span> <span class="badge lock">🔒 con membresía</span></span></li>
+        <li data-cat="OPERACIÓN"><a class="rowlink" href="/app/clase/?c=a8"><span class="t">El runbook delegable: verificar → backup → cambiar → validar<small>El patrón universal de los cambios seguros, ejecutado por un agente con puntos de firma.</small></span></a><span class="m"><span class="badge lvl">INTERMEDIO</span> <span class="badge lock">🔒 con membresía</span></span></li>
+        <li data-cat="OPERACIÓN"><a class="rowlink" href="/app/clase/?c=a9"><span class="t">Cambio de DNS en producción con firma (caso real)<small>Anatomía de un cutover real: dominio vivo, cero downtime, rollback diseñado antes.</small></span></a><span class="m"><span class="badge lvl">INTERMEDIO</span> <span class="badge lock">🔒 con membresía</span></span></li>
+        <li data-cat="GUARDRAILS"><a class="rowlink" href="/app/clase/?c=a10"><span class="t">Permisos mínimos: IAM para agentes<small>Por qué el agente no usa tu admin — diseño de un rol scoped, con caso real.</small></span></a><span class="m"><span class="badge lvl">INTERMEDIO</span> <span class="badge lock">🔒 con membresía</span></span></li>
+        <li data-cat="INCIDENTES"><a class="rowlink" href="/app/clase/?c=a11"><span class="t">Primera respuesta a incidentes con agentes<small>Los primeros 5 minutos: el agente recolecta evidencia mientras tú piensas.</small></span></a><span class="m"><span class="badge lvl">INTERMEDIO</span> <span class="badge lock">🔒 con membresía</span></span></li>
+        <li data-cat="AGENTES"><a class="rowlink" href="/app/clase/?c=a12"><span class="t">AWS DevOps Agent y Azure SRE Agent: qué son y cómo dirigirlos<small>Lo que los hyperscalers venden — y cómo gobernarlo. First-mover en español.</small></span></a><span class="m"><span class="badge lvl">INTERMEDIO</span> <span class="badge lock">🔒 con membresía</span></span></li>
       </ul>
+      <div class="actions" style="margin-top: 26px;">
+        <a class="btn btn--primary btn--big" href="/unirme/">Únete gratis y desbloquea todo →</a>
+        <span class="privacy">2 campos · tu correo es tu firma</span>
+      </div>
     </section>
 
-    <section class="endcta">
-      <h2>Los miembros se enteran <span class="grad">primero</span>.</h2>
-      <a class="btn btn--primary btn--big" href="/unirme/">Únete gratis →</a>
+    <section id="tab-retos" class="is-hidden">
+      <ul class="rows">
+        <li><span class="t">5 días para tu primera nube dirigida<small>Cuenta gratuita de AWS + un agente + tu primer deploy sin tocar la consola. Terminas con infraestructura real dirigida por ti.</small></span><span class="m"><span class="badge lvl">BÁSICO</span> <span class="badge soon">📅 octubre</span></span></li>
+        <li><span class="t">Caza el desperdicio: FinOps en 5 días<small>Un agente audita tu factura día a día. Terminas con un reporte de ahorro real de tu cuenta — el reto que un jefe aprueba.</small></span><span class="m"><span class="badge lvl">BÁSICO</span> <span class="badge soon">📅 noviembre</span></span></li>
+        <li><span class="t">7 días, un runbook delegado<small>De cero a una operación ejecutada por agente con aprobaciones: deploy, DNS o backup-restore. Terminas con tu primera operación firmada.</small></span><span class="m"><span class="badge lvl">INTERMEDIO</span> <span class="badge soon">📅 próximamente</span></span></li>
+      </ul>
+      <div class="actions" style="margin-top: 26px;">
+        <a class="btn btn--primary btn--big" href="/unirme/">Únete y entérate primero →</a>
+        <span class="privacy">clase corta diaria + misión + comunidad · gratis</span>
+      </div>
+    </section>
+
+    <section id="tab-programa" class="is-hidden">
+      <ul class="rows">
+        <li><a class="rowlink" href="/programa/"><span class="t">Programa IAOps — cohorte en vivo con certificado<small>6 semanas · 2 sesiones/semana · entregable semanal sobre TU infraestructura · Demo Day final · Certificado IAOps.</small></span></a><span class="m"><span class="badge lvl">TODOS LOS NIVELES</span> <span class="badge lock">USD 197 fundadora</span></span></li>
+      </ul>
+      <div class="actions" style="margin-top: 26px;">
+        <a class="btn btn--primary btn--big" href="/programa/">Conoce el programa →</a>
+        <span class="privacy">cupos limitados · admisión con llamada de 15 min</span>
+      </div>
     </section>
   </main>
   <footer class="footer">
@@ -58,5 +107,30 @@
     </div>
   </footer>
   <script src="/script.js"></script>
+  <script>
+    // Tabs + filtro por categoría (solo UI; todo el contenido es estático para SEO).
+    (function () {
+      "use strict";
+      var tabs = document.querySelectorAll("#tabs a");
+      tabs.forEach(function (tab) {
+        tab.addEventListener("click", function () {
+          tabs.forEach(function (t) { t.classList.toggle("on", t === tab); });
+          ["clases", "retos", "programa"].forEach(function (name) {
+            document.getElementById("tab-" + name).classList.toggle("is-hidden", name !== tab.getAttribute("data-tab"));
+          });
+        });
+      });
+      var chips = document.querySelectorAll("#chips .chip");
+      chips.forEach(function (chip) {
+        chip.addEventListener("click", function () {
+          chips.forEach(function (c) { c.classList.toggle("on", c === chip); });
+          var cat = chip.getAttribute("data-cat");
+          document.querySelectorAll("#clases li").forEach(function (li) {
+            li.classList.toggle("is-hidden", cat !== "todas" && li.getAttribute("data-cat") !== cat);
+          });
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

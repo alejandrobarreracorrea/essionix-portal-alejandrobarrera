@@ -1,14 +1,21 @@
-"""ab-leads-register: registro con verificación por código y perfil progresivo.
+"""ab-leads-register: registro con verificación por código, login sin contraseña y progreso.
 
 Flujo (POST JSON, campo "action"):
   register -> mínimo viable (nombre + email), guarda lead y envía código de 6 dígitos
-  verify   -> valida código (10 min, máx. 6 intentos) y marca verified=true
+  verify   -> valida código (10 min, máx. 6 intentos), marca verified=true y emite
+              token de sesión (HMAC, 30 días) — el mismo flujo firma registro y login
   resend   -> reenvía código (cooldown 60 s, máx. 6 envíos/día)
+  login    -> envía código SOLO si el email ya es miembro (si no: error "desconocido")
   profile  -> enriquecimiento opcional post-firma (país, dedicación, rol, empresa,
               linkedin, canal, interés, whatsapp) — cada campo se guarda si viene
+  me       -> (token) nombre + progreso del miembro
+  progress -> (token) marca una clase del catálogo como completada
 
-CORS lo gestiona la Function URL. Honeypot: campo "web" en register.
+CORS lo gestiona la Function URL. Honeypot: campo "web" en register/login.
 """
+import base64
+import hashlib
+import hmac
 import json
 import os
 import re
@@ -20,6 +27,7 @@ import boto3
 TABLE = boto3.resource("dynamodb").Table(os.environ["TABLE_NAME"])
 SES = boto3.client("sesv2")
 SENDER = os.environ["SENDER"]
+SESSION_SECRET = os.environ["SESSION_SECRET"].encode()
 
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]{2,}$")
 PAISES = {"colombia", "mexico", "peru", "ecuador", "argentina", "chile", "bolivia", "venezuela", "espana", "otro"}
@@ -31,6 +39,36 @@ CODE_TTL = 600
 MAX_ATTEMPTS = 6
 RESEND_COOLDOWN = 60
 MAX_SENDS_DAY = 6
+SESSION_TTL = 30 * 86400
+CLASES = {f"a{n}" for n in range(1, 13)}  # ids del catálogo público (/cursos)
+
+
+def _b64e(raw):
+    return base64.urlsafe_b64encode(raw).decode().rstrip("=")
+
+
+def _b64d(text):
+    return base64.urlsafe_b64decode(text + "=" * (-len(text) % 4))
+
+
+def _issue_token(email):
+    exp = int(time.time()) + SESSION_TTL
+    mac = hmac.new(SESSION_SECRET, f"{email}|{exp}".encode(), hashlib.sha256).hexdigest()
+    return f"{_b64e(email.encode())}.{exp}.{mac}"
+
+
+def _token_email(token):
+    """Devuelve el email del token si la firma es válida y no expiró; si no, None."""
+    try:
+        email_b64, exp_raw, mac = token.split(".")
+        email = _b64d(email_b64).decode()
+        exp = int(exp_raw)
+    except (ValueError, AttributeError):
+        return None
+    if time.time() > exp:
+        return None
+    good = hmac.new(SESSION_SECRET, f"{email}|{exp}".encode(), hashlib.sha256).hexdigest()
+    return email if hmac.compare_digest(mac, good) else None
 
 
 def _resp(status, payload):
@@ -107,11 +145,41 @@ def handler(event, _context):
         return _resp(400, {"ok": False, "error": "json"})
 
     action = (body.get("action") or "register").strip().lower()
+    now = int(time.time())
+
+    # ---------- acciones con sesión (el email sale del token, no del body) ----------
+    if action in ("me", "progress"):
+        email = _token_email(body.get("token") or "")
+        if not email:
+            return _resp(401, {"ok": False, "error": "sesion"})
+        item = _get(email)
+        if not item or not item.get("verified"):
+            return _resp(401, {"ok": False, "error": "sesion"})
+
+        if action == "me":
+            progress = item.get("progress") or {}
+            return _resp(200, {"ok": True, "nombre": item.get("nombre", ""),
+                               "email": email, "done": sorted(progress.keys())})
+
+        clase = (body.get("clase") or "").strip().lower()
+        if clase not in CLASES:
+            return _resp(400, {"ok": False, "error": "clase"})
+        TABLE.update_item(
+            Key={"email": email},
+            UpdateExpression="SET progress = if_not_exists(progress, :empty)",
+            ExpressionAttributeValues={":empty": {}},
+        )
+        TABLE.update_item(
+            Key={"email": email},
+            UpdateExpression="SET progress.#c = :t, updated_at = :t",
+            ExpressionAttributeNames={"#c": clase},
+            ExpressionAttributeValues={":t": now},
+        )
+        return _resp(200, {"ok": True})
+
     email = (body.get("email") or "").strip().lower()
     if not EMAIL_RE.match(email) or len(email) > 120:
         return _resp(400, {"ok": False, "error": "email"})
-
-    now = int(time.time())
 
     # ---------- register: mínimo viable ----------
     if action == "register":
@@ -121,7 +189,6 @@ def handler(event, _context):
         if not 2 <= len(nombre) <= 80:
             return _resp(400, {"ok": False, "error": "nombre"})
 
-        item = _get(email)
         TABLE.update_item(
             Key={"email": email},
             UpdateExpression=("SET nombre = :n, updated_at = :t, "
@@ -131,22 +198,18 @@ def handler(event, _context):
             ExpressionAttributeNames={"#src": "source"},
             ExpressionAttributeValues={":n": nombre, ":t": now, ":f": False, ":s": "web"},
         )
-        item = _get(email)
-        if item.get("verified"):
-            return _resp(200, {"ok": True, "verified": True})
-        return _issue_code(email, nombre, item)
+        # Siempre se firma (aunque ya exista): así el flujo termina con sesión.
+        return _issue_code(email, nombre, _get(email))
 
-    # ---------- verify: la firma ----------
+    # ---------- verify: la firma (registro Y login — siempre exige el código) ----------
     if action == "verify":
         code = re.sub(r"\D", "", body.get("code") or "")
         item = _get(email)
         if not item:
             return _resp(400, {"ok": False, "error": "desconocido"})
-        if item.get("verified"):
-            return _resp(200, {"ok": True, "verified": True})
         if int(item.get("attempts", 0)) >= MAX_ATTEMPTS:
             return _resp(429, {"ok": False, "error": "max_attempts"})
-        if now > int(item.get("verify_expires", 0)):
+        if now > int(item.get("verify_expires", 0)) or not item.get("verify_code"):
             return _resp(400, {"ok": False, "error": "expirado"})
         if code != item.get("verify_code"):
             TABLE.update_item(Key={"email": email},
@@ -158,15 +221,23 @@ def handler(event, _context):
             UpdateExpression="SET verified = :v, verified_at = :t REMOVE verify_code, verify_expires, attempts",
             ExpressionAttributeValues={":v": True, ":t": now},
         )
-        return _resp(200, {"ok": True, "verified": True})
+        return _resp(200, {"ok": True, "verified": True,
+                           "token": _issue_token(email), "nombre": item.get("nombre", "")})
+
+    # ---------- login: código solo para miembros existentes ----------
+    if action == "login":
+        if (body.get("web") or "").strip():           # honeypot
+            return _resp(200, {"ok": True, "sent": True})
+        item = _get(email)
+        if not item:
+            return _resp(404, {"ok": False, "error": "desconocido"})
+        return _issue_code(email, item.get("nombre", ""), item)
 
     # ---------- resend ----------
     if action == "resend":
         item = _get(email)
         if not item:
             return _resp(400, {"ok": False, "error": "desconocido"})
-        if item.get("verified"):
-            return _resp(200, {"ok": True, "verified": True})
         return _issue_code(email, item.get("nombre", ""), item)
 
     # ---------- profile: enriquecimiento opcional ----------

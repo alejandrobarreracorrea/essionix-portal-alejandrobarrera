@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /app/
+Disallow: /entrar/
 
 User-agent: GPTBot
 Allow: /

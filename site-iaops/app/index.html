@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mi aprendizaje — IAOps LATAM</title>
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#08080b" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body data-endpoint="__REGISTER_ENDPOINT__">
+  <header class="nav">
+    <div class="shell nav__inner">
+      <a class="nav__brand" href="/">IAOps <b>LATAM</b></a>
+      <nav class="nav__links">
+        <a href="/app/" class="is-current">Mi aprendizaje</a>
+        <a href="/cursos/">Cursos</a>
+        <a href="/programa/">Programa</a>
+      </nav>
+      <div class="navgroup">
+        <a class="signin" id="logout" href="/">Salir</a>
+        <span class="avatar" id="avatar">·</span>
+      </div>
+    </div>
+  </header>
+  <main class="shell page">
+    <div id="app-dash" class="is-hidden">
+      <h1 class="welcome">Hola de nuevo, <b id="dash-nombre"></b>.</h1>
+      <p class="lead" style="margin-bottom: 10px;">Continúa donde lo dejaste:</p>
+      <div class="panel">
+        <span class="t" ><span id="cont-title"></span><small id="cont-sub"></small></span>
+        <a class="btn btn--primary" id="cont-btn" href="/app/clase/?c=a1">Continuar →</a>
+      </div>
+
+      <section class="sec">
+        <span class="kicker">Reto activo</span>
+        <div class="panel">
+          <span class="t">5 días para tu primera nube dirigida<small>Llega en octubre — los miembros lo estrenan. Te avisamos por correo.</small></span>
+          <span class="badge soon">📅 octubre</span>
+        </div>
+      </section>
+
+      <section class="sec">
+        <span class="kicker">Tu progreso</span>
+        <ul class="rows">
+          <li><span class="t">Clases completadas</span><span class="m free" id="prog-clases">0 de 12</span></li>
+          <li><span class="t">Siguiente insignia<small>Completa el Reto 1 → "Primera Nube Dirigida"</small></span><span class="m">reto de octubre</span></li>
+        </ul>
+      </section>
+    </div>
+  </main>
+  <footer class="footer">
+    <div class="shell footer__inner">
+      <span>© <span id="year">2026</span> IAOps LATAM · <a href="https://alejandrobarrera.net" target="_blank" rel="noopener">el fundador</a></span>
+      <span>La IA ejecuta. Tú diriges.</span>
+    </div>
+  </footer>
+  <script src="/catalog.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
