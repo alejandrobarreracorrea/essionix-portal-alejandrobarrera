@@ -1,19 +1,19 @@
 # ---------------------------------------------------------------------------
-# iaopslatam.com → 301 → alejandrobarrera.net
-# Dominio-marca de la escuela/comunidad (fácil de dictar en clase). Por ahora
-# redirige al hub personal; en el futuro será su propia landing.
-# Encender enable_iaopslatam cuando el registro del dominio esté COMPLETO
-# (la validación ACM necesita que los nameservers ya deleguen).
+# iaopslatam.com — LA CASA del ecosistema (comunidad + cursos + programa).
+# v1 (2026-08-28): deja de ser redirect y se convierte en sitio propio:
+# bucket privado + OAC + la distribución existente reapuntada. El contenido
+# vive en site-iaops/ y lo publica el mismo pipeline.
 # ---------------------------------------------------------------------------
 
 variable "enable_iaopslatam" {
-  description = "Activa el redirect de iaopslatam.com (requiere registro de dominio completado)"
+  description = "Activa el sitio iaopslatam.com (requiere registro de dominio completado)"
   type        = bool
   default     = false
 }
 
 locals {
-  iaops_domains = ["iaopslatam.com", "www.iaopslatam.com"]
+  iaops_domains     = ["iaopslatam.com", "www.iaopslatam.com"]
+  iaops_bucket_name = "iaopslatam-${var.environment}-${data.aws_caller_identity.current.account_id}"
 }
 
 data "aws_route53_zone" "iaops" {
@@ -57,67 +57,104 @@ resource "aws_acm_certificate_validation" "iaops" {
   validation_record_fqdns = [for r in aws_route53_record.iaops_acm_validation : r.fqdn]
 }
 
-# Función CloudFront: 301 permanente preservando ruta y query string.
+# ---------------------------------------------------------------------------
+# S3 privado del sitio de la comunidad
+# ---------------------------------------------------------------------------
+resource "aws_s3_bucket" "iaops" {
+  count  = var.enable_iaopslatam ? 1 : 0
+  bucket = local.iaops_bucket_name
+  tags   = local.tags
+}
+
+resource "aws_s3_bucket_public_access_block" "iaops" {
+  count                   = var.enable_iaopslatam ? 1 : 0
+  bucket                  = aws_s3_bucket.iaops[0].id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_versioning" "iaops" {
+  count  = var.enable_iaopslatam ? 1 : 0
+  bucket = aws_s3_bucket.iaops[0].id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_cloudfront_origin_access_control" "iaops" {
+  count                             = var.enable_iaopslatam ? 1 : 0
+  name                              = "${local.iaops_bucket_name}-oac"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
+}
+
+# NOTA: este recurso nació como función de redirect; hoy es el url-rewrite de
+# URLs limpias del sitio. Se conserva el label para actualizarlo in-place.
 resource "aws_cloudfront_function" "iaops_redirect" {
   count   = var.enable_iaopslatam ? 1 : 0
   name    = "iaopslatam-redirect-${var.environment}"
   runtime = "cloudfront-js-2.0"
   publish = true
-  comment = "301 iaopslatam.com -> alejandrobarrera.net"
+  comment = "Pretty URLs iaopslatam.com: agrega index.html a rutas de carpeta"
 
   code = <<-EOT
     function handler(event) {
       var req = event.request;
-      var qs = "";
-      var keys = Object.keys(req.querystring);
-      if (keys.length > 0) {
-        qs = "?" + keys.map(function (k) { return k + "=" + req.querystring[k].value; }).join("&");
+      if (req.uri.endsWith("/")) {
+        req.uri += "index.html";
+      } else if (!req.uri.includes(".")) {
+        req.uri += "/index.html";
       }
-      return {
-        statusCode: 301,
-        statusDescription: "Moved Permanently",
-        headers: {
-          "location": { value: "https://${var.domain_name}" + req.uri + qs },
-          "cache-control": { value: "max-age=86400" }
-        }
-      };
+      return req;
     }
   EOT
 }
 
 resource "aws_cloudfront_distribution" "iaops" {
-  count           = var.enable_iaopslatam ? 1 : 0
-  enabled         = true
-  is_ipv6_enabled = true
-  comment         = "iaopslatam.com redirect (${var.environment})"
-  aliases         = local.iaops_domains
-  price_class     = "PriceClass_100"
-  tags            = local.tags
+  count               = var.enable_iaopslatam ? 1 : 0
+  enabled             = true
+  is_ipv6_enabled     = true
+  comment             = "iaopslatam.com — comunidad (${var.environment})"
+  default_root_object = "index.html"
+  aliases             = local.iaops_domains
+  price_class         = "PriceClass_100"
+  tags                = local.tags
 
-  # Origen nunca alcanzado: la función responde antes. CloudFront exige uno.
   origin {
-    domain_name = aws_s3_bucket.site.bucket_regional_domain_name
-    origin_id   = "unused-origin"
-
-    custom_origin_config {
-      http_port              = 80
-      https_port             = 443
-      origin_protocol_policy = "https-only"
-      origin_ssl_protocols   = ["TLSv1.2"]
-    }
+    domain_name              = aws_s3_bucket.iaops[0].bucket_regional_domain_name
+    origin_id                = "s3-${aws_s3_bucket.iaops[0].id}"
+    origin_access_control_id = aws_cloudfront_origin_access_control.iaops[0].id
   }
 
   default_cache_behavior {
-    target_origin_id       = "unused-origin"
+    target_origin_id       = "s3-${aws_s3_bucket.iaops[0].id}"
     viewer_protocol_policy = "redirect-to-https"
-    allowed_methods        = ["GET", "HEAD"]
+    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
     cached_methods         = ["GET", "HEAD"]
+    compress               = true
     cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6" # CachingOptimized
 
     function_association {
       event_type   = "viewer-request"
       function_arn = aws_cloudfront_function.iaops_redirect[0].arn
     }
+  }
+
+  custom_error_response {
+    error_code            = 403
+    response_code         = 200
+    response_page_path    = "/index.html"
+    error_caching_min_ttl = 10
+  }
+
+  custom_error_response {
+    error_code            = 404
+    response_code         = 200
+    response_page_path    = "/index.html"
+    error_caching_min_ttl = 10
   }
 
   restrictions {
@@ -131,6 +168,34 @@ resource "aws_cloudfront_distribution" "iaops" {
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }
+}
+
+data "aws_iam_policy_document" "iaops" {
+  count = var.enable_iaopslatam ? 1 : 0
+
+  statement {
+    sid       = "AllowCloudFrontServicePrincipalReadOnly"
+    effect    = "Allow"
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.iaops[0].arn}/*"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values   = [aws_cloudfront_distribution.iaops[0].arn]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "iaops" {
+  count  = var.enable_iaopslatam ? 1 : 0
+  bucket = aws_s3_bucket.iaops[0].id
+  policy = data.aws_iam_policy_document.iaops[0].json
 }
 
 resource "aws_route53_record" "iaops_ipv4" {
@@ -161,6 +226,10 @@ resource "aws_route53_record" "iaops_ipv6" {
   }
 }
 
-output "iaopslatam_enabled" {
-  value = var.enable_iaopslatam
+output "iaops_bucket_name" {
+  value = var.enable_iaopslatam ? aws_s3_bucket.iaops[0].id : ""
+}
+
+output "iaops_distribution_id" {
+  value = var.enable_iaopslatam ? aws_cloudfront_distribution.iaops[0].id : ""
 }

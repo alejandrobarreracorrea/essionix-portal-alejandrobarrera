@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Únete gratis — IAOps LATAM</title>
+  <meta name="description" content="Hazte miembro de la comunidad de la operación moderna en la nube: 2 campos, un código a tu correo, y adentro." />
+  <link rel="canonical" href="https://iaopslatam.com/unirme/" />
+  <meta name="theme-color" content="#08080b" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Únete gratis — IAOps LATAM" />
+  <meta property="og:description" content="Hazte miembro de la comunidad de la operación moderna en la nube: 2 campos, un código a tu correo, y adentro." />
+  <meta property="og:url" content="https://iaopslatam.com/unirme/" />
+  <meta property="og:locale" content="es_CO" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="shell nav__inner">
+      <a class="nav__brand" href="/">IAOps <b>LATAM</b></a>
+      <nav class="nav__links">
+        <a href="/cursos/">Cursos</a>
+        <a href="/programa/">Programa</a>
+        <a href="/mentoria/">Mentoría</a>
+      </nav>
+      <a class="btn btn--primary" href="/unirme/">Únete gratis</a>
+    </div>
+  </header>
+  <main class="shell page">
+    <span class="kicker">Membresía · gratis</span>
+    <h1>Hazte miembro de <span class="grad">IAOps LATAM</span></h1>
+    <p class="lead">2 campos y un código a tu correo — sin contraseñas, tu correo es tu firma. Recibes la invitación a la comunidad, los runbooks y cada recurso nuevo.</p>
+
+    <div class="steps">
+      <span class="is-active" data-step="1"><i>01</i>Registro</span>
+      <span data-step="2"><i>02</i>Tu firma</span>
+      <span data-step="3"><i>03</i>Perfil</span>
+    </div>
+    <div class="bar"><i id="bar-fill"></i></div>
+
+    <form id="lead-form" data-endpoint="__REGISTER_ENDPOINT__" novalidate>
+      <div id="reg-step-1">
+        <div class="grid2">
+          <label><span>Nombre *</span><input type="text" name="nombre" required minlength="2" maxlength="80" autocomplete="name" /></label>
+          <label><span>Email *</span><input type="email" name="email" required maxlength="120" autocomplete="email" /><small class="hint">Te envío un código de 6 dígitos.</small></label>
+        </div>
+        <input type="text" name="web" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
+        <div class="actions">
+          <button type="submit" class="btn btn--primary">Continuar →</button>
+          <p class="status" id="reg-status-1" role="status" aria-live="polite"></p>
+        </div>
+        <p class="privacy">Solo uso tus datos para la comunidad. Cero spam, te sales cuando quieras.</p>
+      </div>
+
+      <div id="reg-step-2" class="is-hidden">
+        <h2>Firma con tu código</h2>
+        <p class="lead">En IAOps nada importante pasa sin firma — tu membresía tampoco. Enviado a <b id="reg-email-echo"></b> (revisa spam).</p>
+        <div class="verify">
+          <input type="text" id="reg-code" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="······" autocomplete="one-time-code" />
+          <button type="button" id="reg-verify-btn" class="btn btn--primary">Firmar ✍</button>
+        </div>
+        <div class="actions">
+          <a id="reg-resend" class="resend">Reenviar código</a>
+          <p class="status" id="reg-status-2" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <div id="reg-step-3" class="is-hidden">
+        <h2>Completa tu perfil</h2>
+        <p class="lead">Opcional — me ayuda a enviarte solo lo que te sirve. Un minuto.</p>
+        <div class="grid2">
+          <label><span>País</span><select name="pais">
+            <option value="colombia">Colombia</option><option value="mexico">México</option>
+            <option value="peru">Perú</option><option value="ecuador">Ecuador</option>
+            <option value="argentina">Argentina</option><option value="chile">Chile</option>
+            <option value="bolivia">Bolivia</option><option value="venezuela">Venezuela</option>
+            <option value="espana">España</option><option value="otro">Otro</option>
+          </select></label>
+          <label><span>¿A qué te dedicas?</span><select name="dedicacion">
+            <option value="estudiante">Estudiante</option><option value="onprem">Infraestructura on-premise</option>
+            <option value="cloud">Cloud / DevOps / SRE</option><option value="dev">Desarrollo de software</option>
+            <option value="datos">Datos / DBA</option><option value="otro">Otro</option>
+          </select></label>
+          <label><span>Rol / cargo</span><input type="text" name="rol" maxlength="80" placeholder="SysAdmin, Dev, Estudiante…" /></label>
+          <label><span>Empresa / institución</span><input type="text" name="empresa" maxlength="100" /></label>
+          <label><span>LinkedIn</span><input type="url" name="linkedin" maxlength="150" placeholder="https://linkedin.com/in/…" /></label>
+          <label><span>WhatsApp</span><input type="tel" name="whatsapp" maxlength="20" placeholder="+57 ..." /></label>
+          <label><span>¿Cómo nos conociste?</span><select name="canal">
+            <option value="clases">En clase (universidad)</option><option value="linkedin">LinkedIn</option>
+            <option value="evento">Charla o meetup</option><option value="amigo">Me lo recomendaron</option>
+            <option value="otro">Otro</option>
+          </select></label>
+          <label><span>Me interesa</span><select name="interes">
+            <option value="comunidad">La comunidad (gratis)</option><option value="mentoria">Mentoría 1:1</option>
+            <option value="charlas">Charlas y talleres</option><option value="todo">Todo lo anterior</option>
+          </select></label>
+        </div>
+        <div class="actions">
+          <button type="button" id="reg-profile-btn" class="btn btn--primary">Guardar perfil →</button>
+          <a id="reg-skip" class="resend">Saltar por ahora</a>
+          <p class="status" id="reg-status-3" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <div id="reg-step-4" class="is-hidden">
+        <h2>✓ Firmado. Bienvenido a IAOps LATAM.</h2>
+        <p class="lead">Ya eres miembro: te llegará la invitación a la comunidad y cada recurso nuevo. Mientras tanto, el fundador documenta todo primero en LinkedIn.</p>
+        <a class="btn btn--ghost" href="https://www.linkedin.com/in/alejobarrera/" target="_blank" rel="noopener">Seguir al fundador →</a>
+      </div>
+    </form>
+  </main>
+  <footer class="footer">
+    <div class="shell footer__inner">
+      <span>© <span id="year">2026</span> IAOps LATAM · <a href="https://alejandrobarrera.net" target="_blank" rel="noopener">el fundador</a></span>
+      <span>La IA ejecuta. Tú diriges.</span>
+    </div>
+  </footer>
+  <script src="/script.js"></script>
+</body>
+</html>

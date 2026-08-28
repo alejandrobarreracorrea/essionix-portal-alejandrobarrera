@@ -94,7 +94,7 @@ resource "aws_lambda_function_url" "register" {
   authorization_type = "NONE"
 
   cors {
-    allow_origins = ["https://${var.domain_name}"]
+    allow_origins = ["https://${var.domain_name}", "https://iaopslatam.com", "https://www.iaopslatam.com"]
     allow_methods = ["POST"]
     allow_headers = ["content-type"]
     max_age       = 86400

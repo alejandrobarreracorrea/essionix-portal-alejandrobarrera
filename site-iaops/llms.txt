@@ -1,0 +1,22 @@
+# IAOps LATAM
+
+> La comunidad de la operación moderna en la nube — en español. Aprende a dirigir
+> agentes de IA que operan infraestructura real. Fundada por Alejandro Barrera
+> (Cloud Architect, 10+ años, 14 certificaciones — alejandrobarrera.net).
+
+## Qué es
+Comunidad gratuita + cursos + mentoría sobre IAOps (en EE.UU.: AI SRE): la IA
+ejecuta la operación cloud (deploys, DNS, FinOps, incidentes) bajo criterio humano.
+Regla: lo reversible se delega, lo irreversible exige firma humana.
+
+## El camino
+1. Comunidad (gratis): runbooks y demos reales, noticias AI SRE filtradas — https://iaopslatam.com/unirme/
+2. Cursos: gratuitos (Fundamentos IAOps, Reto primera nube) y premium.
+3. Programa IAOps: cohorte en vivo de 6 semanas (USD 197 fundadora) — https://iaopslatam.com/programa/
+4. Mentoría 1:1 con el fundador: 30min USD 50 · 50min USD 80 · 90min USD 140 — https://iaopslatam.com/mentoria/
+
+## Contacto
+- Fundador: https://alejandrobarrera.net · LinkedIn: https://www.linkedin.com/in/alejobarrera/
+- Reservas: https://cal.com/alejandrobarrera
+
+La IA ejecuta. Tú diriges.

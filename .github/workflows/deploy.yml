@@ -34,6 +34,8 @@ jobs:
       BUCKET_NAME: ${{ steps.tf-output.outputs.bucket_name }}
       DISTRIBUTION_ID: ${{ steps.tf-output.outputs.distribution_id }}
       REGISTER_URL: ${{ steps.tf-output.outputs.register_url }}
+      IAOPS_BUCKET: ${{ steps.tf-output.outputs.iaops_bucket }}
+      IAOPS_DIST: ${{ steps.tf-output.outputs.iaops_dist }}
 
     steps:
       - name: Checkout del repositorio
@@ -77,6 +79,8 @@ jobs:
           echo "bucket_name=$(terraform output -raw bucket_name)" >> "$GITHUB_OUTPUT"
           echo "distribution_id=$(terraform output -raw distribution_id)" >> "$GITHUB_OUTPUT"
           echo "register_url=$(terraform output -raw register_url)" >> "$GITHUB_OUTPUT"
+          echo "iaops_bucket=$(terraform output -raw iaops_bucket_name)" >> "$GITHUB_OUTPUT"
+          echo "iaops_dist=$(terraform output -raw iaops_distribution_id)" >> "$GITHUB_OUTPUT"
 
   deploy:
     name: Publicar sitio (S3 sync + invalidación CloudFront)
@@ -91,6 +95,8 @@ jobs:
       BUCKET_NAME: ${{ needs.infra.outputs.BUCKET_NAME }}
       DISTRIBUTION_ID: ${{ needs.infra.outputs.DISTRIBUTION_ID }}
       REGISTER_URL: ${{ needs.infra.outputs.REGISTER_URL }}
+      IAOPS_BUCKET: ${{ needs.infra.outputs.IAOPS_BUCKET }}
+      IAOPS_DIST: ${{ needs.infra.outputs.IAOPS_DIST }}
 
     steps:
       - name: Checkout del repositorio
@@ -108,7 +114,7 @@ jobs:
           # URL nueva en cada deploy: el navegador baja la version nueva sin
           # hard-reload, complementando la invalidacion de CloudFront.
           VER="${GITHUB_SHA::8}"
-          find "${SITE_DIR}" -name "*.html" -print0 | xargs -0 sed -i \
+          find "${SITE_DIR}" site-iaops -name "*.html" -print0 | xargs -0 sed -i \
             -e "s|/styles\.css\"|/styles.css?v=${VER}\"|g" \
             -e "s|/script\.js\"|/script.js?v=${VER}\"|g" \
             -e "s|__REGISTER_ENDPOINT__|${REGISTER_URL}|g"
@@ -139,3 +145,16 @@ jobs:
           aws cloudfront create-invalidation \
             --distribution-id "${DISTRIBUTION_ID}" \
             --paths "/*"
+
+      - name: Publicar iaopslatam.com
+        run: |
+          if [ -z "${IAOPS_BUCKET}" ]; then echo "iaopslatam desactivado"; exit 0; fi
+          aws s3 sync "site-iaops/" "s3://${IAOPS_BUCKET}/" \
+            --delete \
+            --exclude "*.html" --exclude "*.xml" --exclude "*.txt" \
+            --cache-control "public,max-age=3600"
+          aws s3 sync "site-iaops/" "s3://${IAOPS_BUCKET}/" \
+            --exclude "*" \
+            --include "*.html" --include "*.xml" --include "*.txt" \
+            --cache-control "public,max-age=300"
+          aws cloudfront create-invalidation --distribution-id "${IAOPS_DIST}" --paths "/*"
