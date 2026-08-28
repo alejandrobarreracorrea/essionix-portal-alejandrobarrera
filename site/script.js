@@ -37,12 +37,15 @@
   if (langBtn) langBtn.addEventListener("click", function () { applyLang(current === "es" ? "en" : "es"); });
   applyLang(current);
 
-  /* ---------- smooth scroll sin # ---------- */
+  /* ---------- smooth scroll sin # (robusto ante cualquier scroller) ---------- */
   function scrollToId(id) {
-    var target = id === "top" ? document.body : document.getElementById(id);
-    if (!target) return;
-    var top = id === "top" ? 0 : target.getBoundingClientRect().top + window.pageYOffset - 60;
-    window.scrollTo({ top: top, behavior: motionOK ? "smooth" : "auto" });
+    var behavior = motionOK ? "smooth" : "auto";
+    if (id === "top") {
+      (document.scrollingElement || document.documentElement).scrollTo({ top: 0, behavior: behavior });
+      return;
+    }
+    var target = document.getElementById(id);
+    if (target) target.scrollIntoView({ behavior: behavior, block: "start" });
   }
   document.querySelectorAll("[data-scroll]").forEach(function (link) {
     link.addEventListener("click", function (e) { e.preventDefault(); scrollToId(link.getAttribute("data-scroll")); });
@@ -222,8 +225,9 @@
   /* ---------- FAB ---------- */
   var fab = document.querySelector(".fab");
   if (fab) {
+    var scroller = document.scrollingElement || document.documentElement;
     window.addEventListener("scroll", function () {
-      fab.classList.toggle("is-visible", window.pageYOffset > window.innerHeight * 0.85);
+      fab.classList.toggle("is-visible", scroller.scrollTop > window.innerHeight * 0.85);
     }, { passive: true });
   }
 

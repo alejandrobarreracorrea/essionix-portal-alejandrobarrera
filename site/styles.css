@@ -31,7 +31,7 @@ html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body {
   background: var(--bg); color: var(--text);
   font-family: var(--font-body); font-size: 16px; line-height: 1.55;
-  -webkit-font-smoothing: antialiased; overflow-x: hidden; position: relative;
+  -webkit-font-smoothing: antialiased; overflow-x: clip; position: relative;
 }
 
 /* mesh gradient animado */
@@ -68,6 +68,9 @@ a { color: inherit; text-decoration: none; }
 ::selection { background: var(--a1); color: #fff; }
 
 .kicker { display: inline-block; font-family: var(--font-mono); font-size: .8rem; letter-spacing: .04em; color: var(--accent); margin-bottom: 18px; }
+
+/* offset del nav sticky para cualquier scroll a ancla/sección */
+.movement, .strip, .regform, #register { scroll-margin-top: 82px; }
 
 /* ---------- buttons ---------- */
 .btn {
