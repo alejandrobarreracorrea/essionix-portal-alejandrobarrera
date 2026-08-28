@@ -94,6 +94,55 @@
     });
   }
 
+  /* ---------- registro de leads ---------- */
+  var leadForm = document.getElementById("lead-form");
+  if (leadForm) {
+    var MSG = {
+      es: { sending: "enviando…", ok: "✓ ¡Listo! Te escribo pronto.", err: "algo falló — intenta de nuevo o escríbeme por LinkedIn", invalid: "revisa tu nombre y email", config: "registro en mantenimiento — escríbeme por LinkedIn" },
+      en: { sending: "sending…", ok: "✓ Done! I'll be in touch soon.", err: "something failed — retry or ping me on LinkedIn", invalid: "check your name and email", config: "signup under maintenance — ping me on LinkedIn" }
+    };
+    var statusEl = leadForm.querySelector(".regform__status");
+    var btnEl = leadForm.querySelector("button[type=submit]");
+
+    function setStatus(kind, key) {
+      var t = MSG[current === "en" ? "en" : "es"];
+      statusEl.textContent = t[key];
+      statusEl.className = "regform__status" + (kind ? " " + kind : "");
+    }
+
+    leadForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var endpoint = leadForm.getAttribute("data-endpoint") || "";
+      if (endpoint.indexOf("http") !== 0) { setStatus("err", "config"); return; }
+
+      var data = {
+        nombre: (leadForm.nombre.value || "").trim(),
+        email: (leadForm.email.value || "").trim(),
+        whatsapp: (leadForm.whatsapp.value || "").trim(),
+        interes: leadForm.interes.value,
+        web: leadForm.web.value || ""
+      };
+      if (data.nombre.length < 2 || !/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(data.email)) {
+        setStatus("err", "invalid"); return;
+      }
+
+      btnEl.disabled = true;
+      setStatus("", "sending");
+      fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (j) {
+          if (j && j.ok) { setStatus("ok", "ok"); leadForm.reset(); }
+          else { setStatus("err", "invalid"); }
+        })
+        .catch(function () { setStatus("err", "err"); })
+        .finally(function () { btnEl.disabled = false; });
+    });
+  }
+
   /* ---------- FAB ---------- */
   var fab = document.querySelector(".fab");
   if (fab) {

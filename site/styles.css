@@ -212,6 +212,29 @@ a { color: inherit; text-decoration: none; }
 .entry__body > p { color: var(--muted); font-size: clamp(1rem, 1.6vw, 1.12rem); max-width: 60ch; margin-bottom: 18px; }
 .entry__points { font-family: var(--font-mono); font-size: .85rem; color: var(--faint); }
 
+/* ---------- registro de leads ---------- */
+.regform { margin-top: clamp(40px, 6vw, 64px); padding-top: clamp(28px, 4vw, 44px); border-top: 1px solid var(--line); }
+.regform h3 { font-size: clamp(1.6rem, 3.4vw, 2.4rem); margin-bottom: 12px; }
+.regform__sub { color: var(--muted); max-width: 58ch; margin-bottom: 28px; }
+.regform__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 22px; max-width: 780px; }
+.regform label { display: grid; gap: 8px; }
+.regform label > span { font-family: var(--font-mono); font-size: .78rem; letter-spacing: .05em; text-transform: uppercase; color: var(--faint); }
+.regform input, .regform select {
+  background: color-mix(in srgb, #fff 3%, transparent); border: 1px solid var(--line); border-radius: 10px;
+  color: var(--text); font-family: var(--font-body); font-size: 1rem; padding: 13px 15px; outline: none;
+  transition: border-color .2s; width: 100%;
+}
+.regform input:focus, .regform select:focus { border-color: var(--accent); }
+.regform select { appearance: none; -webkit-appearance: none; }
+.regform select option { background: var(--cell, #121217); color: var(--text); }
+.regform__hp { position: absolute !important; left: -9999px !important; height: 0; width: 0; opacity: 0; pointer-events: none; }
+.regform__actions { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 26px; }
+.regform__status { font-family: var(--font-mono); font-size: .88rem; color: var(--muted); min-height: 1.2em; }
+.regform__status.ok { color: var(--a2); }
+.regform__status.err { color: #ff8a8a; }
+.regform__privacy { margin-top: 14px; font-size: .8rem; color: var(--faint); }
+@media (max-width: 620px) { .regform__grid { grid-template-columns: 1fr; } }
+
 /* ---------- asesoría / planes ---------- */
 .list--pricing { margin-top: clamp(28px, 5vw, 44px); }
 .list--pricing .row__idx { min-width: 70px; color: var(--accent); }

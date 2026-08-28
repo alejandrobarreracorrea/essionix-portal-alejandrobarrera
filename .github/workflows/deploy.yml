@@ -31,6 +31,7 @@ jobs:
     outputs:
       BUCKET_NAME: ${{ steps.tf-output.outputs.bucket_name }}
       DISTRIBUTION_ID: ${{ steps.tf-output.outputs.distribution_id }}
+      REGISTER_URL: ${{ steps.tf-output.outputs.register_url }}
 
     steps:
       - name: Checkout del repositorio
@@ -72,6 +73,7 @@ jobs:
         run: |
           echo "bucket_name=$(terraform output -raw bucket_name)" >> "$GITHUB_OUTPUT"
           echo "distribution_id=$(terraform output -raw distribution_id)" >> "$GITHUB_OUTPUT"
+          echo "register_url=$(terraform output -raw register_url)" >> "$GITHUB_OUTPUT"
 
   deploy:
     name: Publicar sitio (S3 sync + invalidación CloudFront)
@@ -85,6 +87,7 @@ jobs:
     env:
       BUCKET_NAME: ${{ needs.infra.outputs.BUCKET_NAME }}
       DISTRIBUTION_ID: ${{ needs.infra.outputs.DISTRIBUTION_ID }}
+      REGISTER_URL: ${{ needs.infra.outputs.REGISTER_URL }}
 
     steps:
       - name: Checkout del repositorio
@@ -103,7 +106,9 @@ jobs:
           # hard-reload, complementando la invalidacion de CloudFront.
           VER="${GITHUB_SHA::8}"
           sed -i "s/styles\.css\"/styles.css?v=${VER}\"/g; s/script\.js\"/script.js?v=${VER}\"/g" "${SITE_DIR}/index.html"
-          echo "Assets versionados con ?v=${VER}"
+          # Inyectar la Function URL del registro de leads
+          sed -i "s|__REGISTER_ENDPOINT__|${REGISTER_URL}|g" "${SITE_DIR}/index.html"
+          echo "Assets versionados con ?v=${VER} y endpoint de registro inyectado"
           grep -o 'styles\.css?v=[a-f0-9]*\|script\.js?v=[a-f0-9]*' "${SITE_DIR}/index.html" || true
 
       - name: Sincronizar assets (img/css/js/svg) con caché moderada

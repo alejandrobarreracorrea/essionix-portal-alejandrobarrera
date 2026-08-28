@@ -9,3 +9,6 @@ terraform/.terraform.lock.hcl
 crash.log
 *.tfplan
 .terraform.tfstate.lock.info
+terraform/build/
+terraform/bootstrap/.terraform/
+terraform/bootstrap/.terraform.lock.hcl

@@ -77,7 +77,7 @@
           <span class="lang__sep">/</span>
           <span class="lang__opt" data-lang="en">EN</span>
         </button>
-        <a class="btn btn--solid magnetic" data-scroll="rutas" data-es="Elige tu ruta" data-en="Pick your path">Elige tu ruta</a>
+        <a class="btn btn--solid magnetic" data-scroll="register" data-es="Regístrate" data-en="Sign up">Regístrate</a>
       </div>
     </div>
   </header>
@@ -297,7 +297,7 @@
         <li class="srow reveal">
           <span class="srow__no">01</span>
           <span class="srow__title" data-es="Comunidad IAOps LATAM" data-en="IAOps LATAM community">Comunidad IAOps LATAM</span>
-          <span class="srow__desc" data-es="Gratuita. Runbooks, demos, noticias de AI SRE y preguntas — el punto de encuentro de los que estamos dando el salto a operar con IA. Abre en septiembre; anúnciate en LinkedIn para la invitación." data-en="Free. Runbooks, demos, AI SRE news and questions — the meeting point for those making the leap to AI-driven operations. Opens in September; follow me on LinkedIn for the invite.">Gratuita. Runbooks, demos, noticias de AI SRE y preguntas — el punto de encuentro de los que estamos dando el salto a operar con IA. Abre en septiembre; anúnciate en LinkedIn para la invitación.</span>
+          <span class="srow__desc" data-es="Gratuita. Runbooks, demos, noticias de AI SRE y preguntas — el punto de encuentro de los que estamos dando el salto a operar con IA. Abre en septiembre: regístrate abajo y te llega la invitación." data-en="Free. Runbooks, demos, AI SRE news and questions — the meeting point for those making the leap to AI-driven operations. Opens in September: register below and the invite reaches you.">Gratuita. Runbooks, demos, noticias de AI SRE y preguntas — el punto de encuentro de los que estamos dando el salto a operar con IA. Abre en septiembre: regístrate abajo y te llega la invitación.</span>
         </li>
         <li class="srow reveal">
           <span class="srow__no">02</span>
@@ -310,6 +310,45 @@
           <span class="srow__desc" data-es="Llevo IAOps a tu evento, universidad o empresa: de la charla inspiracional al taller práctico de dirigir agentes. Escríbeme." data-en="I bring IAOps to your event, university or company: from the inspirational talk to the hands-on agent-directing workshop. Write me.">Llevo IAOps a tu evento, universidad o empresa: de la charla inspiracional al taller práctico de dirigir agentes. Escríbeme.</span>
         </li>
       </ul>
+
+      <!-- Registro de usuarios (leads) -->
+      <div class="regform reveal" id="register">
+        <h3 data-es="Regístrate" data-en="Sign up">Regístrate</h3>
+        <p class="regform__sub" data-es="Déjame tus datos y te llega todo primero: la invitación a la comunidad, los runbooks, el meetup y cada nuevo recurso." data-en="Leave your details and everything reaches you first: the community invite, the runbooks, the meetup and every new resource.">Déjame tus datos y te llega todo primero: la invitación a la comunidad, los runbooks, el meetup y cada nuevo recurso.</p>
+
+        <form id="lead-form" data-endpoint="__REGISTER_ENDPOINT__" novalidate>
+          <div class="regform__grid">
+            <label>
+              <span data-es="Nombre" data-en="Name">Nombre</span>
+              <input type="text" name="nombre" required minlength="2" maxlength="80" autocomplete="name" />
+            </label>
+            <label>
+              <span>Email</span>
+              <input type="email" name="email" required maxlength="120" autocomplete="email" />
+            </label>
+            <label>
+              <span data-es="WhatsApp (opcional)" data-en="WhatsApp (optional)">WhatsApp (opcional)</span>
+              <input type="tel" name="whatsapp" maxlength="20" autocomplete="tel" />
+            </label>
+            <label>
+              <span data-es="Me interesa" data-en="I'm interested in">Me interesa</span>
+              <select name="interes">
+                <option value="comunidad" data-es="Comunidad IAOps (gratis)" data-en="IAOps community (free)">Comunidad IAOps (gratis)</option>
+                <option value="mentoria" data-es="Mentoría 1:1" data-en="1:1 mentoring">Mentoría 1:1</option>
+                <option value="charlas" data-es="Charlas y talleres" data-en="Talks &amp; workshops">Charlas y talleres</option>
+                <option value="todo" data-es="Todo lo anterior" data-en="All of the above">Todo lo anterior</option>
+              </select>
+            </label>
+          </div>
+          <!-- honeypot anti-bots -->
+          <input type="text" name="web" tabindex="-1" autocomplete="off" class="regform__hp" aria-hidden="true" />
+          <div class="regform__actions">
+            <button type="submit" class="btn btn--solid magnetic" data-es="Quiero unirme →" data-en="Count me in →">Quiero unirme →</button>
+            <p class="regform__status" role="status" aria-live="polite"></p>
+          </div>
+          <p class="regform__privacy" data-es="Solo uso tus datos para avisarte de esto. Cero spam, te sales cuando quieras." data-en="I only use your data to keep you posted on this. Zero spam, leave anytime.">Solo uso tus datos para avisarte de esto. Cero spam, te sales cuando quieras.</p>
+        </form>
+      </div>
     </section>
 
     <!-- ============ 06 MENTORÍA (paga) ============ -->
