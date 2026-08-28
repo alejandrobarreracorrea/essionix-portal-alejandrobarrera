@@ -56,7 +56,7 @@ a { color: inherit; text-decoration: none; }
 .nav__inner { display: flex; align-items: center; justify-content: space-between; height: 62px; gap: 18px; }
 .nav__brand { display: flex; align-items: baseline; gap: 8px; font-family: var(--display); font-weight: 700; font-size: 1.05rem; }
 .nav__brand b { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.nav__links { display: flex; gap: 22px; }
+.nav__links { display: flex; align-items: center; gap: 22px; }
 .nav__links a { color: var(--muted); font-size: .93rem; }
 .nav__links a:hover, .nav__links a.is-current { color: var(--text); }
 .nav .btn { padding: .6em 1.2em; font-size: .92rem; }
@@ -149,3 +149,7 @@ select option { background: #111116; }
   html { scroll-behavior: auto; }
   * { transition: none !important; }
 }
+
+/* switcher de ecosistema (cross-link) */
+.eco { font-family: var(--mono); font-size: .8rem; color: var(--a2); }
+.eco:hover { opacity: .8; }
