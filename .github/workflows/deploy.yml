@@ -16,6 +16,8 @@ env:
   # Alias alejandrobarrera.net ya liberado de la distro legacy (EZ6LM98O6TRNJ).
   # Cutover activado: la distro nueva reclama el alias + Route53 apunta a ella.
   ENABLE_CUSTOM_DOMAIN: "true"
+  # Encender cuando el registro de iaopslatam.com complete (redirect 301).
+  ENABLE_IAOPSLATAM: "false"
   TF_BACKEND_BUCKET: essionix-s3-pdn-us-east-1-remotestates
   OIDC_ROLE_ARN: arn:aws:iam::484005000536:role/essionix-role-pdn-us-east-1-oidc
 
@@ -65,6 +67,7 @@ jobs:
         env:
           TF_VAR_environment: ${{ env.ENVIRONMENT }}
           TF_VAR_enable_custom_domain: ${{ env.ENABLE_CUSTOM_DOMAIN }}
+          TF_VAR_enable_iaopslatam: ${{ env.ENABLE_IAOPSLATAM }}
         run: terraform apply -auto-approve -input=false
 
       - name: Exportar outputs de Terraform
