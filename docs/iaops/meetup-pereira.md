@@ -36,7 +36,7 @@ asistentes afectados; anunciar criterios ANTES del evento.
 3. (8 min) Qué es IAOps en lenguaje simple + el momento wow (video corto del agente + firma).
 4. (7 min) **El camino concreto** (ruta Builder/Veterano condensada): fundamentos → código →
    dirigir agentes; trabajo remoto/global desde Pereira.
-5. (5 min) Anuncio de vouchers + mentoría de preparación + comunidad WhatsApp. Cierre:
+5. (5 min) Anuncio de vouchers + mentoría de preparación + comunidad Telegram. Cierre:
    "Las nubes cambian. El criterio queda. Y el criterio se construye — como las ciudades."
 
 ## Logística (checklist)
