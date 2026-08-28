@@ -102,6 +102,16 @@ resource "aws_lambda_permission" "register_url" {
   function_url_auth_type = "NONE"
 }
 
+# Desde oct-2025 las Function URL nuevas exigen TAMBIÉN lambda:InvokeFunction
+# en la resource policy (si falta: 403 Forbidden aunque el auth sea NONE).
+resource "aws_lambda_permission" "register_url_invoke" {
+  statement_id           = "AllowPublicFunctionUrlInvoke"
+  action                 = "lambda:InvokeFunction"
+  function_name          = aws_lambda_function.register.function_name
+  principal              = "*"
+  function_url_auth_type = "NONE"
+}
+
 output "register_url" {
   description = "Function URL del registro de leads (el pipeline la inyecta en el sitio)"
   value       = aws_lambda_function_url.register.function_url
