@@ -105,12 +105,17 @@
     var step1 = document.getElementById("reg-step-1");
     var step2 = document.getElementById("reg-step-2");
     var step3 = document.getElementById("reg-step-3");
+    var step4 = document.getElementById("reg-step-4");
     var status1 = step1.querySelector(".regform__status");
     var status2 = document.getElementById("reg-status-2");
+    var status3 = document.getElementById("reg-status-3");
     var btn1 = step1.querySelector("button[type=submit]");
     var verifyBtn = document.getElementById("reg-verify-btn");
+    var profileBtn = document.getElementById("reg-profile-btn");
+    var skipEl = document.getElementById("reg-skip");
     var resendEl = document.getElementById("reg-resend");
     var codeEl = document.getElementById("reg-code");
+    var barFill = document.getElementById("regbar-fill");
     var regEmail = "";
     var resendTimer = null;
 
@@ -120,6 +125,14 @@
       step1.classList.toggle("is-hidden", step !== 1);
       step2.classList.toggle("is-hidden", step !== 2);
       step3.classList.toggle("is-hidden", step !== 3);
+      step4.classList.toggle("is-hidden", step !== 4);
+      var widths = { 1: "8%", 2: "40%", 3: "72%", 4: "100%" };
+      if (barFill) barFill.style.width = widths[step];
+      document.querySelectorAll(".regstep").forEach(function (s) {
+        var n = parseInt(s.getAttribute("data-step"), 10);
+        s.classList.toggle("is-active", n === step);
+        s.classList.toggle("is-done", n < step || step === 4);
+      });
     }
     function post(payload) {
       return fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
@@ -144,23 +157,15 @@
         action: "register",
         nombre: (leadForm.nombre.value || "").trim(),
         email: (leadForm.email.value || "").trim(),
-        pais: leadForm.pais.value,
-        whatsapp: (leadForm.whatsapp.value || "").trim(),
-        dedicacion: leadForm.dedicacion.value,
-        rol: (leadForm.rol.value || "").trim(),
-        empresa: (leadForm.empresa.value || "").trim(),
-        linkedin: (leadForm.linkedin.value || "").trim(),
-        canal: leadForm.canal.value,
-        interes: leadForm.interes.value,
         web: leadForm.web.value || ""
       };
       if (data.nombre.length < 2 || !/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(data.email)) { setStatus(status1, "err", "invalid"); return; }
       btn1.disabled = true;
       setStatus(status1, "", "sending");
       post(data).then(function (j) {
+        regEmail = data.email;
         if (j.ok && j.verified) { show(3); return; }
         if (j.ok) {
-          regEmail = data.email;
           document.getElementById("reg-email-echo").textContent = regEmail;
           show(2); setStatus(status2, "ok", "codeSent"); startResendCooldown(60); codeEl.focus();
         } else { setStatus(status1, "err", j.error === "cooldown" ? "cooldown" : "invalid"); }
@@ -183,6 +188,27 @@
     }
     verifyBtn.addEventListener("click", doVerify);
     codeEl.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); doVerify(); } });
+
+    profileBtn.addEventListener("click", function () {
+      profileBtn.disabled = true;
+      setStatus(status3, "", "sending");
+      post({
+        action: "profile",
+        email: regEmail,
+        pais: leadForm.pais.value,
+        dedicacion: leadForm.dedicacion.value,
+        rol: (leadForm.rol.value || "").trim(),
+        empresa: (leadForm.empresa.value || "").trim(),
+        linkedin: (leadForm.linkedin.value || "").trim(),
+        whatsapp: (leadForm.whatsapp.value || "").trim(),
+        canal: leadForm.canal.value,
+        interes: leadForm.interes.value
+      }).then(function (j) {
+        if (j.ok) { show(4); } else { setStatus(status3, "err", "err"); }
+      }).catch(function () { setStatus(status3, "err", "err"); })
+        .finally(function () { profileBtn.disabled = false; });
+    });
+    skipEl.addEventListener("click", function () { show(4); });
 
     resendEl.addEventListener("click", function () {
       if (resendEl.classList.contains("is-disabled")) return;

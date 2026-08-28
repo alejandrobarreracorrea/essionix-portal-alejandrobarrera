@@ -233,6 +233,16 @@ a { color: inherit; text-decoration: none; }
 .regform__status.ok { color: var(--a2); }
 .regform__status.err { color: #ff8a8a; }
 .regform__privacy { margin-top: 14px; font-size: .8rem; color: var(--faint); }
+.regform__hint { font-family: var(--font-body); font-size: .78rem; color: var(--faint); text-transform: none; letter-spacing: 0; }
+.regform__steptitle { font-size: clamp(1.3rem, 2.6vw, 1.8rem); margin-bottom: 10px; }
+.regsteps { display: flex; gap: clamp(14px, 3vw, 34px); margin-bottom: 12px; }
+.regstep { display: inline-flex; align-items: baseline; gap: 8px; font-family: var(--font-display); font-weight: 600; font-size: .92rem; color: var(--faint); transition: color .3s; }
+.regstep i { font-family: var(--font-mono); font-style: normal; font-size: .75rem; }
+.regstep.is-active { color: var(--text); }
+.regstep.is-active i { color: var(--accent); }
+.regstep.is-done { color: var(--a2); }
+.regbar { height: 2px; background: var(--line); border-radius: 2px; margin-bottom: 30px; max-width: 780px; overflow: hidden; }
+.regbar i { display: block; height: 100%; background: var(--grad); transition: width .5s cubic-bezier(.2,1,.3,1); }
 .is-hidden { display: none !important; }
 .regform__verify { display: flex; gap: 14px; align-items: stretch; max-width: 420px; margin-top: 6px; }
 #reg-code {
@@ -242,7 +252,7 @@ a { color: inherit; text-decoration: none; }
 .regform__resend { font-family: var(--font-mono); font-size: .85rem; color: var(--accent); cursor: pointer; }
 .regform__resend:hover { color: var(--a2); }
 .regform__resend.is-disabled { color: var(--faint); cursor: default; }
-#reg-step-3 h3 { font-size: clamp(1.5rem, 3vw, 2.1rem); margin-bottom: 12px; color: var(--a2); }
+#reg-step-4 h3 { font-size: clamp(1.5rem, 3vw, 2.1rem); margin-bottom: 12px; color: var(--a2); }
 @media (max-width: 620px) { .regform__grid { grid-template-columns: 1fr; } .regform__verify { flex-direction: column; } #reg-code { max-width: none; } }
 
 /* ---------- asesoría / planes ---------- */

@@ -1,11 +1,13 @@
-"""ab-leads-register: registro de usuarios con verificación por código al correo.
+"""ab-leads-register: registro con verificación por código y perfil progresivo.
 
-Acciones (POST JSON, campo "action"):
-  register -> valida perfil, guarda lead (no verificado), envía código de 6 dígitos vía SES
-  verify   -> compara código (expira a los 10 min, máx. 6 intentos) y marca verified=true
+Flujo (POST JSON, campo "action"):
+  register -> mínimo viable (nombre + email), guarda lead y envía código de 6 dígitos
+  verify   -> valida código (10 min, máx. 6 intentos) y marca verified=true
   resend   -> reenvía código (cooldown 60 s, máx. 6 envíos/día)
+  profile  -> enriquecimiento opcional post-firma (país, dedicación, rol, empresa,
+              linkedin, canal, interés, whatsapp) — cada campo se guarda si viene
 
-CORS lo gestiona la Function URL. Honeypot: campo "web".
+CORS lo gestiona la Function URL. Honeypot: campo "web" en register.
 """
 import json
 import os
@@ -25,9 +27,9 @@ DEDICACIONES = {"estudiante", "onprem", "cloud", "dev", "datos", "otro"}
 CANALES = {"clases", "linkedin", "evento", "amigo", "otro"}
 INTERESES = {"comunidad", "mentoria", "charlas", "todo"}
 
-CODE_TTL = 600          # 10 min
+CODE_TTL = 600
 MAX_ATTEMPTS = 6
-RESEND_COOLDOWN = 60    # seg
+RESEND_COOLDOWN = 60
 MAX_SENDS_DAY = 6
 
 
@@ -45,18 +47,20 @@ def _send_code(email, nombre, code):
         FromEmailAddress=SENDER,
         Destination={"ToAddresses": [email]},
         Content={"Simple": {
-            "Subject": {"Data": f"{code} es tu código — IAOps · Alejandro Barrera", "Charset": "UTF-8"},
+            "Subject": {"Data": f"{code} es tu firma — IAOps · Alejandro Barrera", "Charset": "UTF-8"},
             "Body": {
                 "Text": {"Charset": "UTF-8", "Data": (
-                    f"Hola {primer_nombre},\n\nTu código de verificación es: {code}\n"
-                    f"Vence en 10 minutos.\n\nSi no fuiste tú, ignora este correo.\n\n"
+                    f"Hola {primer_nombre},\n\nEn IAOps nada importante pasa sin firma. "
+                    f"Esta es la tuya: {code}\nVence en 10 minutos.\n\n"
+                    f"Si no fuiste tú, ignora este correo.\n\n"
                     f"— Alejandro Barrera · IAOps\nhttps://alejandrobarrera.net")},
                 "Html": {"Charset": "UTF-8", "Data": (
                     "<div style='background:#08080b;color:#f5f5f7;font-family:Arial,sans-serif;"
                     "padding:40px;border-radius:16px;max-width:520px;margin:auto'>"
                     "<p style='color:#9a8cff;font-size:13px;letter-spacing:2px;margin:0 0 18px'>"
                     "IAOPS · LA IA EJECUTA. TÚ DIRIGES.</p>"
-                    f"<p style='font-size:16px;margin:0 0 8px'>Hola {primer_nombre}, tu código de verificación:</p>"
+                    f"<p style='font-size:16px;margin:0 0 8px'>Hola {primer_nombre} — en IAOps nada "
+                    "importante pasa sin firma. Esta es la tuya:</p>"
                     f"<p style='font-size:44px;font-weight:bold;letter-spacing:10px;margin:16px 0;"
                     f"color:#38e0d8'>{code}</p>"
                     "<p style='color:#9c9caa;font-size:13px'>Vence en 10 minutos. Si no fuiste tú, ignora este correo.</p>"
@@ -68,7 +72,6 @@ def _send_code(email, nombre, code):
 
 
 def _issue_code(email, nombre, item):
-    """Genera, guarda y envía un código nuevo. Devuelve respuesta HTTP."""
     now = int(time.time())
     if item:
         if now - int(item.get("last_send", 0)) < RESEND_COOLDOWN:
@@ -85,14 +88,10 @@ def _issue_code(email, nombre, item):
     code = f"{secrets.randbelow(1000000):06d}"
     TABLE.update_item(
         Key={"email": email},
-        UpdateExpression=(
-            "SET verify_code = :c, verify_expires = :e, attempts = :z, "
-            "last_send = :t, send_window = :ws, send_count = :sc"
-        ),
-        ExpressionAttributeValues={
-            ":c": code, ":e": now + CODE_TTL, ":z": 0,
-            ":t": now, ":ws": window_start, ":sc": sends + 1,
-        },
+        UpdateExpression=("SET verify_code = :c, verify_expires = :e, attempts = :z, "
+                          "last_send = :t, send_window = :ws, send_count = :sc"),
+        ExpressionAttributeValues={":c": code, ":e": now + CODE_TTL, ":z": 0,
+                                   ":t": now, ":ws": window_start, ":sc": sends + 1},
     )
     _send_code(email, nombre, code)
     return _resp(200, {"ok": True, "sent": True})
@@ -114,51 +113,30 @@ def handler(event, _context):
 
     now = int(time.time())
 
-    # ---------------- register ----------------
+    # ---------- register: mínimo viable ----------
     if action == "register":
         if (body.get("web") or "").strip():          # honeypot
             return _resp(200, {"ok": True, "sent": True})
-
         nombre = (body.get("nombre") or "").strip()
         if not 2 <= len(nombre) <= 80:
             return _resp(400, {"ok": False, "error": "nombre"})
 
-        pais = (body.get("pais") or "").strip().lower()
-        dedicacion = (body.get("dedicacion") or "").strip().lower()
-        canal = (body.get("canal") or "").strip().lower()
-        interes = (body.get("interes") or "comunidad").strip().lower()
-        if pais not in PAISES or dedicacion not in DEDICACIONES or canal not in CANALES:
-            return _resp(400, {"ok": False, "error": "campos"})
-        if interes not in INTERESES:
-            interes = "comunidad"
-
-        whatsapp = re.sub(r"[^\d+]", "", body.get("whatsapp") or "")[:20]
-        rol = (body.get("rol") or "").strip()[:80]
-        empresa = (body.get("empresa") or "").strip()[:100]
-        linkedin = (body.get("linkedin") or "").strip()[:150]
-
         item = _get(email)
         TABLE.update_item(
             Key={"email": email},
-            UpdateExpression=(
-                "SET nombre = :n, pais = :p, dedicacion = :d, canal = :ca, interes = :i, "
-                "whatsapp = :w, rol = :r, empresa = :em, linkedin = :l, updated_at = :t, "
-                "created_at = if_not_exists(created_at, :t), verified = if_not_exists(verified, :f), "
-                "#src = if_not_exists(#src, :s)"
-            ),
+            UpdateExpression=("SET nombre = :n, updated_at = :t, "
+                              "created_at = if_not_exists(created_at, :t), "
+                              "verified = if_not_exists(verified, :f), "
+                              "#src = if_not_exists(#src, :s)"),
             ExpressionAttributeNames={"#src": "source"},
-            ExpressionAttributeValues={
-                ":n": nombre, ":p": pais, ":d": dedicacion, ":ca": canal, ":i": interes,
-                ":w": whatsapp, ":r": rol, ":em": empresa, ":l": linkedin,
-                ":t": now, ":f": False, ":s": "web",
-            },
+            ExpressionAttributeValues={":n": nombre, ":t": now, ":f": False, ":s": "web"},
         )
         item = _get(email)
         if item.get("verified"):
             return _resp(200, {"ok": True, "verified": True})
         return _issue_code(email, nombre, item)
 
-    # ---------------- verify ----------------
+    # ---------- verify: la firma ----------
     if action == "verify":
         code = re.sub(r"\D", "", body.get("code") or "")
         item = _get(email)
@@ -182,7 +160,7 @@ def handler(event, _context):
         )
         return _resp(200, {"ok": True, "verified": True})
 
-    # ---------------- resend ----------------
+    # ---------- resend ----------
     if action == "resend":
         item = _get(email)
         if not item:
@@ -190,5 +168,54 @@ def handler(event, _context):
         if item.get("verified"):
             return _resp(200, {"ok": True, "verified": True})
         return _issue_code(email, item.get("nombre", ""), item)
+
+    # ---------- profile: enriquecimiento opcional ----------
+    if action == "profile":
+        item = _get(email)
+        if not item:
+            return _resp(400, {"ok": False, "error": "desconocido"})
+
+        sets, names, values = [], {}, {":t": now}
+        def add(field, value):
+            placeholder = f":v{len(values)}"
+            alias = f"#f{len(names)}"
+            names[alias] = field
+            values[placeholder] = value
+            sets.append(f"{alias} = {placeholder}")
+
+        pais = (body.get("pais") or "").strip().lower()
+        if pais in PAISES:
+            add("pais", pais)
+        dedicacion = (body.get("dedicacion") or "").strip().lower()
+        if dedicacion in DEDICACIONES:
+            add("dedicacion", dedicacion)
+        canal = (body.get("canal") or "").strip().lower()
+        if canal in CANALES:
+            add("canal", canal)
+        interes = (body.get("interes") or "").strip().lower()
+        if interes in INTERESES:
+            add("interes", interes)
+        whatsapp = re.sub(r"[^\d+]", "", body.get("whatsapp") or "")[:20]
+        if whatsapp:
+            add("whatsapp", whatsapp)
+        rol = (body.get("rol") or "").strip()[:80]
+        if rol:
+            add("rol", rol)
+        empresa = (body.get("empresa") or "").strip()[:100]
+        if empresa:
+            add("empresa", empresa)
+        linkedin = (body.get("linkedin") or "").strip()[:150]
+        if linkedin:
+            add("linkedin", linkedin)
+
+        if not sets:
+            return _resp(200, {"ok": True})
+        TABLE.update_item(
+            Key={"email": email},
+            UpdateExpression="SET " + ", ".join(sets) + ", updated_at = :t",
+            ExpressionAttributeNames=names,
+            ExpressionAttributeValues=values,
+        )
+        return _resp(200, {"ok": True})
 
     return _resp(400, {"ok": False, "error": "action"})

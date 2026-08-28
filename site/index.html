@@ -311,25 +311,62 @@
         </li>
       </ul>
 
-      <!-- Registro de usuarios (leads) -->
+      <!-- Registro de usuarios (leads) — wizard 3 pasos + bienvenida -->
       <div class="regform reveal" id="register">
         <h3 data-es="Regístrate" data-en="Sign up">Regístrate</h3>
-        <p class="regform__sub" data-es="Déjame tus datos y te llega todo primero: la invitación a la comunidad, los runbooks, el meetup y cada nuevo recurso." data-en="Leave your details and everything reaches you first: the community invite, the runbooks, the meetup and every new resource.">Déjame tus datos y te llega todo primero: la invitación a la comunidad, los runbooks, el meetup y cada nuevo recurso.</p>
+        <p class="regform__sub" data-es="Todo te llega primero: la invitación a la comunidad, los runbooks, el meetup y cada recurso nuevo. Sin contraseñas — tu correo es tu firma." data-en="Everything reaches you first: the community invite, the runbooks, the meetup and every new resource. No passwords — your email is your signature.">Todo te llega primero: la invitación a la comunidad, los runbooks, el meetup y cada recurso nuevo. Sin contraseñas — tu correo es tu firma.</p>
+
+        <div class="regsteps" aria-hidden="true">
+          <span class="regstep is-active" data-step="1"><i>01</i><span data-es="Registro" data-en="Sign up">Registro</span></span>
+          <span class="regstep" data-step="2"><i>02</i><span data-es="Tu firma" data-en="Your signature">Tu firma</span></span>
+          <span class="regstep" data-step="3"><i>03</i><span data-es="Perfil" data-en="Profile">Perfil</span></span>
+        </div>
+        <div class="regbar" aria-hidden="true"><i id="regbar-fill" style="width:8%"></i></div>
 
         <form id="lead-form" data-endpoint="__REGISTER_ENDPOINT__" novalidate>
-          <!-- PASO 1: perfil -->
+          <!-- PASO 1: mínimo viable (10 segundos) -->
           <div id="reg-step-1">
             <div class="regform__grid">
               <label>
-                <span data-es="Nombre completo *" data-en="Full name *">Nombre completo *</span>
+                <span data-es="Nombre *" data-en="Name *">Nombre *</span>
                 <input type="text" name="nombre" required minlength="2" maxlength="80" autocomplete="name" />
               </label>
               <label>
                 <span>Email *</span>
                 <input type="email" name="email" required maxlength="120" autocomplete="email" />
+                <small class="regform__hint" data-es="Te envío un código de 6 dígitos — sin contraseñas." data-en="I'll send you a 6-digit code — no passwords.">Te envío un código de 6 dígitos — sin contraseñas.</small>
               </label>
+            </div>
+            <!-- honeypot anti-bots -->
+            <input type="text" name="web" tabindex="-1" autocomplete="off" class="regform__hp" aria-hidden="true" />
+            <div class="regform__actions">
+              <button type="submit" class="btn btn--solid magnetic" data-es="Continuar →" data-en="Continue →">Continuar →</button>
+              <p class="regform__status" role="status" aria-live="polite"></p>
+            </div>
+            <p class="regform__privacy" data-es="Solo uso tus datos para avisarte de esto. Cero spam, te sales cuando quieras." data-en="I only use your data to keep you posted on this. Zero spam, leave anytime.">Solo uso tus datos para avisarte de esto. Cero spam, te sales cuando quieras.</p>
+          </div>
+
+          <!-- PASO 2: tu firma (código al correo) -->
+          <div id="reg-step-2" class="is-hidden">
+            <h3 class="regform__steptitle" data-es="Firma con tu código" data-en="Sign with your code">Firma con tu código</h3>
+            <p class="regform__sub"><span data-es="En IAOps nada importante pasa sin firma — tu registro tampoco. Te envié un código de 6 dígitos a" data-en="In IAOps nothing important happens without a signature — neither does your signup. I sent a 6-digit code to">En IAOps nada importante pasa sin firma — tu registro tampoco. Te envié un código de 6 dígitos a</span> <b id="reg-email-echo"></b>. <span data-es="Revisa también spam." data-en="Check spam too.">Revisa también spam.</span></p>
+            <div class="regform__verify">
+              <input type="text" id="reg-code" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="······" autocomplete="one-time-code" />
+              <button type="button" id="reg-verify-btn" class="btn btn--solid magnetic" data-es="Firmar ✍" data-en="Sign ✍">Firmar ✍</button>
+            </div>
+            <div class="regform__actions">
+              <a id="reg-resend" class="regform__resend" data-es="Reenviar código" data-en="Resend code">Reenviar código</a>
+              <p class="regform__status" id="reg-status-2" role="status" aria-live="polite"></p>
+            </div>
+          </div>
+
+          <!-- PASO 3: perfil opcional -->
+          <div id="reg-step-3" class="is-hidden">
+            <h3 class="regform__steptitle" data-es="Completa tu perfil" data-en="Complete your profile">Completa tu perfil</h3>
+            <p class="regform__sub" data-es="Opcional — cada dato me ayuda a enviarte solo lo que te sirve. Un minuto." data-en="Optional — every detail helps me send you only what's useful. One minute.">Opcional — cada dato me ayuda a enviarte solo lo que te sirve. Un minuto.</p>
+            <div class="regform__grid">
               <label>
-                <span data-es="País *" data-en="Country *">País *</span>
+                <span data-es="País" data-en="Country">País</span>
                 <select name="pais">
                   <option value="colombia">Colombia</option>
                   <option value="mexico">México</option>
@@ -344,11 +381,7 @@
                 </select>
               </label>
               <label>
-                <span data-es="WhatsApp (opcional)" data-en="WhatsApp (optional)">WhatsApp (opcional)</span>
-                <input type="tel" name="whatsapp" maxlength="20" autocomplete="tel" placeholder="+57 ..." />
-              </label>
-              <label>
-                <span data-es="¿A qué te dedicas? *" data-en="What do you do? *">¿A qué te dedicas? *</span>
+                <span data-es="¿A qué te dedicas?" data-en="What do you do?">¿A qué te dedicas?</span>
                 <select name="dedicacion">
                   <option value="estudiante" data-es="Estudiante" data-en="Student">Estudiante</option>
                   <option value="onprem" data-es="Infraestructura on-premise" data-en="On-premise infrastructure">Infraestructura on-premise</option>
@@ -359,19 +392,23 @@
                 </select>
               </label>
               <label>
-                <span data-es="Rol / cargo (opcional)" data-en="Role / title (optional)">Rol / cargo (opcional)</span>
+                <span data-es="Rol / cargo" data-en="Role / title">Rol / cargo</span>
                 <input type="text" name="rol" maxlength="80" placeholder="SysAdmin, Dev, Estudiante…" />
               </label>
               <label>
-                <span data-es="Empresa / institución (opcional)" data-en="Company / school (optional)">Empresa / institución (opcional)</span>
-                <input type="text" name="empresa" maxlength="100" data-es-ph="Dónde trabajas o estudias" />
+                <span data-es="Empresa / institución" data-en="Company / school">Empresa / institución</span>
+                <input type="text" name="empresa" maxlength="100" />
               </label>
               <label>
-                <span>LinkedIn (opcional)</span>
+                <span>LinkedIn</span>
                 <input type="url" name="linkedin" maxlength="150" placeholder="https://linkedin.com/in/…" />
               </label>
               <label>
-                <span data-es="¿Cómo me conociste? *" data-en="How did you find me? *">¿Cómo me conociste? *</span>
+                <span>WhatsApp</span>
+                <input type="tel" name="whatsapp" maxlength="20" autocomplete="tel" placeholder="+57 ..." />
+              </label>
+              <label>
+                <span data-es="¿Cómo me conociste?" data-en="How did you find me?">¿Cómo me conociste?</span>
                 <select name="canal">
                   <option value="clases" data-es="En clase (universidad)" data-en="In class (university)">En clase (universidad)</option>
                   <option value="linkedin">LinkedIn</option>
@@ -390,31 +427,16 @@
                 </select>
               </label>
             </div>
-            <!-- honeypot anti-bots -->
-            <input type="text" name="web" tabindex="-1" autocomplete="off" class="regform__hp" aria-hidden="true" />
             <div class="regform__actions">
-              <button type="submit" class="btn btn--solid magnetic" data-es="Continuar →" data-en="Continue →">Continuar →</button>
-              <p class="regform__status" role="status" aria-live="polite"></p>
-            </div>
-            <p class="regform__privacy" data-es="Solo uso tus datos para avisarte de esto. Cero spam, te sales cuando quieras." data-en="I only use your data to keep you posted on this. Zero spam, leave anytime.">Solo uso tus datos para avisarte de esto. Cero spam, te sales cuando quieras.</p>
-          </div>
-
-          <!-- PASO 2: verificación por código -->
-          <div id="reg-step-2" class="is-hidden">
-            <p class="regform__sub"><span data-es="Te envié un código de 6 dígitos a" data-en="I sent a 6-digit code to">Te envié un código de 6 dígitos a</span> <b id="reg-email-echo"></b>. <span data-es="Revisa también spam/promociones." data-en="Check spam/promotions too.">Revisa también spam/promociones.</span></p>
-            <div class="regform__verify">
-              <input type="text" id="reg-code" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="······" autocomplete="one-time-code" />
-              <button type="button" id="reg-verify-btn" class="btn btn--solid magnetic" data-es="Verificar" data-en="Verify">Verificar</button>
-            </div>
-            <div class="regform__actions">
-              <a id="reg-resend" class="regform__resend" data-es="Reenviar código" data-en="Resend code">Reenviar código</a>
-              <p class="regform__status" id="reg-status-2" role="status" aria-live="polite"></p>
+              <button type="button" id="reg-profile-btn" class="btn btn--solid magnetic" data-es="Guardar perfil →" data-en="Save profile →">Guardar perfil →</button>
+              <a id="reg-skip" class="regform__resend" data-es="Saltar por ahora" data-en="Skip for now">Saltar por ahora</a>
+              <p class="regform__status" id="reg-status-3" role="status" aria-live="polite"></p>
             </div>
           </div>
 
-          <!-- PASO 3: listo -->
-          <div id="reg-step-3" class="is-hidden">
-            <h3 data-es="✓ Email verificado. ¡Bienvenido!" data-en="✓ Email verified. Welcome!">✓ Email verificado. ¡Bienvenido!</h3>
+          <!-- PASO 4: bienvenida -->
+          <div id="reg-step-4" class="is-hidden">
+            <h3 data-es="✓ Firmado y dentro. ¡Bienvenido!" data-en="✓ Signed and in. Welcome!">✓ Firmado y dentro. ¡Bienvenido!</h3>
             <p class="regform__sub" data-es="Ya estás en la lista: te llegará la invitación a la comunidad y cada nuevo recurso. Mientras tanto, sígueme en LinkedIn — ahí documento todo primero." data-en="You're on the list: the community invite and every new resource will reach you. Meanwhile, follow me on LinkedIn — everything lands there first.">Ya estás en la lista: te llegará la invitación a la comunidad y cada nuevo recurso. Mientras tanto, sígueme en LinkedIn — ahí documento todo primero.</p>
             <a class="btn btn--ghost magnetic" href="https://www.linkedin.com/in/alejobarrera/" target="_blank" rel="noopener" data-es="Seguir en LinkedIn →" data-en="Follow on LinkedIn →">Seguir en LinkedIn →</a>
           </div>
