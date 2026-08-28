@@ -44,7 +44,7 @@ asistentes afectados; anunciar criterios ANTES del evento.
 - [ ] Confirmar grupo/fecha/formato (¿presencial viable post-terremoto? ¿lugar seguro? ¿virtual?)
 - [ ] Presupuesto vouchers aprobado (Essionix) + compra en AWS Training/Certification
 - [ ] Mecánica de asignación pública y transparente
-- [ ] Comunidad WhatsApp lista ANTES del meetup (es el destino de los asistentes)
+- [ ] Comunidad Telegram lista ANTES del meetup (es el destino de los asistentes)
 - [ ] Coordinar con Sebastián/Pereira Tech Talks (no competir: sumar — puede ser co-organizado)
 - [ ] Grabar la charla (contenido + memoria del gesto)
 

@@ -34,7 +34,7 @@
 | **P0** | Perfil LinkedIn terminado (about/titular ya entregados) + foto + banner + destacados | Esta semana | Alejandro |
 | **P0** | **Web al día para recibir estudiantes**: sección "Formación" (cursos, mentoría, comunidad, charlas) + QR/link corto para dictar en clase | Esta semana | Claude |
 | **P0** | **Arrancar publicación**: 3 posts/sem con el banco de 13 listos (programar lunes) | Lun 31-ago | Alejandro (15 min) |
-| **P1** | Comunidad WhatsApp "IAOps LATAM" creada y enlazada en web + clases | Sem 1 sep | Ambos |
+| **P1** | Comunidad Telegram "IAOps LATAM" creada (topics) y enlazada en web + clases | Sem 1 sep | Ambos |
 | **P1** | **Meetup Pereira**: logística (fecha, lugar/virtual, vouchers), charla adaptada "IAOps como camino" | Sep | Ambos |
 | **P1** | Redes sociales base: YouTube + Instagram/TikTok con marca (banners/bios desde plantillas) | Sem 1-2 sep | Claude genera, Alejandro crea cuentas |
 | **P2** | Automatizar fábrica (`content-drafts.yml` + `news-watch.yml`) | Sem 2 sep | Claude |

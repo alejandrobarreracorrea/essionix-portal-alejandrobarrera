@@ -32,7 +32,7 @@
 |---|---|
 | Meetup Pereira ("IAOps: un camino de carrera" + vouchers) | Sep — definir fecha/formato con el grupo |
 | Pereira Tech Day (charla TED) | Pospuesto por terremoto — esperar nueva fecha de Sebastián |
-| Comunidad WhatsApp "IAOps LATAM" | Crear ANTES del primer día de clase (sep 1) |
+| Comunidad Telegram "IAOps LATAM" | Crear ANTES del primer día de clase (topics: Anuncios·Runbooks·Preguntas·Noticias·Preséntate) |
 | Web sección "Formación" | Esta semana (bloqueada por: nombre instituto + link inscripción) |
 | Automatización fábrica | Sem 2 de sep |
 
