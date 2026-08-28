@@ -1,130 +1,148 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" style="background:#08080b">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alejandro Barrera — IAOps | Deja de operar la nube. Empieza a dirigirla.</title>
-  <meta name="description" content="IAOps: agentes de IA ejecutan la operación cloud bajo tu criterio. Rutas, mentoría y formación con Alejandro Barrera, Cloud Architect 10+ años (AWS · OCI · Azure, 14x certified)." />
+  <title>Alejandro Barrera — Cloud Architect · IAOps | Mentoría y operación con agentes de IA</title>
+  <meta name="description" content="Cloud Architect con 10+ años (AWS · OCI · Azure, 14 certificaciones). Opero mi propia infraestructura con agentes de IA y enseño esa ruta: mentoría 1:1 y fundador de IAOps LATAM." />
   <link rel="canonical" href="https://alejandrobarrera.net/" />
   <meta name="theme-color" content="#08080b" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Alejandro Barrera — IAOps | Deja de operar la nube. Empieza a dirigirla." />
-  <meta property="og:description" content="IAOps: agentes de IA ejecutan la operación cloud bajo tu criterio. Rutas, mentoría y formación con Alejandro Barrera, Cloud Architect 10+ años (AWS · OCI · Azure, 14x certified)." />
+  <meta property="og:title" content="Alejandro Barrera — Cloud Architect · IAOps" />
+  <meta property="og:description" content="Opero mi nube con agentes de IA y enseño esa ruta. Mentoría 1:1 · fundador de IAOps LATAM." />
   <meta property="og:url" content="https://alejandrobarrera.net/" />
   <meta property="og:locale" content="es_CO" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <!-- transición casi transparente hacia la comunidad -->
+  <link rel="preconnect" href="https://iaopslatam.com" />
+  <link rel="prefetch" href="https://iaopslatam.com/" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css" />
-<script type="application/ld+json">
+  <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Person",
-        "@id": "https://alejandrobarrera.net/#person",
-        "name": "Alejandro Barrera",
-        "jobTitle": "Cloud Architect · IAOps",
-        "email": "mailto:alejandro.barrera.correa@gmail.com",
-        "telephone": "+57-310-249-4886",
-        "url": "https://alejandrobarrera.net/",
-        "sameAs": ["https://www.linkedin.com/in/alejobarrera/"],
-        "address": { "@type": "PostalAddress", "addressLocality": "Bogotá", "addressCountry": "CO" },
-        "knowsAbout": ["IAOps", "AI SRE", "AIOps", "Agentic AI operations", "AI-driven cloud operations", "AWS", "Oracle Cloud Infrastructure", "Microsoft Azure", "Cloud Architecture", "Kubernetes", "DevOps", "Terraform", "Cloud Migration", "FinOps", "Technical Mentoring"]
-      },
-      {
-        "@type": "WebSite",
-        "@id": "https://alejandrobarrera.net/#website",
-        "url": "https://alejandrobarrera.net/",
-        "name": "Alejandro Barrera — IAOps",
-        "inLanguage": ["es-CO", "en"],
-        "about": { "@id": "https://alejandrobarrera.net/#person" }
-      }
-    ]
+    "@type": "Person",
+    "@id": "https://alejandrobarrera.net/#person",
+    "name": "Alejandro Barrera",
+    "jobTitle": "Cloud Architect · IAOps",
+    "email": "mailto:alejandro.barrera.correa@gmail.com",
+    "telephone": "+57-310-249-4886",
+    "url": "https://alejandrobarrera.net/",
+    "sameAs": ["https://www.linkedin.com/in/alejobarrera/", "https://iaopslatam.com/"],
+    "address": { "@type": "PostalAddress", "addressLocality": "Bogotá", "addressCountry": "CO" },
+    "knowsAbout": ["IAOps", "AI SRE", "AIOps", "AWS", "Oracle Cloud Infrastructure", "Microsoft Azure", "Cloud Architecture", "Kubernetes", "DevOps", "Terraform", "FinOps", "Technical Mentoring"]
   }
   </script>
 </head>
 <body>
-  <div class="bg-aura" aria-hidden="true"></div>
-  <div class="grain" aria-hidden="true"></div>
-  <div class="cursor-glow" aria-hidden="true"></div>
-  <header class="nav" id="top">
+  <header class="nav">
     <div class="shell nav__inner">
-      <a class="nav__brand" href="/">
-        <span class="nav__mono">AB</span>
-        <span class="nav__name">Alejandro Barrera</span>
-        <span class="nav__status"><i></i><span>IAOps</span></span>
-      </a>
-      <nav class="nav__links" aria-label="Primary">
-        <a href="/manifiesto/" data-es="Manifiesto" data-en="Manifesto">Manifiesto</a>
-        <a href="/rutas/" data-es="Rutas" data-en="Paths">Rutas</a>
-        <a href="/prueba/" data-es="La prueba" data-en="The proof">La prueba</a>
-        <a href="/formacion/" data-es="Formación" data-en="Learning">Formación</a>
-        <a href="/mentoria/" data-es="Mentoría" data-en="Mentoring">Mentoría</a>
+      <a class="nav__brand" href="/">Alejandro <b>Barrera</b></a>
+      <nav class="nav__links">
+        <a href="#manifiesto">Manifiesto</a>
+        <a href="#rutas">Rutas</a>
+        <a href="#prueba">La prueba</a>
+        <a href="#contacto">Contacto</a>
+        <a class="eco" href="https://iaopslatam.com/">IAOps LATAM ↗</a>
       </nav>
-      <div class="nav__actions">
-        <button class="lang" id="lang" type="button" aria-label="Cambiar idioma">
-          <span class="lang__opt is-active" data-lang="es">ES</span>
-          <span class="lang__sep">/</span>
-          <span class="lang__opt" data-lang="en">EN</span>
-        </button>
-        <a class="btn btn--solid magnetic" href="/registro/" data-es="Regístrate" data-en="Sign up">Regístrate</a>
-      </div>
+      <a class="btn btn--primary" href="#mentoria">Mentoría</a>
     </div>
   </header>
 
   <main class="shell">
-<section class="hero" aria-label="Intro">
-      <span class="hero__eyebrow"><i class="dot"></i><span data-es="Alejandro Barrera · IAOps · AWS · OCI · Azure" data-en="Alejandro Barrera · IAOps · AWS · OCI · Azure">Alejandro Barrera · IAOps · AWS · OCI · Azure</span></span>
-      <h1 class="kinetic">
-        <span class="kin"><span data-es="DEJA DE OPERAR." data-en="STOP OPERATING.">DEJA DE OPERAR.</span></span>
-        <span class="kin"><span class="kinetic__accent" data-es="EMPIEZA A DIRIGIR." data-en="START DIRECTING.">EMPIEZA A DIRIGIR.</span></span>
-      </h1>
-      <p class="hero__lead"
-         data-es="IAOps: agentes de IA ejecutan la operación de tu nube — deploys, migraciones, costos, incidentes — bajo tu criterio. Te enseño la ruta que uso en mi propia infraestructura, en producción, todos los días."
-         data-en="IAOps: AI agents run your cloud operations — deploys, migrations, costs, incidents — under your judgment. I teach you the same path I use on my own infrastructure, in production, every day.">
-        IAOps: agentes de IA ejecutan la operación de tu nube — deploys, migraciones, costos, incidentes — bajo tu criterio. Te enseño la ruta que uso en mi propia infraestructura, en producción, todos los días.
-      </p>
+    <!-- HERO -->
+    <section class="hero">
+      <span class="kicker">Cloud Architect · AWS · OCI · Azure · 14x certified</span>
+      <h1>Deja de operar la nube.<br><span class="grad">Empieza a dirigirla.</span></h1>
+      <p>Opero mi propia infraestructura con agentes de IA — deploys, DNS, costos, incidentes — y enseño esa ruta. 10+ años: del datacenter frío a dirigir agentes.</p>
       <div class="hero__cta">
-        <a class="btn btn--solid magnetic" href="/rutas/" data-es="Elige tu ruta" data-en="Pick your path">Elige tu ruta</a>
-        <a class="btn btn--ghost magnetic" href="/mentoria/" data-es="Mentoría 1:1" data-en="1:1 mentoring">Mentoría 1:1</a>
+        <a class="btn btn--primary btn--big" href="#mentoria">Mentoría 1:1 →</a>
+        <a class="btn btn--ghost" href="https://iaopslatam.com/unirme/">Únete gratis a la comunidad</a>
       </div>
-      <a class="scrollcue" href="#facts" aria-label="Scroll">
-        <span data-es="desliza" data-en="scroll">desliza</span><i></i>
-      </a>
+      <div class="facts">
+        <span><b>+10</b> años</span><span><b>3</b> nubes</span><span><b>14</b> certificaciones</span><span>fundador de <b>IAOps LATAM</b></span>
+      </div>
     </section>
-<section class="strip" id="facts" aria-label="Facts">
-      <div class="strip__item reveal"><span class="strip__num">+10</span><span class="strip__label" data-es="años operando infraestructura" data-en="years running infrastructure">años operando infraestructura</span></div>
-      <div class="strip__item reveal"><span class="strip__num">3</span><span class="strip__label" data-es="nubes · AWS · OCI · Azure" data-en="clouds · AWS · OCI · Azure">nubes · AWS · OCI · Azure</span></div>
-      <div class="strip__item reveal"><span class="strip__num">14</span><span class="strip__label" data-es="certificaciones cloud" data-en="cloud certifications">certificaciones cloud</span></div>
-      <div class="strip__item reveal"><span class="strip__num">100%</span><span class="strip__label" data-es="operación real, no demos" data-en="real ops, not toy demos">operación real, no demos</span></div>
+
+    <!-- MANIFIESTO -->
+    <section class="sec" id="manifiesto">
+      <span class="kicker">Manifiesto</span>
+      <h2>Tres principios. Ninguno negociable.</h2>
+      <ul class="rows">
+        <li><span class="t">La IA ejecuta. Tú diriges.<small>Los agentes hacen el toil: los clicks, los runbooks, las madrugadas. Lo reversible se delega; lo irreversible exige tu firma.</small></span><span class="m">01</span></li>
+        <li><span class="t">El criterio no se automatiza.<small>Tus años de experiencia — sí, esos de on-premise — son el insumo que la IA no tiene. No estás obsoleto: eres lo que falta.</small></span><span class="m">02</span></li>
+        <li><span class="t">Se aprende operando.<small>Nada de demos de juguete: todo sale de infraestructura real en producción — la mía — con errores incluidos.</small></span><span class="m">03</span></li>
+      </ul>
     </section>
-    <section class="movement" id="explora">
-      <header class="movement__head reveal">
-        <span class="kicker" data-es="Explora" data-en="Explore">Explora</span>
-        <h2 data-es="Empieza por donde quieras" data-en="Start anywhere">Empieza por donde quieras</h2>
-      </header>
-      <ul class="list">
-        <li class="row reveal"><a class="row__lead row__link" href="/manifiesto/"><span class="row__idx">01</span><span class="row__title" data-es="Manifiesto" data-en="Manifesto">Manifiesto</span></a><span class="row__meta" data-es="Por qué la nube ya no se opera a mano" data-en="Why the cloud is no longer run by hand">Por qué la nube ya no se opera a mano</span></li>
-        <li class="row reveal"><a class="row__lead row__link" href="/rutas/"><span class="row__idx">02</span><span class="row__title" data-es="Rutas" data-en="Paths">Rutas</span></a><span class="row__meta" data-es="Veterano · Builder · Equipos" data-en="Veteran · Builder · Teams">Veterano · Builder · Equipos</span></li>
-        <li class="row reveal"><a class="row__lead row__link" href="/prueba/"><span class="row__idx">03</span><span class="row__title" data-es="La prueba" data-en="The proof">La prueba</span></a><span class="row__meta" data-es="Operación real + 14 certificaciones" data-en="Real operations + 14 certifications">Operación real + 14 certificaciones</span></li>
-        <li class="row reveal"><a class="row__lead row__link" href="/formacion/"><span class="row__idx">04</span><span class="row__title" data-es="Formación" data-en="Learning">Formación</span></a><span class="row__meta" data-es="Comunidad · mentoría · charlas" data-en="Community · mentoring · talks">Comunidad · mentoría · charlas</span></li>
-        <li class="row reveal"><a class="row__lead row__link" href="/mentoria/"><span class="row__idx">05</span><span class="row__title" data-es="Mentoría 1:1" data-en="1:1 Mentoring">Mentoría 1:1</span></a><span class="row__meta">USD 50 · 80 · 140</span></li>
-        <li class="row reveal"><a class="row__lead row__link" href="/registro/"><span class="row__idx">→</span><span class="row__title" data-es="Regístrate" data-en="Sign up">Regístrate</span></a><span class="row__meta" data-es="2 campos, 10 segundos" data-en="2 fields, 10 seconds">2 campos, 10 segundos</span></li>
+
+    <!-- RUTAS -->
+    <section class="sec" id="rutas">
+      <span class="kicker">Rutas</span>
+      <h2>Un camino para cada punto de partida</h2>
+      <ul class="rows">
+        <li><span class="t">Veterano · de operador a director<small>Llevas 10-20 años en sistemas. No empiezas de cero: empiezas con el criterio. El puente: una nube + código + dirigir agentes.</small></span><span class="m"><a href="#mentoria" style="color:var(--accent)">mentoría →</a></span></li>
+        <li><span class="t">Builder · entra en la era de los agentes<small>La ruta 2020 (memorizar servicios, años de tickets) murió. Fundamentos → código, no clicks → laboratorio público.</small></span><span class="m"><a href="https://iaopslatam.com/unirme/" style="color:var(--a2)">comunidad ↗</a></span></li>
+        <li><span class="t">Equipos · tu operación con IA<small>Diagnóstico → piloto en un flujo real → formación del equipo. Sin apagar el negocio.</small></span><span class="m"><a href="#contacto" style="color:var(--accent)">escríbeme →</a></span></li>
+      </ul>
+    </section>
+
+    <!-- LA PRUEBA -->
+    <section class="sec" id="prueba">
+      <span class="kicker">La prueba</span>
+      <h2>No es teoría. Es mi lunes.</h2>
+      <p class="sec__sub">Mi propia infraestructura es el laboratorio — operaciones reales ejecutadas por agentes bajo mi firma:</p>
+      <ul class="rows">
+        <li><span class="t">Decomisión sin downtime<small>Un agente migró el DNS de este dominio y decomisionó la infra legacy: backup previo, propagación verificada, mi firma en lo irreversible.</small></span><span class="m">OP/01</span></li>
+        <li><span class="t">Cero consola<small>Este sitio se publica solo: Terraform + pipeline OIDC + un agente que propone los cambios que yo apruebo.</small></span><span class="m">OP/02</span></li>
+        <li><span class="t">FinOps con agentes<small>Un agente audita mi facturación multi-cloud y encuentra en minutos lo que aburre buscar a mano.</small></span><span class="m">OP/03</span></li>
+        <li><a class="rowlink" href="https://www.linkedin.com/in/alejobarrera/" target="_blank" rel="noopener"><span class="t">14 certificaciones cloud<small>10 AWS (2 Professional · 4 Specialty · AI Practitioner), Microsoft y Oracle — ver y verificar en LinkedIn.</small></span></a><span class="m">↗</span></li>
+      </ul>
+    </section>
+
+    <!-- MENTORÍA -->
+    <section class="sec" id="mentoria">
+      <span class="kicker">Mentoría · 1:1</span>
+      <h2>Tu caso, conmigo</h2>
+      <p class="sec__sub">Sesiones de trabajo sobre TU ruta, TU infraestructura, TUS agentes. Reservas y pagas en Cal.com.</p>
+      <ul class="rows">
+        <li><span class="t">Sesión exprés<small>Segunda opinión · elige tu ruta · Q&A puntual.</small></span><span class="m">30 min · USD 50</span></li>
+        <li><span class="t">Mentoría 1:1<small>Sesión de trabajo enfocada en tu caso.</small></span><span class="m">50 min · USD 80</span></li>
+        <li><span class="t">Architecture review<small>Revisión profunda · Well-Architected · plan IAOps.</small></span><span class="m">90 min · USD 140</span></li>
+      </ul>
+      <div class="actions" style="margin-top:26px;">
+        <a class="btn btn--primary btn--big" href="https://cal.com/alejandrobarrera" target="_blank" rel="noopener">Reservar en Cal.com →</a>
+        <span class="privacy">Pago seguro al reservar · factura disponible</span>
+      </div>
+    </section>
+
+    <!-- PUENTE A LA COMUNIDAD -->
+    <section class="endcta" id="comunidad">
+      <span class="kicker">¿Prefieres empezar gratis?</span>
+      <h2>La comunidad vive en <span class="grad">IAOps LATAM</span></h2>
+      <a class="btn btn--primary btn--big" href="https://iaopslatam.com/unirme/">Únete gratis ↗</a>
+    </section>
+
+    <!-- CONTACTO -->
+    <section class="sec" id="contacto">
+      <span class="kicker">Contacto</span>
+      <h2>Las nubes cambian. <span class="grad">El criterio queda.</span></h2>
+      <ul class="rows">
+        <li><a class="rowlink" href="mailto:alejandro.barrera.correa@gmail.com"><span class="t">Email</span></a><span class="m">alejandro.barrera.correa@gmail.com</span></li>
+        <li><a class="rowlink" href="tel:+573102494886"><span class="t">Teléfono</span></a><span class="m">+57 310 249 4886</span></li>
+        <li><a class="rowlink" href="https://www.linkedin.com/in/alejobarrera/" target="_blank" rel="noopener"><span class="t">LinkedIn</span></a><span class="m">/in/alejobarrera</span></li>
+        <li><span class="t">Ubicación</span><span class="m">Bogotá, Colombia · GMT-5</span></li>
       </ul>
     </section>
   </main>
 
-  <footer class="footer shell">
-    <div class="footer__inner">
-      <span>© <span id="year">2026</span> Alejandro Barrera · IAOps · <a href="/contacto/" data-es="Contacto" data-en="Contact">Contacto</a></span>
-      <span data-es="Las nubes cambian. El criterio queda." data-en="Clouds change. Judgment stays.">Las nubes cambian. El criterio queda.</span>
+  <footer class="footer">
+    <div class="shell footer__inner">
+      <span>© <span id="year">2026</span> Alejandro Barrera · <a href="https://iaopslatam.com/">IAOps LATAM ↗</a></span>
+      <span>La IA ejecuta. Tú diriges.</span>
     </div>
   </footer>
-
-  <a class="fab" href="/registro/" data-es="Regístrate" data-en="Sign up">Regístrate</a>
-
-  <script src="/script.js"></script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 </body>
 </html>

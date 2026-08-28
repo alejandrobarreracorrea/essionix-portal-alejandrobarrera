@@ -66,16 +66,34 @@ resource "aws_cloudfront_origin_access_control" "site" {
   signing_protocol                  = "sigv4"
 }
 
-# URLs limpias multi-página: /manifiesto/ -> /manifiesto/index.html
+# One-pager v2: redirige las URLs de la era multi-página a anclas del home
+# y el viejo /registro a la casa de la membresía (iaopslatam.com/unirme).
 resource "aws_cloudfront_function" "url_rewrite" {
   name    = "alejandrobarrera-url-rewrite-${var.environment}"
   runtime = "cloudfront-js-2.0"
   publish = true
-  comment = "Pretty URLs: agrega index.html a rutas de carpeta"
+  comment = "Redirects legacy multi-pagina -> anclas del one-pager"
 
   code = <<-EOT
     function handler(event) {
       var req = event.request;
+      var base = req.uri.replace(/\/index\.html$/, "").replace(/\/$/, "") || "/";
+      var r301 = {
+        "/registro": "https://iaopslatam.com/unirme/",
+        "/formacion": "https://iaopslatam.com/",
+        "/manifiesto": "https://${var.domain_name}/#manifiesto",
+        "/rutas": "https://${var.domain_name}/#rutas",
+        "/prueba": "https://${var.domain_name}/#prueba",
+        "/mentoria": "https://${var.domain_name}/#mentoria",
+        "/contacto": "https://${var.domain_name}/#contacto"
+      };
+      if (r301[base]) {
+        return {
+          statusCode: 301,
+          statusDescription: "Moved Permanently",
+          headers: { "location": { value: r301[base] } }
+        };
+      }
       if (req.uri.endsWith("/")) {
         req.uri += "index.html";
       } else if (!req.uri.includes(".")) {

@@ -34,7 +34,7 @@ dirección humana de los agentes.
 ## Formación
 Alejandro es docente universitario de Cloud Computing, Redes y Ciberseguridad, y speaker.
 Tres formas de aprender con él:
-- Comunidad IAOps LATAM (gratuita — abre septiembre 2026; invitación vía LinkedIn)
+- Comunidad IAOps LATAM (gratuita): https://iaopslatam.com/unirme/
 - Mentoría técnica 1:1 (paga, ver abajo)
 - Charlas y talleres para eventos, universidades y empresas
 
