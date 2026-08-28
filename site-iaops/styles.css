@@ -109,7 +109,7 @@ a { color: inherit; text-decoration: none; }
 .bar i { display: block; height: 100%; width: 8%; background: var(--grad); transition: width .4s ease; }
 
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px; max-width: 640px; }
-label { display: grid; gap: 7px; }
+label { display: grid; gap: 7px; align-content: start; }
 label > span { font-family: var(--mono); font-size: .74rem; letter-spacing: .05em; text-transform: uppercase; color: var(--faint); }
 input, select {
   background: rgba(255, 255, 255, .03); border: 1px solid var(--line); border-radius: 10px;
