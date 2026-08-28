@@ -94,52 +94,102 @@
     });
   }
 
-  /* ---------- registro de leads ---------- */
+  /* ---------- registro de leads (con verificación por código) ---------- */
   var leadForm = document.getElementById("lead-form");
   if (leadForm) {
     var MSG = {
-      es: { sending: "enviando…", ok: "✓ ¡Listo! Te escribo pronto.", err: "algo falló — intenta de nuevo o escríbeme por LinkedIn", invalid: "revisa tu nombre y email", config: "registro en mantenimiento — escríbeme por LinkedIn" },
-      en: { sending: "sending…", ok: "✓ Done! I'll be in touch soon.", err: "something failed — retry or ping me on LinkedIn", invalid: "check your name and email", config: "signup under maintenance — ping me on LinkedIn" }
+      es: { sending: "enviando…", verifying: "verificando…", codeSent: "✓ código enviado", err: "algo falló — intenta de nuevo o escríbeme por LinkedIn", invalid: "revisa los campos marcados con *", config: "registro en mantenimiento — escríbeme por LinkedIn", badCode: "código incorrecto — revisa e intenta de nuevo", expired: "el código venció — pide uno nuevo", cooldown: "espera un momento antes de reenviar", maxTries: "demasiados intentos — pide un código nuevo", resendIn: "reenviar en " },
+      en: { sending: "sending…", verifying: "verifying…", codeSent: "✓ code sent", err: "something failed — retry or ping me on LinkedIn", invalid: "check the fields marked with *", config: "signup under maintenance — ping me on LinkedIn", badCode: "wrong code — check and retry", expired: "code expired — request a new one", cooldown: "wait a moment before resending", maxTries: "too many tries — request a new code", resendIn: "resend in " }
     };
-    var statusEl = leadForm.querySelector(".regform__status");
-    var btnEl = leadForm.querySelector("button[type=submit]");
+    var endpoint = leadForm.getAttribute("data-endpoint") || "";
+    var step1 = document.getElementById("reg-step-1");
+    var step2 = document.getElementById("reg-step-2");
+    var step3 = document.getElementById("reg-step-3");
+    var status1 = step1.querySelector(".regform__status");
+    var status2 = document.getElementById("reg-status-2");
+    var btn1 = step1.querySelector("button[type=submit]");
+    var verifyBtn = document.getElementById("reg-verify-btn");
+    var resendEl = document.getElementById("reg-resend");
+    var codeEl = document.getElementById("reg-code");
+    var regEmail = "";
+    var resendTimer = null;
 
-    function setStatus(kind, key) {
-      var t = MSG[current === "en" ? "en" : "es"];
-      statusEl.textContent = t[key];
-      statusEl.className = "regform__status" + (kind ? " " + kind : "");
+    function t(key) { return MSG[current === "en" ? "en" : "es"][key]; }
+    function setStatus(el, kind, key) { el.textContent = key ? t(key) : ""; el.className = el.className.replace(/ (ok|err)/g, "").trim(); if (kind) el.className += " " + kind; }
+    function show(step) {
+      step1.classList.toggle("is-hidden", step !== 1);
+      step2.classList.toggle("is-hidden", step !== 2);
+      step3.classList.toggle("is-hidden", step !== 3);
+    }
+    function post(payload) {
+      return fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
+        .then(function (r) { return r.json().then(function (j) { j._status = r.status; return j; }); });
+    }
+    function startResendCooldown(secs) {
+      var left = secs;
+      resendEl.classList.add("is-disabled");
+      clearInterval(resendTimer);
+      resendTimer = setInterval(function () {
+        left -= 1;
+        if (left <= 0) { clearInterval(resendTimer); resendEl.classList.remove("is-disabled"); resendEl.textContent = t("resendIn").replace(/en $|in $/, "") && (current === "en" ? "Resend code" : "Reenviar código"); }
+        else { resendEl.textContent = t("resendIn") + left + "s"; }
+      }, 1000);
+      resendEl.textContent = t("resendIn") + left + "s";
     }
 
     leadForm.addEventListener("submit", function (e) {
       e.preventDefault();
-      var endpoint = leadForm.getAttribute("data-endpoint") || "";
-      if (endpoint.indexOf("http") !== 0) { setStatus("err", "config"); return; }
-
+      if (endpoint.indexOf("http") !== 0) { setStatus(status1, "err", "config"); return; }
       var data = {
+        action: "register",
         nombre: (leadForm.nombre.value || "").trim(),
         email: (leadForm.email.value || "").trim(),
+        pais: leadForm.pais.value,
         whatsapp: (leadForm.whatsapp.value || "").trim(),
+        dedicacion: leadForm.dedicacion.value,
+        rol: (leadForm.rol.value || "").trim(),
+        empresa: (leadForm.empresa.value || "").trim(),
+        linkedin: (leadForm.linkedin.value || "").trim(),
+        canal: leadForm.canal.value,
         interes: leadForm.interes.value,
         web: leadForm.web.value || ""
       };
-      if (data.nombre.length < 2 || !/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(data.email)) {
-        setStatus("err", "invalid"); return;
-      }
+      if (data.nombre.length < 2 || !/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(data.email)) { setStatus(status1, "err", "invalid"); return; }
+      btn1.disabled = true;
+      setStatus(status1, "", "sending");
+      post(data).then(function (j) {
+        if (j.ok && j.verified) { show(3); return; }
+        if (j.ok) {
+          regEmail = data.email;
+          document.getElementById("reg-email-echo").textContent = regEmail;
+          show(2); setStatus(status2, "ok", "codeSent"); startResendCooldown(60); codeEl.focus();
+        } else { setStatus(status1, "err", j.error === "cooldown" ? "cooldown" : "invalid"); }
+      }).catch(function () { setStatus(status1, "err", "err"); })
+        .finally(function () { btn1.disabled = false; });
+    });
 
-      btnEl.disabled = true;
-      setStatus("", "sending");
-      fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      })
-        .then(function (r) { return r.json(); })
-        .then(function (j) {
-          if (j && j.ok) { setStatus("ok", "ok"); leadForm.reset(); }
-          else { setStatus("err", "invalid"); }
-        })
-        .catch(function () { setStatus("err", "err"); })
-        .finally(function () { btnEl.disabled = false; });
+    function doVerify() {
+      var code = (codeEl.value || "").replace(/\D/g, "");
+      if (code.length !== 6) { setStatus(status2, "err", "badCode"); return; }
+      verifyBtn.disabled = true;
+      setStatus(status2, "", "verifying");
+      post({ action: "verify", email: regEmail, code: code }).then(function (j) {
+        if (j.ok && j.verified) { show(3); }
+        else if (j.error === "expirado") { setStatus(status2, "err", "expired"); }
+        else if (j.error === "max_attempts") { setStatus(status2, "err", "maxTries"); }
+        else { setStatus(status2, "err", "badCode"); }
+      }).catch(function () { setStatus(status2, "err", "err"); })
+        .finally(function () { verifyBtn.disabled = false; });
+    }
+    verifyBtn.addEventListener("click", doVerify);
+    codeEl.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); doVerify(); } });
+
+    resendEl.addEventListener("click", function () {
+      if (resendEl.classList.contains("is-disabled")) return;
+      post({ action: "resend", email: regEmail }).then(function (j) {
+        if (j.ok) { setStatus(status2, "ok", "codeSent"); startResendCooldown(60); }
+        else { setStatus(status2, "err", j.error === "cooldown" ? "cooldown" : "err"); }
+      }).catch(function () { setStatus(status2, "err", "err"); });
     });
   }
 

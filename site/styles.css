@@ -233,7 +233,17 @@ a { color: inherit; text-decoration: none; }
 .regform__status.ok { color: var(--a2); }
 .regform__status.err { color: #ff8a8a; }
 .regform__privacy { margin-top: 14px; font-size: .8rem; color: var(--faint); }
-@media (max-width: 620px) { .regform__grid { grid-template-columns: 1fr; } }
+.is-hidden { display: none !important; }
+.regform__verify { display: flex; gap: 14px; align-items: stretch; max-width: 420px; margin-top: 6px; }
+#reg-code {
+  font-family: var(--font-mono); font-size: 1.6rem; letter-spacing: .45em; text-align: center;
+  max-width: 230px;
+}
+.regform__resend { font-family: var(--font-mono); font-size: .85rem; color: var(--accent); cursor: pointer; }
+.regform__resend:hover { color: var(--a2); }
+.regform__resend.is-disabled { color: var(--faint); cursor: default; }
+#reg-step-3 h3 { font-size: clamp(1.5rem, 3vw, 2.1rem); margin-bottom: 12px; color: var(--a2); }
+@media (max-width: 620px) { .regform__grid { grid-template-columns: 1fr; } .regform__verify { flex-direction: column; } #reg-code { max-width: none; } }
 
 /* ---------- asesoría / planes ---------- */
 .list--pricing { margin-top: clamp(28px, 5vw, 44px); }

@@ -317,36 +317,107 @@
         <p class="regform__sub" data-es="Déjame tus datos y te llega todo primero: la invitación a la comunidad, los runbooks, el meetup y cada nuevo recurso." data-en="Leave your details and everything reaches you first: the community invite, the runbooks, the meetup and every new resource.">Déjame tus datos y te llega todo primero: la invitación a la comunidad, los runbooks, el meetup y cada nuevo recurso.</p>
 
         <form id="lead-form" data-endpoint="__REGISTER_ENDPOINT__" novalidate>
-          <div class="regform__grid">
-            <label>
-              <span data-es="Nombre" data-en="Name">Nombre</span>
-              <input type="text" name="nombre" required minlength="2" maxlength="80" autocomplete="name" />
-            </label>
-            <label>
-              <span>Email</span>
-              <input type="email" name="email" required maxlength="120" autocomplete="email" />
-            </label>
-            <label>
-              <span data-es="WhatsApp (opcional)" data-en="WhatsApp (optional)">WhatsApp (opcional)</span>
-              <input type="tel" name="whatsapp" maxlength="20" autocomplete="tel" />
-            </label>
-            <label>
-              <span data-es="Me interesa" data-en="I'm interested in">Me interesa</span>
-              <select name="interes">
-                <option value="comunidad" data-es="Comunidad IAOps (gratis)" data-en="IAOps community (free)">Comunidad IAOps (gratis)</option>
-                <option value="mentoria" data-es="Mentoría 1:1" data-en="1:1 mentoring">Mentoría 1:1</option>
-                <option value="charlas" data-es="Charlas y talleres" data-en="Talks &amp; workshops">Charlas y talleres</option>
-                <option value="todo" data-es="Todo lo anterior" data-en="All of the above">Todo lo anterior</option>
-              </select>
-            </label>
+          <!-- PASO 1: perfil -->
+          <div id="reg-step-1">
+            <div class="regform__grid">
+              <label>
+                <span data-es="Nombre completo *" data-en="Full name *">Nombre completo *</span>
+                <input type="text" name="nombre" required minlength="2" maxlength="80" autocomplete="name" />
+              </label>
+              <label>
+                <span>Email *</span>
+                <input type="email" name="email" required maxlength="120" autocomplete="email" />
+              </label>
+              <label>
+                <span data-es="País *" data-en="Country *">País *</span>
+                <select name="pais">
+                  <option value="colombia">Colombia</option>
+                  <option value="mexico">México</option>
+                  <option value="peru">Perú</option>
+                  <option value="ecuador">Ecuador</option>
+                  <option value="argentina">Argentina</option>
+                  <option value="chile">Chile</option>
+                  <option value="bolivia">Bolivia</option>
+                  <option value="venezuela">Venezuela</option>
+                  <option value="espana" data-es="España" data-en="Spain">España</option>
+                  <option value="otro" data-es="Otro" data-en="Other">Otro</option>
+                </select>
+              </label>
+              <label>
+                <span data-es="WhatsApp (opcional)" data-en="WhatsApp (optional)">WhatsApp (opcional)</span>
+                <input type="tel" name="whatsapp" maxlength="20" autocomplete="tel" placeholder="+57 ..." />
+              </label>
+              <label>
+                <span data-es="¿A qué te dedicas? *" data-en="What do you do? *">¿A qué te dedicas? *</span>
+                <select name="dedicacion">
+                  <option value="estudiante" data-es="Estudiante" data-en="Student">Estudiante</option>
+                  <option value="onprem" data-es="Infraestructura on-premise" data-en="On-premise infrastructure">Infraestructura on-premise</option>
+                  <option value="cloud" data-es="Cloud / DevOps / SRE" data-en="Cloud / DevOps / SRE">Cloud / DevOps / SRE</option>
+                  <option value="dev" data-es="Desarrollo de software" data-en="Software development">Desarrollo de software</option>
+                  <option value="datos" data-es="Datos / DBA" data-en="Data / DBA">Datos / DBA</option>
+                  <option value="otro" data-es="Otro" data-en="Other">Otro</option>
+                </select>
+              </label>
+              <label>
+                <span data-es="Rol / cargo (opcional)" data-en="Role / title (optional)">Rol / cargo (opcional)</span>
+                <input type="text" name="rol" maxlength="80" placeholder="SysAdmin, Dev, Estudiante…" />
+              </label>
+              <label>
+                <span data-es="Empresa / institución (opcional)" data-en="Company / school (optional)">Empresa / institución (opcional)</span>
+                <input type="text" name="empresa" maxlength="100" data-es-ph="Dónde trabajas o estudias" />
+              </label>
+              <label>
+                <span>LinkedIn (opcional)</span>
+                <input type="url" name="linkedin" maxlength="150" placeholder="https://linkedin.com/in/…" />
+              </label>
+              <label>
+                <span data-es="¿Cómo me conociste? *" data-en="How did you find me? *">¿Cómo me conociste? *</span>
+                <select name="canal">
+                  <option value="clases" data-es="En clase (universidad)" data-en="In class (university)">En clase (universidad)</option>
+                  <option value="linkedin">LinkedIn</option>
+                  <option value="evento" data-es="Charla o meetup" data-en="Talk or meetup">Charla o meetup</option>
+                  <option value="amigo" data-es="Me lo recomendaron" data-en="A friend told me">Me lo recomendaron</option>
+                  <option value="otro" data-es="Otro" data-en="Other">Otro</option>
+                </select>
+              </label>
+              <label>
+                <span data-es="Me interesa" data-en="I'm interested in">Me interesa</span>
+                <select name="interes">
+                  <option value="comunidad" data-es="Comunidad IAOps (gratis)" data-en="IAOps community (free)">Comunidad IAOps (gratis)</option>
+                  <option value="mentoria" data-es="Mentoría 1:1" data-en="1:1 mentoring">Mentoría 1:1</option>
+                  <option value="charlas" data-es="Charlas y talleres" data-en="Talks &amp; workshops">Charlas y talleres</option>
+                  <option value="todo" data-es="Todo lo anterior" data-en="All of the above">Todo lo anterior</option>
+                </select>
+              </label>
+            </div>
+            <!-- honeypot anti-bots -->
+            <input type="text" name="web" tabindex="-1" autocomplete="off" class="regform__hp" aria-hidden="true" />
+            <div class="regform__actions">
+              <button type="submit" class="btn btn--solid magnetic" data-es="Continuar →" data-en="Continue →">Continuar →</button>
+              <p class="regform__status" role="status" aria-live="polite"></p>
+            </div>
+            <p class="regform__privacy" data-es="Solo uso tus datos para avisarte de esto. Cero spam, te sales cuando quieras." data-en="I only use your data to keep you posted on this. Zero spam, leave anytime.">Solo uso tus datos para avisarte de esto. Cero spam, te sales cuando quieras.</p>
           </div>
-          <!-- honeypot anti-bots -->
-          <input type="text" name="web" tabindex="-1" autocomplete="off" class="regform__hp" aria-hidden="true" />
-          <div class="regform__actions">
-            <button type="submit" class="btn btn--solid magnetic" data-es="Quiero unirme →" data-en="Count me in →">Quiero unirme →</button>
-            <p class="regform__status" role="status" aria-live="polite"></p>
+
+          <!-- PASO 2: verificación por código -->
+          <div id="reg-step-2" class="is-hidden">
+            <p class="regform__sub"><span data-es="Te envié un código de 6 dígitos a" data-en="I sent a 6-digit code to">Te envié un código de 6 dígitos a</span> <b id="reg-email-echo"></b>. <span data-es="Revisa también spam/promociones." data-en="Check spam/promotions too.">Revisa también spam/promociones.</span></p>
+            <div class="regform__verify">
+              <input type="text" id="reg-code" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="······" autocomplete="one-time-code" />
+              <button type="button" id="reg-verify-btn" class="btn btn--solid magnetic" data-es="Verificar" data-en="Verify">Verificar</button>
+            </div>
+            <div class="regform__actions">
+              <a id="reg-resend" class="regform__resend" data-es="Reenviar código" data-en="Resend code">Reenviar código</a>
+              <p class="regform__status" id="reg-status-2" role="status" aria-live="polite"></p>
+            </div>
           </div>
-          <p class="regform__privacy" data-es="Solo uso tus datos para avisarte de esto. Cero spam, te sales cuando quieras." data-en="I only use your data to keep you posted on this. Zero spam, leave anytime.">Solo uso tus datos para avisarte de esto. Cero spam, te sales cuando quieras.</p>
+
+          <!-- PASO 3: listo -->
+          <div id="reg-step-3" class="is-hidden">
+            <h3 data-es="✓ Email verificado. ¡Bienvenido!" data-en="✓ Email verified. Welcome!">✓ Email verificado. ¡Bienvenido!</h3>
+            <p class="regform__sub" data-es="Ya estás en la lista: te llegará la invitación a la comunidad y cada nuevo recurso. Mientras tanto, sígueme en LinkedIn — ahí documento todo primero." data-en="You're on the list: the community invite and every new resource will reach you. Meanwhile, follow me on LinkedIn — everything lands there first.">Ya estás en la lista: te llegará la invitación a la comunidad y cada nuevo recurso. Mientras tanto, sígueme en LinkedIn — ahí documento todo primero.</p>
+            <a class="btn btn--ghost magnetic" href="https://www.linkedin.com/in/alejobarrera/" target="_blank" rel="noopener" data-es="Seguir en LinkedIn →" data-en="Follow on LinkedIn →">Seguir en LinkedIn →</a>
+          </div>
         </form>
       </div>
     </section>

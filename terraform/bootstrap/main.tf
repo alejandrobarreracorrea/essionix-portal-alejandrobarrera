@@ -67,6 +67,12 @@ resource "aws_iam_role_policy" "ab_leads_deploy" {
         Action   = "logs:*"
         Resource = "arn:aws:logs:us-east-1:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/ab-leads-*"
       },
+      {
+        Sid      = "LeadsSes"
+        Effect   = "Allow"
+        Action   = "ses:*"
+        Resource = "arn:aws:ses:us-east-1:${data.aws_caller_identity.current.account_id}:identity/alejandrobarrera.net"
+      },
     ]
   })
 }

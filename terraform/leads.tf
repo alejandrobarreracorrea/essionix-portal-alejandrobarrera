@@ -51,8 +51,14 @@ resource "aws_iam_role_policy" "leads_exec" {
       {
         Sid      = "WriteLeads"
         Effect   = "Allow"
-        Action   = ["dynamodb:UpdateItem"]
+        Action   = ["dynamodb:UpdateItem", "dynamodb:GetItem"]
         Resource = aws_dynamodb_table.leads.arn
+      },
+      {
+        Sid      = "SendVerification"
+        Effect   = "Allow"
+        Action   = ["ses:SendEmail"]
+        Resource = aws_sesv2_email_identity.site.arn
       },
       {
         Sid      = "Logs"
@@ -71,13 +77,14 @@ resource "aws_lambda_function" "register" {
   handler          = "register.handler"
   filename         = data.archive_file.register.output_path
   source_code_hash = data.archive_file.register.output_base64sha256
-  timeout          = 5
+  timeout          = 10
   memory_size      = 128
   tags             = local.tags
 
   environment {
     variables = {
       TABLE_NAME = aws_dynamodb_table.leads.name
+      SENDER     = "Alejandro Barrera · IAOps <hola@${var.domain_name}>"
     }
   }
 }
