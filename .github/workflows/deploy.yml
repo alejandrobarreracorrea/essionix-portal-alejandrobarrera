@@ -18,6 +18,9 @@ env:
   ENABLE_CUSTOM_DOMAIN: "true"
   # Encender cuando el registro de iaopslatam.com complete (redirect 301).
   ENABLE_IAOPSLATAM: "true"
+  # Registro defensivo del término AI SRE: 301 -> iaopslatam.com.
+  # Encender cuando los registros de aisrelatam.com/iasrelatam.com completen.
+  ENABLE_AISRE_REDIRECT: "false"
   TF_BACKEND_BUCKET: essionix-s3-pdn-us-east-1-remotestates
   OIDC_ROLE_ARN: arn:aws:iam::484005000536:role/essionix-role-pdn-us-east-1-oidc
 
@@ -70,6 +73,7 @@ jobs:
           TF_VAR_environment: ${{ env.ENVIRONMENT }}
           TF_VAR_enable_custom_domain: ${{ env.ENABLE_CUSTOM_DOMAIN }}
           TF_VAR_enable_iaopslatam: ${{ env.ENABLE_IAOPSLATAM }}
+          TF_VAR_enable_aisre_redirect: ${{ env.ENABLE_AISRE_REDIRECT }}
         run: terraform apply -auto-approve -input=false
 
       - name: Exportar outputs de Terraform
