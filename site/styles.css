@@ -42,7 +42,7 @@ a { color: inherit; text-decoration: none; }
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: .5em;
   font-family: var(--display); font-weight: 600; font-size: 1rem;
-  padding: .9em 1.7em; border-radius: 999px; cursor: pointer; border: 1px solid transparent;
+  padding: .9em 1.7em; border-radius: 999px; cursor: pointer; border: 1px solid transparent; white-space: nowrap;
   transition: opacity .15s ease, border-color .15s ease;
 }
 .btn--primary { background: var(--grad); color: #fff; }
@@ -179,4 +179,10 @@ html { overflow-x: clip; } /* el canvas full-bleed (100vw) no debe crear scroll 
 @media (max-width: 760px) {
   .hero__grid { flex-direction: column-reverse; align-items: flex-start; }
   .hero__photo { width: 148px; }
+}
+@media (max-width: 760px) {
+  .mesh {
+    -webkit-mask-image: linear-gradient(to bottom, #000 75%, transparent);
+    mask-image: linear-gradient(to bottom, #000 75%, transparent);
+  }
 }

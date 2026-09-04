@@ -50,9 +50,36 @@
 
   function rgba(c, a) { return "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + a + ")"; }
 
+  function mix(t) {
+    return [Math.round(A1[0] + (A2[0] - A1[0]) * t),
+            Math.round(A1[1] + (A2[1] - A1[1]) * t),
+            Math.round(A1[2] + (A2[2] - A1[2]) * t)];
+  }
+
+  // En pantallas angostas la bitácora chocaría con el texto del hero:
+  // ahí el fondo son ondas de contorno suaves (mismas de iaopslatam).
+  function drawWaves(t) {
+    var N = 9;
+    for (var i = 0; i < N; i++) {
+      var base = (i + 1) / (N + 1) * H;
+      ctx.beginPath();
+      for (var x = 0; x <= W; x += 10) {
+        var y = base
+          + Math.sin(x * 0.006 + i * 0.9 + t * 0.00025) * 14
+          + Math.sin(x * 0.0021 - i * 0.6 + t * 0.00014) * 24;
+        x ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+      }
+      var a = 0.06 + 0.10 * Math.abs(Math.sin(i * 0.7 + t * 0.0003));
+      var c = mix(i / N);
+      ctx.strokeStyle = "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + a + ")";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+  }
+
   function draw(t) {
     ctx.clearRect(0, 0, W, H);
-    if (W < 760) return; // en móvil el hero es angosto: sin bitácora
+    if (W < 760) { drawWaves(t); return; }
 
     if (t - tPrev > 34) { // cadencia de tipeo (~30 caracteres/s)
       tPrev = t;
