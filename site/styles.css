@@ -155,3 +155,13 @@ select option { background: #111116; }
 .eco:hover { opacity: .8; }
 .facts { display: flex; gap: 26px; flex-wrap: wrap; margin-top: 30px; font-family: var(--mono); font-size: .82rem; color: var(--faint); }
 .facts b { color: var(--text); font-weight: 500; }
+
+/* ---------- malla de operación (fondo del hero, mesh.js) ---------- */
+html { overflow-x: clip; } /* el canvas full-bleed (100vw) no debe crear scroll horizontal */
+.hero { position: relative; z-index: 0; }
+.mesh {
+  position: absolute; top: 0; bottom: 0; left: 50%; width: 100vw;
+  transform: translateX(-50%); z-index: -1; pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent);
+}
