@@ -41,7 +41,7 @@ Tres formas de aprender con él:
 ## Mentoría técnica 1:1 (paga)
 Reserva y pago en https://cal.com/alejandrobarrera
 - Sesión exprés — 30 min — USD 50 (segunda opinión / elegir ruta / Q&A)
-- Mentoría 1:1 — 50 min — USD 80 (sesión de trabajo sobre tu caso)
+- Mentoría 1:1 — 50 min — USD 80 (sesión de trabajo sobre tu caso): https://cal.com/alejandrobarrera/mentoria-1-1
 - Architecture review — 90 min — USD 140 (revisión profunda / Well-Architected / plan IAOps)
 Formación de equipos: por email.
 
