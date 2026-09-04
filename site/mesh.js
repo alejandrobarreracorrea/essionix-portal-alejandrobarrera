@@ -1,9 +1,9 @@
-/* Malla de operación del hero — canvas 2D sin dependencias.
-   Familia "constellation mesh" (particles.js la popularizó; aquí versión propia):
-   nodos a la deriva + enlaces coloreados con el gradiente de marca (violeta→cian)
-   + "pulso de firma": cada pocos segundos un nodo emite un anillo (el momento
-   de aprobación, sello de la marca). Respeta prefers-reduced-motion, se pausa
-   fuera de viewport / pestaña oculta, y baja densidad en móvil. */
+/* Fondo del hero — "terminal viva": una bitácora de operación real (la
+   decomisión legacy + auditoría FinOps ejecutadas por agentes) se tipea en
+   fantasma al costado derecho del hero. La línea de la firma humana se
+   resalta en cian: es el sello de la marca. Canvas 2D sin dependencias;
+   respeta prefers-reduced-motion, se pausa fuera de viewport / pestaña
+   oculta y se desactiva en pantallas angostas (chocaría con el texto). */
 (function () {
   "use strict";
 
@@ -19,15 +19,28 @@
     var n = parseInt(hex.slice(1), 16);
     return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
   }
-  var A1 = tokenRGB("--a1", "#8b7bff"); // violeta
-  var A2 = tokenRGB("--a2", "#38e0d8"); // cian
+  var A1 = tokenRGB("--a1", "#8b7bff");
+  var A2 = tokenRGB("--a2", "#38e0d8");
+  var GRAY = [156, 156, 170];
 
-  var SPEED = 0.32, CONNECT = 140, LINE_A = 0.14, DOT_A = 0.5;
-  var W = 0, H = 0, pts = [], pulses = [], nextPulse = 0;
+  // Operación real, no utilería: decomisión con firma + FinOps (posts 3 y 11).
+  var LINES = [
+    "$ agent run decommission-legacy",
+    "verificando DNS apunta a distro nueva… ok",
+    "backup s3://legacy → 220 objetos ✓",
+    "esperando firma humana [y/n] ✍  y",
+    "liberando alias CloudFront… ok",
+    "propagación DNS: 58/60 verificaciones ✓",
+    "eliminando distribución EZ6LM98… hecho",
+    "$ curl -I https://dominio → HTTP 200",
+    "downtime: 0s · toil ahorrado: 1 tarde",
+    "$ agent run finops-audit",
+    "huérfanos detectados: 7 · ahorro: $118/mes"
+  ];
+
+  var W = 0, H = 0, feed = [], cursor = 0, ch = 0, tPrev = 0;
   var dpr = Math.min(window.devicePixelRatio || 1, 2);
   var running = false, visible = true, raf = 0;
-
-  function count() { return W < 640 ? 26 : 52; }
 
   function resize() {
     W = canvas.offsetWidth; H = canvas.offsetHeight;
@@ -35,75 +48,42 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  function seed() {
-    pts = [];
-    for (var k = 0, n = count(); k < n; k++) {
-      pts.push({ x: Math.random() * W, y: Math.random() * H,
-                 vx: (Math.random() - 0.5) * SPEED, vy: (Math.random() - 0.5) * SPEED });
-    }
-    pulses = [];
-  }
+  function rgba(c, a) { return "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + a + ")"; }
 
-  function mix(t) { // color del gradiente en t∈[0,1]
-    return [Math.round(A1[0] + (A2[0] - A1[0]) * t),
-            Math.round(A1[1] + (A2[1] - A1[1]) * t),
-            Math.round(A1[2] + (A2[2] - A1[2]) * t)];
-  }
-
-  function draw(now) {
+  function draw(t) {
     ctx.clearRect(0, 0, W, H);
-    var i, j, p, q, dx, dy, d2, a, c;
+    if (W < 760) return; // en móvil el hero es angosto: sin bitácora
 
-    for (i = 0; i < pts.length; i++) {
-      p = pts[i];
-      p.x = (p.x + p.vx + W) % W;
-      p.y = (p.y + p.vy + H) % H;
-    }
-    for (i = 0; i < pts.length - 1; i++) {
-      for (j = i + 1; j < pts.length; j++) {
-        p = pts[i]; q = pts[j];
-        dx = p.x - q.x; dy = p.y - q.y; d2 = dx * dx + dy * dy;
-        if (d2 < CONNECT * CONNECT) {
-          a = LINE_A * (1 - Math.sqrt(d2) / CONNECT);
-          c = mix(((p.x + q.x) / 2) / W);
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(q.x, q.y);
-          ctx.strokeStyle = "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + a + ")";
-          ctx.lineWidth = 0.8;
-          ctx.stroke();
-        }
+    if (t - tPrev > 34) { // cadencia de tipeo (~30 caracteres/s)
+      tPrev = t;
+      ch++;
+      var cur = LINES[cursor % LINES.length];
+      if (ch >= cur.length + 14) { // pausa breve al final de cada línea
+        ch = 0;
+        cursor++;
+        feed.push(cur);
+        if (feed.length > 9) feed.shift();
       }
     }
-    for (i = 0; i < pts.length; i++) {
-      p = pts[i];
-      c = mix(p.x / W);
-      ctx.fillStyle = "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + DOT_A + ")";
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, 1.4, 0, 6.2832);
-      ctx.fill();
-    }
 
-    // pulso de firma: anillo que se expande desde un nodo al azar
-    if (now > nextPulse && pts.length) {
-      pulses.push({ p: pts[(Math.random() * pts.length) | 0], t0: now });
-      nextPulse = now + 3800 + Math.random() * 2600;
+    ctx.font = '13px "JetBrains Mono", monospace';
+    ctx.textBaseline = "top";
+    var x0 = W * 0.56, y0 = H * 0.14, lh = 26;
+    for (var i = 0; i < feed.length; i++) {
+      var line = feed[i];
+      var firma = line.indexOf("✍") > -1;
+      var c = firma ? A2 : (line[0] === "$" ? A1 : GRAY);
+      var a = 0.06 + 0.11 * (i / feed.length) + (firma ? 0.10 : 0);
+      ctx.fillStyle = rgba(c, a);
+      ctx.fillText(line, x0, y0 + i * lh);
     }
-    for (i = pulses.length - 1; i >= 0; i--) {
-      var t = (now - pulses[i].t0) / 1400;
-      if (t >= 1) { pulses.splice(i, 1); continue; }
-      p = pulses[i].p;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, 3 + t * 34, 0, 6.2832);
-      ctx.strokeStyle = "rgba(" + A2[0] + "," + A2[1] + "," + A2[2] + "," + (0.35 * (1 - t)) + ")";
-      ctx.lineWidth = 1.1;
-      ctx.stroke();
-    }
+    ctx.fillStyle = rgba(A2, 0.32);
+    ctx.fillText(LINES[cursor % LINES.length].slice(0, ch) + "▌", x0, y0 + feed.length * lh);
   }
 
-  function loop(now) {
+  function loop(t) {
     if (!running) return;
-    draw(now);
+    draw(t);
     raf = requestAnimationFrame(loop);
   }
   function setRunning(on) {
@@ -112,11 +92,11 @@
     if (on) { raf = requestAnimationFrame(loop); } else { cancelAnimationFrame(raf); }
   }
 
-  resize(); seed();
+  resize();
   var resizeTimer;
   window.addEventListener("resize", function () {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function () { resize(); seed(); }, 150);
+    resizeTimer = setTimeout(resize, 150);
   });
   new IntersectionObserver(function (entries) {
     visible = entries[0].isIntersecting;
