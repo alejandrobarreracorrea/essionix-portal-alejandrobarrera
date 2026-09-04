@@ -165,3 +165,18 @@ html { overflow-x: clip; } /* el canvas full-bleed (100vw) no debe crear scroll 
   -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
   mask-image: linear-gradient(to bottom, #000 55%, transparent);
 }
+
+/* ---------- foto del hero (círculo con anillo de marca) ---------- */
+.hero__grid { display: flex; align-items: center; justify-content: space-between; gap: clamp(24px, 4vw, 48px); }
+.hero__txt { min-width: 0; }
+.hero__grid h1 { font-size: clamp(2rem, 4.8vw, 3.35rem); max-width: none; }
+.hero__photo {
+  flex: none; width: clamp(180px, 21vw, 264px); aspect-ratio: 1;
+  border-radius: 50%; padding: 3px; background: var(--grad);
+  box-shadow: 0 0 70px rgba(139, 123, 255, .22);
+}
+.hero__photo img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; border: 5px solid var(--bg); }
+@media (max-width: 760px) {
+  .hero__grid { flex-direction: column-reverse; align-items: flex-start; }
+  .hero__photo { width: 148px; }
+}
