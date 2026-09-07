@@ -102,11 +102,67 @@ Borrar la ruta default de hostA = por qué "hay red pero no sale" (la falla #1 d
 - Limpieza: `sudo ip netns del hostA hostB hostC router; sudo ip link del sw0; sudo ip link del sw1`
   (o reiniciar la instancia — todo era efímero: otra lección).
 
+
+## Parte 4 · El componente gráfico: el diagrama que se dibuja solo (~10 min)
+
+Packet Tracer dibuja la red que simulas. Aquí es al revés — y mejor: **un script lee la red
+real y genera el diagrama**. Si el diagrama y la realidad difieren, la realidad gana (primera
+lección de documentación de infraestructura).
+
+Guarda esto como `topo.sh` en la instancia y ejecútalo:
+
+```bash
+#!/usr/bin/env bash
+# topo.sh — genera un diagrama Mermaid de la topología real (bridges, namespaces, IPs)
+echo 'graph TD'
+echo '  classDef sw fill:#156082,color:#fff'
+echo '  classDef host fill:#0F9ED5,color:#fff'
+
+# switches (bridges) y sus puertos
+for br in $(ls /sys/class/net | while read i; do [ -d /sys/class/net/$i/bridge ] && echo $i; done); do
+  echo "  $br[\"🔀 $br (switch)\"]:::sw"
+done
+
+# hosts (namespaces): sus interfaces, IPs y a qué switch conectan
+for ns in $(ip netns list | awk '{print $1}'); do
+  echo "  $ns[\"🖥 $ns\"]:::host"
+  for ifc in $(sudo ip netns exec $ns ls /sys/class/net | grep -v '^lo$'); do
+    ip4=$(sudo ip -n $ns -o -4 addr show dev $ifc | awk '{print $4}')
+    peer=$(sudo ip netns exec $ns cat /sys/class/net/$ifc/iflink)
+    # ¿en qué bridge está el otro extremo del cable?
+    for pif in $(ls /sys/class/net); do
+      if [ "$(cat /sys/class/net/$pif/ifindex 2>/dev/null)" = "$peer" ]; then
+        br=$(basename $(readlink /sys/class/net/$pif/master 2>/dev/null) 2>/dev/null)
+        [ -n "$br" ] && echo "  $ns ---|\"$ifc · $ip4\"| $br"
+      fi
+    done
+  done
+done
+```
+
+```bash
+chmod +x topo.sh && ./topo.sh
+```
+
+La salida es texto Mermaid. Pégala en la bitácora (README de GitHub) dentro de un bloque
+` ```mermaid ` — **GitHub lo renderiza como diagrama automáticamente**. También se puede ver
+al instante en mermaid.live. Resultado: la topología del equipo, dibujada desde la verdad.
+
+## Suplentes gráficos — el mapa completo (todo libre)
+
+| Lo que da Packet Tracer | Suplente sin licenciamiento |
+|---|---|
+| Lienzo drag & drop para DISEÑAR | **draw.io** (diagrams.net, libre) — el plano CIDR y la arquitectura del caso |
+| Ver la topología construida | **topo.sh → Mermaid en GitHub** (se dibuja desde la red real) + **VPC Resource Map** en la consola AWS (visual nativo, gratis) para la parte cloud |
+| "Simulation mode" (paquetes viajando) | **Wireshark** (GPL, gráfico): capturar en la instancia `sudo tcpdump -i sw0 -w lab.pcap`, bajarlo con `scp` y abrirlo — colores por protocolo y *Statistics → Flow Graph* = la animación de PT, pero con tráfico real |
+| Simulador GUI completo para practicar en casa | **Filius** (GPL, educativo, drag & drop de hosts/switches/routers con animación de paquetes) — opcional para quien quiera el "clicky" |
+
 ## Producto de la sesión (bitácora)
 
 1. Captura del `ping` entre hosts + el `tcpdump` mostrando ARP e ICMP, comentados.
 2. Diagrama de la topología construida (draw.io o foto de papel) con IPs y máscaras.
 3. Dos "experimentos de ruptura" documentados: qué rompieron, qué esperaban, qué pasó.
+4. El diagrama Mermaid generado por `topo.sh` renderizado en el README de la bitácora.
 
 ## Notas para el docente
 
