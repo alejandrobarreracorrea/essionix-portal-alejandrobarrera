@@ -1,0 +1,100 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ruta Inf TI — Cloud, Redes y Ciberseguridad · Esumer 2026-2</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#08080b; --line:#22222b; --text:#f5f5f7; --muted:#9c9caa; --faint:#6b6b78;
+  --a1:#8b7bff; --a2:#38e0d8; --grad:linear-gradient(100deg,var(--a1),var(--a2));
+  --display:"Space Grotesk",sans-serif; --body:"Inter",sans-serif; --mono:"JetBrains Mono",monospace; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { background:var(--bg); color:var(--text); font-family:var(--body); font-size:15.5px; line-height:1.55;
+  background-image:radial-gradient(60% 40% at 70% -10%, rgba(139,123,255,.14), transparent 70%); background-repeat:no-repeat; }
+.shell { max-width:1060px; margin:0 auto; padding:36px clamp(16px,4vw,40px) 80px; }
+.kicker { font-family:var(--mono); font-size:.75rem; letter-spacing:.07em; text-transform:uppercase; color:var(--a1); }
+h1 { font-family:var(--display); font-size:clamp(1.6rem,4vw,2.5rem); letter-spacing:-.02em; margin:8px 0 4px; }
+h1 b { background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.sub { color:var(--muted); margin-bottom:22px; }
+.controls { display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin:18px 0 8px;
+  position:sticky; top:0; background:rgba(8,8,11,.92); backdrop-filter:blur(10px); padding:12px 0; z-index:10; border-bottom:1px solid var(--line); }
+.toggle { display:flex; border:1px solid var(--line); border-radius:999px; overflow:hidden; }
+.toggle button { background:none; border:0; color:var(--muted); font-family:var(--mono); font-size:.8rem; padding:.55em 1.2em; cursor:pointer; }
+.toggle button.on { background:var(--grad); color:#fff; }
+.hint { font-family:var(--mono); font-size:.75rem; color:var(--faint); }
+.mod { margin-top:38px; }
+.mod h2 { font-family:var(--display); font-size:1.25rem; }
+.mod .name { color:var(--a2); font-family:var(--mono); font-size:.78rem; letter-spacing:.05em; text-transform:uppercase; }
+.mod .fase { color:var(--faint); font-size:.85rem; margin:4px 0 14px; border-left:2px solid; border-image:var(--grad) 1; padding-left:10px; }
+.week { border-top:1px solid var(--line); padding:14px 0 4px; }
+.wk { font-family:var(--mono); font-size:.75rem; color:var(--faint); margin-bottom:8px; }
+.sess { display:grid; grid-template-columns:190px 1fr; gap:6px 20px; padding:10px 0; }
+.when { font-family:var(--mono); font-size:.8rem; color:var(--muted); line-height:1.8; }
+.when .d { color:var(--text); font-weight:500; display:block; }
+.badge { display:inline-block; font-family:var(--mono); font-size:.68rem; padding:.25em .8em; border-radius:999px; margin-top:4px; }
+.b-virtual { color:var(--a1); border:1px solid rgba(139,123,255,.4); }
+.b-presencial { color:var(--a2); border:1px solid rgba(56,224,216,.4); }
+.b-hibrido { color:#ffce6b; border:1px solid rgba(255,206,107,.4); }
+.tema { font-family:var(--display); font-weight:600; font-size:1.02rem; }
+.cont { color:var(--muted); font-size:.88rem; margin-top:3px; }
+.act { color:var(--a2); font-size:.83rem; margin-top:5px; }
+.act b { font-family:var(--mono); font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; }
+.special { border:1px dashed var(--line); border-radius:14px; padding:16px 18px; margin-top:8px; }
+.footer { border-top:1px solid var(--line); margin-top:44px; padding-top:16px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; font-family:var(--mono); font-size:.78rem; color:var(--faint); }
+@media (max-width:640px){ .sess { grid-template-columns:1fr; } .when { display:flex; gap:12px; align-items:center; flex-wrap:wrap; } .when .d{display:inline} }
+@media print { body{background:#fff;color:#111} .controls{position:static} }
+</style></head><body><div class="shell">
+<span class="kicker">Esumer · Ruta TI · 2026-2 · 92 horas</span>
+<h1>Cloud Computing, Redes y <b>Ciberseguridad</b> Esencial</h1>
+<p class="sub">Calendario completo: 15 semanas · 2 sesiones/semana de 3 h (6:30–9:30 p.m.) · proyecto integrador acumulativo por fases.</p>
+<div class="controls">
+  <span class="hint">FRANJA:</span>
+  <div class="toggle"><button id="bt-mj" class="on">Mar / Jue</button><button id="bt-mv">Mié / Vie</button></div>
+  <span class="hint" id="count"></span>
+</div>
+<div id="app"></div>
+<div class="footer"><span>Fuente: Ruta TI (programa oficial) · fases de proyecto: overlay de dictado</span><span>Total: 92 horas</span></div>
+</div>
+<script>
+var DATA = {"weeks": [{"n": 1, "sessions": [{"tema": "Encuentro Inicial (Refrigerio)", "contenido": "", "mod": "Hibrido", "act": ""}, {"tema": "MasterClass (Nivelación) Encuentro inicial y panorama de la infraestructura TI", "contenido": "Componentes de una infraestructura tecnológica; hardware, sistema operativo, red, servicios y nube; cliente y servidor; infraestructura local, virtualizada y Cloud; disponibilidad, rendimiento y seguridad; presentación del caso integrador.", "mod": "Virtual", "act": "Diagnóstico inicial + mapa de infraestructura de una organización ficticia. Producto: identificación de usuarios, servicios, activos críticos y necesidades del caso integrador."}]}, {"n": 2, "sessions": [{"tema": "Fundamentos de sistemas operativos y terminal Linux", "contenido": "Rol del sistema operativo; usuarios y procesos; estructura del sistema de archivos; rutas absolutas y relativas; comandos básicos de terminal; creación, consulta y organización de archivos y directorios; permisos básicos; uso responsable de privilegios administrativos.", "mod": "Presencial", "act": "Taller nivelatorio en Ubuntu: navegar por el sistema, administrar archivos y documentar una secuencia básica de comandos para tareas de soporte."}, {"tema": "Fundamentos de redes y modelo TCP/IP", "contenido": "Conceptos de LAN, WAN e Internet; dispositivos de red; paquete y trama; capas del modelo TCP/IP; protocolos esenciales; direcciones MAC e IP; puertos y servicios; flujo de una comunicación cliente-servidor.", "mod": "Virtual", "act": "Laboratorio en Cisco Packet Tracer: construir una red local simple, conectar hosts y verificar comunicación extremo a extremo."}]}, {"n": 3, "sessions": [{"tema": "Direccionamiento IPv4 y segmentación básica", "contenido": "Estructura de una dirección IPv4; dirección de red, host y broadcast; máscara y prefijo CIDR; redes privadas; gateway; asignación estática y dinámica; introducción al subnetting y planeación de direccionamiento.", "mod": "Virtual", "act": "Reto: diseñar el esquema de direccionamiento de varias áreas de una organización y validarlo en Packet Tracer."}, {"tema": "MasterClass (Recapitulación)", "contenido": "", "mod": "Presencial", "act": ""}]}, {"n": 4, "sessions": [{"tema": "Servicios de red y diagnóstico de conectividad", "contenido": "DNS y resolución de nombres; DHCP; gateway; conceptos de NAT; ICMP; comandos ping, traceroute/tracert, ip/ifconfig, ipconfig y nslookup; lectura básica de síntomas de conectividad; metodología de diagnóstico por capas.", "mod": "Virtual", "act": "Práctica: resolver una serie de fallas simuladas de conectividad y elaborar una bitácora problema–prueba–resultado–solución."}, {"tema": "Virtualización: conceptos y creación de máquinas virtuales", "contenido": "Virtualización de cómputo; hipervisor Tipo 1 y Tipo 2; máquina virtual; CPU, RAM, disco y red virtual; snapshots; imágenes; ventajas, limitaciones y casos de uso; creación de VMs con VirtualBox.", "mod": "Virtual", "act": "Laboratorio: crear una VM Ubuntu, asignar recursos, instalar el sistema y documentar su configuración base."}]}, {"n": 5, "sessions": [{"tema": "Redes virtuales y administración remota", "contenido": "Modos de red NAT, bridge y host-only; direccionamiento en máquinas virtuales; comunicación host–VM; concepto de SSH; llaves y contraseñas; acceso remoto; transferencia básica de archivos; buenas prácticas de exposición de servicios.", "mod": "Virtual", "act": "Taller: habilitar acceso remoto a una VM de laboratorio y comprobar conectividad entre componentes de la red virtual."}, {"tema": "Fundamentos de Cloud Computing", "contenido": "Características de la nube; IaaS, PaaS y SaaS; regiones y zonas; elasticidad; pago por consumo; responsabilidad compartida; recursos de cómputo, red y almacenamiento; comparación entre infraestructura local y Cloud.", "mod": "Virtual", "act": "Actividad: clasificar servicios tecnológicos según modelo Cloud y diseñar una primera arquitectura de nube para el caso integrador."}]}, {"n": 6, "sessions": [{"tema": "Instancias de cómputo y acceso seguro en la nube", "contenido": "Creación conceptual y práctica de una instancia Linux en OCI o AWS; selección de imagen y capacidad; redes y reglas de acceso; IP pública/privada; pares de llaves; conexión SSH; ciclo de vida de la instancia y criterios básicos de costo.", "mod": "Virtual", "act": "Laboratorio: desplegar una instancia de práctica en la nube y conectarse mediante SSH aplicando una configuración mínima de acceso."}, {"tema": "MasterClass (Recapitulación y preparación de bootcamp)", "contenido": "", "mod": "Presencial", "act": ""}]}, {"n": 7, "sessions": [{"tema": "Bootcamp · día 1", "contenido": "Jornada práctica intensiva presencial sobre el proyecto integrador.", "mod": "Presencial", "act": ""}, {"tema": "Bootcamp · día 2", "contenido": "Jornada práctica intensiva presencial sobre el proyecto integrador.", "mod": "Presencial", "act": ""}]}, {"n": 8, "sessions": [{"tema": "Almacenamiento, servicios y publicación de una aplicación", "contenido": "Almacenamiento por bloques, archivos y objetos; persistencia; instalación de paquetes; servicio web básico; puertos de aplicación; inicio y detención de servicios; introducción a logs; publicación controlada de contenido en una VM Cloud.", "mod": "Virtual", "act": "Reto: instalar y publicar un servicio web sencillo en la instancia, verificando acceso y documentando puertos y dependencias."}, {"tema": "Fundamentos de ciberseguridad y gestión de riesgos", "contenido": "Confidencialidad, integridad y disponibilidad; activo, amenaza, vulnerabilidad, riesgo y control; superficie de exposición; principio de mínimo privilegio; defensa en profundidad; responsabilidad compartida; identificación de activos críticos.", "mod": "Virtual", "act": "Taller: elaborar una matriz básica activo–amenaza–vulnerabilidad–control para la infraestructura construida en el módulo anterior."}]}, {"n": 9, "sessions": [{"tema": "Identidades, permisos y endurecimiento básico de Linux", "contenido": "Usuarios y grupos; autenticación; contraseñas robustas; permisos de archivos; sudo y mínimo privilegio; actualizaciones; servicios innecesarios; configuración segura básica; registros del sistema y evidencia de cambios.", "mod": "Virtual", "act": "Laboratorio defensivo en la VM propia: revisar cuentas, permisos y servicios, aplicar un checklist de hardening y documentar los cambios."}, {"tema": "MasterClass", "contenido": "Función de un firewall; reglas de entrada y salida; puertos permitidos; política por defecto; UFW en Ubuntu; relación con reglas Cloud; segmentación; validación de conectividad después de aplicar controles.", "mod": "Presencial", "act": "Práctica en entorno autorizado: definir una política mínima de acceso, configurar UFW y comprobar que solo los servicios necesarios permanezcan disponibles."}]}, {"n": 10, "sessions": [{"tema": "Automatización con Bash: fundamentos", "contenido": "Scripting para tareas operativas; variables; argumentos; comandos encadenados; condicionales y ciclos básicos; salida y códigos de retorno; permisos de ejecución; automatización de verificaciones repetitivas.", "mod": "Virtual", "act": "Laboratorio: crear un script que recopile información operativa del sistema y genere un reporte de estado reproducible."}, {"tema": "Automatización de administración y despliegue", "contenido": "Scripts para instalación y configuración repetible; validaciones previas; creación de directorios y archivos de configuración; gestión de servicios; registro de resultados; parametrización; diseño de scripts seguros e idempotencia a nivel conceptual.", "mod": "Virtual", "act": "Reto: automatizar la preparación básica de un servidor de laboratorio y comparar tiempo, errores y repetibilidad frente al proceso manual."}]}, {"n": 11, "sessions": [{"tema": "Infraestructura como código y control de versiones", "contenido": "Concepto de Infrastructure as Code; configuración declarativa vs. scripts imperativos; versionamiento de configuraciones; Git y GitHub; ramas y commits; revisión de cambios; trazabilidad; separación de secretos y código.", "mod": "Virtual", "act": "Actividad: versionar scripts y archivos de configuración del proyecto en GitHub, incluyendo README y estructura de despliegue reproducible."}, {"tema": "NGINX como servidor web y proxy inverso", "contenido": "Rol de NGINX; servidor web; proxy inverso; upstream; puertos internos y externos; separación entre cliente y aplicación; archivos de configuración; pruebas y logs; beneficios para escalabilidad y operación.", "mod": "Virtual", "act": "Laboratorio: configurar NGINX como proxy inverso frente a un servicio de prueba y validar el flujo de solicitudes."}]}, {"n": 12, "sessions": [{"tema": "Balanceo de carga y alta disponibilidad", "contenido": "Motivación del balanceo; múltiples instancias; estrategias básicas de distribución; health checks conceptuales; falla de una instancia; redundancia; punto único de falla; escalamiento vertical vs. horizontal; criterios de capacidad.", "mod": "Virtual", "act": "Taller: montar un escenario controlado con dos servicios de prueba detrás de NGINX y verificar continuidad básica ante indisponibilidad de una instancia."}, {"tema": "MasterClass (Recapitulación y preparación de bootcamp)", "contenido": "", "mod": "Presencial", "act": ""}]}, {"n": 13, "sessions": [{"tema": "Bootcamp · día 1", "contenido": "Jornada práctica intensiva presencial sobre el proyecto integrador.", "mod": "Presencial", "act": ""}, {"tema": "Bootcamp · día 2", "contenido": "Jornada práctica intensiva presencial sobre el proyecto integrador.", "mod": "Presencial", "act": ""}]}, {"n": 14, "sessions": [{"tema": "Diseño de infraestructura empresarial y dimensionamiento", "contenido": "Levantamiento de requerimientos; usuarios, servicios y niveles de criticidad; estimación inicial de cómputo, memoria, almacenamiento y red; dependencias; alta disponibilidad; seguridad; respaldo y recuperación; elaboración de diagramas en Draw.io.", "mod": "Virtual", "act": "Producto: arquitectura objetivo del caso empresarial con diagrama, inventario de componentes y justificación técnica de las decisiones."}, {"tema": "Gobernanza, cumplimiento, costos y defensa de la propuesta", "contenido": "Políticas y responsabilidades; gestión de accesos; respaldo y continuidad; registro y trazabilidad; cumplimiento básico y privacidad; estimación comparativa de costos; riesgos y controles; estructura del pitch técnico para audiencias no especializadas.", "mod": "Virtual", "act": "Simulación de comité: presentación de 7–10 minutos con arquitectura, costo, riesgos, controles y beneficios; ronda de preguntas y ajustes finales."}]}, {"n": 15, "sessions": [{"tema": "Semana de la Innovación Multidisciplinar", "contenido": "Cierre institucional: sustentación de proyectos integradores de todas las rutas.", "mod": "Presencial", "act": "", "hours": 8, "special": true}]}], "modules": [{"from": 1, "to": 3, "name": "Módulo 1 · Explorar", "sub": "Redes y Sistemas Operativos", "fase": "Fase 1 del proyecto: el mapa — infra diagnosticada, red diseñada, terminal dominada"}, {"from": 4, "to": 7, "name": "Módulo 2 · Construir", "sub": "Virtualización y Servicios Cloud", "fase": "Fase 2: de la VM local a una instancia Linux REAL en OCI/AWS free tier con SSH"}, {"from": 8, "to": 9, "name": "Módulo 3 · Experimentar", "sub": "Seguridad Informática y Administración", "fase": "Fase 3: la instancia endurecida — usuarios, permisos, UFW, auditoría"}, {"from": 10, "to": 13, "name": "Módulo 4 · Innovar", "sub": "Arquitecturas Escalables y Automatización", "fase": "Fase 4: servicio vivo tras NGINX + scripts versionados en GitHub + balanceo"}, {"from": 14, "to": 15, "name": "Módulo 5 · Transformar", "sub": "Diseño de Infraestructura Empresarial", "fase": "Fase 5: arquitectura documentada, costos y pitch con demo EN VIVO"}]};
+var MESES = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+var DIAS = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+function mondayOf(weekN) { var d = new Date(2026,7,31); d.setDate(d.getDate() + (weekN-1)*7); return d; }
+function fmt(d) { return DIAS[d.getDay()] + " " + d.getDate() + " " + MESES[d.getMonth()] + "."; }
+function render(franja) {
+  var offs = franja === "mj" ? [1,3] : [2,4];
+  var app = document.getElementById("app");
+  app.innerHTML = "";
+  DATA.modules.forEach(function(m) {
+    var sec = document.createElement("section"); sec.className = "mod";
+    sec.innerHTML = '<span class="name">' + m.name + '</span><h2>' + m.sub + '</h2><p class="fase">' + m.fase + '</p>';
+    DATA.weeks.filter(function(w){ return w.n >= m.from && w.n <= m.to; }).forEach(function(w) {
+      var mon = mondayOf(w.n);
+      var wkEnd = new Date(mon); wkEnd.setDate(wkEnd.getDate()+6);
+      var div = document.createElement("div"); div.className = "week";
+      div.innerHTML = '<div class="wk">SEMANA ' + w.n + ' · ' + mon.getDate() + ' ' + MESES[mon.getMonth()] + ' – ' + wkEnd.getDate() + ' ' + MESES[wkEnd.getMonth()] + '</div>';
+      w.sessions.forEach(function(sn, i) {
+        if (sn.special) {
+          div.innerHTML += '<div class="special"><span class="tema">' + sn.tema + '</span><p class="cont">' + sn.contenido + '</p><div class="when" style="margin-top:6px">8 horas · horario institucional por definir <span class="badge b-presencial">Presencial</span></div></div>';
+          return;
+        }
+        var d = new Date(mon); d.setDate(d.getDate() + offs[i]);
+        var mod = (sn.mod || "").toLowerCase();
+        var bcls = mod.indexOf("pres") === 0 ? "b-presencial" : (mod.indexOf("h") === 0 ? "b-hibrido" : "b-virtual");
+        var el = document.createElement("div"); el.className = "sess";
+        el.innerHTML =
+          '<div class="when"><span class="d">' + fmt(d) + '</span>6:30 – 9:30 p.m.<br><span class="badge ' + bcls + '">' + (sn.mod || "—") + '</span></div>' +
+          '<div><div class="tema">' + sn.tema + '</div>' +
+          (sn.contenido ? '<div class="cont">' + sn.contenido + '</div>' : '') +
+          (sn.act ? '<div class="act"><b>Producto:</b> ' + sn.act + '</div>' : '') + '</div>';
+        div.appendChild(el);
+      });
+      sec.appendChild(div);
+    });
+    app.appendChild(sec);
+  });
+  var total = 0; DATA.weeks.forEach(function(w){ w.sessions.forEach(function(s){ total += s.hours || 3; }); });
+  document.getElementById("count").textContent = DATA.weeks.length + " semanas · " + total + " h";
+}
+document.getElementById("bt-mj").onclick = function(){ this.classList.add("on"); document.getElementById("bt-mv").classList.remove("on"); render("mj"); };
+document.getElementById("bt-mv").onclick = function(){ this.classList.add("on"); document.getElementById("bt-mj").classList.remove("on"); render("mv"); };
+render("mj");
+</script></body></html>
