@@ -297,14 +297,14 @@ function go(n) {
   slides.forEach(function(s, k){ s.classList.toggle("on", k === i); });
   document.getElementById("bar").style.width = ((i + 1) / slides.length * 100) + "%";
   document.getElementById("num").textContent = (i + 1) + " / " + slides.length;
+  document.querySelector(".nav-hint").style.display = i === 0 ? "" : "none";
 }
 document.addEventListener("keydown", function(e){
   if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") go(i + 1);
   if (e.key === "ArrowLeft" || e.key === "PageUp") go(i - 1);
   if (e.key === "Home") go(0);
 });
-function hint(){ document.querySelector(".nav-hint").style.display = i === 0 ? "" : "none"; }
-document.addEventListener("click", function(e){ go(e.clientX > innerWidth * 0.25 ? i + 1 : i - 1); hint(); });
-document.addEventListener("keyup", hint);
+
+document.addEventListener("click", function(e){ go(e.clientX > innerWidth * 0.25 ? i + 1 : i - 1); });
 go(0);
 </script></body></html>
