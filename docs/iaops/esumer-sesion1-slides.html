@@ -33,6 +33,15 @@ h2 { font-family:var(--display); font-size:clamp(1.5rem,3.6vw,2.8rem); letter-sp
 .bar { position:fixed; top:0; left:0; height:3px; background:var(--grad); width:0; transition:width .25s ease; z-index:10; }
 .num { position:fixed; bottom:3vh; right:clamp(30px,8vw,120px); font-family:var(--mono); font-size:.8rem; color:var(--faint); z-index:10; }
 .nav-hint { position:fixed; bottom:3vh; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:.68rem; color:var(--faint); z-index:10; }
+.chart { max-width:520px; }
+.chart-title { font-family:var(--mono); font-size:.78rem; color:var(--muted); letter-spacing:.04em; text-transform:uppercase; margin-bottom:14px; }
+.chart-bars { display:flex; align-items:flex-end; gap:clamp(14px,2.5vw,30px); height:clamp(180px,34vh,320px); border-bottom:1px solid var(--line); padding-bottom:2px; }
+.cbar { flex:1; height:var(--h); background:linear-gradient(180deg, rgba(139,123,255,.55), rgba(139,123,255,.12)); border-radius:8px 8px 0 0; position:relative; }
+.cbar.hi { background:var(--grad); }
+.cbar.dim { background:linear-gradient(180deg, rgba(56,224,216,.30), rgba(56,224,216,.06)); border:1px dashed rgba(56,224,216,.35); border-bottom:0; }
+.cv { position:absolute; top:-26px; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:clamp(.7rem,1.2vw,.9rem); color:var(--text); white-space:nowrap; }
+.cy { position:absolute; bottom:-26px; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:.72rem; color:var(--faint); }
+.chart-note { margin-top:34px; font-family:var(--mono); font-size:.68rem; color:var(--faint); }
 .demo { border:1px dashed var(--line); border-radius:18px; padding:clamp(18px,3vh,30px); max-width:820px; margin-top:10px; }
 .demo p { font-family:var(--mono); color:var(--a2); font-size:clamp(.85rem,1.5vw,1.1rem); padding:6px 0; }
 ul.clean { list-style:none; max-width:880px; }
@@ -91,14 +100,36 @@ ul.clean li:first-child { border-top:0; }
   <p class="sub">Tres datos del mercado 2026 — con fuentes, no con humo. Porque la decisión de tomarse esto en serio es de ustedes, y se toma con información.</p>
 </section>
 
-<!-- 5 · DEMANDA -->
+<!-- 5 · DEMANDA: EL MERCADO CLOUD -->
 <section class="slide">
-  <span class="k">La demanda · 2026</span>
-  <div class="grid2">
-    <div><span class="big grad">4.8M</span><p class="sub">puestos de <b>ciberseguridad</b> sin llenar en el mundo — y la brecha creció 19% en un año</p></div>
-    <div><span class="big grad">8×</span><p class="sub">los empleos que exigen habilidades de IA crecen 8 veces más rápido que el mercado laboral general</p></div>
+  <span class="k">La demanda · el mercado cloud</span>
+  <div class="grid2" style="align-items:center">
+    <div>
+      <span class="big grad">+21,3%</span>
+      <p class="sub">crecerá el gasto mundial en nube pública en 2026 — impulsado por la demanda de IA. Alguien tiene que <b>construir y operar</b> toda esa infraestructura.</p>
+    </div>
+    <div class="chart">
+      <p class="chart-title">Gasto mundial en nube pública (Gartner)</p>
+      <div class="chart-bars">
+        <div class="cbar" style="--h:46%"><span class="cv">$675B</span><span class="cy">2024</span></div>
+        <div class="cbar" style="--h:47%"><span class="cv">$700B</span><span class="cy">2025</span></div>
+        <div class="cbar hi" style="--h:57%"><span class="cv">$850B</span><span class="cy">2026</span></div>
+        <div class="cbar dim" style="--h:100%"><span class="cv">$1,48T</span><span class="cy">2029*</span></div>
+      </div>
+      <p class="chart-note">*proyección · miles de millones de USD</p>
+    </div>
   </div>
-  <p class="sub" style="margin-top:26px">Las habilidades más buscadas dentro de esa brecha: <b>cloud security</b>, automatización y arquitecturas zero-trust — exactamente la intersección de este curso.</p>
+  <p class="src">Fuente oficial: Gartner — Forecast Public Cloud Services Worldwide (3Q25) · gasto de usuario final</p>
+</section>
+
+<!-- 5b · DEMANDA: EL TALENTO -->
+<section class="slide">
+  <span class="k">La demanda · el talento</span>
+  <div class="grid2">
+    <div><span class="big grad">4.8M</span><p class="sub">puestos de <b>ciberseguridad</b> sin llenar en el mundo — la brecha creció 19% en un año</p></div>
+    <div><span class="big grad">8×</span><p class="sub">los empleos que exigen habilidades de <b>IA</b> crecen 8 veces más rápido que el mercado laboral general</p></div>
+  </div>
+  <p class="sub" style="margin-top:26px">Y dentro de la brecha, las habilidades más pedidas: <b>cloud security</b>, automatización y zero-trust — exactamente la intersección de este curso.</p>
   <p class="src">Fuentes: ISC2 Cybersecurity Workforce Study · PwC Global AI Jobs Barometer 2026 · Stanford HAI AI Index 2026</p>
 </section>
 
@@ -272,6 +303,8 @@ document.addEventListener("keydown", function(e){
   if (e.key === "ArrowLeft" || e.key === "PageUp") go(i - 1);
   if (e.key === "Home") go(0);
 });
-document.addEventListener("click", function(e){ go(e.clientX > innerWidth * 0.25 ? i + 1 : i - 1); });
+function hint(){ document.querySelector(".nav-hint").style.display = i === 0 ? "" : "none"; }
+document.addEventListener("click", function(e){ go(e.clientX > innerWidth * 0.25 ? i + 1 : i - 1); hint(); });
+document.addEventListener("keyup", hint);
 go(0);
 </script></body></html>
