@@ -1,0 +1,277 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 1 · Cloud, Redes y Ciberseguridad — Esumer</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#08080b; --line:#22222b; --text:#f5f5f7; --muted:#9c9caa; --faint:#6b6b78;
+  --a1:#8b7bff; --a2:#38e0d8; --grad:linear-gradient(100deg,var(--a1),var(--a2));
+  --display:"Space Grotesk",sans-serif; --body:"Inter",sans-serif; --mono:"JetBrains Mono",monospace; }
+* { box-sizing:border-box; margin:0; padding:0; }
+html,body { height:100%; }
+body { background:var(--bg); color:var(--text); font-family:var(--body); overflow:hidden;
+  background-image:radial-gradient(55% 45% at 75% -10%, rgba(139,123,255,.15), transparent 70%); }
+.slide { position:absolute; inset:0; display:none; flex-direction:column; justify-content:center;
+  padding:6vh clamp(30px,8vw,120px); }
+.slide.on { display:flex; }
+.k { font-family:var(--mono); font-size:clamp(.7rem,1.1vw,.85rem); letter-spacing:.08em; text-transform:uppercase; color:var(--a1); margin-bottom:18px; }
+h1 { font-family:var(--display); font-size:clamp(2rem,5.2vw,4.2rem); letter-spacing:-.02em; line-height:1.06; max-width:22ch; }
+h2 { font-family:var(--display); font-size:clamp(1.5rem,3.6vw,2.8rem); letter-spacing:-.02em; line-height:1.1; margin-bottom:26px; max-width:26ch; }
+.grad { background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.sub { color:var(--muted); font-size:clamp(1rem,1.8vw,1.4rem); max-width:52ch; margin-top:20px; line-height:1.5; }
+.rows { list-style:none; max-width:900px; }
+.rows li { display:flex; justify-content:space-between; align-items:baseline; gap:24px; padding:clamp(10px,1.6vh,16px) 0; border-top:1px solid var(--line); }
+.rows .t { font-family:var(--display); font-weight:600; font-size:clamp(1rem,1.9vw,1.5rem); }
+.rows .t small { display:block; font-family:var(--body); font-weight:400; color:var(--muted); font-size:clamp(.8rem,1.3vw,1rem); margin-top:2px; }
+.rows .m { font-family:var(--mono); color:var(--a2); font-size:clamp(.8rem,1.4vw,1.05rem); white-space:nowrap; }
+.big { font-family:var(--display); font-size:clamp(3rem,9vw,7.5rem); font-weight:700; letter-spacing:-.03em; line-height:1; }
+.src { position:absolute; bottom:3vh; left:clamp(30px,8vw,120px); right:clamp(30px,8vw,120px); font-family:var(--mono); font-size:.68rem; color:var(--faint); }
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:clamp(16px,3vw,40px); max-width:1000px; }
+.chipset { display:flex; gap:10px; flex-wrap:wrap; margin-top:24px; }
+.chip { font-family:var(--mono); font-size:clamp(.75rem,1.2vw,.95rem); padding:.5em 1.1em; border:1px solid var(--line); border-radius:999px; color:var(--muted); }
+.chip.hi { color:var(--a2); border-color:rgba(56,224,216,.4); }
+.q { font-family:var(--display); font-size:clamp(1.4rem,3vw,2.3rem); border-left:3px solid; border-image:var(--grad) 1; padding-left:22px; margin:14px 0; max-width:30ch; line-height:1.25; }
+.bar { position:fixed; top:0; left:0; height:3px; background:var(--grad); width:0; transition:width .25s ease; z-index:10; }
+.num { position:fixed; bottom:3vh; right:clamp(30px,8vw,120px); font-family:var(--mono); font-size:.8rem; color:var(--faint); z-index:10; }
+.nav-hint { position:fixed; bottom:3vh; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:.68rem; color:var(--faint); z-index:10; }
+.demo { border:1px dashed var(--line); border-radius:18px; padding:clamp(18px,3vh,30px); max-width:820px; margin-top:10px; }
+.demo p { font-family:var(--mono); color:var(--a2); font-size:clamp(.85rem,1.5vw,1.1rem); padding:6px 0; }
+ul.clean { list-style:none; max-width:880px; }
+ul.clean li { padding:clamp(8px,1.4vh,14px) 0; border-top:1px solid var(--line); color:var(--muted); font-size:clamp(.95rem,1.7vw,1.3rem); }
+ul.clean li b { color:var(--text); }
+ul.clean li:first-child { border-top:0; }
+.tag9 { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:1000px; margin-top:10px; }
+.t9 { border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:clamp(.75rem,1.25vw,.95rem); color:var(--muted); }
+.t9 b { color:var(--a1); font-family:var(--mono); margin-right:6px; }
+</style></head><body>
+<div class="bar" id="bar"></div>
+<div class="num" id="num"></div>
+<div class="nav-hint">← → o click para avanzar</div>
+
+<!-- 1 · PORTADA -->
+<section class="slide on">
+  <span class="k">Esumer · Ruta TI · 2026-2 · Sesión 1</span>
+  <h1>Cloud Computing, Redes y <span class="grad">Ciberseguridad</span></h1>
+  <p class="sub">14 semanas para llevar una empresa a la nube — de verdad, no en diapositivas.</p>
+  <p class="sub" style="font-family:var(--mono); font-size:clamp(.8rem,1.3vw,1rem); color:var(--faint)">Alejandro Barrera · Cloud Architect</p>
+</section>
+
+<!-- 2 · QUIÉN LES HABLA -->
+<section class="slide">
+  <span class="k">¿Quién les habla?</span>
+  <h2>13 años operando infraestructura crítica</h2>
+  <ul class="rows">
+    <li><span class="t">2013 · DBA on-premise<small>Bases de datos de una gobernación — discos, cintas, madrugadas</small></span><span class="m">Oracle · SQL Server</span></li>
+    <li><span class="t">SRE en una bolsa de valores<small>Sistemas críticos, cero tolerancia a fallos</small></span><span class="m">misión crítica</span></li>
+    <li><span class="t">Cloud Architect<small>Arquitecturas en AWS, OCI y Azure para banca, estado y retail</small></span><span class="m">3 nubes</span></li>
+    <li><span class="t">Hoy: dirijo agentes de IA que operan mi infraestructura<small>Y enseño esa ruta — la que ustedes empiezan hoy</small></span><span class="m">2026</span></li>
+  </ul>
+  <div class="chipset">
+    <span class="chip hi">14 certificaciones</span><span class="chip">10× AWS</span><span class="chip">2× AWS Professional</span><span class="chip">4× AWS Specialty</span><span class="chip">AWS AI Practitioner</span><span class="chip">Azure</span><span class="chip">Oracle OCP</span>
+  </div>
+</section>
+
+<!-- 3 · CLIENTES -->
+<section class="slide">
+  <span class="k">Dónde ha corrido ese trabajo</span>
+  <h2>Sector público y privado — sistemas que no se pueden caer</h2>
+  <ul class="rows">
+    <li><span class="t">Ministerio de Defensa<small>Infraestructura del sector defensa</small></span><span class="m">público</span></li>
+    <li><span class="t">Transmilenio · IDU<small>Movilidad e infraestructura de Bogotá</small></span><span class="m">público</span></li>
+    <li><span class="t">Bolsa Mercantil de Colombia<small>Mercado de commodities — operación bursátil</small></span><span class="m">financiero</span></li>
+    <li><span class="t">BCP<small>Banca — Perú</small></span><span class="m">financiero</span></li>
+    <li><span class="t">Navigate<small>Sector privado — proyectos cloud</small></span><span class="m">privado</span></li>
+  </ul>
+  <p class="sub" style="margin-top:24px">Todo lo que van a ver en este curso viene de esa operación real — errores incluidos.</p>
+</section>
+
+<!-- 4 · TRANSICIÓN -->
+<section class="slide">
+  <span class="k">Antes de la técnica, el mapa</span>
+  <h2>¿Por qué <span class="grad">este</span> curso, en <span class="grad">este</span> momento?</h2>
+  <p class="sub">Tres datos del mercado 2026 — con fuentes, no con humo. Porque la decisión de tomarse esto en serio es de ustedes, y se toma con información.</p>
+</section>
+
+<!-- 5 · DEMANDA -->
+<section class="slide">
+  <span class="k">La demanda · 2026</span>
+  <div class="grid2">
+    <div><span class="big grad">4.8M</span><p class="sub">puestos de <b>ciberseguridad</b> sin llenar en el mundo — y la brecha creció 19% en un año</p></div>
+    <div><span class="big grad">8×</span><p class="sub">los empleos que exigen habilidades de IA crecen 8 veces más rápido que el mercado laboral general</p></div>
+  </div>
+  <p class="sub" style="margin-top:26px">Las habilidades más buscadas dentro de esa brecha: <b>cloud security</b>, automatización y arquitecturas zero-trust — exactamente la intersección de este curso.</p>
+  <p class="src">Fuentes: ISC2 Cybersecurity Workforce Study · PwC Global AI Jobs Barometer 2026 · Stanford HAI AI Index 2026</p>
+</section>
+
+<!-- 6 · QUIÉNES CONTRATAN -->
+<section class="slide">
+  <span class="k">¿Quiénes contratan estos roles?</span>
+  <h2>Los nombres que van a ver en las vacantes</h2>
+  <div class="grid2">
+    <ul class="clean">
+      <li><b>Tech LATAM:</b> Mercado Libre · Nubank · Rappi · Globant (plan de 20.000 contrataciones en la región) · Endava · EPAM</li>
+      <li><b>Banca y seguros:</b> Bancolombia · Davivienda · BBVA · Sura</li>
+    </ul>
+    <ul class="clean">
+      <li><b>Consultoría global:</b> Accenture · IBM · TCS · Deloitte</li>
+      <li><b>Y el mercado remoto:</b> empresas de EE.UU. y Europa contratando en LATAM — mismo rol, otra moneda</li>
+    </ul>
+  </div>
+  <p class="sub" style="margin-top:20px">Solo en Colombia: <b>cientos de vacantes DevOps/Cloud activas</b> en cualquier semana del año.</p>
+  <p class="src">Fuentes: Glassdoor Colombia (400+ vacantes DevOps) · Globant investor news · LatamDev</p>
+</section>
+
+<!-- 7 · SUELDOS LATAM -->
+<section class="slide">
+  <span class="k">¿Y cuánto paga? · Colombia y LATAM</span>
+  <ul class="rows">
+    <li><span class="t">Junior / semi-senior local<small>Primeros 1–2 años en el rol</small></span><span class="m">COP 4–7 M/mes</span></li>
+    <li><span class="t">DevOps / Cloud / SRE con experiencia<small>Mercado local colombiano</small></span><span class="m">COP 8–13 M/mes</span></li>
+    <li><span class="t">Remoto para EE.UU. desde LATAM<small>Mismo rol, contratado en dólares</small></span><span class="m">USD 7.500–11.000/mes</span></li>
+  </ul>
+  <p class="sub" style="margin-top:24px">La brecha local→remoto es de <b>4 a 5 veces</b>. Se cruza con dos cosas: inglés y las habilidades de este curso.</p>
+  <p class="src">Fuentes: ERI · Guía Salarial Michael Page Colombia 2026 · mercado remoto US→LATAM</p>
+</section>
+
+<!-- 8 · SUELDOS USA -->
+<section class="slide">
+  <span class="k">¿Y cuánto paga? · Estados Unidos</span>
+  <div class="grid2">
+    <div><span class="big grad">$205K</span><p class="sub">mediana de compensación total anual de un <b>Site Reliability Engineer</b> en EE.UU.</p></div>
+    <div><span class="big grad">+62%</span><p class="sub">prima salarial promedio para quien suma <b>habilidades de IA</b> a su rol — en todos los sectores</p></div>
+  </div>
+  <p class="sub" style="margin-top:26px">Vacantes de operación con IA (AIOps) publicadas hasta <b>USD 360K</b>. No es promesa: son las cifras públicas del mercado al que este curso apunta.</p>
+  <p class="src">Fuentes: levels.fyi (SRE, mediana US) · PwC Global AI Jobs Barometer 2026 · ZipRecruiter (AIOps Engineer)</p>
+</section>
+
+<!-- 9 · LA CONCLUSIÓN -->
+<section class="slide">
+  <span class="k">La conclusión honesta</span>
+  <h2>La oportunidad es real.<br>La fila también.</h2>
+  <p class="sub">Lo que separa a los que entran de los que miran: <b>evidencia de que saben operar</b> — no un diploma, un portafolio. Este curso está diseñado para que salgan con esa evidencia: infraestructura real, código real, bitácora pública.</p>
+</section>
+
+<!-- 10 · DIAGNÓSTICO -->
+<section class="slide">
+  <span class="k">Ahora ustedes · diagnóstico exploratorio</span>
+  <h2>¿De dónde arrancamos?</h2>
+  <ul class="clean">
+    <li>📋 Formulario de 8 preguntas — 5 minutos, anónimo, sin nota <b>[QR / link aquí]</b></li>
+    <li>🗣️ Y en voz alta: <b>¿qué pasa entre que escriben google.com y aparece la página?</b></li>
+    <li>Guardamos las respuestas — las vamos a volver a mirar al final del semestre.</li>
+  </ul>
+</section>
+
+<!-- 11 · LA DINÁMICA -->
+<section class="slide">
+  <span class="k">La dinámica del curso</span>
+  <h2>Caso de estudio: <span class="grad">"Tu empresa a la nube"</span></h2>
+  <p class="q">"Llevo 15 años con un computador, un cuaderno y una contraseña que conocen todos. Llévenme a la nube."</p>
+  <p class="sub">Cada equipo (2-3) adopta una pyme — ustedes eligen cuál — y son su área de TI durante 14 semanas. Presupuesto de infraestructura: <b>$0</b> (capa gratuita). El dueño pide 9 cosas:</p>
+  <div class="tag9">
+    <span class="t9"><b>R1</b> red privada segura</span><span class="t9"><b>R2</b> servidor que no cierra</span><span class="t9"><b>R3</b> reconstruible en minutos</span>
+    <span class="t9"><b>R4</b> que lo encuentren en internet</span><span class="t9"><b>R5</b> nadie toca todo</span><span class="t9"><b>R6</b> exposición auditada</span>
+    <span class="t9"><b>R7</b> cambios sin trauma</span><span class="t9"><b>R8</b> no caerse el día de la feria</span><span class="t9"><b>R9</b> costos claros</span>
+  </div>
+</section>
+
+<!-- 12 · REGLAS Y EVALUACIÓN -->
+<section class="slide">
+  <span class="k">Reglas del juego · evaluación</span>
+  <div class="grid2">
+    <ul class="clean">
+      <li><b>Se entrega infraestructura funcionando</b>, no pantallazos de teoría</li>
+      <li><b>Si no está en la bitácora (GitHub), no existe</b></li>
+      <li><b>Llaves y secretos jamás al repo</b></li>
+      <li><b>IA siempre permitida</b> — pero: código que no puedes explicar, no se ejecuta</li>
+    </ul>
+    <ul class="clean">
+      <li><b>60%</b> · los 9 requisitos, con evidencia</li>
+      <li><b>20%</b> · bitácora y calidad del repo</li>
+      <li><b>20%</b> · defensa final con demo EN VIVO</li>
+      <li>🏅 Bonus: sobrevivir el simulacro de incidente</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 13 · EL STACK -->
+<section class="slide">
+  <span class="k">El kit de tecnología</span>
+  <h2>El mismo stack de la industria — desde el día 1</h2>
+  <ul class="rows">
+    <li><span class="t">AWS<small>La nube donde vive todo — capa gratuita</small></span><span class="m">sesión 1</span></li>
+    <li><span class="t">GitHub<small>Bitácora, código y despliegues automáticos</small></span><span class="m">sesión 1</span></li>
+    <li><span class="t">Terminal Linux<small>Vía AWS CloudShell — sin instalar nada</small></span><span class="m">sesión 2</span></li>
+    <li><span class="t">Terraform<small>La infraestructura como código</small></span><span class="m">semana 4</span></li>
+    <li><span class="t">IA como copiloto<small>Con regla de la casa — nunca en piloto automático</small></span><span class="m">siempre</span></li>
+  </ul>
+</section>
+
+<!-- 14 · EL MAPA -->
+<section class="slide">
+  <span class="k">El mapa · 14 semanas</span>
+  <ul class="rows">
+    <li><span class="t">M1 · Explorar<small>Terminal y redes — directo en la nube</small></span><span class="m">sem 1–2</span></li>
+    <li><span class="t">M2 · Construir<small>VPC, EC2 y Terraform: infra viva y reproducible</small></span><span class="m">sem 3–5</span></li>
+    <li><span class="t">⚡ Bootcamp 1<small>Presencial: dirige tu nube con IA + reto por equipos</small></span><span class="m">oct 12–18</span></li>
+    <li><span class="t">M3 · Experimentar<small>Publicar y asegurar: NGINX, IAM, defensa en capas</small></span><span class="m">sem 7–8</span></li>
+    <li><span class="t">M4 · Innovar<small>CI/CD y alta disponibilidad — sobrevivir la falla en vivo</small></span><span class="m">sem 9–11</span></li>
+    <li><span class="t">⚡ Bootcamp 2 + M5<small>Incidente, go-live y defensa ante comité</small></span><span class="m">nov 23 → dic</span></li>
+  </ul>
+</section>
+
+<!-- 15 · TEMA 1 -->
+<section class="slide">
+  <span class="k">Tema 1 · empezamos</span>
+  <h2>¿Qué es una <span class="grad">infraestructura</span>?</h2>
+  <ul class="rows">
+    <li><span class="t">01 · Hardware<small>Los fierros — que en la nube no ves, pero existen</small></span><span class="m">cómputo</span></li>
+    <li><span class="t">02 · Sistema operativo<small>Linux: donde vive todo lo demás</small></span><span class="m">SO</span></li>
+    <li><span class="t">03 · Red<small>Cómo se encuentran las máquinas — IP, puertos, DNS</small></span><span class="m">red</span></li>
+    <li><span class="t">04 · Servicios<small>Lo que el usuario final consume: web, datos, correo</small></span><span class="m">apps</span></li>
+    <li><span class="t">05 · Nube<small>Todo lo anterior, como servicio, pagado por consumo</small></span><span class="m">cloud</span></li>
+  </ul>
+</section>
+
+<!-- 16 · DEMO -->
+<section class="slide">
+  <span class="k">Demo en vivo · una infraestructura real, ahora mismo</span>
+  <h2>No es teoría: está corriendo</h2>
+  <div class="demo">
+    <p>$ curl -I https://[mi-sitio] &nbsp;&nbsp;→ HTTP 200 · ¿quién responde?</p>
+    <p>$ dig [mi-sitio] &nbsp;&nbsp;→ el DNS en acción</p>
+    <p>→ consola AWS: la instancia, la red, el balanceador — las 5 capas de la slide anterior</p>
+    <p>→ GitHub: el código que crea TODO esto</p>
+  </div>
+  <p class="sub" style="margin-top:20px">En la semana 13, cada equipo tendrá su versión de esto. Empezando la próxima clase.</p>
+</section>
+
+<!-- 17 · CIERRE -->
+<section class="slide">
+  <span class="k">Para la próxima clase</span>
+  <h2>Su misión</h2>
+  <ul class="clean">
+    <li>1 · Conformar el equipo (2-3) y elegir la empresa del caso — nombre y sector</li>
+    <li>2 · Crear su cuenta de GitHub (gratis, con correo institucional o personal)</li>
+    <li>3 · <b>[Según defina Esumer]</b> cuenta AWS free tier o acceso AWS Academy</li>
+    <li>4 · Traer laptop — la sesión 2 es 100% manos en la terminal</li>
+  </ul>
+  <p class="sub" style="margin-top:26px">Las nubes cambian. El criterio queda. Nos vemos en la terminal. 🚀</p>
+  <p class="sub" style="font-family:var(--mono); font-size:.85rem; color:var(--faint)">[QR LinkedIn — slide de cierre]</p>
+</section>
+
+<script>
+var slides = document.querySelectorAll(".slide"), i = 0;
+function go(n) {
+  i = Math.max(0, Math.min(slides.length - 1, n));
+  slides.forEach(function(s, k){ s.classList.toggle("on", k === i); });
+  document.getElementById("bar").style.width = ((i + 1) / slides.length * 100) + "%";
+  document.getElementById("num").textContent = (i + 1) + " / " + slides.length;
+}
+document.addEventListener("keydown", function(e){
+  if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") go(i + 1);
+  if (e.key === "ArrowLeft" || e.key === "PageUp") go(i - 1);
+  if (e.key === "Home") go(0);
+});
+document.addEventListener("click", function(e){ go(e.clientX > innerWidth * 0.25 ? i + 1 : i - 1); });
+go(0);
+</script></body></html>
