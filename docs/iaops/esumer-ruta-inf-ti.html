@@ -57,11 +57,39 @@ h1 b { background:var(--grad); -webkit-background-clip:text; background-clip:tex
 .reqs em { color:var(--faint); font-style:normal; font-size:.78rem; }
 @media (max-width:760px){ .intro-grid { grid-template-columns:1fr; } }
 
+
+.mainTabs { display:flex; gap:10px; margin-top:20px; }
+.mainTabs button { background:none; border:1px solid var(--line); border-radius:999px; color:var(--muted);
+  font-family:var(--display); font-weight:600; font-size:.92rem; padding:.6em 1.4em; cursor:pointer; }
+.mainTabs button.on { background:var(--grad); color:#fff; border-color:transparent; }
+.req-full { margin-top:12px; }
+.rf { border-top:1px solid var(--line); padding:12px 0; }
+.rf-h { font-family:var(--display); font-weight:600; font-size:.98rem; }
+.rf-h b { color:var(--a1); font-family:var(--mono); font-size:.78rem; margin-right:6px; }
+.rf-t { color:var(--muted); font-size:.86rem; margin-top:3px; }
+.rf-a { color:var(--a2); font-size:.8rem; margin-top:4px; }
+.rf-a em { color:var(--faint); font-style:normal; float:right; font-family:var(--mono); font-size:.72rem; }
+.rf-a code { font-family:var(--mono); font-size:.78rem; }
+.arch { margin-top:14px; display:flex; flex-direction:column; gap:10px; }
+.arch-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.an { border:1px solid var(--line); border-radius:10px; padding:.5em .9em; font-family:var(--mono); font-size:.75rem; color:var(--muted); }
+.an.lb, .an.ec { border-color:rgba(139,123,255,.45); color:var(--a1); }
+.an.gh, .an.tf { border-color:rgba(56,224,216,.4); color:var(--a2); }
+.an.vpc { width:100%; text-align:center; border-style:dashed; }
+.an.aws { color:#ffce6b; border-color:rgba(255,206,107,.4); }
+.an.ops { width:100%; text-align:center; }
+.ar { color:var(--faint); font-family:var(--mono); font-size:.75rem; }
+
 @media print { body{background:#fff;color:#111} .controls{position:static} }
 </style></head><body><div class="shell">
 <span class="kicker">Esumer · Ruta Inf TI · 2026-2 · dictado cloud-first</span>
 <h1>Cloud Computing, Redes y <b>Ciberseguridad</b> Esencial</h1>
 <p class="sub">Dictado cloud-first · un caso de estudio que integra todos los conceptos · producto tangible por sesión · <b>Mar/Mié presencial · Jue/Vie virtual</b> · 6:30–9:30 p.m. · Grupo 1 inicia mar 8 sep · Grupo 2 mié 9 sep</p>
+<div class="mainTabs">
+  <button id="mt-cal" class="on">Calendario</button>
+  <button id="mt-caso">Caso de estudio</button>
+</div>
+<div id="view-cal">
 <div class="controls">
   <span class="hint">GRUPO:</span>
   <div class="toggle"><button id="bt-mj" class="on">Grupo 1 · Mar/Jue</button><button id="bt-mv">Grupo 2 · Mié/Vie</button></div>
@@ -96,6 +124,68 @@ h1 b { background:var(--grad); -webkit-background-clip:text; background-clip:tex
   </div>
 </section>
 <div id="app"></div>
+</div>
+<div id="view-caso" style="display:none">
+
+<section class="mod" style="margin-top:26px">
+  <span class="name">Caso de estudio integrador</span>
+  <h2>"Tu empresa a la nube"</h2>
+  <p class="fase">Un solo caso, 14 semanas, 9 requisitos: al final no entregas un trabajo — entregas una empresa operando en la nube.</p>
+
+  <div class="card" style="margin-top:16px">
+    <span class="ck">La historia</span>
+    <p class="cd" style="font-size:.95rem">Una pyme tradicional de tu ciudad — el equipo elige cuál: panadería con pedidos, papelería, ferretería, agencia de viajes, academia de música… — lleva 15 años operando con <b>un computador, un cuaderno y una contraseña que conocen todos</b>. El dueño acaba de entender que sin presencia digital el negocio se muere, y contrató al equipo como su <b>área de tecnología</b>. El encargo: llevar la empresa a la nube en 14 semanas, con presupuesto de infraestructura <b>$0</b> (capa gratuita) y todo documentado, porque "no quiero depender de nadie que se vaya con el conocimiento".</p>
+    <p class="cd" style="font-size:.95rem"><b>La situación hoy (los dolores):</b> no existe en internet · los datos viven en un solo PC sin respaldo · todos usan la misma clave · cada cambio "lo hace el sobrino" y nadie sabe cómo quedó · no hay forma de saber cuánto costaría crecer.</p>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <span class="ck">Los 9 requisitos — en la voz del dueño</span>
+    <div class="req-full">
+      <div class="rf"><div class="rf-h"><b>R1</b> "No quiero que cualquiera entre a mis sistemas."</div><div class="rf-t">Red privada segmentada: VPC con subred pública y privada, diseñada con CIDR propio.</div><div class="rf-a">✓ Aceptación: VPC desplegada según el plano de red versionado en la bitácora. <em>Semanas 2–3 · M1</em></div></div>
+      <div class="rf"><div class="rf-h"><b>R2</b> "Necesito un computador que nunca cierre, aunque yo duerma."</div><div class="rf-t">Servidor Linux (EC2) dentro de la red propia, administrado por SSH con llaves.</div><div class="rf-a">✓ Aceptación: instancia viva accesible SOLO por llave SSH, documentada. <em>Semana 3 · M2</em></div></div>
+      <div class="rf"><div class="rf-h"><b>R3</b> "Si mañana se daña todo, ¿en cuánto tiempo lo reconstruyen?"</div><div class="rf-t">Infraestructura como código: Terraform + GitHub — la empresa entera se recrea con un comando.</div><div class="rf-a">✓ Aceptación: <code>terraform destroy</code> → <code>apply</code> → todo arriba en &lt;15 min, cronometrado. <em>Semanas 4–5 · M2</em></div></div>
+      <div class="rf"><div class="rf-h"><b>R4</b> "Quiero que mis clientes me encuentren en internet."</div><div class="rf-t">Web corporativa pública servida por NGINX desde el servidor propio.</div><div class="rf-a">✓ Aceptación: URL pública respondiendo con la web de la empresa. <em>Semana 7 · M3</em></div></div>
+      <div class="rf"><div class="rf-h"><b>R5</b> "No todos deben poder tocar todo."</div><div class="rf-t">Identidades con mínimo privilegio: IAM sin root + servidor endurecido (usuarios, sudo, updates).</div><div class="rf-a">✓ Aceptación: cero uso de root; cada rol con permisos justos, con evidencia. <em>Semana 8 · M3</em></div></div>
+      <div class="rf"><div class="rf-h"><b>R6</b> "¿Qué tan expuestos estamos? Demuéstremelo."</div><div class="rf-t">Defensa en capas: Security Groups + NACL + UFW, auditada con Nmap.</div><div class="rf-a">✓ Aceptación: solo lo necesario expuesto; escaneo antes/después en la bitácora. <em>Semana 8 · M3</em></div></div>
+      <div class="rf"><div class="rf-h"><b>R7</b> "Cambiar la página no puede ser un trauma de fin de semana."</div><div class="rf-t">Despliegue continuo: GitHub Actions publica cada cambio automáticamente.</div><div class="rf-a">✓ Aceptación: editar → push → el sitio se actualiza solo, sin tocar el servidor. <em>Semanas 9–10 · M4</em></div></div>
+      <div class="rf"><div class="rf-h"><b>R8</b> "El día de la feria, la página NO se puede caer."</div><div class="rf-t">Alta disponibilidad: dos servidores tras un balanceador con health checks.</div><div class="rf-a">✓ Aceptación: se apaga un servidor EN VIVO y el sitio sigue — demo grabada. <em>Semana 11 · M4</em></div></div>
+      <div class="rf"><div class="rf-h"><b>R9</b> "¿Y esto cuánto me cuesta de verdad? ¿Y si crecemos?"</div><div class="rf-t">Arquitectura documentada, estimación con la calculadora de AWS y políticas de gobernanza.</div><div class="rf-a">✓ Aceptación: documento de arquitectura + costos + defensa ante comité. <em>Semana 13 · M5</em></div></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <span class="ck">Arquitectura objetivo (lo que existirá en la semana 13)</span>
+    <div class="arch">
+      <div class="arch-row"><span class="an usr">🌍 Clientes</span><span class="ar">→</span><span class="an lb">Balanceador (ALB)</span><span class="ar">→</span><span class="an ec">EC2 web #1 · NGINX</span><span class="an ec">EC2 web #2 · NGINX</span></div>
+      <div class="arch-row"><span class="an vpc">VPC propia · subred pública + privada · SG/NACL</span></div>
+      <div class="arch-row"><span class="an gh">GitHub (código + bitácora)</span><span class="ar">→ Actions →</span><span class="an tf">Terraform</span><span class="ar">→ crea/actualiza →</span><span class="an aws">AWS</span></div>
+      <div class="arch-row"><span class="an ops">Equipo TI: SSH con llaves · IAM mínimo privilegio · scripts Bash por cron · IA como copiloto revisado</span></div>
+    </div>
+  </div>
+
+  <div class="intro-grid" style="margin-top:16px">
+    <div class="card">
+      <span class="ck">Reglas del juego</span>
+      <ul class="kit">
+        <li><b>Presupuesto $0</b> — capa gratuita; lo que no se usa, se apaga o se destruye (FinOps desde el día 1)</li>
+        <li><b>Todo por Git</b> — si no está en la bitácora, no existe; el repo es la evidencia</li>
+        <li><b>Llaves y secretos jamás al repo</b> — higiene de credenciales no negociable</li>
+        <li><b>IA permitida siempre</b> — bajo la regla: código que no puedes explicar, no se ejecuta</li>
+        <li><b>Lo irreversible se consulta</b> — borrar, exponer o gastar requiere acuerdo del equipo</li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="ck">Evaluación del caso</span>
+      <ul class="kit">
+        <li><b>60%</b> — requisitos conquistados con evidencia verificable (los 9 checkpoints de la bitácora)</li>
+        <li><b>20%</b> — calidad de la bitácora y del repo (documentación, commits, orden)</li>
+        <li><b>20%</b> — defensa final: pitch ante "el dueño" (comité) con demo EN VIVO</li>
+        <li style="color:var(--faint)">Bonus: sobrevivir el simulacro de incidente del Bootcamp 2 con postmortem limpio</li>
+      </ul>
+    </div>
+  </div>
+</section>
+</div>
 <div class="footer"><span>Plan de dictado cloud-first sobre el programa oficial · módulos oficiales conservados</span><span>Total: 92 horas</span></div>
 </div>
 <script>
@@ -140,7 +230,17 @@ function render(franja) {
   var total = 0; DATA.weeks.forEach(function(w){ w.sessions.forEach(function(s){ total += s.hours || 3; }); });
   document.getElementById("count").textContent = DATA.weeks.length + " semanas · " + total + " h";
 }
-document.getElementById("bt-mj").onclick = function(){ this.classList.add("on"); document.getElementById("bt-mv").classList.remove("on"); render("mj"); };
+document.getElementById("bt-mj").onclick = function(){ this.classList.add("on"); document.getElementById("bt-mv").classList.remove("on"); 
+document.getElementById("mt-cal").onclick = function(){
+  this.classList.add("on"); document.getElementById("mt-caso").classList.remove("on");
+  document.getElementById("view-cal").style.display = ""; document.getElementById("view-caso").style.display = "none";
+};
+document.getElementById("mt-caso").onclick = function(){
+  this.classList.add("on"); document.getElementById("mt-cal").classList.remove("on");
+  document.getElementById("view-caso").style.display = ""; document.getElementById("view-cal").style.display = "none";
+};
+render("mj");
+ };
 document.getElementById("bt-mv").onclick = function(){ this.classList.add("on"); document.getElementById("bt-mj").classList.remove("on"); render("mv"); };
 render("mj");
 </script></body></html>
