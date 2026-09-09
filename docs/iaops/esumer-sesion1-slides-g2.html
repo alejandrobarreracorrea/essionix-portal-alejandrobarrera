@@ -26,6 +26,21 @@ h2 { font-family:var(--display); font-size:clamp(1.5rem,3.6vw,2.8rem); letter-sp
 .big { font-family:var(--display); font-size:clamp(3rem,9vw,7.5rem); font-weight:700; letter-spacing:-.03em; line-height:1; }
 .act-chip { display:inline-block; background:var(--naranja); color:#fff; font-family:var(--mono);
   font-size:.68rem; padding:.35em 1em; border-radius:999px; margin-right:10px; letter-spacing:.05em; vertical-align:middle; }
+
+.stack { display:flex; flex-direction:column; gap:9px; max-width:940px; margin-top:6px; }
+.layer { display:flex; align-items:center; gap:18px; border:1px solid var(--line); border-left:5px solid var(--a2);
+  border-radius:12px; padding:clamp(8px,1.4vh,14px) 18px; opacity:0; transform:translateY(12px);
+  transition:opacity .35s ease, transform .35s ease; }
+.layer.on { opacity:1; transform:none; }
+.layer .ln { font-family:var(--mono); font-size:.85rem; color:var(--a1); }
+.layer b { font-family:var(--display); font-size:clamp(.95rem,1.7vw,1.25rem); }
+.layer p { color:var(--muted); font-size:clamp(.78rem,1.3vw,.98rem); line-height:1.35; margin-top:1px; }
+.layer .lt { margin-left:auto; font-family:var(--mono); font-size:.72rem; color:var(--a2); white-space:nowrap; }
+.layer.l1 { border-left-color:#44546A; } .layer.l2 { border-left-color:#156082; }
+.layer.l3 { border-left-color:#0F9ED5; } .layer.l4 { border-left-color:#1FB5C9; }
+.layer.l5 { border-left-color:var(--naranja); }
+.layer.l6 { border:0; border-left:5px solid var(--naranja); background:rgba(233,113,50,.06); }
+
 .src { position:absolute; bottom:3vh; left:clamp(30px,8vw,120px); right:clamp(30px,8vw,120px); font-family:var(--mono); font-size:.68rem; color:var(--faint); }
 .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:clamp(16px,3vw,40px); max-width:1000px; }
 .chipset { display:flex; gap:10px; flex-wrap:wrap; margin-top:24px; }
@@ -318,14 +333,15 @@ ul.clean li:first-child { border-top:0; }
 <!-- 15 · TEMA 1 -->
 <section class="slide">
   <span class="k">Tema 1 · empezamos</span>
-  <h2>¿Qué es una <span class="grad">infraestructura</span>?</h2>
-  <ul class="rows">
-    <li><span class="t">01 · Hardware<small>Los fierros — que en la nube no ves, pero existen</small></span><span class="m">cómputo</span></li>
-    <li><span class="t">02 · Sistema operativo<small>Linux: donde vive todo lo demás</small></span><span class="m">SO</span></li>
-    <li><span class="t">03 · Red<small>Cómo se encuentran las máquinas — IP, puertos, DNS</small></span><span class="m">red</span></li>
-    <li><span class="t">04 · Servicios<small>Lo que el usuario final consume: web, datos, correo</small></span><span class="m">apps</span></li>
-    <li><span class="t">05 · Nube<small>Todo lo anterior, como servicio, pagado por consumo</small></span><span class="m">cloud</span></li>
-  </ul>
+  <h2>¿Qué tiene que existir para que un video de TikTok llegue a tu celular?</h2>
+  <div class="stack">
+    <div class="layer l1"><span class="ln">01</span><div><b>Hardware</b><p>Un servidor REAL, en un edificio real, guarda ese video en un disco real. En la nube no lo ves — pero existe.</p></div><span class="lt">cómputo</span></div>
+    <div class="layer l2"><span class="ln">02</span><div><b>Sistema operativo</b><p>Linux corre en ese servidor. (Y en tu Android. Y en el 96% de los servidores del mundo.)</p></div><span class="lt">Linux</span></div>
+    <div class="layer l3"><span class="ln">03</span><div><b>Red</b><p>IP, puertos y DNS encuentran ese servidor entre millones y traen el video hasta tu mano — en milisegundos.</p></div><span class="lt">IP · DNS</span></div>
+    <div class="layer l4"><span class="ln">04</span><div><b>Servicios</b><p>La app, la base de datos de tus likes, el algoritmo que decide el próximo video: lo que tú consumes.</p></div><span class="lt">apps · datos</span></div>
+    <div class="layer l5"><span class="ln">05</span><div><b>Nube</b><p>TikTok no es dueño de casi nada de eso: lo ALQUILA por segundos. Eso es la nube — y por eso existe este curso.</p></div><span class="lt">cloud</span></div>
+    <div class="layer l6"><div><b>Todo eso junto tiene un nombre: infraestructura.</b><p>Y en 14 semanas, ustedes van a construir la suya.</p></div></div>
+  </div>
 </section>
 
 
@@ -375,12 +391,17 @@ function go(n) {
   document.querySelector(".nav-hint").style.display = i === 0 ? "" : "none";
   document.getElementById("instf").style.display = i === 0 ? "none" : "";
 }
+function fwd() {
+  var hid = slides[i].querySelector(".layer:not(.on)");
+  if (hid) { hid.classList.add("on"); return; }
+  go(i + 1);
+}
 document.addEventListener("keydown", function(e){
-  if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") go(i + 1);
+  if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") fwd();
   if (e.key === "ArrowLeft" || e.key === "PageUp") go(i - 1);
   if (e.key === "Home") go(0);
 });
 
-document.addEventListener("click", function(e){ go(e.clientX > innerWidth * 0.25 ? i + 1 : i - 1); });
+document.addEventListener("click", function(e){ if (e.clientX > innerWidth * 0.25) { fwd(); } else { go(i - 1); } });
 go(0);
 </script></body></html>
