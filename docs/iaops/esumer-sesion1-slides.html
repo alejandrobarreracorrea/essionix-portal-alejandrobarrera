@@ -24,6 +24,8 @@ h2 { font-family:var(--display); font-size:clamp(1.5rem,3.6vw,2.8rem); letter-sp
 .rows .t small { display:block; font-family:var(--body); font-weight:400; color:var(--muted); font-size:clamp(.8rem,1.3vw,1rem); margin-top:2px; }
 .rows .m { font-family:var(--mono); color:var(--a2); font-size:clamp(.8rem,1.4vw,1.05rem); white-space:nowrap; }
 .big { font-family:var(--display); font-size:clamp(3rem,9vw,7.5rem); font-weight:700; letter-spacing:-.03em; line-height:1; }
+.act-chip { display:inline-block; background:var(--naranja); color:#fff; font-family:var(--mono);
+  font-size:.68rem; padding:.35em 1em; border-radius:999px; margin-right:10px; letter-spacing:.05em; vertical-align:middle; }
 .src { position:absolute; bottom:3vh; left:clamp(30px,8vw,120px); right:clamp(30px,8vw,120px); font-family:var(--mono); font-size:.68rem; color:var(--faint); }
 .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:clamp(16px,3vw,40px); max-width:1000px; }
 .chipset { display:flex; gap:10px; flex-wrap:wrap; margin-top:24px; }
@@ -84,6 +86,19 @@ ul.clean li:first-child { border-top:0; }
   <img class="cover-logo" src="esumer-assets/estudia-blanco.png" alt="Estud-IA">
 </section>
 
+<!-- 16 · DEMO -->
+<section class="slide">
+  <span class="k">Antes de decirles quién soy — miren esto</span>
+  <h2>No es teoría: está corriendo</h2>
+  <div class="demo">
+    <p>$ curl -I https://[mi-sitio] &nbsp;&nbsp;→ HTTP 200 · ¿quién responde?</p>
+    <p>$ dig [mi-sitio] &nbsp;&nbsp;→ el DNS en acción</p>
+    <p>→ consola AWS: la instancia, la red, el balanceador — las 5 capas de la slide anterior</p>
+    <p>→ GitHub: el código que crea TODO esto</p>
+  </div>
+  <p class="sub" style="margin-top:20px">En la semana 13, cada equipo tendrá su versión de esto. Empezando la próxima clase.</p>
+</section>
+
 <!-- 2 · QUIÉN LES HABLA -->
 <section class="slide">
   <span class="k">¿Quién les habla?</span>
@@ -113,11 +128,39 @@ ul.clean li:first-child { border-top:0; }
   <p class="sub" style="margin-top:24px">Todo lo que van a ver en este curso viene de esa operación real — errores incluidos.</p>
 </section>
 
+<!-- 10 · DIAGNÓSTICO -->
+<section class="slide">
+  <span class="k"><span class="act-chip">ACTIVIDAD · 10 min</span> Ahora ustedes · diagnóstico</span>
+  <h2>¿De dónde arrancamos?</h2>
+  <div class="grid2" style="align-items:center">
+    <ul class="clean">
+      <li>📋 9 preguntas — 5 minutos, anónimo, sin nota</li>
+      <li>🗣️ Y en voz alta: <b>¿qué pasa entre que escriben google.com y aparece la página?</b></li>
+      <li>Guardamos las respuestas — las volveremos a mirar al final del semestre.</li>
+    </ul>
+    <div class="qr" style="align-items:center"><svg xmlns="http://www.w3.org/2000/svg" width="132" height="132" class="segno"><g transform="scale(4)"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#0a0a0e" d="M2 2.5h7m1 0h2m3 0h1m1 0h1m4 0h1m1 0h7m-29 1h1m5 0h1m1 0h4m1 0h1m3 0h2m1 0h1m1 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m2 0h4m3 0h1m1 0h2m2 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m3 0h1m1 0h2m1 0h3m2 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m2 0h2m1 0h1m1 0h1m2 0h3m2 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m2 0h3m1 0h1m2 0h2m1 0h1m2 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h1m3 0h1m2 0h5m-20 1h1m1 0h2m1 0h3m5 0h1m3 0h2m3 0h1m2 0h1m1 0h2m-29 1h1m1 0h1m1 0h2m1 0h1m2 0h1m1 0h3m5 0h1m1 0h3m3 0h1m-25 1h4m5 0h1m2 0h1m3 0h1m5 0h2m-28 1h1m1 0h1m5 0h2m1 0h1m3 0h1m3 0h3m1 0h2m3 0h1m-28 1h2m1 0h3m1 0h1m3 0h1m1 0h4m1 0h1m1 0h1m3 0h2m-27 1h1m1 0h1m2 0h1m1 0h2m3 0h1m1 0h1m1 0h3m3 0h1m3 0h3m-28 1h2m1 0h1m1 0h1m4 0h3m4 0h2m1 0h1m2 0h1m1 0h3m-29 1h3m5 0h2m1 0h1m2 0h3m2 0h4m1 0h1m2 0h1m-28 1h2m4 0h2m1 0h2m3 0h2m1 0h2m1 0h2m2 0h2m1 0h1m-27 1h2m1 0h2m1 0h2m1 0h3m1 0h2m1 0h1m2 0h1m2 0h1m1 0h3m-28 1h1m1 0h2m2 0h2m1 0h2m2 0h3m4 0h1m2 0h1m2 0h1m-25 1h1m4 0h1m1 0h1m2 0h8m1 0h2m1 0h1m1 0h1m-26 1h1m1 0h2m1 0h1m2 0h1m2 0h3m1 0h1m1 0h1m1 0h7m-19 1h5m2 0h2m1 0h1m1 0h1m3 0h5m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m1 0h2m1 0h1m-28 1h1m5 0h1m1 0h1m1 0h1m1 0h4m2 0h3m3 0h2m1 0h1m-28 1h1m1 0h3m1 0h1m3 0h2m3 0h1m1 0h2m1 0h5m1 0h2m-28 1h1m1 0h3m1 0h1m1 0h1m1 0h3m2 0h7m1 0h3m2 0h1m-29 1h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h2m1 0h1m1 0h1m4 0h1m2 0h1m1 0h1m-29 1h1m5 0h1m2 0h2m2 0h2m1 0h1m3 0h1m1 0h1m2 0h1m1 0h1m-28 1h7m1 0h2m3 0h1m2 0h5m6 0h1"/></g></svg>
+<span style="text-align:center;width:100%">escanea o entra a<br><b>forms.gle/fLNhU3ruMG5VgFmW6</b></span></div>
+  </div>
+</section>
+
 <!-- 4 · TRANSICIÓN -->
 <section class="slide">
   <span class="k">Antes de la técnica, el mapa</span>
   <h2>¿Por qué <span class="grad">este</span> curso, en <span class="grad">este</span> momento?</h2>
   <p class="sub">Tres datos del mercado 2026 — con fuentes, no con humo. Porque la decisión de tomarse esto en serio es de ustedes, y se toma con información.</p>
+</section>
+
+
+<!-- APUESTA 1 -->
+<section class="slide">
+  <span class="k"><span class="act-chip">A MANO ALZADA</span> Apuesta #1</span>
+  <h2>¿Cuánto va a gastar el mundo en nube pública este año?</h2>
+  <ul class="rows">
+    <li><span class="t">A · 85 mil millones de dólares</span><span class="m">🙋</span></li>
+    <li><span class="t">B · 850 mil millones de dólares</span><span class="m">🙋</span></li>
+    <li><span class="t">C · 8,5 billones de dólares</span><span class="m">🙋</span></li>
+  </ul>
+  <p class="sub" style="margin-top:22px">Voten antes de pasar la slide. El que acierte gana… respeto. 😄</p>
 </section>
 
 <!-- 5 · DEMANDA: EL MERCADO CLOUD -->
@@ -183,6 +226,19 @@ ul.clean li:first-child { border-top:0; }
   <p class="src">Fuentes: ERI · Guía Salarial Michael Page Colombia 2026 · mercado remoto US→LATAM</p>
 </section>
 
+
+<!-- APUESTA 2 -->
+<section class="slide">
+  <span class="k"><span class="act-chip">A MANO ALZADA</span> Apuesta #2</span>
+  <h2>¿Cuánto gana al año un Site Reliability Engineer en EE.UU.? (mediana)</h2>
+  <ul class="rows">
+    <li><span class="t">A · USD 90.000</span><span class="m">🙋</span></li>
+    <li><span class="t">B · USD 205.000</span><span class="m">🙋</span></li>
+    <li><span class="t">C · USD 350.000</span><span class="m">🙋</span></li>
+  </ul>
+  <p class="sub" style="margin-top:22px">Pista: es más de lo que están pensando.</p>
+</section>
+
 <!-- 8 · SUELDOS USA -->
 <section class="slide">
   <span class="k">¿Y cuánto paga? · Estados Unidos</span>
@@ -199,21 +255,6 @@ ul.clean li:first-child { border-top:0; }
   <span class="k">La conclusión honesta</span>
   <h2>La oportunidad es real.<br>La fila también.</h2>
   <p class="sub">Lo que separa a los que entran de los que miran: <b>evidencia de que saben operar</b> — no un diploma, un portafolio. Este curso está diseñado para que salgan con esa evidencia: infraestructura real, código real, bitácora pública.</p>
-</section>
-
-<!-- 10 · DIAGNÓSTICO -->
-<section class="slide">
-  <span class="k">Ahora ustedes · diagnóstico exploratorio</span>
-  <h2>¿De dónde arrancamos?</h2>
-  <div class="grid2" style="align-items:center">
-    <ul class="clean">
-      <li>📋 9 preguntas — 5 minutos, anónimo, sin nota</li>
-      <li>🗣️ Y en voz alta: <b>¿qué pasa entre que escriben google.com y aparece la página?</b></li>
-      <li>Guardamos las respuestas — las volveremos a mirar al final del semestre.</li>
-    </ul>
-    <div class="qr" style="align-items:center"><svg xmlns="http://www.w3.org/2000/svg" width="132" height="132" class="segno"><g transform="scale(4)"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#0a0a0e" d="M2 2.5h7m1 0h2m3 0h1m1 0h1m4 0h1m1 0h7m-29 1h1m5 0h1m1 0h4m1 0h1m3 0h2m1 0h1m1 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m2 0h4m3 0h1m1 0h2m2 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m3 0h1m1 0h2m1 0h3m2 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m2 0h2m1 0h1m1 0h1m2 0h3m2 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m2 0h3m1 0h1m2 0h2m1 0h1m2 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h1m3 0h1m2 0h5m-20 1h1m1 0h2m1 0h3m5 0h1m3 0h2m3 0h1m2 0h1m1 0h2m-29 1h1m1 0h1m1 0h2m1 0h1m2 0h1m1 0h3m5 0h1m1 0h3m3 0h1m-25 1h4m5 0h1m2 0h1m3 0h1m5 0h2m-28 1h1m1 0h1m5 0h2m1 0h1m3 0h1m3 0h3m1 0h2m3 0h1m-28 1h2m1 0h3m1 0h1m3 0h1m1 0h4m1 0h1m1 0h1m3 0h2m-27 1h1m1 0h1m2 0h1m1 0h2m3 0h1m1 0h1m1 0h3m3 0h1m3 0h3m-28 1h2m1 0h1m1 0h1m4 0h3m4 0h2m1 0h1m2 0h1m1 0h3m-29 1h3m5 0h2m1 0h1m2 0h3m2 0h4m1 0h1m2 0h1m-28 1h2m4 0h2m1 0h2m3 0h2m1 0h2m1 0h2m2 0h2m1 0h1m-27 1h2m1 0h2m1 0h2m1 0h3m1 0h2m1 0h1m2 0h1m2 0h1m1 0h3m-28 1h1m1 0h2m2 0h2m1 0h2m2 0h3m4 0h1m2 0h1m2 0h1m-25 1h1m4 0h1m1 0h1m2 0h8m1 0h2m1 0h1m1 0h1m-26 1h1m1 0h2m1 0h1m2 0h1m2 0h3m1 0h1m1 0h1m1 0h7m-19 1h5m2 0h2m1 0h1m1 0h1m3 0h5m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m1 0h2m1 0h1m-28 1h1m5 0h1m1 0h1m1 0h1m1 0h4m2 0h3m3 0h2m1 0h1m-28 1h1m1 0h3m1 0h1m3 0h2m3 0h1m1 0h2m1 0h5m1 0h2m-28 1h1m1 0h3m1 0h1m1 0h1m1 0h3m2 0h7m1 0h3m2 0h1m-29 1h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h2m1 0h1m1 0h1m4 0h1m2 0h1m1 0h1m-29 1h1m5 0h1m2 0h2m2 0h2m1 0h1m3 0h1m1 0h1m2 0h1m1 0h1m-28 1h7m1 0h2m3 0h1m2 0h5m6 0h1"/></g></svg>
-<span style="text-align:center;width:100%">escanea o entra a<br><b>forms.gle/fLNhU3ruMG5VgFmW6</b></span></div>
-  </div>
 </section>
 
 <!-- 11 · LA DINÁMICA -->
@@ -276,7 +317,7 @@ ul.clean li:first-child { border-top:0; }
 
 <!-- 15 · TEMA 1 -->
 <section class="slide">
-  <span class="k">Tema 1 · empezamos</span>
+  <span class="k">Tema 1 · empezamos <span class="act-chip">CON TEATRO · 3 VOLUNTARIOS</span></span>
   <h2>¿Qué es una <span class="grad">infraestructura</span>?</h2>
   <ul class="rows">
     <li><span class="t">01 · Hardware<small>Los fierros — que en la nube no ves, pero existen</small></span><span class="m">cómputo</span></li>
@@ -287,17 +328,17 @@ ul.clean li:first-child { border-top:0; }
   </ul>
 </section>
 
-<!-- 16 · DEMO -->
+
+<!-- RESERVA -->
 <section class="slide">
-  <span class="k">Demo en vivo · una infraestructura real, ahora mismo</span>
-  <h2>No es teoría: está corriendo</h2>
-  <div class="demo">
-    <p>$ curl -I https://[mi-sitio] &nbsp;&nbsp;→ HTTP 200 · ¿quién responde?</p>
-    <p>$ dig [mi-sitio] &nbsp;&nbsp;→ el DNS en acción</p>
-    <p>→ consola AWS: la instancia, la red, el balanceador — las 5 capas de la slide anterior</p>
-    <p>→ GitHub: el código que crea TODO esto</p>
-  </div>
-  <p class="sub" style="margin-top:20px">En la semana 13, cada equipo tendrá su versión de esto. Empezando la próxima clase.</p>
+  <span class="k"><span class="act-chip">ACTIVIDAD · si nos queda tiempo</span> Bonus</span>
+  <h2>Tu primera cuenta de <span class="grad">GitHub</span> — ahora, desde el celular</h2>
+  <ul class="clean">
+    <li>1 · <b>github.com</b> → Sign up (correo personal o institucional)</li>
+    <li>2 · Crear repositorio: <b>bitacora-[nombre-de-tu-empresa]</b> → público → Add README</li>
+    <li>3 · Editar el README (lápiz ✏️): escribe el nombre de tu empresa ficticia y quiénes son el equipo → <b>Commit changes</b></li>
+  </ul>
+  <p class="sub" style="margin-top:24px">Eso que acaban de hacer se llama <b>commit</b> — su primer registro en la bitácora del proyecto. Ya empezaron. ✅</p>
 </section>
 
 <!-- 17 · CIERRE -->
