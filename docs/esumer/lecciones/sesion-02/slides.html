@@ -60,6 +60,63 @@ h2 { font-family:var(--display); font-size:clamp(1.5rem,3.6vw,2.8rem); letter-sp
 .sim p { color:var(--muted); font-size:clamp(.85rem,1.4vw,1rem); }
 .sim p b { color:var(--text, #0E2841); }
 .check li::before { content:"☐  "; font-family:var(--mono); color:var(--naranja); }
+
+/* ---- casa animada (mapa de fases) ---- */
+.casa-slide { justify-content:flex-start; padding-top:clamp(30px,5vh,60px); }
+.house { max-width:720px; margin:14px auto 0; width:100%; }
+.roof {
+  width:0; height:0; margin:0 auto;
+  border-left:clamp(180px,26vw,360px) solid transparent;
+  border-right:clamp(180px,26vw,360px) solid transparent;
+  border-bottom:clamp(52px,7vh,80px) solid var(--naranja);
+  position:relative; opacity:0;
+}
+.roof span {
+  position:absolute; top:clamp(30px,4vh,48px); left:50%; transform:translateX(-50%);
+  white-space:nowrap; color:#fff; font-family:var(--display); font-weight:600;
+  font-size:clamp(.72rem,1.25vw,1rem); text-shadow:0 1px 3px rgba(0,0,0,.25);
+}
+.floor {
+  display:flex; align-items:center; gap:14px; padding:clamp(9px,1.5vh,15px) 22px;
+  border:1px solid var(--line); border-top:0; background:#fff; position:relative;
+  opacity:0; transform:translateY(26px);
+}
+.floor.fA { background:linear-gradient(90deg, rgba(15,158,213,.08), #fff); }
+.floor.fB { background:linear-gradient(90deg, rgba(21,96,130,.07), #fff); }
+.floor.base { border-radius:0 0 6px 6px; border-bottom-width:6px; border-bottom-color:var(--navy); }
+.floor .fi { font-size:clamp(1.3rem,2.4vw,1.9rem); flex:none; }
+.floor b { font-family:var(--display); font-weight:600; font-size:clamp(.9rem,1.6vw,1.2rem); }
+.floor i { margin-left:auto; font-family:var(--mono); font-style:normal; font-size:clamp(.66rem,1.15vw,.85rem); color:var(--faint); letter-spacing:.03em; }
+.floor.hoy { border-color:var(--naranja); z-index:2; }
+.floor.hoy i { color:var(--naranja); font-weight:600; }
+.floor.fD i, .floor.fB i, .floor.fA i { color:var(--c2, #0F9ED5); font-weight:600; }
+.here {
+  position:absolute; left:calc(100% + 14px); top:50%; transform:translateY(-50%);
+  font-family:var(--mono); font-size:clamp(.68rem,1.15vw,.85rem); color:#fff;
+  background:var(--naranja); padding:.3em .9em; border-radius:999px; white-space:nowrap;
+  opacity:0; animation:hereIn .5s ease 2.4s forwards, herePulse 1.8s ease 2.9s infinite;
+}
+/* entrada: construir de abajo (fF) hacia arriba, y el techo al final */
+.slide.on .floor { animation:floorUp .5s cubic-bezier(.2,.7,.3,1) forwards; }
+.slide.on .floor.fF { animation-delay:.1s; }
+.slide.on .floor.fE { animation-delay:.45s; }
+.slide.on .floor.fD { animation-delay:.8s; }
+.slide.on .floor.fC { animation-delay:1.1s; }
+.slide.on .floor.fB { animation-delay:1.4s; }
+.slide.on .floor.fA { animation-delay:1.7s; }
+.slide.on .roof { animation:roofDrop .55s cubic-bezier(.2,.7,.3,1) 2s forwards; }
+.slide.on .floor.hoy { animation:floorUp .5s cubic-bezier(.2,.7,.3,1) forwards, hoyGlow 2s ease 2.6s infinite; }
+.slide.on .floor.fF.hoy { animation-delay:.1s, 2.6s; }
+.slide.on .floor.fE.hoy { animation-delay:.45s, 2.9s; }
+@keyframes floorUp { to { opacity:1; transform:none; } }
+@keyframes roofDrop { from { opacity:0; transform:translateY(-30px); } to { opacity:1; transform:none; } }
+@keyframes hoyGlow { 0%,100% { box-shadow:0 0 0 0 rgba(233,113,50,0); } 50% { box-shadow:0 0 0 4px rgba(233,113,50,.18); } }
+@keyframes hereIn { to { opacity:1; } }
+@keyframes herePulse { 0%,100% { transform:translateY(-50%) scale(1); } 50% { transform:translateY(-50%) scale(1.06); } }
+@media (prefers-reduced-motion: reduce) {
+  .floor, .roof, .here { opacity:1 !important; transform:none !important; animation:none !important; }
+}
+@media (max-width:640px) { .here { position:static; display:inline-block; margin-left:8px; transform:none; } }
 .src { position:absolute; bottom:3vh; left:clamp(30px,8vw,120px); right:clamp(30px,8vw,120px); font-family:var(--mono); font-size:.68rem; color:var(--faint); }
 .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:clamp(16px,3vw,40px); max-width:1000px; }
 .chipset { display:flex; gap:10px; flex-wrap:wrap; margin-top:24px; }
@@ -121,17 +178,17 @@ ul.clean li:first-child { border-top:0; }
 </section>
 
 <!-- 2 · LA CASA -->
-<section class="slide">
-  <span class="k">El mapa del curso</span>
-  <h2 style="font-size:clamp(1.2rem,2.6vw,2rem); margin-bottom:14px;">Vamos a construir una casa. Su empresa va a vivir en ella.</h2>
-  <div class="stack casa">
-    <div class="layer l1 hoy"><span class="ln">🏗</span><div><b>Los cimientos <span class="hoy-tag">HOY</span></b><p>Linux y la terminal — TODO lo demás se apoya aquí. Nadie pone el techo primero.</p></div><span class="lt">LINUX</span></div>
-    <div class="layer l2 hoy"><span class="ln">📐</span><div><b>Los planos <span class="hoy-tag">HOY</span></b><p>Git y GitHub — si la casa se cae, con los planos se reconstruye idéntica.</p></div><span class="lt">GIT · GITHUB</span></div>
-    <div class="layer l3"><span class="ln">🗺</span><div><b>La dirección y las calles</b><p>La IP es la dirección de la casa, el DNS es el nombre en el buzón. (Próxima semana)</p></div><span class="lt">REDES · NETWORKING</span></div>
-    <div class="layer l3"><span class="ln">🧱</span><div><b>La estructura</b><p>Las paredes donde vive lo que su empresa hace.</p></div><span class="lt">SERVIDORES</span></div>
-    <div class="layer l4"><span class="ln">🚪</span><div><b>Puertas y cerraduras</b><p>Quién entra, por dónde, con qué llave — y quién se queda afuera.</p></div><span class="lt">CIBERSEGURIDAD</span></div>
-    <div class="layer l5"><span class="ln">💧</span><div><b>Los servicios públicos</b><p>Agua y luz por consumo — no construyes la represa, pagas el recibo.</p></div><span class="lt">CLOUD · AWS</span></div>
-    <div class="layer l6"><div><b>🏡 La casa habitada: la web de su empresa atendiendo gente.</b><p>Miren el nombre del curso: <b>Cloud</b> (los servicios) · <b>Redes</b> (las calles) · <b>Ciberseguridad</b> (las cerraduras). La casa ES el curso. Hoy: se mezcla cemento.</p></div></div>
+<section class="slide casa-slide">
+  <span class="k">El mapa del curso · ¿en qué fase estás?</span>
+  <h2 style="font-size:clamp(1.15rem,2.5vw,1.9rem); margin-bottom:6px;">Construimos una casa. Tu empresa vivirá en ella — y hoy vamos por los cimientos.</h2>
+  <div class="house">
+    <div class="roof"><span>🏡 La casa habitada — la web de tu empresa en internet</span></div>
+    <div class="floor fA"><span class="fi">💧</span><b>Los servicios públicos</b><i>CLOUD · AWS</i></div>
+    <div class="floor fB"><span class="fi">🚪</span><b>Puertas y cerraduras</b><i>CIBERSEGURIDAD</i></div>
+    <div class="floor fC"><span class="fi">🧱</span><b>La estructura</b><i>SERVIDORES</i></div>
+    <div class="floor fD"><span class="fi">🗺</span><b>La dirección y las calles</b><i>REDES · NETWORKING</i></div>
+    <div class="floor fE hoy"><span class="fi">📐</span><b>Los planos</b><i>GIT · GITHUB</i><span class="here">◄ AQUÍ ESTAMOS</span></div>
+    <div class="floor fF hoy base"><span class="fi">🏗</span><b>Los cimientos</b><i>LINUX + TERMINAL</i></div>
   </div>
 </section>
 
