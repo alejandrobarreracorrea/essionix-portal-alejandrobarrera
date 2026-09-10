@@ -1,66 +1,85 @@
-# Sesión 2 · Lab: la caja de herramientas — guía del docente
+# Sesión 2 · Lab: la caja de herramientas + Linux real en EC2 — guía del docente
 
-**Estructura de la sesión:** Parte 1 = las 5 herramientas (GitHub, Git, VS Code, AWS, Terraform).
-Parte 2 = Linux/terminal (labs + rito del push) si el tiempo alcanza — ver ritmo.md para el plan de recorte.
+**Enfoque (opción B):** el Linux real donde se practican los comandos es una **instancia EC2 (Ubuntu)**
+lanzada por cada estudiante, conectada por **EC2 Instance Connect** (navegador, sin llaves .pem ni
+cliente SSH). Prerequisito: cuenta AWS activa (se pidió en la sesión 1).
 
-**Enfoque:** herramientas en la máquina PERSONAL de cada estudiante. Nada provisto por la
-universidad, nada en la nube de terceros. Entornos:
-- **Windows** → Git Bash (viene con Git) para hoy · **WSL/Ubuntu** como Linux completo (se deja instalando)
-- **macOS** → Terminal nativa (ya es Unix)
-- **Plan B navegador** → killercoda.com (Playgrounds → Ubuntu): terminal PURA a pantalla completa, gratis con login GitHub, ~1h por sesión (suficiente para el lab)
-- **Solo celular** → Killercoda en el navegador del celular o Termux (Android); completar en sala de cómputo 5º piso bloque 3
+**Fallback obligatorio para sin-cuenta/sin-tarjeta:** killercoda.com → Playgrounds → Ubuntu
+(Linux real, navegador, gratis, sin registro). TODOS los labs corren igual ahí.
 
-## Los instaladores (links para el chat, en orden de la sesión)
-1. GitHub (cuenta): https://github.com/signup
-2. Git (Windows, incluye Git Bash): https://git-scm.com/download/win — TODO por defecto · macOS: `git --version` en Terminal dispara la instalación
-3. VS Code: https://code.visualstudio.com/download
-4. AWS free tier PERSONAL: https://aws.amazon.com/free → correo personal + tarjeta (validación ~USD 1 reversada) + celular · plan Basic · región us-east-1 · clave root al gestor de contraseñas
-5. Terraform: Windows `winget install HashiCorp.Terraform` · macOS `brew install hashicorp/tap/terraform` · sin brew/winget: https://developer.hashicorp.com/terraform/install → verificar `terraform -version`
-6. (misión) WSL: PowerShell COMO ADMINISTRADOR → `wsl --install` → reiniciar → "Ubuntu" → usuario/clave
+## Los instaladores/cuentas (links para el chat)
+1. GitHub: https://github.com/signup  ·  repo `bitacora-[empresa]` público con README
+2. AWS free tier PERSONAL: https://aws.amazon.com/free (prerequisito de la sesión 1)
+3. VS Code (local, para el semestre): https://code.visualstudio.com/download
+4. Terraform (local): Windows `winget install HashiCorp.Terraform` · macOS `brew install hashicorp/tap/terraform`
 
-## Autenticación de git SIN dolor
-`git clone https://github.com/USUARIO/bitacora-X.git` → Git Credential Manager abre el
-navegador → "Authorize" → listo para siempre. (En macOS puede pedir token: plan B = gh CLI
-o el mismo flujo desde VS Code; tenerlo probado antes de clase.)
+## LANZAR LA INSTANCIA EC2 (el corazón de hoy)
+Consola AWS → región **N. Virginia (us-east-1)** → servicio **EC2** → **Launch instance**:
+- Name: `mi-primer-servidor`
+- AMI: **Ubuntu** (marca "Free tier eligible")
+- Type: **t2.micro** o **t3.micro** (Free tier)
+- Key pair: **Proceed without a key pair** ← clave para evitar el lío de .pem
+- Network: ✓ **Allow SSH traffic from Anywhere (0.0.0.0/0)**
+- **Launch instance** → Instances → esperar **Running** (~1 min)
 
-## El script del tesoro (pegar en el chat en el RETO — funciona en Git Bash, Terminal, WSL y Killercoda)
+## CONECTARSE (sin SSH client, sin llaves)
+Instancia → **Connect** → pestaña **EC2 Instance Connect** → **Connect** → terminal en el navegador
+con `ubuntu@ip-...:~$`. Eso es Ubuntu 100% real.
 
+> Nota de por qué "Proceed without a key pair" funciona con Instance Connect: EC2 Instance Connect
+> inyecta una llave temporal por 60s al conectar desde la consola. No necesitas gestionar .pem.
+> (En módulo 2, cuando enseñemos SSH "de verdad", sí generamos y usamos key pairs.)
+
+## LABS (todos DENTRO de la instancia)
+- Lab 1 ubicarse: `whoami` `pwd` `ls -la` `uname -a` `cd / && ls` `cd ~` `clear`
+- Lab 2 construir: `mkdir` `echo >` `cat` `cp` `mv` `rm` (⚠️ rm sin papelera)
+- Lab 3 git: `git config --global user.name/…email` · `git clone https://github.com/USER/bitacora-*.git`
+  (clonar público NO pide clave)
+
+## EL PUSH DESDE EL SERVIDOR → necesita TOKEN de GitHub
+En un servidor no hay Credential Manager. Para `git push` sobre HTTPS, GitHub pide usuario + **token**
+(no la contraseña — GitHub ya no acepta contraseña por git). Crear el token (1 min, pegar pasos al chat):
+1. github.com → foto (arriba der.) → **Settings** → abajo **Developer settings**
+2. **Personal access tokens** → **Tokens (classic)** → **Generate new token (classic)**
+3. Note: `esumer` · Expiration: 90 days · Scope: ✓ **repo** · **Generate token**
+4. **COPIAR el token** (empieza por `ghp_...`) — no se vuelve a mostrar. Guardarlo temporal.
+En el push: `git push` → Username: tu-usuario · Password: **pegar el token** (no se ve al pegar, es normal).
+> Minuto de seguridad en vivo: ese token ES una llave — jamás pegarlo en un archivo del repo ni compartirlo.
+
+## EL RITO (en la instancia, dentro de bitacora-*)
+```bash
+mkdir planos materiales && echo "Somos [empresa]" > materiales/lema.txt
+git add . && git commit -m "Primeras piezas de la casa" && git push   # pide user + token
+```
+→ abrir github.com/[user]/bitacora-* → las carpetas aparecen. El servidor Linux publicó en internet.
+
+## RETO DEL TESORO (pegar en el chat)
 ```bash
 mkdir -p ~/tesoro/puerto/{bodega,muelle} ~/tesoro/isla/{selva,volcan/cueva} ~/tesoro/barco
 echo "Pista: el tesoro no está en el agua. Busca TIERRA firme." > ~/tesoro/barco/bitacora.txt
 echo "Pista: donde hay fuego hubo riqueza. Sube al lugar más caliente." > ~/tesoro/isla/selva/mapa-roto.txt
 echo "Pista: los piratas esconden en lo profundo. Busca un hueco oscuro." > ~/tesoro/isla/volcan/marca-x.txt
-echo "FELICIDADES 🏴‍☠️ — código secreto: CAJA-COMPLETA-$RANDOM" > ~/tesoro/isla/volcan/cueva/.cofre.txt
+echo "FELICIDADES 🏴‍☠️ — código secreto: SERVIDOR-VIVO-$RANDOM" > ~/tesoro/isla/volcan/cueva/.cofre.txt
 echo "Aquí no hay nada... ¿o no revisaste lo OCULTO? (pista: ls -a)" > ~/tesoro/isla/volcan/cueva/leeme.txt
 cd ~/tesoro && echo "El mapa está listo. Empieza con: ls"
 ```
-
-Maldades pedagógicas: cofre **oculto** (obliga `ls -a`) · `$RANDOM` = código único por persona.
-
-**Cierre maestro:** el tesoro está en ~ (FUERA del repo) — al intentar `git add` ahí sale
-"not a git repository": la lección de que Git solo ve dentro de la carpeta con `.git`.
-```bash
-cd ~/bitacora-*        # (o donde clonaron)
-echo "Tesoro sesión 2: TALLER-MONTADO-XXXX" > tesoro.md
-git add . && git commit -m "Tesoro encontrado" && git push
-```
-
-## Solución del tesoro
-`cd ~/tesoro` → `ls` → `cat barco/bitacora.txt` → `isla/selva/mapa-roto.txt` →
+Solución: `cd ~/tesoro` → `ls` → `cat barco/bitacora.txt` → `isla/selva/mapa-roto.txt` →
 `isla/volcan/marca-x.txt` → `cueva/` → `ls -a` → `cat .cofre.txt`
+Cierre: guardar el código en `~/bitacora-*/tesoro.md` y push.
 
-## Checkpoints por chat
-1. Link del repo ✅ · 2. `git --version` (el número) · 3. VS Code ✅ · 4. resultado de `pwd`
-5. clone hecho (`ls` mostrando README) · 6. link de github.com con sus carpetas (el rito)
-7. código del tesoro · 8. link de la cheat-sheet
-Quien falla 2 seguidos → mensaje directo con nombre propio.
+## ⚠️ APAGAR LA INSTANCIA — PASO NO NEGOCIABLE (hacerlo JUNTOS al final)
+Instancia → **Instance state** → **Terminate** (hoy, como fue de práctica) o **Stop** (para reusar).
+Verificar estado **Stopped/Terminated**. Con 40 estudiantes, instancias olvidadas = facturas sorpresa.
+Al inicio de la próxima clase: revisar en consola que nadie dejó nada corriendo.
 
 ## Riesgos conocidos y mitigación
-- **WSL requiere admin + reinicio** → por eso va al FINAL (parada 4) y se termina de misión; nadie se bloquea en clase
-- **Antivirus/permisos corporativos** en laptops de trabajo → Killercoda hoy, instalación en casa
-- **Windows 7/8 (sin WSL)** → Git Bash cubre todo el curso de terminal básica; VirtualBox+Ubuntu como alternativa (guía aparte si aparece el caso)
-- **git clone pide credenciales raras** → verificar que instaló Git CON Git Credential Manager (default)
+- **Sin tarjeta / cuenta AWS** → Killercoda (mismos labs, sin AWS). No se atrasan.
+- **Instance Connect falla** ("unable to connect") → suele ser el security group sin puerto 22:
+  editar security group de la instancia → Inbound → Add rule → SSH → Anywhere. O usar Killercoda.
+- **La instancia no lanza** (límite/verificación de cuenta nueva) → Killercoda; el EC2 queda de misión.
+- **Push falla** → 99% es token mal copiado o sin scope `repo`. Regenerar.
+- **Olvidan apagar** → recordatorio en el grupo esa misma noche + revisión al inicio de sesión 3.
 
-## Producto (rúbrica rápida)
-`cheatsheet-terminal.md` subido POR TERMINAL: ✔ 12+ comandos ✔ descripción propia ✔ un ejemplo real
-Bonus: `tesoro.md` + pantallazo del prompt de Ubuntu (WSL) en la bitácora
+## Producto (rúbrica)
+cheatsheet-terminal.md subido por push desde el servidor: ✔ 12+ comandos ✔ descripción propia ✔ ejemplo real.
+Bonus: tesoro.md + instancia apagada (pantallazo del estado Stopped/Terminated).
