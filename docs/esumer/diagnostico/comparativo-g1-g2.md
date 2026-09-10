@@ -45,7 +45,7 @@ la muestra — útil sobre todo para detectar más casos solo-celular no reporta
 
 ## Decisiones tomadas con estos datos
 
-- [x] AWS free tier (sin Academy) — cuenta **por equipo** (mitiga tarjeta y solo-celular)
+- [x] AWS free tier (sin Academy) — cuenta **personal de cada estudiante** (ninguna herramienta la provee la universidad); el alta se pospone a sem 3-4. Sem 2 pivota a Linux+Git con Codespaces (solo cuenta GitHub)
 - [ ] Armar equipos del caso distribuyendo los solo-celular (G2) y los nunca-terminal (G1: 5, G2: 2)
 - [ ] Recordatorio de encuesta al G2
 - [ ] Sesión 2: mismo plan para ambos grupos, con parejas mentor/novato

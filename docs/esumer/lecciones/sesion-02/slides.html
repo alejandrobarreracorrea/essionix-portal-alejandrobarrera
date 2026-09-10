@@ -41,6 +41,9 @@ h2 { font-family:var(--display); font-size:clamp(1.5rem,3.6vw,2.8rem); letter-sp
 .layer.l5 { border-left-color:var(--naranja); }
 .layer.l6 { border:0; border-left:5px solid var(--naranja); background:rgba(233,113,50,.06); }
 
+.casa .layer { border-left-width:5px; }
+.casa .hoy { outline:3px solid var(--naranja); outline-offset:2px; background:rgba(233,113,50,.05); }
+.hoy-tag { font-family:var(--mono); font-size:.65rem; color:#fff; background:var(--naranja); border-radius:999px; padding:.25em .8em; margin-left:10px; }
 .src { position:absolute; bottom:3vh; left:clamp(30px,8vw,120px); right:clamp(30px,8vw,120px); font-family:var(--mono); font-size:.68rem; color:var(--faint); }
 .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:clamp(16px,3vw,40px); max-width:1000px; }
 .chipset { display:flex; gap:10px; flex-wrap:wrap; margin-top:24px; }
@@ -95,13 +98,28 @@ ul.clean li:first-child { border-top:0; }
   <img class="cover-bg" src="../../assets/portada.png" alt="">
   <div class="cover-txt">
     <span class="cover-k">Estud-IA · Ruta TI · 2026-2 · Sesión 2 · clase virtual</span>
-    <h1 class="cover-h">La terminal: el lenguaje del operador</h1>
-    <p class="cover-s">Hoy sales con la terminal dominada y tu bitácora viva.<br>Alejandro Barrera · Cloud Architect</p>
+    <h1 class="cover-h">Los cimientos de la casa: Linux, Git y GitHub</h1>
+    <p class="cover-s">Hoy: tu terminal, tus planos y tu primer push.<br>Alejandro Barrera · Cloud Architect</p>
   </div>
   <img class="cover-logo" src="../../assets/estudia-blanco.png" alt="Estud-IA">
 </section>
 
-<!-- 2 · APUESTA DE REPASO -->
+<!-- 2 · LA CASA -->
+<section class="slide">
+  <span class="k">El mapa del curso</span>
+  <h2 style="font-size:clamp(1.2rem,2.6vw,2rem); margin-bottom:14px;">Vamos a construir una casa. Su empresa va a vivir en ella.</h2>
+  <div class="stack casa">
+    <div class="layer l1 hoy"><span class="ln">🏗</span><div><b>Los cimientos <span class="hoy-tag">HOY</span></b><p>Linux y la terminal — TODO lo demás se apoya aquí. Nadie pone el techo primero.</p></div></div>
+    <div class="layer l2 hoy"><span class="ln">📐</span><div><b>Los planos <span class="hoy-tag">HOY</span></b><p>Git y GitHub — si la casa se cae, con los planos se reconstruye idéntica.</p></div></div>
+    <div class="layer l3"><span class="ln">🗺</span><div><b>La dirección y las calles</b><p>Redes: la IP es la dirección de la casa, el DNS es el nombre en el buzón. (Próxima semana)</p></div></div>
+    <div class="layer l3"><span class="ln">🧱</span><div><b>La estructura</b><p>Servidores: las paredes donde vive lo que su empresa hace.</p></div></div>
+    <div class="layer l4"><span class="ln">🚪</span><div><b>Puertas y cerraduras</b><p>Seguridad: quién entra, por dónde, con qué llave.</p></div></div>
+    <div class="layer l5"><span class="ln">💧</span><div><b>Los servicios públicos</b><p>La nube: agua y luz por consumo — no construyes la represa, pagas el recibo.</p></div></div>
+    <div class="layer l6"><div><b>🏡 La casa habitada: la web de su empresa, en internet, atendiendo gente.</b><p>Ahí vamos. Pero hoy… se mezcla cemento.</p></div></div>
+  </div>
+</section>
+
+<!-- 3 · APUESTA DE REPASO -->
 <section class="slide">
   <span class="k">Apuesta de repaso · sesión 1</span>
   <h2>En la torre de TikTok: ¿qué capa encuentra el servidor correcto entre millones?</h2>
@@ -113,168 +131,161 @@ ul.clean li:first-child { border-top:0; }
   <p class="sub" style="margin-top:20px">Escriban su letra en el chat — a la cuenta de tres.</p>
 </section>
 
-<!-- 3 · EL PLAN DE HOY -->
+<!-- 4 · EL PLAN -->
 <section class="slide">
   <span class="k">El plan de hoy</span>
-  <h2>4 paradas, un producto</h2>
+  <h2>3 paradas, un producto</h2>
   <ul class="rows">
-    <li><span class="t">1 · Cuentas listas<small>GitHub individual + la cuenta AWS del equipo</small></span><span class="m">~30 min</span></li>
-    <li><span class="t">2 · La terminal de verdad<small>4 laboratorios guiados, todos tecleando</small></span><span class="m">~70 min</span></li>
-    <li><span class="t">3 · Reto: la búsqueda del tesoro<small>Navegar hasta encontrarlo — solo con comandos</small></span><span class="m">~20 min</span></li>
-    <li><span class="t">4 · Producto: tu cheat-sheet<small>Tu chuleta personal de comandos, versionada en la bitácora</small></span><span class="m">al cierre</span></li>
+    <li><span class="t">1 · Tu cuenta GitHub y tu bitácora<small>Personal, gratis, sin tarjeta — tu portafolio profesional nace hoy</small></span><span class="m">~25 min</span></li>
+    <li><span class="t">2 · Tu terminal Linux en el navegador<small>Codespaces: Ubuntu real dentro de tu propio repo — sin instalar nada</small></span><span class="m">~80 min</span></li>
+    <li><span class="t">3 · El rito de paso: tu primer push<small>Crear un archivo EN la terminal y verlo aparecer en github.com</small></span><span class="m">el clímax</span></li>
   </ul>
+  <p class="sub" style="margin-top:18px">Todo lo de hoy es con cuentas personales de ustedes. Gratis. Suyas para siempre.</p>
 </section>
 
-<!-- 4 · GITHUB -->
+<!-- 5 · GITHUB CUENTA -->
 <section class="slide">
-  <span class="k"><span class="act-chip">ACTIVIDAD</span> Parada 1a · GitHub — individual</span>
-  <h2>Tu bitácora nace hoy</h2>
+  <span class="k"><span class="act-chip">ACTIVIDAD</span> Parada 1 · GitHub</span>
+  <h2>Los planos necesitan una oficina</h2>
   <ul class="clean">
-    <li>1 · <b>github.com</b> → Sign up → correo + usuario profesional (te va a acompañar toda la carrera: nada de xX_d4rk_Xx)</li>
+    <li>1 · <b>github.com</b> → Sign up → correo personal + usuario profesional (te acompañará toda la carrera: nada de xX_d4rk_Xx)</li>
     <li>2 · Nuevo repositorio: <b>bitacora-[tu-empresa]</b> · público · ✓ Add README</li>
-    <li>3 · En el README (lápiz ✏️): nombre de la empresa, integrantes del equipo y una línea: qué hace</li>
-    <li>4 · <b>Commit changes</b> — tu primer registro</li>
+    <li>3 · Ese repo es la carpeta de planos de su casa: TODO lo que construyan queda registrado ahí</li>
   </ul>
-  <p class="sub" style="margin-top:18px">El que ya la tiene de la misión: ayuda a su equipo. Pongan el link del repo en el chat ✅</p>
+  <p class="sub" style="margin-top:18px">Checkpoint: link de tu repo al chat ✅ — el que ya la tiene, ayuda al de al lado.</p>
 </section>
 
-<!-- 5 · AWS EQUIPO -->
+<!-- 6 · CODESPACES -->
 <section class="slide">
-  <span class="k"><span class="act-chip">ACTIVIDAD</span> Parada 1b · AWS — una cuenta POR EQUIPO</span>
-  <h2>La cuenta donde vivirá su empresa</h2>
+  <span class="k"><span class="act-chip">ACTIVIDAD</span> Parada 2 · tu terminal</span>
+  <h2>Linux en el navegador — dentro de tu propio repo</h2>
   <ul class="clean">
-    <li><b>Por qué por equipo:</b> la infraestructura del caso es del equipo — y una sola cuenta es más fácil de cuidar (y de apagar)</li>
-    <li><b>Qué necesita el "dueño de cuenta":</b> correo + celular + tarjeta débito/crédito (validación de ~USD 1 que se reversa — no es un cobro)</li>
-    <li><b>aws.amazon.com/free</b> → Create account → plan <b>Basic (gratuito)</b> → región N. Virginia (us-east-1)</li>
-    <li>Los demás integrantes: pendientes del paso a paso — la semana entrante todos entran a la misma cuenta (IAM, ya verán)</li>
+    <li>1 · En tu repo: botón verde <b>Code</b> → pestaña <b>Codespaces</b> → <b>Create codespace on main</b></li>
+    <li>2 · Espera ~1 min: se está encendiendo <b>un computador Linux real</b> para ti, gratis, en la nube</li>
+    <li>3 · Abajo aparece la TERMINAL (si no: menú ☰ → Terminal → New Terminal)</li>
+    <li>4 · Eso que parpadea es el prompt <b>$</b> — tu pala y tu cemento de hoy</li>
   </ul>
+  <p class="sub" style="margin-top:18px">Checkpoint: ✅ al chat cuando veas el $ · 60 horas gratis al mes — de sobra para el curso.</p>
 </section>
 
-<!-- 6 · MINUTO DE SEGURIDAD -->
-<section class="slide">
-  <span class="k">🔐 Minuto de seguridad #1 · nueva tradición del curso</span>
-  <h2>La clave <span class="grad">root</span> es sagrada</h2>
-  <ul class="rows">
-    <li><span class="t">La cuenta que acaban de crear es la cuenta ROOT<small>Puede TODO: borrar, gastar, regalar la empresa entera</small></span><span class="m">⚠️</span></li>
-    <li><span class="t">Regla 1 · No se comparte NUNCA<small>Ni con el equipo, ni por WhatsApp, ni "un momentico"</small></span><span class="m">01</span></li>
-    <li><span class="t">Regla 2 · No se usa a diario<small>Pronto crearemos usuarios con permisos limitados para trabajar</small></span><span class="m">02</span></li>
-    <li><span class="t">Regla 3 · Clave larga + guardada en un gestor<small>La primera práctica profesional del curso</small></span><span class="m">03</span></li>
-  </ul>
-</section>
-
-<!-- 7 · CLOUDSHELL -->
-<section class="slide">
-  <span class="k">Parada 2 · entrar a la terminal</span>
-  <h2>CloudShell: una terminal Linux en tu navegador</h2>
-  <ul class="clean">
-    <li>1 · Entrar a la consola AWS → ícono <b>&gt;_</b> (arriba a la derecha) → esperar ~30 seg</li>
-    <li>2 · Eso que ven es <b>Linux de verdad</b>, gratis, sin instalar nada — corriendo en un servidor de Virginia</li>
-    <li>3 · Sin cuenta AWS todavía: <b>webvm.io</b> — Linux en el navegador, sin registro (sirve para TODO el lab de hoy)</li>
-  </ul>
-  <p class="sub" style="margin-top:18px">Checkpoint en el chat: escriban ✅ cuando vean el prompt <b>$</b> parpadeando.</p>
-</section>
-
-<!-- 8 · POR QUÉ TERMINAL -->
+<!-- 7 · POR QUÉ -->
 <section class="slide">
   <span class="k">30 segundos de contexto</span>
   <h2>¿Por qué la terminal, si existen las ventanitas?</h2>
   <ul class="rows">
-    <li><span class="t">Los servidores no tienen pantalla<small>El 100% de la operación real pasa por aquí</small></span><span class="m">realidad</span></li>
-    <li><span class="t">Es automatizable<small>Lo que escribes hoy, mañana es un script — clic no se automatiza</small></span><span class="m">futuro</span></li>
-    <li><span class="t">Es el idioma de la IA<small>Los agentes de IA operan infraestructura… por terminal</small></span><span class="m">2026</span></li>
+    <li><span class="t">Los servidores no tienen pantalla ni mouse<small>El 100% de la operación real del mundo pasa por terminal</small></span><span class="m">realidad</span></li>
+    <li><span class="t">Los clicks no dejan planos<small>Lo que escribes se puede guardar, repetir y automatizar — lo que clickeas, no</small></span><span class="m">planos</span></li>
+    <li><span class="t">Es el idioma de la IA<small>Los agentes de IA que ya operan infraestructura… lo hacen por terminal</small></span><span class="m">2026</span></li>
   </ul>
 </section>
 
-<!-- 9 · LAB 1 -->
+<!-- 8 · LAB 1 -->
 <section class="slide">
-  <span class="k"><span class="act-chip">LAB 1</span> Ubicarse</span>
+  <span class="k"><span class="act-chip">LAB 1</span> Ubicarse en el terreno</span>
   <h2>¿Dónde estoy? ¿Qué hay aquí?</h2>
   <div class="demo">
     <p>$ pwd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ¿en qué carpeta estoy?</p>
-    <p>$ ls&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ¿qué hay aquí?</p>
-    <p>$ ls -la&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# …¿y lo escondido, con detalles?</p>
-    <p>$ cd /tmp&nbsp;&nbsp;&nbsp;&nbsp;# moverse a otra carpeta</p>
+    <p>$ ls&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ¿qué hay aquí? (tu README debería estar)</p>
+    <p>$ ls -la&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# …¿y lo escondido? (ojo con .git — LOS PLANOS)</p>
+    <p>$ cd /tmp && pwd&nbsp;&nbsp;# moverse a otra carpeta</p>
     <p>$ cd ~&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# volver a casa</p>
     <p>$ clear&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# limpiar la pantalla</p>
   </div>
-  <p class="sub" style="margin-top:16px">Mini-reto al chat: ¿qué devuelve <b>pwd</b> recién entras a CloudShell?</p>
+  <p class="sub" style="margin-top:16px">Mini-reto al chat: dentro de su repo hay una carpeta oculta. ¿Cómo se llama?</p>
 </section>
 
-<!-- 10 · LAB 2 -->
+<!-- 9 · LAB 2 -->
 <section class="slide">
-  <span class="k"><span class="act-chip">LAB 2</span> Crear</span>
-  <h2>Construye la estructura de tu empresa</h2>
+  <span class="k"><span class="act-chip">LAB 2</span> Construir</span>
+  <h2>Las primeras piezas de la casa</h2>
   <div class="demo">
-    <p>$ mkdir mi-empresa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# crear carpeta</p>
-    <p>$ cd mi-empresa && mkdir web datos redes</p>
-    <p>$ touch web/index.html&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# crear archivo vacío</p>
-    <p>$ echo "Somos [empresa]" > lema.txt&nbsp;&nbsp;# crear CON contenido</p>
-    <p>$ cat lema.txt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# leerlo</p>
-    <p>$ nano lema.txt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# editarlo (Ctrl+O guarda, Ctrl+X sale)</p>
+    <p>$ mkdir planos materiales&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# crear carpetas</p>
+    <p>$ echo "Somos [tu empresa]" > materiales/lema.txt</p>
+    <p>$ cat materiales/lema.txt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# leerlo</p>
+    <p>$ nano materiales/lema.txt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# editar (Ctrl+O guarda · Ctrl+X sale)</p>
+    <p>$ cp materiales/lema.txt lema-copia.txt&nbsp;# copiar</p>
+    <p>$ mv lema-copia.txt planos/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# mover</p>
+    <p>$ rm planos/lema-copia.txt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# borrar — SIN papelera ⚠️</p>
   </div>
+  <p class="sub" style="margin-top:14px"><b>rm no perdona.</b> Antes de borrar: respirar, leer dos veces. En una casa real, tumbar la pared equivocada sale caro.</p>
 </section>
 
-<!-- 11 · LAB 3 -->
+<!-- 10 · GIT CONFIG -->
 <section class="slide">
-  <span class="k"><span class="act-chip">LAB 3</span> Mover, copiar… y el comando que no perdona</span>
-  <h2>cp · mv · rm</h2>
+  <span class="k"><span class="act-chip">LAB 3</span> Parada 3 · los planos</span>
+  <h2>Preséntate con el arquitecto: configura Git</h2>
   <div class="demo">
-    <p>$ cp lema.txt lema-backup.txt&nbsp;&nbsp;&nbsp;# copiar</p>
-    <p>$ mv lema.txt web/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# mover</p>
-    <p>$ mv lema-backup.txt el-lema.txt&nbsp;# …también renombra</p>
-    <p>$ rm el-lema.txt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# borrar — SIN preguntar, SIN papelera</p>
+    <p>$ git config --global user.name "Tu Nombre"</p>
+    <p>$ git config --global user.email "tu@correo.com"&nbsp;&nbsp;# el MISMO de GitHub</p>
+    <p>$ git status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ¿qué cambió en la casa desde el último plano?</p>
   </div>
-  <p class="sub" style="margin-top:16px"><b>rm no perdona.</b> En este curso, antes de borrar: respirar, leer dos veces, copiar primero. Lo reversible se hace tranquilo; lo irreversible, con cuidado — recuerden esto cuando lleguemos a producción.</p>
+  <p class="sub" style="margin-top:16px">Git es el arquitecto que anota TODO: quién cambió qué, cuándo y por qué. Por eso necesita tu nombre. En Codespaces la conexión con GitHub ya viene lista — en un computador normal habría un paso más (lo veremos).</p>
 </section>
 
-<!-- 12 · LAB 4 -->
+<!-- 11 · EL RITO -->
 <section class="slide">
-  <span class="k"><span class="act-chip">LAB 4</span> Inspeccionar y encadenar</span>
-  <h2>Los superpoderes</h2>
+  <span class="k"><span class="act-chip">EL RITO DE PASO</span> tu primer push</span>
+  <h2>Del cemento al plano oficial — en 3 comandos</h2>
   <div class="demo">
-    <p>$ history&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# todo lo que has escrito</p>
-    <p>$ man ls&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# el manual (q para salir)</p>
-    <p>$ history | grep mkdir&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# el tubo | conecta comandos</p>
-    <p>$ ls web/ && echo "existe"&nbsp;&nbsp;&nbsp;# && = "si funcionó, entonces…"</p>
+    <p>$ git add .&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# "arquitecto: mira esto"</p>
+    <p>$ git commit -m "Primeras piezas de la casa"&nbsp;# "fírmalo en el plano"</p>
+    <p>$ git push&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# "archívalo en la oficina"</p>
   </div>
-  <p class="sub" style="margin-top:16px">El tubo <b>|</b> es la idea más poderosa de Unix: comandos pequeños que se combinan. La van a usar todo el semestre.</p>
+  <ul class="clean" style="margin-top:16px">
+    <li>Ahora: abran <b>github.com/[usuario]/bitacora-[empresa]</b> en otra pestaña…</li>
+    <li>…y ahí están: <b>planos/ y materiales/</b>, creados desde la terminal, publicados en internet</li>
+  </ul>
+  <p class="sub" style="margin-top:14px">Eso que sintieron es el flujo que usan los equipos de tecnología del planeta entero. Ya son parte. 📐</p>
 </section>
 
-<!-- 13 · RETO -->
+<!-- 12 · RETO -->
 <section class="slide">
   <span class="k"><span class="act-chip">RETO · 20 min</span> La búsqueda del tesoro</span>
   <h2>Hay un tesoro escondido en su terminal</h2>
   <ul class="clean">
-    <li>1 · Copien el comando que voy a pegar en el chat y ejecútenlo (crea el mapa del tesoro)</li>
+    <li>1 · Copien el comando del chat y ejecútenlo (crea el mapa del tesoro)</li>
     <li>2 · Naveguen SOLO con la terminal: <b>cd, ls, cat</b> — cada carpeta tiene una pista</li>
-    <li>3 · El tesoro es un archivo con un código secreto → péguenlo en el chat al encontrarlo 🏴‍☠️</li>
+    <li>3 · El código secreto del cofre → al chat 🏴‍☠️</li>
+    <li>4 · <b>Cierre maestro:</b> suban su código a la bitácora… con add, commit y push</li>
   </ul>
-  <p class="sub" style="margin-top:18px">Primeros 3 en encontrarlo: gloria eterna en la bitácora del curso. Prohibido el pánico — todo se resuelve con lo de hoy.</p>
+  <p class="sub" style="margin-top:18px">Primeros 3: gloria eterna. Pista general: en esta casa también hay cosas ocultas.</p>
+</section>
+
+<!-- 13 · MINUTO DE SEGURIDAD -->
+<section class="slide">
+  <span class="k">🔐 Minuto de seguridad #1 · nueva tradición</span>
+  <h2>Un repo público es una casa con ventanas</h2>
+  <ul class="rows">
+    <li><span class="t">Todo lo que suben, lo ve internet ENTERO<small>Y lo que se publicó, aunque se borre, alguien pudo copiarlo</small></span><span class="m">⚠️</span></li>
+    <li><span class="t">Regla 1 · JAMÁS subir contraseñas, llaves o tokens<small>Ni "un momentico" — hay bots escaneando GitHub 24/7 buscando exactamente eso</small></span><span class="m">01</span></li>
+    <li><span class="t">Regla 2 · Datos personales tampoco<small>Cédulas, teléfonos, correos de otros: nunca al repo</small></span><span class="m">02</span></li>
+    <li><span class="t">Regla 3 · En la duda, no lo subas<small>Pregunta primero — despublicar no existe de verdad</small></span><span class="m">03</span></li>
+  </ul>
 </section>
 
 <!-- 14 · PRODUCTO -->
 <section class="slide">
-  <span class="k">Parada 4 · el producto de hoy</span>
-  <h2>Tu <span class="grad">cheat-sheet</span> personal</h2>
+  <span class="k">El producto de hoy</span>
+  <h2>Tu <span class="grad">cheat-sheet</span>, subida como los profesionales</h2>
   <ul class="clean">
-    <li>1 · En la terminal: <b>history</b> — ahí está todo lo que aprendiste hoy</li>
-    <li>2 · Elige tus 12-15 comandos y arma tu chuleta: comando → para qué sirve → ejemplo tuyo</li>
-    <li>3 · Pégala en tu bitácora de GitHub: nuevo archivo <b>cheatsheet-terminal.md</b> (editor web, Commit changes)</li>
-    <li>4 · Link del archivo al chat del grupo ✅</li>
+    <li>1 · <b>history</b> — ahí está todo lo que aprendiste hoy</li>
+    <li>2 · <b>nano cheatsheet-terminal.md</b> — tus 12-15 comandos: qué hace cada uno, con TUS palabras</li>
+    <li>3 · <b>git add . && git commit -m "Mi cheat-sheet" && git push</b></li>
+    <li>4 · Link del archivo (en github.com) al chat ✅</li>
   </ul>
-  <p class="sub" style="margin-top:18px">No es tarea decorativa: la chuleta que TÚ escribes es la que tu cabeza recuerda — y queda pública en tu portafolio.</p>
+  <p class="sub" style="margin-top:18px">La chuleta que TÚ escribes es la que tu cabeza recuerda — y queda pública en tu portafolio desde la semana 2.</p>
 </section>
 
 <!-- 15 · CIERRE -->
 <section class="slide">
-  <span class="k">Para el martes</span>
+  <span class="k">Para la próxima clase</span>
   <h2>Su misión</h2>
   <ul class="clean">
-    <li>1 · Terminar la cheat-sheet en la bitácora (si no quedó hoy)</li>
-    <li>2 · Cuenta AWS del equipo creada y clave root guardada como se debe</li>
-    <li>3 · El martes es <b>presencial</b>: redes TCP/IP — cómo se encuentran las máquinas. Traigan laptop los que puedan</li>
+    <li>1 · Terminar y subir la cheat-sheet (si no quedó hoy) — con push, no con el editor web</li>
+    <li>2 · Practicar 10 minutos: entrar al Codespace, crear algo, subirlo</li>
+    <li>3 · Próxima clase <b>presencial</b>: la dirección y las calles de la casa — redes. Traigan laptop los que puedan</li>
   </ul>
-  <p class="sub" style="margin-top:24px">Hoy tocaron un servidor real en Virginia desde su casa. Piénsenlo. 🚀</p>
+  <p class="sub" style="margin-top:24px">Hoy pusieron los cimientos y archivaron los primeros planos. La casa ya empezó. 🏗</p>
   <div class="qrs">
     <div class="qr"><svg xmlns="http://www.w3.org/2000/svg" width="132" height="132" class="segno"><g transform="scale(4)"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#0a0a0e" d="M2 2.5h7m1 0h1m2 0h1m2 0h1m1 0h5m1 0h7m-29 1h1m5 0h1m1 0h2m2 0h3m3 0h1m3 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m4 0h1m1 0h1m1 0h2m1 0h1m3 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h1m2 0h5m4 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m2 0h1m2 0h1m1 0h3m2 0h1m2 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m2 0h1m1 0h4m3 0h2m2 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h2m7 0h3m-20 1h1m1 0h2m1 0h3m1 0h2m1 0h1m1 0h1m1 0h2m4 0h1m2 0h1m1 0h2m-29 1h1m1 0h1m2 0h1m3 0h3m2 0h1m1 0h4m1 0h4m3 0h1m-29 1h1m5 0h6m1 0h2m3 0h1m1 0h5m1 0h2m-26 1h1m2 0h1m2 0h6m1 0h2m1 0h1m1 0h1m1 0h3m3 0h1m-29 1h3m2 0h3m3 0h1m1 0h3m1 0h1m1 0h1m5 0h2m-23 1h1m3 0h5m1 0h3m2 0h1m2 0h2m2 0h3m-28 1h1m2 0h1m1 0h1m1 0h2m1 0h3m5 0h2m2 0h2m1 0h3m-27 1h1m1 0h2m3 0h1m1 0h1m2 0h1m1 0h1m6 0h2m2 0h1m-27 1h3m2 0h4m3 0h3m2 0h4m2 0h2m1 0h1m-27 1h1m2 0h1m2 0h3m1 0h2m2 0h1m1 0h1m2 0h1m2 0h1m1 0h3m-28 1h1m3 0h1m1 0h1m2 0h1m2 0h4m1 0h1m4 0h2m2 0h1m-23 1h2m1 0h1m1 0h3m3 0h1m1 0h1m4 0h1m3 0h1m-26 1h1m1 0h2m1 0h1m2 0h2m2 0h1m1 0h3m1 0h8m-19 1h1m1 0h3m3 0h3m1 0h1m3 0h5m-29 1h7m1 0h3m3 0h1m1 0h1m1 0h3m1 0h1m1 0h2m1 0h1m-28 1h1m5 0h1m1 0h1m2 0h1m1 0h1m4 0h1m1 0h1m3 0h2m1 0h2m-29 1h1m1 0h3m1 0h1m3 0h1m1 0h1m2 0h1m1 0h1m2 0h5m1 0h3m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h1m2 0h5m1 0h3m2 0h2m2 0h1m-29 1h1m1 0h3m1 0h1m1 0h3m1 0h1m3 0h1m6 0h1m2 0h1m1 0h1m-29 1h1m5 0h1m3 0h2m1 0h4m3 0h4m1 0h1m1 0h1m-28 1h7m1 0h1m2 0h1m2 0h2m2 0h5m2 0h1m1 0h1"/></g></svg>
 
