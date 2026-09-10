@@ -58,9 +58,57 @@ h1 { font-family:Poppins,sans-serif; font-size:1.6rem; margin-bottom:4px; }
   box-shadow:0 0 0 0 rgba(233,113,50,0); animation:foundPulse 2s ease .6s infinite; }
 @keyframes dropIn { to{opacity:1;transform:none} }
 @keyframes foundPulse { 0%,100%{box-shadow:0 0 0 0 rgba(233,113,50,0)} 50%{box-shadow:0 -6px 0 -2px rgba(233,113,50,.4)} }
+
+/* ============ 4 · CIBERSEGURIDAD: la cerradura ============ */
+.sec .door { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:150px; height:210px;
+  background:linear-gradient(160deg,#2b3a4d,#1c2735); border-radius:10px 10px 4px 4px; border:3px solid #12212f; }
+.sec .door::before { content:""; position:absolute; inset:14px; border:2px dashed rgba(255,255,255,.12); border-radius:6px; }
+.sec .lock { position:absolute; right:18px; top:50%; transform:translateY(-50%); width:26px; height:26px; border-radius:50%;
+  background:var(--naranja); display:grid; place-items:center; font-size:.8rem; transition:none; }
+.sec .try { position:absolute; top:50%; transform:translateY(-50%); font-size:1.7rem; font-family:"JetBrains Mono",monospace; }
+.sec .k-ok { left:22px; animation:keyOk 5s ease infinite; }
+.sec .k-bad { left:22px; animation:keyBad 5s ease 2.5s infinite; }
+.sec .verdict { position:absolute; left:50%; bottom:22px; transform:translateX(-50%); font-family:"JetBrains Mono",monospace;
+  font-size:.72rem; font-weight:600; opacity:0; }
+.sec .v-ok { color:var(--verde); animation:vOk 5s ease infinite; }
+.sec .v-bad { color:#c0392b; animation:vBad 5s ease 2.5s infinite; }
+@keyframes keyOk { 0%{left:20px;opacity:0} 10%{opacity:1} 30%{left:calc(50% - 40px)} 40%{left:calc(50% - 40px)} 50%,100%{left:calc(50% - 40px);opacity:0} }
+@keyframes keyBad { 0%{left:20px;opacity:0} 10%{opacity:1} 30%{left:calc(50% - 40px)} 40%{transform:translateY(-50%) rotate(-14deg)} 44%{transform:translateY(-50%) rotate(14deg)} 48%{transform:translateY(-50%) rotate(0)} 55%,100%{left:20px;opacity:0} }
+@keyframes vOk { 0%,32%{opacity:0} 40%,48%{opacity:1} 55%,100%{opacity:0} }
+@keyframes vBad { 0%,38%{opacity:0} 46%,54%{opacity:1} 60%,100%{opacity:0} }
+
+/* ============ 5 · CLOUD: la llave del agua (pago por consumo) ============ */
+.cloud .tap { position:absolute; left:50%; top:40px; transform:translateX(-50%); font-size:3rem; }
+.cloud .drop { position:absolute; left:50%; top:100px; transform:translateX(-50%); width:9px; height:9px;
+  background:var(--c2); border-radius:50% 50% 50% 0; rotate:45deg; animation:dropFall 1.4s linear infinite; }
+.cloud .drop.d2 { animation-delay:.47s } .cloud .drop.d3 { animation-delay:.94s }
+.cloud .meter { position:absolute; left:50%; bottom:34px; transform:translateX(-50%); width:220px; text-align:center; }
+.cloud .bar { height:16px; border-radius:8px; background:#e6edf5; overflow:hidden; margin-bottom:8px; }
+.cloud .bar i { display:block; height:100%; width:0; background:linear-gradient(90deg,var(--c2),var(--naranja)); animation:meterFill 6s ease infinite; }
+.cloud .cost { font-family:"JetBrains Mono",monospace; font-size:.74rem; color:var(--muted); }
+.cloud .cost b { color:var(--naranja); }
+@keyframes dropFall { 0%{top:96px;opacity:0} 12%{opacity:1} 88%{opacity:1} 100%{top:150px;opacity:0} }
+@keyframes meterFill { 0%{width:0} 80%,100%{width:82%} }
+
+/* ============ 6 · TERRAFORM: la constructora lee el plano ============ */
+.tf .plan { position:absolute; left:34px; top:50%; transform:translateY(-50%); width:120px; height:150px;
+  background:#fff; border:1px solid var(--line); border-radius:6px; padding:14px; box-shadow:0 8px 22px rgba(14,40,65,.1); }
+.tf .plan .cl { height:7px; background:#eef2f7; border-radius:4px; margin-bottom:9px; }
+.tf .plan .cl:nth-child(2){width:70%} .tf .plan .cl:nth-child(4){width:55%}
+.tf .robot { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); font-size:2.6rem; animation:robotBob 1.2s ease infinite; }
+.tf .built { position:absolute; right:40px; top:50%; transform:translateY(-50%); text-align:center; }
+.tf .built .b { display:block; font-family:"JetBrains Mono",monospace; font-size:.66rem; color:#fff; padding:6px 0; width:130px;
+  border-radius:5px; margin-bottom:6px; opacity:0; transform:scale(.8); }
+.tf .built .r1{background:var(--c1);animation:builtPop .5s ease 1.2s forwards}
+.tf .built .r2{background:var(--c2);animation:builtPop .5s ease 1.9s forwards}
+.tf .built .r3{background:var(--naranja);animation:builtPop .5s ease 2.6s forwards}
+.tf .spark { position:absolute; left:calc(50% + 30px); top:50%; transform:translateY(-50%); font-size:1.1rem; opacity:0; animation:spark 3.5s ease infinite; }
+@keyframes robotBob { 0%,100%{transform:translate(-50%,-50%)} 50%{transform:translate(-50%,-58%)} }
+@keyframes builtPop { to{opacity:1;transform:none} }
+@keyframes spark { 0%,30%{opacity:0} 40%{opacity:1;left:calc(50% + 30px)} 70%{opacity:1;left:calc(100% - 175px)} 80%,100%{opacity:0} }
 </style></head><body>
 <h1>Librería de animaciones de conceptos</h1>
-<p class="sub">Piezas reutilizables (CSS puro, sin dependencias) que se integran a los decks cuando llega su tema. Batch 1.</p>
+<p class="sub">Piezas reutilizables (CSS puro, sin dependencias) que se integran a los decks cuando llega su tema. 7 conceptos.</p>
 
 <div class="demo">
   <span class="tag">Fase: la dirección y las calles · Redes</span>
@@ -98,6 +146,45 @@ h1 { font-family:Poppins,sans-serif; font-size:1.6rem; margin-bottom:4px; }
       <div class="blk b-srv">🧱 Los servidores</div>
       <div class="blk b-linux">🐧 LINUX — los cimientos</div>
     </div>
+  </div>
+</div>
+
+<div class="demo">
+  <span class="tag">Fase: puertas y cerraduras · Ciberseguridad</span>
+  <h2>🚪 La cerradura: solo entra la llave correcta</h2>
+  <p class="sub" style="margin:2px 0 0">La llave buena abre; la equivocada rebota. Autenticar es exactamente eso.</p>
+  <div class="stage sec">
+    <div class="door"><div class="lock">🔒</div></div>
+    <span class="try k-ok">🔑</span>
+    <span class="try k-bad">🗝️</span>
+    <span class="verdict v-ok">✓ acceso concedido</span>
+    <span class="verdict v-bad">✕ acceso denegado</span>
+  </div>
+</div>
+
+<div class="demo">
+  <span class="tag">Fase: los servicios públicos · Cloud · AWS</span>
+  <h2>💧 La nube: no construyes la represa, abres la llave</h2>
+  <p class="sub" style="margin:2px 0 0">Pagas solo lo que consumes — y el medidor solo corre mientras usas.</p>
+  <div class="stage cloud">
+    <div class="tap">🚰</div>
+    <div class="drop"></div><div class="drop d2"></div><div class="drop d3"></div>
+    <div class="meter">
+      <div class="bar"><i></i></div>
+      <div class="cost">consumo del mes: <b>$0.00 → lo que uses</b></div>
+    </div>
+  </div>
+</div>
+
+<div class="demo">
+  <span class="tag">Fase: la constructora automática · Terraform</span>
+  <h2>🤖 Terraform lee el plano y arma la casa sola</h2>
+  <p class="sub" style="margin:2px 0 0">Le entregas el código y construye la infraestructura completa, idéntica, en minutos.</p>
+  <div class="stage tf">
+    <div class="plan"><div class="cl"></div><div class="cl"></div><div class="cl"></div><div class="cl"></div></div>
+    <div class="robot">🤖</div>
+    <span class="spark">⚡</span>
+    <div class="built"><span class="b r1">🧱 servidor</span><span class="b r2">🗺 red</span><span class="b r3">🚪 seguridad</span></div>
   </div>
 </div>
 
