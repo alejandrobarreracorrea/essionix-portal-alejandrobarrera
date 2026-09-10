@@ -42,6 +42,8 @@ h2 { font-family:var(--display); font-size:clamp(1.5rem,3.6vw,2.8rem); letter-sp
 .layer.l6 { border:0; border-left:5px solid var(--naranja); background:rgba(233,113,50,.06); }
 
 .casa .layer { border-left-width:5px; }
+.casa .lt { margin-left:auto; font-family:var(--mono); font-size:.68rem; color:var(--faint); white-space:nowrap; }
+.casa .l3 .lt, .casa .l4 .lt, .casa .l5 .lt { color:var(--c2, #0F9ED5); font-weight:600; }
 .casa .hoy { outline:3px solid var(--naranja); outline-offset:2px; background:rgba(233,113,50,.05); }
 .hoy-tag { font-family:var(--mono); font-size:.65rem; color:#fff; background:var(--naranja); border-radius:999px; padding:.25em .8em; margin-left:10px; }
 .src { position:absolute; bottom:3vh; left:clamp(30px,8vw,120px); right:clamp(30px,8vw,120px); font-family:var(--mono); font-size:.68rem; color:var(--faint); }
@@ -109,13 +111,13 @@ ul.clean li:first-child { border-top:0; }
   <span class="k">El mapa del curso</span>
   <h2 style="font-size:clamp(1.2rem,2.6vw,2rem); margin-bottom:14px;">Vamos a construir una casa. Su empresa va a vivir en ella.</h2>
   <div class="stack casa">
-    <div class="layer l1 hoy"><span class="ln">🏗</span><div><b>Los cimientos <span class="hoy-tag">HOY</span></b><p>Linux y la terminal — TODO lo demás se apoya aquí. Nadie pone el techo primero.</p></div></div>
-    <div class="layer l2 hoy"><span class="ln">📐</span><div><b>Los planos <span class="hoy-tag">HOY</span></b><p>Git y GitHub — si la casa se cae, con los planos se reconstruye idéntica.</p></div></div>
-    <div class="layer l3"><span class="ln">🗺</span><div><b>La dirección y las calles</b><p>Redes: la IP es la dirección de la casa, el DNS es el nombre en el buzón. (Próxima semana)</p></div></div>
-    <div class="layer l3"><span class="ln">🧱</span><div><b>La estructura</b><p>Servidores: las paredes donde vive lo que su empresa hace.</p></div></div>
-    <div class="layer l4"><span class="ln">🚪</span><div><b>Puertas y cerraduras</b><p>Seguridad: quién entra, por dónde, con qué llave.</p></div></div>
-    <div class="layer l5"><span class="ln">💧</span><div><b>Los servicios públicos</b><p>La nube: agua y luz por consumo — no construyes la represa, pagas el recibo.</p></div></div>
-    <div class="layer l6"><div><b>🏡 La casa habitada: la web de su empresa, en internet, atendiendo gente.</b><p>Ahí vamos. Pero hoy… se mezcla cemento.</p></div></div>
+    <div class="layer l1 hoy"><span class="ln">🏗</span><div><b>Los cimientos <span class="hoy-tag">HOY</span></b><p>Linux y la terminal — TODO lo demás se apoya aquí. Nadie pone el techo primero.</p></div><span class="lt">LINUX</span></div>
+    <div class="layer l2 hoy"><span class="ln">📐</span><div><b>Los planos <span class="hoy-tag">HOY</span></b><p>Git y GitHub — si la casa se cae, con los planos se reconstruye idéntica.</p></div><span class="lt">GIT · GITHUB</span></div>
+    <div class="layer l3"><span class="ln">🗺</span><div><b>La dirección y las calles</b><p>La IP es la dirección de la casa, el DNS es el nombre en el buzón. (Próxima semana)</p></div><span class="lt">REDES · NETWORKING</span></div>
+    <div class="layer l3"><span class="ln">🧱</span><div><b>La estructura</b><p>Las paredes donde vive lo que su empresa hace.</p></div><span class="lt">SERVIDORES</span></div>
+    <div class="layer l4"><span class="ln">🚪</span><div><b>Puertas y cerraduras</b><p>Quién entra, por dónde, con qué llave — y quién se queda afuera.</p></div><span class="lt">CIBERSEGURIDAD</span></div>
+    <div class="layer l5"><span class="ln">💧</span><div><b>Los servicios públicos</b><p>Agua y luz por consumo — no construyes la represa, pagas el recibo.</p></div><span class="lt">CLOUD · AWS</span></div>
+    <div class="layer l6"><div><b>🏡 La casa habitada: la web de su empresa atendiendo gente.</b><p>Miren el nombre del curso: <b>Cloud</b> (los servicios) · <b>Redes</b> (las calles) · <b>Ciberseguridad</b> (las cerraduras). La casa ES el curso. Hoy: se mezcla cemento.</p></div></div>
   </div>
 </section>
 

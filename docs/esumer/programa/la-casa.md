@@ -4,6 +4,12 @@
 cada pieza tiene un porqué, y al final alguien VIVE en ella (los usuarios). Cada sesión del
 curso ubica al estudiante en el plano: **"¿qué parte de la casa estamos construyendo hoy?"**
 
+**El nombre del curso vive en la casa** (decirlo explícito, siempre con la palabra técnica):
+- **Cloud Computing** = 💧 los servicios públicos (agua y luz por consumo)
+- **Redes / Networking** = 🗺 la dirección y las calles (IP, DNS, TCP/IP, VPC)
+- **Ciberseguridad** = 🚪 las puertas y cerraduras (llaves, firewalls, IAM)
+Linux y Git no están en el título, pero son cimientos y planos: sin ellos no hay casa que asegurar ni conectar.
+
 ## El mapa completo
 
 | Pieza de la casa | En infraestructura | Módulo | La pregunta que responde |
