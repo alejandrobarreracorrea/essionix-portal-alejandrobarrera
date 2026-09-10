@@ -1,56 +1,61 @@
-# Sesión 2 · Lab: cimientos (Linux + Git en Codespaces) — guía del docente
+# Sesión 2 · Lab: monta tu taller (Git + VS Code + Linux local) — guía del docente
 
-**Entorno:** GitHub Codespaces (cuenta personal de CADA estudiante, gratis, sin tarjeta).
-El Codespace se abre DESDE su repo bitácora → git ya viene autenticado → `push` funciona sin configurar credenciales.
-**Toda herramienta del curso es personal y gratuita — nada depende de la universidad.**
+**Enfoque:** herramientas en la máquina PERSONAL de cada estudiante. Nada provisto por la
+universidad, nada en la nube de terceros. Entornos:
+- **Windows** → Git Bash (viene con Git) para hoy · **WSL/Ubuntu** como Linux completo (se deja instalando)
+- **macOS** → Terminal nativa (ya es Unix)
+- **Plan B navegador** → killercoda.com (Playgrounds → Ubuntu): terminal PURA a pantalla completa, gratis con login GitHub, ~1h por sesión (suficiente para el lab)
+- **Solo celular** → Killercoda en el navegador del celular o Termux (Android); completar en sala de cómputo 5º piso bloque 3
 
-## Flujo de cuentas (parada 1)
-1. github.com → Sign up (correo personal, usuario profesional)
-2. Repo `bitacora-[empresa]` · público · con README
-3. Code → Codespaces → Create codespace on main (~1 min)
-4. Terminal abajo (☰ → Terminal → New Terminal si no aparece)
+## Los 3 instaladores (links para el chat)
+- Git (Windows, incluye Git Bash): https://git-scm.com/download/win — TODO por defecto
+- VS Code: https://code.visualstudio.com/download
+- WSL (Windows 10/11, PowerShell COMO ADMINISTRADOR): `wsl --install` → reiniciar → abrir "Ubuntu" → crear usuario/clave
+- macOS: `git --version` en Terminal dispara la instalación de Command Line Tools
 
-## El script del tesoro (pegar en el chat en el RETO)
+## Autenticación de git SIN dolor
+`git clone https://github.com/USUARIO/bitacora-X.git` → Git Credential Manager abre el
+navegador → "Authorize" → listo para siempre. (En macOS puede pedir token: plan B = gh CLI
+o el mismo flujo desde VS Code; tenerlo probado antes de clase.)
+
+## El script del tesoro (pegar en el chat en el RETO — funciona en Git Bash, Terminal, WSL y Killercoda)
 
 ```bash
 mkdir -p ~/tesoro/puerto/{bodega,muelle} ~/tesoro/isla/{selva,volcan/cueva} ~/tesoro/barco
 echo "Pista: el tesoro no está en el agua. Busca TIERRA firme." > ~/tesoro/barco/bitacora.txt
 echo "Pista: donde hay fuego hubo riqueza. Sube al lugar más caliente." > ~/tesoro/isla/selva/mapa-roto.txt
 echo "Pista: los piratas esconden en lo profundo. Busca un hueco oscuro." > ~/tesoro/isla/volcan/marca-x.txt
-echo "FELICIDADES 🏴‍☠️ — código secreto: CIMIENTOS-LISTOS-$RANDOM" > ~/tesoro/isla/volcan/cueva/.cofre.txt
+echo "FELICIDADES 🏴‍☠️ — código secreto: TALLER-MONTADO-$RANDOM" > ~/tesoro/isla/volcan/cueva/.cofre.txt
 echo "Aquí no hay nada... ¿o no revisaste lo OCULTO? (pista: ls -a)" > ~/tesoro/isla/volcan/cueva/leeme.txt
 cd ~/tesoro && echo "El mapa está listo. Empieza con: ls"
 ```
 
-Maldades pedagógicas: el cofre es archivo **oculto** (obliga `ls -a`) y `$RANDOM` hace único
-cada código (no hay copy-paste entre compañeros).
+Maldades pedagógicas: cofre **oculto** (obliga `ls -a`) · `$RANDOM` = código único por persona.
 
-**Cierre maestro del reto:** el código encontrado se guarda y SE SUBE:
+**Cierre maestro:** el tesoro está en ~ (FUERA del repo) — al intentar `git add` ahí sale
+"not a git repository": la lección de que Git solo ve dentro de la carpeta con `.git`.
 ```bash
-cd /workspaces/bitacora-*    # volver al repo (el tesoro estaba en ~, fuera del repo)
-echo "Tesoro sesión 2: CIMIENTOS-LISTOS-XXXX" > tesoro.md
+cd ~/bitacora-*        # (o donde clonaron)
+echo "Tesoro sesión 2: TALLER-MONTADO-XXXX" > tesoro.md
 git add . && git commit -m "Tesoro encontrado" && git push
 ```
-(Nota: ~ está FUERA del repo — momento perfecto para explicar que Git solo ve lo que está
-dentro de la carpeta con `.git`. El error "not a git repository" es una lección, no un fallo.)
 
-## Solución del tesoro (para ti)
+## Solución del tesoro
 `cd ~/tesoro` → `ls` → `cat barco/bitacora.txt` → `isla/selva/mapa-roto.txt` →
 `isla/volcan/marca-x.txt` → `cueva/` → `ls -a` → `cat .cofre.txt`
 
 ## Checkpoints por chat
-- Parada 1: link del repo ✅ · Parada 2: ✅ al ver el `$` · Lab 1: nombre de la carpeta oculta (`.git`)
-- Lab 2: contenido de su lema.txt · Rito: link de github.com mostrando planos/ y materiales/
-- Reto: el código del cofre · Producto: link de la cheat-sheet en github.com
-- Quien falla 2 checkpoints seguidos → mensaje directo con nombre propio
+1. Link del repo ✅ · 2. `git --version` (el número) · 3. VS Code ✅ · 4. resultado de `pwd`
+5. clone hecho (`ls` mostrando README) · 6. link de github.com con sus carpetas (el rito)
+7. código del tesoro · 8. link de la cheat-sheet
+Quien falla 2 seguidos → mensaje directo con nombre propio.
 
-## Plan B / C
-- Codespaces lento o bloqueado → **Google Cloud Shell** (shell.cloud.google.com, cuenta Gmail,
-  gratis, git incluido; requiere `git clone` con token — solo como respaldo del docente)
-- Estudiante solo-celular → Codespaces FUNCIONA en el navegador del celular (github.com/codespaces);
-  incómodo pero real. Completar en sala de cómputo 5º piso bloque 3
-- WebVM (webvm.io): juguete opcional para practicar comandos SIN red — no puede hacer push (decirlo tal cual)
+## Riesgos conocidos y mitigación
+- **WSL requiere admin + reinicio** → por eso va al FINAL (parada 4) y se termina de misión; nadie se bloquea en clase
+- **Antivirus/permisos corporativos** en laptops de trabajo → Killercoda hoy, instalación en casa
+- **Windows 7/8 (sin WSL)** → Git Bash cubre todo el curso de terminal básica; VirtualBox+Ubuntu como alternativa (guía aparte si aparece el caso)
+- **git clone pide credenciales raras** → verificar que instaló Git CON Git Credential Manager (default)
 
 ## Producto (rúbrica rápida)
-`cheatsheet-terminal.md` subido POR TERMINAL (push, no editor web): ✔ 12+ comandos ✔ descripción
-propia ✔ un ejemplo real de su sesión · Bonus: `tesoro.md` con su código
+`cheatsheet-terminal.md` subido POR TERMINAL: ✔ 12+ comandos ✔ descripción propia ✔ un ejemplo real
+Bonus: `tesoro.md` + pantallazo del prompt de Ubuntu (WSL) en la bitácora

@@ -1,24 +1,24 @@
-# Sesión 2 (virtual) · guía de ritmo — cimientos: Linux + Git
+# Sesión 2 (virtual) · guía de ritmo — monta tu taller
 
-**Regla virtual:** checkpoint por chat cada ≤12 min. Tu cámara SIEMPRE encendida; pantalla = terminal con fuente GRANDE.
-**Cambio de enfoque:** cero AWS hoy. Cuentas personales de cada estudiante (GitHub). La casa como hilo conductor.
+**Enfoque:** todo local y personal. Checkpoint por chat cada ≤12 min. Tu cámara siempre; pantalla = terminal con fuente GRANDE.
 
 | Hora | Min | Bloque | Nota |
 |---|---|---|---|
-| 6:30 | 5 | Entrada + LA CASA | La slide del mapa: "hoy = cimientos y planos". 30 segundos de ubicación, no más |
+| 6:30 | 5 | Entrada + LA CASA | "Hoy: cimientos y planos" — 30 seg de ubicación |
 | 6:35 | 5 | Apuesta de repaso | Letra al chat (B 😉) |
-| 6:40 | 5 | El plan de hoy | Vender el rito de paso: "hoy hacen su primer push" |
-| 6:45 | 25 | GitHub: cuenta + repo bitácora | Checkpoint: link al chat. Los que ya tienen: ayudan |
-| 7:10 | 15 | Codespaces: encender su Linux | Checkpoint: ✅ al ver el $ — celebrar: "acaban de encender un computador en la nube" |
+| 6:40 | 5 | El plan: montar TU taller | Vender la idea: herramientas tuyas para siempre |
+| 6:45 | 20 | GitHub: cuenta + repo | Checkpoint: link al chat |
+| 7:05 | 20 | Instalar Git (+ terminal) y VS Code | Los dos instaladores en paralelo; checkpoint: git --version. Los que terminan: monitores |
 | 7:25 | 5 | Por qué terminal | Corto, con punch |
-| 7:30 | 30 | Labs 1-2 (ubicarse, construir) | Tú tecleas → replican → checkpoint. Ritmo del 80% |
+| 7:30 | 30 | Labs 1-2 (ubicarse, construir) | Tú tecleas → replican → checkpoint. Windows y Mac a la vez: mostrar que pwd difiere y no importa |
 | 8:00 | 10 | PAUSA | |
-| 8:10 | 10 | Lab 3: git config + status | "Preséntense con el arquitecto" |
-| 8:20 | 10 | **EL RITO: add · commit · push** | El momento de la sesión: verlo aparecer en github.com. Pedir reacciones en cámara/chat |
-| 8:30 | 20 | RETO del tesoro | Script al chat. El cierre del reto ES otro push (tesoro.md) |
-| 8:50 | 20 | Producto: cheat-sheet + push | Acompañar en vivo |
-| 9:10 | 5 | Minuto de seguridad #1 | Repo público = casa con ventanas: jamás llaves/contraseñas/datos |
-| 9:15 | 10 | Cierre + misión + QRs | Próxima: presencial — "la dirección y las calles de la casa" (redes) |
+| 8:10 | 15 | Lab 3: git config + CLONE de su bitácora | El momento delicado (auth navegador) — ir despacio, monitores activos |
+| 8:25 | 10 | **EL RITO: add · commit · push** | Verlo aparecer en github.com — pedir reacciones |
+| 8:35 | 20 | RETO del tesoro | Script al chat; cierre = push del tesoro.md (y la lección "not a git repository") |
+| 8:55 | 15 | Producto: cheat-sheet + push | Acompañar en vivo |
+| 9:10 | 5 | Parada 4: lanzar WSL / mostrar Killercoda | `wsl --install` queda corriendo de misión; demo Killercoda 60 seg |
+| 9:15 | 5 | Minuto de seguridad #1 | Repo público = casa con ventanas |
+| 9:20 | 10 | Cierre + misión + QRs | Próxima presencial: redes — "la dirección y las calles" |
 
-**Reserva:** `cowsay` y los comandos de hacker de película (`sudo apt install cowsay cmatrix -y` en Codespaces) · ronda libre de preguntas de carrera.
-**Anti-deserción:** monitores (los adelantados) · nombres propios · códigos de tesoro únicos.
+**Reservas:** cowsay en Killercoda (`apt install cowsay`) · ronda de preguntas de carrera · demo: "así se ve MI terminal un día normal".
+**Anti-deserción:** monitores · nombres propios · códigos de tesoro únicos.
