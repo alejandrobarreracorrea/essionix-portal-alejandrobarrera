@@ -397,19 +397,46 @@ ul.clean li:first-child { border-top:0; }
   </ul>
 </section>
 
+<!-- 11d · LANZAR EC2 -->
+<section class="slide">
+  <span class="k"><span class="act-chip">ACTIVIDAD</span> Tu primer servidor Linux — de verdad</span>
+  <h2>Lancemos una máquina Linux en la nube</h2>
+  <ul class="clean">
+    <li>1 · Consola AWS → busca <b>EC2</b> → arriba a la derecha elige región <b>N. Virginia (us-east-1)</b></li>
+    <li>2 · <b>Launch instance</b> → nombre: <b>mi-primer-servidor</b></li>
+    <li>3 · Imagen: <b>Ubuntu</b> (Free tier eligible) · Tipo: <b>t2.micro</b> o <b>t3.micro</b> (Free tier) 🟢</li>
+    <li>4 · Key pair: <b>Proceed without a key pair</b> (entraremos por el navegador)</li>
+    <li>5 · Network settings: ✓ <b>Allow SSH from Anywhere</b> · <b>Launch instance</b></li>
+  </ul>
+  <p class="sub" style="margin-top:14px">Acaban de pedir un computador Linux completo, encendiéndose en un datacenter de Virginia. Costo: <b>$0</b> en capa gratuita — hoy lo apagamos al terminar.</p>
+</section>
+
+<!-- 11e · INSTANCE CONNECT -->
+<section class="slide">
+  <span class="k"><span class="act-chip">ACTIVIDAD</span> Entra a tu servidor — sin llaves, sin líos</span>
+  <h2>EC2 Instance Connect: Linux en tu navegador</h2>
+  <ul class="clean">
+    <li>1 · EC2 → <b>Instances</b> → espera a que diga <b>Running</b> ✅ (~1 min)</li>
+    <li>2 · Selecciona tu instancia → botón <b>Connect</b> → pestaña <b>EC2 Instance Connect</b> → <b>Connect</b></li>
+    <li>3 · Se abre una terminal negra en el navegador con: <b>ubuntu@ip-...:~$</b></li>
+  </ul>
+  <div class="sim" style="margin-top:16px"><span class="o">🐧</span><p><b>Esto SÍ es Linux 100% real</b> — el kernel, los paquetes, todo. Aquí sí se cumple lo que vimos: la terminal manejando el sistema operativo.</p></div>
+  <p class="sub" style="margin-top:12px">Checkpoint: ✅ al chat cuando veas <b>ubuntu@...$</b> · ¿Sin cuenta AWS o sin tarjeta? → <b>killercoda.com</b> (Ubuntu en el navegador, gratis) y sigues todos los labs igual.</p>
+</section>
+
 <!-- 12 · LAB 1 -->
 <section class="slide">
-  <span class="k"><span class="act-chip">LAB 1</span> Ubicarse — Git Bash (Win) o Terminal (Mac)</span>
+  <span class="k"><span class="act-chip">LAB 1</span> Ubicarse — dentro de TU servidor Linux</span>
   <h2>¿Dónde estoy? ¿Qué hay aquí?</h2>
   <div class="demo">
-    <p>$ pwd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ¿en qué carpeta estoy?</p>
-    <p>$ ls&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ¿qué hay aquí?</p>
-    <p>$ ls -la&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# …¿y lo escondido, con detalles?</p>
-    <p>$ cd Desktop && pwd&nbsp;&nbsp;# moverse</p>
-    <p>$ cd ~&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# volver a casa</p>
-    <p>$ clear&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# limpiar</p>
+    <p>$ whoami&nbsp;&nbsp;&nbsp;# ¿quién soy en este servidor?</p>
+    <p>$ pwd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ¿en qué carpeta estoy?</p>
+    <p>$ ls -la&nbsp;&nbsp;# ¿qué hay aquí, incluso lo oculto?</p>
+    <p>$ uname -a&nbsp;# ¿qué sistema es este? (Linux 👀)</p>
+    <p>$ cd / && ls&nbsp;# la raíz del sistema — el mapa de Linux</p>
+    <p>$ cd ~&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# volver a casa · clear para limpiar</p>
   </div>
-  <p class="sub" style="margin-top:16px">Mini-reto al chat: ¿qué te respondió <b>pwd</b>?</p>
+  <p class="sub" style="margin-top:16px">Mini-reto al chat: ¿qué te respondió <b>whoami</b>? (todos serán <b>ubuntu</b> — están dentro del servidor, no en su PC)</p>
 </section>
 
 <!-- 13 · LAB 2 -->
@@ -429,16 +456,15 @@ ul.clean li:first-child { border-top:0; }
 
 <!-- 14 · LAB 3 -->
 <section class="slide">
-  <span class="k"><span class="act-chip">LAB 3</span> Conectar el taller con la oficina</span>
+  <span class="k"><span class="act-chip">LAB 3</span> Conectar el servidor con la oficina de planos</span>
   <h2>git config + traer tus planos</h2>
   <div class="demo">
     <p>$ git config --global user.name "Tu Nombre"</p>
     <p>$ git config --global user.email "tu@correo.com"&nbsp;&nbsp;# el MISMO de GitHub</p>
     <p>$ git clone https://github.com/TU-USUARIO/bitacora-tu-empresa.git</p>
-    <p>&nbsp;&nbsp;→ se abre el navegador: Authorize (una sola vez)</p>
     <p>$ cd bitacora-* && ls -la&nbsp;&nbsp;&nbsp;&nbsp;# el README… y la carpeta .git 👀</p>
   </div>
-  <p class="sub" style="margin-top:16px">La carpeta oculta <b>.git</b> ES el archivo del arquitecto — por eso Git solo ve lo que pasa dentro de esta carpeta.</p>
+  <p class="sub" style="margin-top:16px">Clonar un repo público no pide clave (es solo leer). La carpeta oculta <b>.git</b> ES el archivo del arquitecto — por eso Git solo ve lo que pasa dentro de esta carpeta. <br><b>Para SUBIR (push) desde el servidor</b> sí pedirá clave: ahí va tu <b>token</b> de GitHub (lo creamos en 1 minuto — ver chat).</p>
 </section>
 
 <!-- 15 · EL RITO -->
@@ -469,26 +495,28 @@ ul.clean li:first-child { border-top:0; }
   <p class="sub" style="margin-top:18px">Primeros 3: gloria eterna. Pista: en esta casa también hay cosas ocultas.</p>
 </section>
 
-<!-- 17 · LINUX COMPLETO (misión) -->
+<!-- 17 · APAGAR LA INSTANCIA -->
 <section class="slide">
-  <span class="k"><span class="act-chip">PARA CASA</span> tu Linux completo</span>
-  <h2>Ubuntu de verdad, dentro de tu máquina</h2>
+  <span class="k">⚠️ Paso NO negociable · antes de cerrar</span>
+  <h2>Apaga tu servidor — o te sigue corriendo el taxímetro</h2>
   <ul class="clean">
-    <li>🪟 <b>Windows:</b> PowerShell como administrador → <b>wsl --install</b> → reiniciar → abrir "Ubuntu" → usuario y clave</li>
-    <li>🍎 <b>macOS:</b> ya eres familia Unix — tu Terminal es el equivalente</li>
-    <li>🌐 <b>Probar Linux YA sin instalar:</b> <b>killercoda.com</b> → Playgrounds → Ubuntu (terminal pura a pantalla completa, gratis con tu cuenta GitHub)</li>
+    <li>1 · Consola AWS → <b>EC2</b> → <b>Instances</b> → selecciona tu instancia</li>
+    <li>2 · Botón <b>Instance state</b> → elige:</li>
+    <li>&nbsp;&nbsp;&nbsp;🅰️ <b>Stop</b> — la apagas para seguir usándola después (queda guardada, no cobra cómputo)</li>
+    <li>&nbsp;&nbsp;&nbsp;🅱️ <b>Terminate</b> — la borras por completo (hoy, como fue de práctica, esta es la segura)</li>
+    <li>3 · Verifica que quede en <b>Stopped</b> o <b>Terminated</b> ✅</li>
   </ul>
-  <p class="sub" style="margin-top:16px">La próxima semana administramos ese Ubuntu por dentro: usuarios, permisos, procesos.</p>
+  <p class="sub" style="margin-top:14px">Un servidor encendido que nadie usa <b>gasta</b>. Apagar lo que no se usa es la regla de oro de operar en la nube — y la vamos a repetir todo el semestre. <b>Todos apagamos ahora, juntos.</b></p>
 </section>
 
 <!-- 18 · MINUTO DE SEGURIDAD -->
 <section class="slide">
   <span class="k">🔐 Minuto de seguridad #1 · nueva tradición</span>
-  <h2>Dos llaves que cuidan tu casa</h2>
+  <h2>Tres reglas que cuidan tu casa (y tu bolsillo)</h2>
   <ul class="rows">
-    <li><span class="t">La clave ROOT de AWS<small>Puede TODO: gastar, borrar, regalar el terreno. Larga, guardada en un gestor, JAMÁS compartida — ni "un momentico"</small></span><span class="m">01</span></li>
+    <li><span class="t">La clave ROOT de AWS es sagrada<small>Puede TODO: gastar, borrar, regalar el terreno. Larga, en un gestor, JAMÁS compartida — ni "un momentico"</small></span><span class="m">01</span></li>
     <li><span class="t">Un repo público es una casa con ventanas<small>Jamás subir contraseñas, llaves, tokens ni datos personales — hay bots escaneando GitHub 24/7</small></span><span class="m">02</span></li>
-    <li><span class="t">En la duda, no lo subas<small>Despublicar no existe de verdad</small></span><span class="m">03</span></li>
+    <li><span class="t">Apaga lo que no uses<small>Un servidor encendido cobra aunque nadie lo use. Revisen que su instancia quedó apagada</small></span><span class="m">03</span></li>
   </ul>
 </section>
 
