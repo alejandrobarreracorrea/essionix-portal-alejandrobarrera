@@ -142,6 +142,42 @@ h2 { font-family:var(--display); font-size:clamp(1.5rem,3.6vw,2.8rem); letter-sp
 @keyframes trowIn { to { opacity:1; transform:none; } }
 @keyframes arrowShine { 0% { opacity:0; transform:translateX(-8px); } 100% { opacity:1; transform:none; } }
 @media (prefers-reduced-motion: reduce) { .tbox,.trow,.trow .link::after { opacity:1 !important; transform:none !important; animation:none !important; } }
+
+/* ---- ¿qué es un SO? — stack animado ---- */
+.os-slide { justify-content:flex-start; padding-top:clamp(26px,4.5vh,52px); }
+.osstack { max-width:760px; margin:12px auto 0; width:100%; }
+.oslayer { display:flex; align-items:center; gap:16px; border:1px solid var(--line); border-radius:12px;
+  padding:clamp(9px,1.5vh,15px) 20px; background:#fff; opacity:0; transform:translateX(-24px); }
+.oslayer .oi { font-size:clamp(1.5rem,2.8vw,2.2rem); flex:none; }
+.oslayer b { font-family:var(--display); font-weight:600; font-size:clamp(.9rem,1.6vw,1.2rem); }
+.oslayer p { color:var(--muted); font-size:clamp(.75rem,1.3vw,.95rem); line-height:1.35; margin-top:1px; }
+.oslayer.mid { border-color:var(--naranja); background:linear-gradient(90deg,rgba(233,113,50,.07),#fff); }
+.osarrow { text-align:center; font-family:var(--mono); font-size:.7rem; color:var(--faint); padding:5px 0; opacity:0; }
+.slide.on .oslayer.top { animation:osIn .5s ease .2s forwards; }
+.slide.on .oslayer.mid { animation:osIn .5s ease .9s forwards, osGlow 2.2s ease 1.6s infinite; }
+.slide.on .oslayer.bot { animation:osIn .5s ease 1.5s forwards; }
+.slide.on .osarrow { animation:osFade .4s ease forwards; }
+.slide.on .osarrow:nth-of-type(2) { animation-delay:.7s; }
+.slide.on .osarrow:nth-of-type(4) { animation-delay:1.3s; }
+@keyframes osIn { to{opacity:1;transform:none} }
+@keyframes osFade { to{opacity:1} }
+@keyframes osGlow { 0%,100%{box-shadow:0 0 0 0 rgba(233,113,50,0)} 50%{box-shadow:0 0 0 4px rgba(233,113,50,.15)} }
+/* ---- grid de sistemas operativos ---- */
+.osgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:900px; margin-top:8px; }
+.oscard { border:1px solid var(--line); border-radius:14px; padding:14px 16px; text-align:left; background:#fff;
+  opacity:0; transform:translateY(18px); }
+.oscard .oe { font-size:clamp(1.6rem,3vw,2.2rem); display:block; margin-bottom:4px; }
+.oscard b { font-family:var(--display); font-size:clamp(.95rem,1.7vw,1.2rem); }
+.oscard small { display:block; color:var(--muted); font-size:clamp(.72rem,1.2vw,.86rem); line-height:1.3; margin-top:3px; }
+.oscard.hi { border-color:var(--naranja); border-width:2px; background:linear-gradient(160deg,rgba(233,113,50,.08),#fff); }
+.oscard.goal { border-style:dashed; border-color:var(--c1, #156082); }
+.slide.on .oscard { animation:osCard .45s ease forwards; }
+.slide.on .oscard:nth-child(1){animation-delay:.15s} .slide.on .oscard:nth-child(2){animation-delay:.3s}
+.slide.on .oscard:nth-child(3){animation-delay:.45s} .slide.on .oscard:nth-child(4){animation-delay:.6s}
+.slide.on .oscard:nth-child(5){animation-delay:.75s} .slide.on .oscard:nth-child(6){animation-delay:.9s}
+@keyframes osCard { to{opacity:1;transform:none} }
+@media (max-width:640px){ .osgrid { grid-template-columns:1fr 1fr; } }
+@media (prefers-reduced-motion: reduce) { .oslayer,.osarrow,.oscard { opacity:1 !important; transform:none !important; animation:none !important; } }
 .src { position:absolute; bottom:3vh; left:clamp(30px,8vw,120px); right:clamp(30px,8vw,120px); font-family:var(--mono); font-size:.68rem; color:var(--faint); }
 .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:clamp(16px,3vw,40px); max-width:1000px; }
 .chipset { display:flex; gap:10px; flex-wrap:wrap; margin-top:24px; }
@@ -321,13 +357,42 @@ ul.clean li:first-child { border-top:0; }
   <p class="sub" style="margin-top:20px">Herramientas de nivel profesional, costo total: <b>$0</b>. Ahora sí — a mezclar cemento. 🧱</p>
 </section>
 
-<!-- 11 · POR QUÉ TERMINAL -->
+<!-- 11a · ¿QUÉ ES UN SO? -->
+<section class="slide os-slide">
+  <span class="k">Parte 2 · antes del cemento, el jefe de obra</span>
+  <h2 style="font-size:clamp(1.15rem,2.5vw,1.9rem); margin-bottom:6px;">¿Qué es un sistema operativo?</h2>
+  <div class="osstack">
+    <div class="oslayer top"><span class="oi">🧑‍💻</span><div><b>Tú y las aplicaciones</b><p>Lo que quieres hacer: navegar, editar, abrir un programa</p></div></div>
+    <div class="osarrow">▲ le pides al… ▼ le ordena al</div>
+    <div class="oslayer mid"><span class="oi">🧑‍🔧</span><div><b>El sistema operativo <span class="hoy-tag">el administrador</span></b><p>Reparte la memoria, el procesador y el disco entre todos. Traduce lo que pides a algo que el fierro entiende. Sin él, el hardware es un ladrillo.</p></div></div>
+    <div class="osarrow">▲ organiza · ▼ maneja</div>
+    <div class="oslayer bot"><span class="oi">🖥️</span><div><b>El hardware</b><p>Procesador, memoria, disco — la fuerza bruta, pero sin criterio</p></div></div>
+  </div>
+</section>
+
+<!-- 11b · ¿CUÁLES EXISTEN? -->
+<section class="slide">
+  <span class="k">Parte 2 · el mismo trabajo, distintos administradores</span>
+  <h2>¿Cuáles existen?</h2>
+  <div class="osgrid">
+    <div class="oscard"><span class="oe">🪟</span><b>Windows</b><small>el más común en computadores de casa y oficina</small></div>
+    <div class="oscard"><span class="oe">🍎</span><b>macOS</b><small>el de los Mac — de la familia Unix, primo de Linux</small></div>
+    <div class="oscard hi"><span class="oe">🐧</span><b>Linux</b><small>gratis y libre — <b>el rey de los servidores y la nube</b></small></div>
+    <div class="oscard"><span class="oe">🤖</span><b>Android</b><small>tu celular… corre sobre Linux por dentro</small></div>
+    <div class="oscard"><span class="oe">📱</span><b>iOS</b><small>el del iPhone — pariente de macOS</small></div>
+    <div class="oscard goal"><span class="oe">🎯</span><b>Todos hacen lo mismo</b><small>administrar el hardware. Aprendes uno, entiendes todos</small></div>
+  </div>
+  <p class="sub" style="margin-top:16px">Nosotros nos enfocamos en <b>Linux</b>: es donde vive la infraestructura del mundo (recuerden los cimientos 🏗). ¿Y cómo se le dan órdenes a Linux?…</p>
+</section>
+
+<!-- 11c · LA TERMINAL = MANEJAR EL SO -->
 <section class="slide">
   <span class="k">Parte 2 · el cemento y la pala</span>
-  <h2>¿Por qué la terminal, si existen las ventanitas?</h2>
+  <h2>La terminal: cómo se le habla al sistema operativo</h2>
   <ul class="rows">
-    <li><span class="t">Los servidores no tienen pantalla ni mouse<small>El 100% de la operación real del mundo pasa por terminal</small></span><span class="m">realidad</span></li>
-    <li><span class="t">Los clicks no dejan planos<small>Lo que escribes se puede guardar, repetir y automatizar — lo que clickeas, no</small></span><span class="m">planos</span></li>
+    <li><span class="t">Es el control remoto del SO<small>En Windows y Mac usas ventanas y clicks; a un servidor Linux le das ÓRDENES escritas — directo al administrador</small></span><span class="m">órdenes</span></li>
+    <li><span class="t">Los servidores no tienen pantalla ni mouse<small>El 100% de la operación real del mundo se maneja por terminal</small></span><span class="m">realidad</span></li>
+    <li><span class="t">Los clicks no dejan planos<small>Lo que escribes se guarda, se repite y se automatiza — lo que clickeas, no</small></span><span class="m">planos</span></li>
     <li><span class="t">Es el idioma de la IA<small>Los agentes de IA que ya operan infraestructura… lo hacen por terminal</small></span><span class="m">2026</span></li>
   </ul>
 </section>
