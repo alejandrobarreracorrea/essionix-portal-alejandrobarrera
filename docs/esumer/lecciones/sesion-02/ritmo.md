@@ -1,24 +1,26 @@
-# Sesión 2 (virtual) · guía de ritmo — monta tu taller
+# Sesión 2 (virtual) · guía de ritmo — la caja de herramientas
 
-**Enfoque:** todo local y personal. Checkpoint por chat cada ≤12 min. Tu cámara siempre; pantalla = terminal con fuente GRANDE.
+**Estructura:** Parte 1 = TODAS las herramientas (GitHub, Git, VS Code, AWS, Terraform). Parte 2 = Linux/terminal si alcanza.
+**Regla:** checkpoint por chat tras cada herramienta. Nadie se bloquea: lo que no salga, queda de misión con guía.
 
 | Hora | Min | Bloque | Nota |
 |---|---|---|---|
-| 6:30 | 5 | Entrada + LA CASA | "Hoy: cimientos y planos" — 30 seg de ubicación |
-| 6:35 | 5 | Apuesta de repaso | Letra al chat (B 😉) |
-| 6:40 | 5 | El plan: montar TU taller | Vender la idea: herramientas tuyas para siempre |
-| 6:45 | 20 | GitHub: cuenta + repo | Checkpoint: link al chat |
-| 7:05 | 20 | Instalar Git (+ terminal) y VS Code | Los dos instaladores en paralelo; checkpoint: git --version. Los que terminan: monitores |
-| 7:25 | 5 | Por qué terminal | Corto, con punch |
-| 7:30 | 30 | Labs 1-2 (ubicarse, construir) | Tú tecleas → replican → checkpoint. Windows y Mac a la vez: mostrar que pwd difiere y no importa |
+| 6:30 | 5 | Entrada + LA CASA | "Hoy conseguimos las herramientas" |
+| 6:35 | 5 | El plan (2 partes) + GRÁFICA de la caja | La lámina de similitudes obra↔software — dejarla 2 min, es el mapa mental |
+| 6:40 | 15 | 🧰 1/5 GitHub: cuenta + repo | Checkpoint: link |
+| 6:55 | 15 | 🧰 2/5 Git (+ terminal) | Checkpoint: git --version |
+| 7:10 | 10 | 🧰 3/5 VS Code | Checkpoint: ✅ |
+| 7:20 | 25 | 🧰 4/5 AWS personal | El bloque friccioso (tarjeta+celular). Los sin tarjeta: siguen viendo, queda de misión. Monitores activos |
+| 7:45 | 10 | 🧰 5/5 Terraform | winget/brew · checkpoint: terraform -version |
+| 7:55 | 5 | CHECKLIST del taller | Celebrar: "taller profesional, $0" |
 | 8:00 | 10 | PAUSA | |
-| 8:10 | 15 | Lab 3: git config + CLONE de su bitácora | El momento delicado (auth navegador) — ir despacio, monitores activos |
-| 8:25 | 10 | **EL RITO: add · commit · push** | Verlo aparecer en github.com — pedir reacciones |
-| 8:35 | 20 | RETO del tesoro | Script al chat; cierre = push del tesoro.md (y la lección "not a git repository") |
-| 8:55 | 15 | Producto: cheat-sheet + push | Acompañar en vivo |
-| 9:10 | 5 | Parada 4: lanzar WSL / mostrar Killercoda | `wsl --install` queda corriendo de misión; demo Killercoda 60 seg |
-| 9:15 | 5 | Minuto de seguridad #1 | Repo público = casa con ventanas |
-| 9:20 | 10 | Cierre + misión + QRs | Próxima presencial: redes — "la dirección y las calles" |
+| 8:10 | 5 | Por qué terminal | Punch corto |
+| 8:15 | 25 | Labs 1-2 | Tú tecleas → replican → checkpoint |
+| 8:40 | 15 | Lab 3: config + clone | El paso delicado (auth navegador) — despacio |
+| 8:55 | 10 | **EL RITO: add·commit·push** | El clímax — verlo en github.com |
+| 9:05 | 10 | Producto: cheat-sheet + push | Acompañar |
+| 9:15 | 5 | Minuto de seguridad #1 | Root + repo público |
+| 9:20 | 10 | Cierre + misión + QRs | WSL queda de misión con guía |
 
-**Reservas:** cowsay en Killercoda (`apt install cowsay`) · ronda de preguntas de carrera · demo: "así se ve MI terminal un día normal".
-**Anti-deserción:** monitores · nombres propios · códigos de tesoro únicos.
+**Si el tiempo NO alcanza para la parte 2 completa** (probable si AWS se enreda): prioridad = Lab 3 + RITO (el push ES el producto); labs 1-2 se comprimen a demo tuya + práctica de misión. El RETO del tesoro pasa a la próxima sesión como calentamiento.
+**Reservas:** tesoro · cowsay en Killercoda · ronda de carrera.

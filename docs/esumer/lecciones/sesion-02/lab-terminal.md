@@ -1,4 +1,7 @@
-# Sesión 2 · Lab: monta tu taller (Git + VS Code + Linux local) — guía del docente
+# Sesión 2 · Lab: la caja de herramientas — guía del docente
+
+**Estructura de la sesión:** Parte 1 = las 5 herramientas (GitHub, Git, VS Code, AWS, Terraform).
+Parte 2 = Linux/terminal (labs + rito del push) si el tiempo alcanza — ver ritmo.md para el plan de recorte.
 
 **Enfoque:** herramientas en la máquina PERSONAL de cada estudiante. Nada provisto por la
 universidad, nada en la nube de terceros. Entornos:
@@ -7,11 +10,13 @@ universidad, nada en la nube de terceros. Entornos:
 - **Plan B navegador** → killercoda.com (Playgrounds → Ubuntu): terminal PURA a pantalla completa, gratis con login GitHub, ~1h por sesión (suficiente para el lab)
 - **Solo celular** → Killercoda en el navegador del celular o Termux (Android); completar en sala de cómputo 5º piso bloque 3
 
-## Los 3 instaladores (links para el chat)
-- Git (Windows, incluye Git Bash): https://git-scm.com/download/win — TODO por defecto
-- VS Code: https://code.visualstudio.com/download
-- WSL (Windows 10/11, PowerShell COMO ADMINISTRADOR): `wsl --install` → reiniciar → abrir "Ubuntu" → crear usuario/clave
-- macOS: `git --version` en Terminal dispara la instalación de Command Line Tools
+## Los instaladores (links para el chat, en orden de la sesión)
+1. GitHub (cuenta): https://github.com/signup
+2. Git (Windows, incluye Git Bash): https://git-scm.com/download/win — TODO por defecto · macOS: `git --version` en Terminal dispara la instalación
+3. VS Code: https://code.visualstudio.com/download
+4. AWS free tier PERSONAL: https://aws.amazon.com/free → correo personal + tarjeta (validación ~USD 1 reversada) + celular · plan Basic · región us-east-1 · clave root al gestor de contraseñas
+5. Terraform: Windows `winget install HashiCorp.Terraform` · macOS `brew install hashicorp/tap/terraform` · sin brew/winget: https://developer.hashicorp.com/terraform/install → verificar `terraform -version`
+6. (misión) WSL: PowerShell COMO ADMINISTRADOR → `wsl --install` → reiniciar → "Ubuntu" → usuario/clave
 
 ## Autenticación de git SIN dolor
 `git clone https://github.com/USUARIO/bitacora-X.git` → Git Credential Manager abre el
@@ -25,7 +30,7 @@ mkdir -p ~/tesoro/puerto/{bodega,muelle} ~/tesoro/isla/{selva,volcan/cueva} ~/te
 echo "Pista: el tesoro no está en el agua. Busca TIERRA firme." > ~/tesoro/barco/bitacora.txt
 echo "Pista: donde hay fuego hubo riqueza. Sube al lugar más caliente." > ~/tesoro/isla/selva/mapa-roto.txt
 echo "Pista: los piratas esconden en lo profundo. Busca un hueco oscuro." > ~/tesoro/isla/volcan/marca-x.txt
-echo "FELICIDADES 🏴‍☠️ — código secreto: TALLER-MONTADO-$RANDOM" > ~/tesoro/isla/volcan/cueva/.cofre.txt
+echo "FELICIDADES 🏴‍☠️ — código secreto: CAJA-COMPLETA-$RANDOM" > ~/tesoro/isla/volcan/cueva/.cofre.txt
 echo "Aquí no hay nada... ¿o no revisaste lo OCULTO? (pista: ls -a)" > ~/tesoro/isla/volcan/cueva/leeme.txt
 cd ~/tesoro && echo "El mapa está listo. Empieza con: ls"
 ```
