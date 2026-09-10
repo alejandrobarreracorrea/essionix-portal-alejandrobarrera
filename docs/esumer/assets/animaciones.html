@@ -1,0 +1,104 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Librería de animaciones de conceptos — Esumer</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root { --navy:#0E2841; --c1:#156082; --c2:#0F9ED5; --naranja:#E97132; --verde:#196B24; --line:#dfe5ee; --muted:#44546A; --faint:#8B98A9; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:Inter,sans-serif; color:var(--navy); background:#f7f9fc; padding:30px; }
+h1 { font-family:Poppins,sans-serif; font-size:1.6rem; margin-bottom:4px; }
+.sub { color:var(--muted); margin-bottom:24px; font-size:.9rem; }
+.demo { background:#fff; border:1px solid var(--line); border-radius:16px; padding:26px; margin-bottom:22px; }
+.demo h2 { font-family:Poppins,sans-serif; font-size:1.1rem; margin-bottom:4px; }
+.demo .tag { font-family:"JetBrains Mono",monospace; font-size:.7rem; color:var(--naranja); text-transform:uppercase; letter-spacing:.06em; }
+.stage { height:300px; position:relative; overflow:hidden; margin-top:16px; border-radius:12px; background:linear-gradient(180deg,#fbfdff,#f0f5fb); }
+
+/* ============ 1 · LAS CALLES: paquetes y protocolos ============ */
+.net .road { position:absolute; left:0; right:0; top:50%; height:52px; transform:translateY(-50%);
+  background:#2b3a4d; }
+.net .road::before,.net .road::after { content:""; position:absolute; left:0; right:0; height:3px;
+  background:repeating-linear-gradient(90deg,#ffd24a 0 26px, transparent 26px 52px); }
+.net .road::before { top:8px; } .net .road::after { bottom:8px; }
+.net .house { position:absolute; top:50%; transform:translateY(-50%); text-align:center; font-size:2.4rem; z-index:2; }
+.net .house small { display:block; font-family:"JetBrains Mono",monospace; font-size:.62rem; color:var(--muted); margin-top:-6px; }
+.net .h-cli { left:26px; } .net .h-srv { right:26px; }
+.net .pkt { position:absolute; top:50%; transform:translateY(-50%); font-family:"JetBrains Mono",monospace;
+  font-size:.62rem; font-weight:600; color:#fff; padding:.3em .7em; border-radius:6px; white-space:nowrap; z-index:3;
+  box-shadow:0 2px 6px rgba(0,0,0,.2); }
+.net .p1 { background:var(--c2); animation:pktGo 3.2s linear infinite; }
+.net .p2 { background:var(--verde); animation:pktBack 3.2s linear 1.6s infinite; }
+.net .p3 { background:var(--naranja); animation:pktGo 3.2s linear .8s infinite; }
+@keyframes pktGo   { 0%{left:130px;opacity:0} 8%{opacity:1} 92%{opacity:1} 100%{left:calc(100% - 210px);opacity:0} }
+@keyframes pktBack { 0%{left:calc(100% - 210px);opacity:0} 8%{opacity:1} 92%{opacity:1} 100%{left:130px;opacity:0} }
+
+/* ============ 2 · LA MESA DE DIBUJO: del plano al commit ============ */
+.draw .paper { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%) rotate(-2deg);
+  width:300px; height:200px; background:#fff; border:1px solid var(--line); border-radius:6px;
+  box-shadow:0 10px 30px rgba(14,40,65,.12); padding:20px; }
+.draw .ln { height:9px; border-radius:4px; background:#eef2f7; margin-bottom:11px; width:0;
+  animation:drawLine 4s ease-in-out infinite; }
+.draw .ln:nth-child(1){animation-delay:.2s} .draw .ln:nth-child(2){animation-delay:.5s;width:0}
+.draw .ln:nth-child(3){animation-delay:.8s} .draw .ln:nth-child(4){animation-delay:1.1s}
+.draw .pencil { position:absolute; font-size:1.8rem; left:40px; top:40px; animation:pencilMove 4s ease-in-out infinite; }
+.draw .commit { position:absolute; right:22px; bottom:16px; font-family:"JetBrains Mono",monospace;
+  font-size:.66rem; color:#fff; background:var(--c1); padding:.35em .8em; border-radius:6px; opacity:0;
+  animation:commitPop 4s ease-in-out infinite; }
+@keyframes drawLine { 0%,10%{width:0} 40%,60%{width:100%} 90%,100%{width:100%} }
+@keyframes pencilMove { 0%{left:36px;top:36px} 30%{left:230px;top:70px} 60%{left:60px;top:120px} 100%{left:36px;top:36px} }
+@keyframes commitPop { 0%,70%{opacity:0;transform:translateY(6px)} 80%,100%{opacity:1;transform:none} }
+
+/* ============ 3 · LOS CIMIENTOS: sobre Linux se para todo ============ */
+.found .stack2 { position:absolute; left:50%; bottom:26px; transform:translateX(-50%); width:340px; }
+.found .blk { border-radius:8px; padding:9px 0; text-align:center; font-family:"JetBrains Mono",monospace;
+  font-size:.72rem; color:#fff; margin-bottom:7px; opacity:0; transform:translateY(-14px); }
+.found .b-app { background:var(--naranja); animation:dropIn .5s ease 1.8s forwards; }
+.found .b-cloud { background:var(--c2); animation:dropIn .5s ease 1.4s forwards; }
+.found .b-srv { background:var(--c1); animation:dropIn .5s ease 1s forwards; }
+.found .b-linux { background:var(--navy); font-weight:700; padding:14px 0; opacity:1; transform:none;
+  box-shadow:0 0 0 0 rgba(233,113,50,0); animation:foundPulse 2s ease .6s infinite; }
+@keyframes dropIn { to{opacity:1;transform:none} }
+@keyframes foundPulse { 0%,100%{box-shadow:0 0 0 0 rgba(233,113,50,0)} 50%{box-shadow:0 -6px 0 -2px rgba(233,113,50,.4)} }
+</style></head><body>
+<h1>Librería de animaciones de conceptos</h1>
+<p class="sub">Piezas reutilizables (CSS puro, sin dependencias) que se integran a los decks cuando llega su tema. Batch 1.</p>
+
+<div class="demo">
+  <span class="tag">Fase: la dirección y las calles · Redes</span>
+  <h2>🗺 Los protocolos viajando por la calle</h2>
+  <p class="sub" style="margin:2px 0 0">El cliente pide, el servidor responde: paquetes (HTTP, DNS, IP) yendo y viniendo por la vía.</p>
+  <div class="stage net">
+    <div class="road"></div>
+    <div class="house h-cli">🏠<small>CLIENTE</small></div>
+    <div class="house h-srv">🏢<small>SERVIDOR</small></div>
+    <div class="pkt p1">GET /index.html</div>
+    <div class="pkt p3">DNS: ¿dónde está?</div>
+    <div class="pkt p2">200 OK ✓</div>
+  </div>
+</div>
+
+<div class="demo">
+  <span class="tag">Fase: los planos · Git · GitHub</span>
+  <h2>✏️ La mesa de dibujo: del trazo al commit</h2>
+  <p class="sub" style="margin:2px 0 0">Se dibuja el plano (código), y cuando queda listo, se archiva con un commit.</p>
+  <div class="stage draw">
+    <div class="paper"><div class="ln"></div><div class="ln"></div><div class="ln"></div><div class="ln"></div>
+      <span class="commit">git commit ✓</span></div>
+    <div class="pencil">✏️</div>
+  </div>
+</div>
+
+<div class="demo">
+  <span class="tag">Fase: los cimientos · Linux</span>
+  <h2>🏗 Todo se apoya sobre Linux</h2>
+  <p class="sub" style="margin:2px 0 0">Servidores, nube y aplicaciones se paran encima del sistema operativo. Si el cimiento falla, cae todo.</p>
+  <div class="stage found">
+    <div class="stack2">
+      <div class="blk b-app">🤖 Tus aplicaciones</div>
+      <div class="blk b-cloud">💧 La nube (AWS)</div>
+      <div class="blk b-srv">🧱 Los servidores</div>
+      <div class="blk b-linux">🐧 LINUX — los cimientos</div>
+    </div>
+  </div>
+</div>
+
+</body></html>
