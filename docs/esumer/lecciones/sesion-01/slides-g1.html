@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>[G2 · versión dinámica] Sesión 1 — Esumer</title>
+<title>[G1 · versión presentada 8-sep] Sesión 1 — Esumer</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root { --bg:#ffffff; --line:#dfe5ee; --text:#0E2841; --muted:#44546A; --faint:#8B98A9;
@@ -24,23 +24,6 @@ h2 { font-family:var(--display); font-size:clamp(1.5rem,3.6vw,2.8rem); letter-sp
 .rows .t small { display:block; font-family:var(--body); font-weight:400; color:var(--muted); font-size:clamp(.8rem,1.3vw,1rem); margin-top:2px; }
 .rows .m { font-family:var(--mono); color:var(--a2); font-size:clamp(.8rem,1.4vw,1.05rem); white-space:nowrap; }
 .big { font-family:var(--display); font-size:clamp(3rem,9vw,7.5rem); font-weight:700; letter-spacing:-.03em; line-height:1; }
-.act-chip { display:inline-block; background:var(--naranja); color:#fff; font-family:var(--mono);
-  font-size:.68rem; padding:.35em 1em; border-radius:999px; margin-right:10px; letter-spacing:.05em; vertical-align:middle; }
-
-.stack { display:flex; flex-direction:column; gap:9px; max-width:940px; margin-top:6px; }
-.layer { display:flex; align-items:center; gap:18px; border:1px solid var(--line); border-left:5px solid var(--a2);
-  border-radius:12px; padding:clamp(6px,1.1vh,11px) 18px; opacity:0; transform:translateY(12px);
-  transition:opacity .35s ease, transform .35s ease; }
-.layer.on { opacity:1; transform:none; }
-.layer .ln { font-family:var(--mono); font-size:.85rem; color:var(--a1); }
-.layer b { font-family:var(--display); font-size:clamp(.95rem,1.7vw,1.25rem); }
-.layer p { color:var(--muted); font-size:clamp(.78rem,1.3vw,.98rem); line-height:1.35; margin-top:1px; }
-.layer .lt { margin-left:auto; font-family:var(--mono); font-size:.72rem; color:var(--a2); white-space:nowrap; }
-.layer.l1 { border-left-color:#44546A; } .layer.l2 { border-left-color:#156082; }
-.layer.l3 { border-left-color:#0F9ED5; } .layer.l4 { border-left-color:#1FB5C9; }
-.layer.l5 { border-left-color:var(--naranja); }
-.layer.l6 { border:0; border-left:5px solid var(--naranja); background:rgba(233,113,50,.06); }
-
 .src { position:absolute; bottom:3vh; left:clamp(30px,8vw,120px); right:clamp(30px,8vw,120px); font-family:var(--mono); font-size:.68rem; color:var(--faint); }
 .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:clamp(16px,3vw,40px); max-width:1000px; }
 .chipset { display:flex; gap:10px; flex-wrap:wrap; margin-top:24px; }
@@ -87,31 +70,18 @@ ul.clean li:first-child { border-top:0; }
 </style></head><body>
 <div class="bar" id="bar"></div>
 <div class="num" id="num"></div>
-<div class="inst-footer" id="instf"><img src="esumer-assets/logos-medellin.png" alt="Alcaldía de Medellín · SAPIENCIA · Esumer"></div>
+<div class="inst-footer" id="instf"><img src="../../assets/logos-medellin.png" alt="Alcaldía de Medellín · SAPIENCIA · Esumer"></div>
 <div class="nav-hint">← → o click para avanzar</div>
 
 <!-- 1 · PORTADA institucional -->
 <section class="slide on cover">
-  <img class="cover-bg" src="esumer-assets/portada.png" alt="">
+  <img class="cover-bg" src="../../assets/portada.png" alt="">
   <div class="cover-txt">
-    <span class="cover-k">Estud-IA · Habilidades Digitales · Ruta TI · 2026-2 · Grupo 2</span>
+    <span class="cover-k">Estud-IA · Habilidades Digitales · Ruta TI · 2026-2 · Grupo 1</span>
     <h1 class="cover-h">Cloud Computing, Redes y Ciberseguridad</h1>
     <p class="cover-s">14 semanas para llevar una empresa a la nube — de verdad, no en diapositivas.<br>Alejandro Barrera · Cloud Architect</p>
   </div>
-  <img class="cover-logo" src="esumer-assets/estudia-blanco.png" alt="Estud-IA">
-</section>
-
-<!-- 16 · DEMO -->
-<section class="slide">
-  <span class="k">Antes de decirles quién soy — miren esto</span>
-  <h2>No es teoría: está corriendo</h2>
-  <div class="demo">
-    <p>$ curl -I https://[mi-sitio] &nbsp;&nbsp;→ HTTP 200 · ¿quién responde?</p>
-    <p>$ dig [mi-sitio] &nbsp;&nbsp;→ el DNS en acción</p>
-    <p>→ consola AWS: la instancia, la red, el balanceador — las 5 capas de la slide anterior</p>
-    <p>→ GitHub: el código que crea TODO esto</p>
-  </div>
-  <p class="sub" style="margin-top:20px">En la semana 13, cada equipo tendrá su versión de esto. Empezando la próxima clase.</p>
+  <img class="cover-logo" src="../../assets/estudia-blanco.png" alt="Estud-IA">
 </section>
 
 <!-- 2 · QUIÉN LES HABLA -->
@@ -143,39 +113,11 @@ ul.clean li:first-child { border-top:0; }
   <p class="sub" style="margin-top:24px">Todo lo que van a ver en este curso viene de esa operación real — errores incluidos.</p>
 </section>
 
-<!-- 10 · DIAGNÓSTICO -->
-<section class="slide">
-  <span class="k"><span class="act-chip">ACTIVIDAD</span> Ahora ustedes · diagnóstico</span>
-  <h2>¿De dónde arrancamos?</h2>
-  <div class="grid2" style="align-items:center">
-    <ul class="clean">
-      <li>📋 9 preguntas — 5 minutos, anónimo, sin nota</li>
-      <li>🗣️ Y en voz alta: <b>¿qué pasa entre que escriben google.com y aparece la página?</b></li>
-      <li>Guardamos las respuestas — las volveremos a mirar al final del semestre.</li>
-    </ul>
-    <div class="qr" style="align-items:center"><svg xmlns="http://www.w3.org/2000/svg" width="132" height="132" class="segno"><g transform="scale(4)"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#0a0a0e" d="M2 2.5h7m1 0h2m3 0h1m1 0h1m4 0h1m1 0h7m-29 1h1m5 0h1m1 0h4m1 0h1m3 0h2m1 0h1m1 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m2 0h4m3 0h1m1 0h2m2 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m3 0h1m1 0h2m1 0h3m2 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m2 0h2m1 0h1m1 0h1m2 0h3m2 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m2 0h3m1 0h1m2 0h2m1 0h1m2 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h1m3 0h1m2 0h5m-20 1h1m1 0h2m1 0h3m5 0h1m3 0h2m3 0h1m2 0h1m1 0h2m-29 1h1m1 0h1m1 0h2m1 0h1m2 0h1m1 0h3m5 0h1m1 0h3m3 0h1m-25 1h4m5 0h1m2 0h1m3 0h1m5 0h2m-28 1h1m1 0h1m5 0h2m1 0h1m3 0h1m3 0h3m1 0h2m3 0h1m-28 1h2m1 0h3m1 0h1m3 0h1m1 0h4m1 0h1m1 0h1m3 0h2m-27 1h1m1 0h1m2 0h1m1 0h2m3 0h1m1 0h1m1 0h3m3 0h1m3 0h3m-28 1h2m1 0h1m1 0h1m4 0h3m4 0h2m1 0h1m2 0h1m1 0h3m-29 1h3m5 0h2m1 0h1m2 0h3m2 0h4m1 0h1m2 0h1m-28 1h2m4 0h2m1 0h2m3 0h2m1 0h2m1 0h2m2 0h2m1 0h1m-27 1h2m1 0h2m1 0h2m1 0h3m1 0h2m1 0h1m2 0h1m2 0h1m1 0h3m-28 1h1m1 0h2m2 0h2m1 0h2m2 0h3m4 0h1m2 0h1m2 0h1m-25 1h1m4 0h1m1 0h1m2 0h8m1 0h2m1 0h1m1 0h1m-26 1h1m1 0h2m1 0h1m2 0h1m2 0h3m1 0h1m1 0h1m1 0h7m-19 1h5m2 0h2m1 0h1m1 0h1m3 0h5m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m1 0h2m1 0h1m-28 1h1m5 0h1m1 0h1m1 0h1m1 0h4m2 0h3m3 0h2m1 0h1m-28 1h1m1 0h3m1 0h1m3 0h2m3 0h1m1 0h2m1 0h5m1 0h2m-28 1h1m1 0h3m1 0h1m1 0h1m1 0h3m2 0h7m1 0h3m2 0h1m-29 1h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h2m1 0h1m1 0h1m4 0h1m2 0h1m1 0h1m-29 1h1m5 0h1m2 0h2m2 0h2m1 0h1m3 0h1m1 0h1m2 0h1m1 0h1m-28 1h7m1 0h2m3 0h1m2 0h5m6 0h1"/></g></svg>
-<span style="text-align:center;width:100%">escanea o entra a<br><b>forms.gle/fLNhU3ruMG5VgFmW6</b></span></div>
-  </div>
-</section>
-
 <!-- 4 · TRANSICIÓN -->
 <section class="slide">
   <span class="k">Antes de la técnica, el mapa</span>
   <h2>¿Por qué <span class="grad">este</span> curso, en <span class="grad">este</span> momento?</h2>
   <p class="sub">Tres datos del mercado 2026 — con fuentes, no con humo. Porque la decisión de tomarse esto en serio es de ustedes, y se toma con información.</p>
-</section>
-
-
-<!-- APUESTA 1 -->
-<section class="slide">
-  <span class="k">Apuesta #1</span>
-  <h2>¿Cuánto va a gastar el mundo en nube pública este año?</h2>
-  <ul class="rows">
-    <li><span class="t">A · 85 mil millones de dólares</span><span class="m">🙋</span></li>
-    <li><span class="t">B · 850 mil millones de dólares</span><span class="m">🙋</span></li>
-    <li><span class="t">C · 8,5 billones de dólares</span><span class="m">🙋</span></li>
-  </ul>
-  <p class="sub" style="margin-top:22px">Voten ahora — el que acierte gana… respeto. 😄</p>
 </section>
 
 <!-- 5 · DEMANDA: EL MERCADO CLOUD -->
@@ -241,19 +183,6 @@ ul.clean li:first-child { border-top:0; }
   <p class="src">Fuentes: ERI · Guía Salarial Michael Page Colombia 2026 · mercado remoto US→LATAM</p>
 </section>
 
-
-<!-- APUESTA 2 -->
-<section class="slide">
-  <span class="k">Apuesta #2</span>
-  <h2>¿Cuánto gana al año un Site Reliability Engineer en EE.UU.? (mediana)</h2>
-  <ul class="rows">
-    <li><span class="t">A · USD 90.000</span><span class="m">🙋</span></li>
-    <li><span class="t">B · USD 205.000</span><span class="m">🙋</span></li>
-    <li><span class="t">C · USD 350.000</span><span class="m">🙋</span></li>
-  </ul>
-  <p class="sub" style="margin-top:22px">Pista: es más de lo que están pensando.</p>
-</section>
-
 <!-- 8 · SUELDOS USA -->
 <section class="slide">
   <span class="k">¿Y cuánto paga? · Estados Unidos</span>
@@ -270,6 +199,21 @@ ul.clean li:first-child { border-top:0; }
   <span class="k">La conclusión honesta</span>
   <h2>La oportunidad es real.<br>La fila también.</h2>
   <p class="sub">Lo que separa a los que entran de los que miran: <b>evidencia de que saben operar</b> — no un diploma, un portafolio. Este curso está diseñado para que salgan con esa evidencia: infraestructura real, código real, bitácora pública.</p>
+</section>
+
+<!-- 10 · DIAGNÓSTICO -->
+<section class="slide">
+  <span class="k">Ahora ustedes · diagnóstico exploratorio</span>
+  <h2>¿De dónde arrancamos?</h2>
+  <div class="grid2" style="align-items:center">
+    <ul class="clean">
+      <li>📋 9 preguntas — 5 minutos, anónimo, sin nota</li>
+      <li>🗣️ Y en voz alta: <b>¿qué pasa entre que escriben google.com y aparece la página?</b></li>
+      <li>Guardamos las respuestas — las volveremos a mirar al final del semestre.</li>
+    </ul>
+    <div class="qr" style="align-items:center"><svg xmlns="http://www.w3.org/2000/svg" width="132" height="132" class="segno"><g transform="scale(4)"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#0a0a0e" d="M2 2.5h7m1 0h2m3 0h1m1 0h1m4 0h1m1 0h7m-29 1h1m5 0h1m1 0h4m1 0h1m3 0h2m1 0h1m1 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m2 0h4m3 0h1m1 0h2m2 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m3 0h1m1 0h2m1 0h3m2 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m2 0h2m1 0h1m1 0h1m2 0h3m2 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m2 0h3m1 0h1m2 0h2m1 0h1m2 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h1m3 0h1m2 0h5m-20 1h1m1 0h2m1 0h3m5 0h1m3 0h2m3 0h1m2 0h1m1 0h2m-29 1h1m1 0h1m1 0h2m1 0h1m2 0h1m1 0h3m5 0h1m1 0h3m3 0h1m-25 1h4m5 0h1m2 0h1m3 0h1m5 0h2m-28 1h1m1 0h1m5 0h2m1 0h1m3 0h1m3 0h3m1 0h2m3 0h1m-28 1h2m1 0h3m1 0h1m3 0h1m1 0h4m1 0h1m1 0h1m3 0h2m-27 1h1m1 0h1m2 0h1m1 0h2m3 0h1m1 0h1m1 0h3m3 0h1m3 0h3m-28 1h2m1 0h1m1 0h1m4 0h3m4 0h2m1 0h1m2 0h1m1 0h3m-29 1h3m5 0h2m1 0h1m2 0h3m2 0h4m1 0h1m2 0h1m-28 1h2m4 0h2m1 0h2m3 0h2m1 0h2m1 0h2m2 0h2m1 0h1m-27 1h2m1 0h2m1 0h2m1 0h3m1 0h2m1 0h1m2 0h1m2 0h1m1 0h3m-28 1h1m1 0h2m2 0h2m1 0h2m2 0h3m4 0h1m2 0h1m2 0h1m-25 1h1m4 0h1m1 0h1m2 0h8m1 0h2m1 0h1m1 0h1m-26 1h1m1 0h2m1 0h1m2 0h1m2 0h3m1 0h1m1 0h1m1 0h7m-19 1h5m2 0h2m1 0h1m1 0h1m3 0h5m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m1 0h2m1 0h1m-28 1h1m5 0h1m1 0h1m1 0h1m1 0h4m2 0h3m3 0h2m1 0h1m-28 1h1m1 0h3m1 0h1m3 0h2m3 0h1m1 0h2m1 0h5m1 0h2m-28 1h1m1 0h3m1 0h1m1 0h1m1 0h3m2 0h7m1 0h3m2 0h1m-29 1h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h2m1 0h1m1 0h1m4 0h1m2 0h1m1 0h1m-29 1h1m5 0h1m2 0h2m2 0h2m1 0h1m3 0h1m1 0h1m2 0h1m1 0h1m-28 1h7m1 0h2m3 0h1m2 0h5m6 0h1"/></g></svg>
+<span style="text-align:center;width:100%">escanea o entra a<br><b>forms.gle/fLNhU3ruMG5VgFmW6</b></span></div>
+  </div>
 </section>
 
 <!-- 11 · LA DINÁMICA -->
@@ -333,28 +277,27 @@ ul.clean li:first-child { border-top:0; }
 <!-- 15 · TEMA 1 -->
 <section class="slide">
   <span class="k">Tema 1 · empezamos</span>
-  <h2 style="font-size:clamp(1.2rem,2.6vw,2rem); max-width:34ch; margin-bottom:14px;">¿Qué tiene que existir para que un video de TikTok llegue a tu celular?</h2>
-  <div class="stack">
-    <div class="layer l1"><span class="ln">01</span><div><b>Hardware</b><p>Un servidor REAL, en un edificio real, guarda ese video en un disco real. En la nube no lo ves — pero existe.</p></div><span class="lt">cómputo</span></div>
-    <div class="layer l2"><span class="ln">02</span><div><b>Sistema operativo</b><p>Linux corre en ese servidor. (Y en tu Android. Y en el 96% de los servidores del mundo.)</p></div><span class="lt">Linux</span></div>
-    <div class="layer l3"><span class="ln">03</span><div><b>Red</b><p>IP, puertos y DNS encuentran ese servidor entre millones y traen el video hasta tu mano — en milisegundos.</p></div><span class="lt">IP · DNS</span></div>
-    <div class="layer l4"><span class="ln">04</span><div><b>Servicios</b><p>La app, la base de datos de tus likes, el algoritmo que decide el próximo video: lo que tú consumes.</p></div><span class="lt">apps · datos</span></div>
-    <div class="layer l5"><span class="ln">05</span><div><b>Nube</b><p>TikTok no es dueño de casi nada de eso: lo ALQUILA por segundos. Eso es la nube — y por eso existe este curso.</p></div><span class="lt">cloud</span></div>
-    <div class="layer l6"><div><b>Todo eso junto tiene un nombre: infraestructura.</b><p>Y en 14 semanas, ustedes van a construir la suya.</p></div></div>
-  </div>
+  <h2>¿Qué es una <span class="grad">infraestructura</span>?</h2>
+  <ul class="rows">
+    <li><span class="t">01 · Hardware<small>Los fierros — que en la nube no ves, pero existen</small></span><span class="m">cómputo</span></li>
+    <li><span class="t">02 · Sistema operativo<small>Linux: donde vive todo lo demás</small></span><span class="m">SO</span></li>
+    <li><span class="t">03 · Red<small>Cómo se encuentran las máquinas — IP, puertos, DNS</small></span><span class="m">red</span></li>
+    <li><span class="t">04 · Servicios<small>Lo que el usuario final consume: web, datos, correo</small></span><span class="m">apps</span></li>
+    <li><span class="t">05 · Nube<small>Todo lo anterior, como servicio, pagado por consumo</small></span><span class="m">cloud</span></li>
+  </ul>
 </section>
 
-
-<!-- RESERVA -->
+<!-- 16 · DEMO -->
 <section class="slide">
-  <span class="k"><span class="act-chip">ACTIVIDAD</span> Bonus del día</span>
-  <h2>Tu primera cuenta de <span class="grad">GitHub</span> — ahora, desde el celular</h2>
-  <ul class="clean">
-    <li>1 · <b>github.com</b> → Sign up (correo personal o institucional)</li>
-    <li>2 · Crear repositorio: <b>bitacora-[nombre-de-tu-empresa]</b> → público → Add README</li>
-    <li>3 · Editar el README (lápiz ✏️): escribe el nombre de tu empresa ficticia y quiénes son el equipo → <b>Commit changes</b></li>
-  </ul>
-  <p class="sub" style="margin-top:24px">Eso que acaban de hacer se llama <b>commit</b> — su primer registro en la bitácora del proyecto. Ya empezaron. ✅</p>
+  <span class="k">Demo en vivo · una infraestructura real, ahora mismo</span>
+  <h2>No es teoría: está corriendo</h2>
+  <div class="demo">
+    <p>$ curl -I https://[mi-sitio] &nbsp;&nbsp;→ HTTP 200 · ¿quién responde?</p>
+    <p>$ dig [mi-sitio] &nbsp;&nbsp;→ el DNS en acción</p>
+    <p>→ consola AWS: la instancia, la red, el balanceador — las 5 capas de la slide anterior</p>
+    <p>→ GitHub: el código que crea TODO esto</p>
+  </div>
+  <p class="sub" style="margin-top:20px">En la semana 13, cada equipo tendrá su versión de esto. Empezando la próxima clase.</p>
 </section>
 
 <!-- 17 · CIERRE -->
@@ -391,17 +334,12 @@ function go(n) {
   document.querySelector(".nav-hint").style.display = i === 0 ? "" : "none";
   document.getElementById("instf").style.display = i === 0 ? "none" : "";
 }
-function fwd() {
-  var hid = slides[i].querySelector(".layer:not(.on)");
-  if (hid) { hid.classList.add("on"); return; }
-  go(i + 1);
-}
 document.addEventListener("keydown", function(e){
-  if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") fwd();
+  if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") go(i + 1);
   if (e.key === "ArrowLeft" || e.key === "PageUp") go(i - 1);
   if (e.key === "Home") go(0);
 });
 
-document.addEventListener("click", function(e){ if (e.clientX > innerWidth * 0.25) { fwd(); } else { go(i - 1); } });
+document.addEventListener("click", function(e){ go(e.clientX > innerWidth * 0.25 ? i + 1 : i - 1); });
 go(0);
 </script></body></html>
