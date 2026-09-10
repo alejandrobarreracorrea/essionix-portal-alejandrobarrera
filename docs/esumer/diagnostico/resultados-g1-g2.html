@@ -1,0 +1,153 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnóstico G1 vs G2 · Cloud, Redes y Ciberseguridad — Esumer 2026-2</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root { --navy:#0E2841; --c1:#156082; --c2:#0F9ED5; --naranja:#E97132; --line:#dfe5ee; --muted:#44546A; --faint:#8B98A9; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:Inter,sans-serif; color:var(--navy); background:#fff; font-size:15px;
+  background-image:radial-gradient(50% 30% at 80% -5%, rgba(15,158,213,.08), transparent 70%); background-repeat:no-repeat; }
+.shell { max-width:860px; margin:0 auto; padding:44px clamp(16px,4vw,40px) 80px; }
+.k { font-family:"JetBrains Mono",monospace; font-size:.72rem; letter-spacing:.07em; text-transform:uppercase; color:var(--c1); }
+h1 { font-family:Poppins,sans-serif; font-size:clamp(1.5rem,4vw,2.2rem); margin:6px 0 4px; }
+.sub { color:var(--muted); margin-bottom:8px; }
+.legend { display:flex; gap:22px; margin:16px 0 8px; font-size:.85rem; align-items:center; flex-wrap:wrap; }
+.sw { display:inline-block; width:14px; height:14px; border-radius:4px; margin-right:7px; vertical-align:-2px; }
+.q { border:1px solid var(--line); border-radius:14px; padding:20px 22px; margin-top:18px; }
+.q h2 { font-family:Poppins,sans-serif; font-size:1.05rem; margin-bottom:14px; }
+.opt { display:grid; grid-template-columns:200px 1fr; gap:6px 16px; align-items:center; padding:7px 0; border-top:1px solid var(--line); }
+.opt:first-of-type { border-top:0; }
+.ol { font-size:.86rem; color:var(--muted); }
+.pair { display:flex; flex-direction:column; gap:4px; }
+.bl { position:relative; height:16px; background:#f1f4f9; border-radius:5px; overflow:visible; }
+.bl i { display:block; height:100%; background:var(--c1); border-radius:5px; min-width:2px; }
+.bl.g2 i { background:var(--c2); }
+.bl em { position:absolute; left:calc(100% - 100%); top:-1px; font-style:normal; font-family:"JetBrains Mono",monospace; font-size:.68rem; color:var(--faint); left:auto; right:-4px; transform:translateX(100%); white-space:nowrap; }
+.notes { border-left:3px solid var(--naranja); padding:12px 16px; margin-top:22px; color:var(--muted); font-size:.9rem; }
+.notes b { color:var(--navy); }
+footer { margin-top:30px; font-family:"JetBrains Mono",monospace; font-size:.7rem; color:var(--faint); }
+@media (max-width:640px) { .opt { grid-template-columns:1fr; } }
+@media print { .q { break-inside:avoid; } }
+</style></head><body><div class="shell">
+<span class="k">Esumer · Ruta TI 2026-2 · Diagnóstico inicial · snapshot 10-sep-2026</span>
+<h1>Diagnóstico: Grupo 1 vs Grupo 2</h1>
+<p class="sub">Mismas 9 preguntas, aplicadas en la sesión 1 de cada grupo. Porcentajes sobre los respondientes de cada grupo.</p>
+<div class="legend">
+  <span><span class="sw" style="background:var(--c1)"></span><b>G1</b> · Mar/Jue · n=28 de 40 (70%)</span>
+  <span><span class="sw" style="background:var(--c2)"></span><b>G2</b> · Mié/Vie · n=17 de 29 (59%)</span>
+</div>
+<section class="q"><h2>1 · ¿Cuál es tu relación con la tecnología?</h2><div class="opt"><span class="ol">Ya en TI (estudia/trabaja)</span>
+<div class="pair">
+  <div class="bl"><i style="width:61%"></i><em>17 · 61%</em></div>
+  <div class="bl g2"><i style="width:65%"></i><em>11 · 65%</em></div>
+</div></div><div class="opt"><span class="ol">Otra área, le atrae</span>
+<div class="pair">
+  <div class="bl"><i style="width:21%"></i><em>6 · 21%</em></div>
+  <div class="bl g2"><i style="width:18%"></i><em>3 · 18%</em></div>
+</div></div><div class="opt"><span class="ol">Empezando de cero</span>
+<div class="pair">
+  <div class="bl"><i style="width:14%"></i><em>4 · 14%</em></div>
+  <div class="bl g2"><i style="width:18%"></i><em>3 · 18%</em></div>
+</div></div><div class="opt"><span class="ol">Ya administra infra</span>
+<div class="pair">
+  <div class="bl"><i style="width:4%"></i><em>1 · 4%</em></div>
+  <div class="bl g2"><i style="width:0%"></i><em>0 · 0%</em></div>
+</div></div></section>
+<section class="q"><h2>2 · ¿Has usado la terminal?</h2><div class="opt"><span class="ol">Nunca</span>
+<div class="pair">
+  <div class="bl"><i style="width:18%"></i><em>5 · 18%</em></div>
+  <div class="bl g2"><i style="width:12%"></i><em>2 · 12%</em></div>
+</div></div><div class="opt"><span class="ol">Copiando de tutoriales</span>
+<div class="pair">
+  <div class="bl"><i style="width:43%"></i><em>12 · 43%</em></div>
+  <div class="bl g2"><i style="width:47%"></i><em>8 · 47%</em></div>
+</div></div><div class="opt"><span class="ol">Se defiende</span>
+<div class="pair">
+  <div class="bl"><i style="width:29%"></i><em>8 · 29%</em></div>
+  <div class="bl g2"><i style="width:29%"></i><em>5 · 29%</em></div>
+</div></div><div class="opt"><span class="ol">Total comodidad</span>
+<div class="pair">
+  <div class="bl"><i style="width:11%"></i><em>3 · 11%</em></div>
+  <div class="bl g2"><i style="width:12%"></i><em>2 · 12%</em></div>
+</div></div></section>
+<section class="q"><h2>3 · ¿Sabes qué es una dirección IP?</h2><div class="opt"><span class="ol">Puede explicarla</span>
+<div class="pair">
+  <div class="bl"><i style="width:57%"></i><em>16 · 57%</em></div>
+  <div class="bl g2"><i style="width:59%"></i><em>10 · 59%</em></div>
+</div></div><div class="opt"><span class="ol">Le suena</span>
+<div class="pair">
+  <div class="bl"><i style="width:36%"></i><em>10 · 36%</em></div>
+  <div class="bl g2"><i style="width:41%"></i><em>7 · 41%</em></div>
+</div></div><div class="opt"><span class="ol">Ni idea</span>
+<div class="pair">
+  <div class="bl"><i style="width:7%"></i><em>2 · 7%</em></div>
+  <div class="bl g2"><i style="width:0%"></i><em>0 · 0%</em></div>
+</div></div></section>
+<section class="q"><h2>4 · ¿Has publicado algo en internet?</h2><div class="opt"><span class="ol">Sí, funcionó</span>
+<div class="pair">
+  <div class="bl"><i style="width:36%"></i><em>10 · 36%</em></div>
+  <div class="bl g2"><i style="width:41%"></i><em>7 · 41%</em></div>
+</div></div><div class="opt"><span class="ol">Lo intentó</span>
+<div class="pair">
+  <div class="bl"><i style="width:7%"></i><em>2 · 7%</em></div>
+  <div class="bl g2"><i style="width:6%"></i><em>1 · 6%</em></div>
+</div></div><div class="opt"><span class="ol">Nunca</span>
+<div class="pair">
+  <div class="bl"><i style="width:57%"></i><em>16 · 57%</em></div>
+  <div class="bl g2"><i style="width:53%"></i><em>9 · 53%</em></div>
+</div></div></section>
+<section class="q"><h2>5 · Cuentas que ya tiene (múltiple)</h2><div class="opt"><span class="ol">GitHub</span>
+<div class="pair">
+  <div class="bl"><i style="width:32%"></i><em>9 · 32%</em></div>
+  <div class="bl g2"><i style="width:53%"></i><em>9 · 53%</em></div>
+</div></div><div class="opt"><span class="ol">AWS</span>
+<div class="pair">
+  <div class="bl"><i style="width:7%"></i><em>2 · 7%</em></div>
+  <div class="bl g2"><i style="width:24%"></i><em>4 · 24%</em></div>
+</div></div><div class="opt"><span class="ol">Azure / Google Cloud</span>
+<div class="pair">
+  <div class="bl"><i style="width:18%"></i><em>5 · 18%</em></div>
+  <div class="bl g2"><i style="width:18%"></i><em>3 · 18%</em></div>
+</div></div><div class="opt"><span class="ol">Ninguna</span>
+<div class="pair">
+  <div class="bl"><i style="width:54%"></i><em>15 · 54%</em></div>
+  <div class="bl g2"><i style="width:29%"></i><em>5 · 29%</em></div>
+</div></div></section>
+<section class="q"><h2>6 · ¿Qué tanto usa IA?</h2><div class="opt"><span class="ol">A diario</span>
+<div class="pair">
+  <div class="bl"><i style="width:46%"></i><em>13 · 46%</em></div>
+  <div class="bl g2"><i style="width:35%"></i><em>6 · 35%</em></div>
+</div></div><div class="opt"><span class="ol">A veces</span>
+<div class="pair">
+  <div class="bl"><i style="width:50%"></i><em>14 · 50%</em></div>
+  <div class="bl g2"><i style="width:59%"></i><em>10 · 59%</em></div>
+</div></div><div class="opt"><span class="ol">Casi nunca</span>
+<div class="pair">
+  <div class="bl"><i style="width:4%"></i><em>1 · 4%</em></div>
+  <div class="bl g2"><i style="width:6%"></i><em>1 · 6%</em></div>
+</div></div></section>
+<section class="q"><h2>7 · Equipo disponible ⭐</h2><div class="opt"><span class="ol">Laptop que puede traer</span>
+<div class="pair">
+  <div class="bl"><i style="width:54%"></i><em>15 · 54%</em></div>
+  <div class="bl g2"><i style="width:76%"></i><em>13 · 76%</em></div>
+</div></div><div class="opt"><span class="ol">PC en casa (no viaja)</span>
+<div class="pair">
+  <div class="bl"><i style="width:43%"></i><em>12 · 43%</em></div>
+  <div class="bl g2"><i style="width:0%"></i><em>0 · 0%</em></div>
+</div></div><div class="opt"><span class="ol">Solo equipos de la U</span>
+<div class="pair">
+  <div class="bl"><i style="width:4%"></i><em>1 · 4%</em></div>
+  <div class="bl g2"><i style="width:0%"></i><em>0 · 0%</em></div>
+</div></div><div class="opt"><span class="ol">Solo celular ⚠️</span>
+<div class="pair">
+  <div class="bl"><i style="width:0%"></i><em>0 · 0%</em></div>
+  <div class="bl g2"><i style="width:24%"></i><em>4 · 24%</em></div>
+</div></div></section>
+
+<div class="notes">
+<b>Q8 — qué quieren poder hacer (ambos grupos, mismo orden):</b> 1º ciberseguridad (vulnerabilidades, threat hunting, "blindar la información") · 2º cloud/infra (montar y administrar en la nube) · 3º carrera/empleo. <br><br>
+<b>Q9 — baseline google.com:</b> mayoría de respuestas vagas; minoría (~5 por grupo) con noción de petición/servidor/DNS. Se re-responde en la semana 14 para medir el salto.<br><br>
+<b>Hallazgos clave:</b> G2 tiene 4 estudiantes solo-celular (G1: cero) → máx. uno por equipo + salas de cómputo 5º piso bloque 3. La logística se invierte: G1 pocos laptops en aula pero todos con PC en total; G2 aula bien equipada. G2 llega con más cuentas creadas (53% GitHub, 24% AWS).
+</div>
+<footer>Fuente: Forms del curso (Sheet vinculado, separado por marca temporal 8-sep / 9-sep). Datos agregados — sin información personal.</footer>
+</div></body></html>
