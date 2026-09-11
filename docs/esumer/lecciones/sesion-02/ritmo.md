@@ -20,7 +20,7 @@
 | 9:00 | 10 | Producto: cheat-sheet + push | Acompañar |
 | 9:10 | 5 | ⚠️ **APAGAR la instancia — TODOS JUNTOS** | No cerrar la clase sin esto. Verificar Stopped/Terminated |
 | 9:15 | 5 | Minuto de seguridad #1 | Root · repo público · apaga lo que no uses |
-| 9:20 | 10 | Cierre + misión + QRs | Próxima presencial: redes |
+| 9:20 | 10 | Cierre + misión + QRs | Próxima virtual: redes |
 
 **Si el tiempo aprieta (probable con 40 y EC2):** prioridad absoluta = lanzar EC2 + Labs 1-2 (el "Linux real" que motivó esto) + APAGAR. El push con token y el reto pasan a la próxima como calentamiento. NUNCA saltarse el apagado.
 **Anti-deserción:** monitores · nombres propios · códigos de tesoro únicos.
