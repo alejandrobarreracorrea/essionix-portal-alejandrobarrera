@@ -1,7 +1,7 @@
 # Sesión 2 (virtual) · guía de ritmo — herramientas + Linux real en EC2
 
 **Estructura:** Parte 1 = caja de herramientas. Parte 2 = SO + lanzar EC2 + labs en Linux real + push + APAGAR.
-**Regla:** checkpoint por chat cada ≤12 min. Monitores = los que van adelante. Nadie sin tarjeta se queda: Killercoda.
+**Regla:** checkpoint por chat cada ≤12 min. Monitores = los que van adelante. **Todos deben tener cuenta AWS activa** (prerequisito de la sesión 1); el lab corre solo en EC2, sin entorno alternativo. Quien llegue sin cuenta, la activamos en el momento.
 
 | Hora | Min | Bloque | Nota |
 |---|---|---|---|
@@ -11,7 +11,7 @@
 | 6:45 | 30 | Verificar/completar herramientas | GitHub, VS Code, Terraform, AWS (prerequisito). Rápido si llegaron listos. Checkpoints |
 | 7:15 | 5 | ¿Qué es un SO? (stack animado) | El administrador entre hardware y apps |
 | 7:20 | 5 | ¿Cuáles existen? + terminal = manejar el SO | Cierra en "¿cómo se le habla a Linux?" |
-| 7:25 | 20 | **Lanzar EC2 + Instance Connect** | El bloque estelar. Ir despacio, monitores activos. Sin cuenta → Killercoda. Checkpoint: `ubuntu@...$` |
+| 7:25 | 20 | **Lanzar EC2 + Instance Connect** | El bloque estelar. Ir despacio, monitores activos. Checkpoint: `ubuntu@...$` |
 | 7:45 | 5 | PAUSA corta | |
 | 7:50 | 25 | Labs 1-2 EN el servidor | whoami/uname para que SIENTAN que es Linux real. Checkpoint por lab |
 | 8:15 | 15 | Lab 3: git config + clone + crear token | El token es el paso nuevo — pasos al chat, despacio |

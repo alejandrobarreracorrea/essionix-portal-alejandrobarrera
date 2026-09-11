@@ -4,8 +4,10 @@
 lanzada por cada estudiante, conectada por **EC2 Instance Connect** (navegador, sin llaves .pem ni
 cliente SSH). Prerequisito: cuenta AWS activa (se pidió en la sesión 1).
 
-**Fallback obligatorio para sin-cuenta/sin-tarjeta:** killercoda.com → Playgrounds → Ubuntu
-(Linux real, navegador, gratis, sin registro). TODOS los labs corren igual ahí.
+**Todos deben tener cuenta AWS activa** (prerequisito de la sesión 1). El lab corre **solo en EC2**:
+no hay entorno alternativo. Quien llegue sin cuenta activa, la activamos en el momento (verificación /
+tarjeta) antes de continuar; si la verificación tarda, trabaja en pareja sobre la instancia de un
+compañero mientras se destraba — todo sigue en EC2.
 
 ## Los instaladores/cuentas (links para el chat)
 1. GitHub: https://github.com/signup  ·  repo `bitacora-[empresa]` público con README
@@ -73,10 +75,10 @@ Verificar estado **Stopped/Terminated**. Con 40 estudiantes, instancias olvidada
 Al inicio de la próxima clase: revisar en consola que nadie dejó nada corriendo.
 
 ## Riesgos conocidos y mitigación
-- **Sin tarjeta / cuenta AWS** → Killercoda (mismos labs, sin AWS). No se atrasan.
+- **Sin cuenta AWS activa** → es prerequisito: todos deben tenerla. Se activa en el momento (verificación / tarjeta); mientras se destraba, trabaja en pareja sobre la instancia de un compañero. No hay entorno alterno.
 - **Instance Connect falla** ("unable to connect") → suele ser el security group sin puerto 22:
-  editar security group de la instancia → Inbound → Add rule → SSH → Anywhere. O usar Killercoda.
-- **La instancia no lanza** (límite/verificación de cuenta nueva) → Killercoda; el EC2 queda de misión.
+  editar security group de la instancia → Inbound → Add rule → SSH → Anywhere.
+- **La instancia no lanza** (límite/verificación de cuenta nueva) → resolver la verificación de la cuenta; si tarda, en pareja sobre la instancia de un compañero mientras se destraba.
 - **Push falla** → 99% es token mal copiado o sin scope `repo`. Regenerar.
 - **Olvidan apagar** → recordatorio en el grupo esa misma noche + revisión al inicio de sesión 3.
 
