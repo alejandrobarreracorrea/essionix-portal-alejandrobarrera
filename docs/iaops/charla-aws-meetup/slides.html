@@ -1,236 +1,294 @@
 <!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>De 0 a deploy: tu primera app viva en AWS — Meetup</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>De 0 a deploy: tu primera app viva en AWS — AWS UG Pereira</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0b0e14; --bg2:#11151f; --line:#232a38; --text:#eef2f8; --muted:#9aa6b6; --faint:#6b7686;
-  --aws:#ff9900; --aws2:#ffb84d; --ink:#0b0e14;
-  --display:'Poppins',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+  --bg:#08080b; --panel:#0d0d14; --panel2:#12121c; --line:#232430;
+  --text:#f5f5f7; --muted:#9c9caa; --faint:#6b6b78;
+  --p:#8b7bff; --t:#38e0d8; --aws:#ff9900;
+  --grad:linear-gradient(105deg,var(--p),var(--t));
+  --grad-aws:linear-gradient(105deg,var(--aws),#ff6a3d);
+  --display:'Space Grotesk',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+  --pad:clamp(44px,7vw,120px);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{background:var(--bg);color:var(--text);font-family:var(--body);overflow:hidden}
-.slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
-  padding:clamp(40px,7vw,110px);opacity:0;transition:opacity .4s ease}
-.slide.on{display:flex;opacity:1}
-.k{font-family:var(--mono);font-size:clamp(.62rem,1vw,.8rem);letter-spacing:.14em;text-transform:uppercase;color:var(--aws);margin-bottom:18px}
-h1{font-family:var(--display);font-weight:800;line-height:1.02;font-size:clamp(2.4rem,6.5vw,5.2rem);letter-spacing:-.02em}
-h2{font-family:var(--display);font-weight:700;line-height:1.05;font-size:clamp(1.7rem,4.4vw,3.4rem);letter-spacing:-.015em}
-h1 .or,h2 .or{color:var(--aws)}
-.sub{color:var(--muted);font-size:clamp(1rem,1.8vw,1.5rem);line-height:1.5;margin-top:22px;max-width:24ch}
-.lead{font-size:clamp(1.15rem,2.2vw,1.9rem);line-height:1.4;max-width:20ch;font-weight:500}
-.big{font-family:var(--display);font-weight:800;font-size:clamp(3.4rem,11vw,9rem);line-height:.95;color:var(--aws);letter-spacing:-.03em}
-.clean{list-style:none;display:flex;flex-direction:column;gap:clamp(10px,1.7vh,18px);margin-top:12px;max-width:30ch}
-.clean li{font-size:clamp(1rem,1.9vw,1.5rem);line-height:1.35;padding-left:0}
-.clean li b{color:var(--aws2);font-weight:600}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,60px);align-items:center}
-.card{background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:clamp(20px,2.6vw,34px)}
-.card .ico{font-size:clamp(2rem,4vw,3.2rem);line-height:1}
-.card h3{font-family:var(--display);font-weight:700;font-size:clamp(1.2rem,2.3vw,1.9rem);margin:12px 0 8px}
-.card p{color:var(--muted);font-size:clamp(.9rem,1.5vw,1.15rem);line-height:1.45}
-.analogy{font-family:var(--mono);color:var(--aws);font-size:clamp(.85rem,1.4vw,1.05rem);margin-top:14px;display:block}
-.statgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(16px,2.4vw,30px);margin-top:12px;max-width:1000px}
-.stat{background:var(--bg2);border:1px solid var(--line);border-left:4px solid var(--aws);border-radius:14px;padding:clamp(16px,2vw,26px)}
-.stat .n{font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,4vw,3rem);color:var(--aws)}
-.stat .l{color:var(--muted);font-size:clamp(.82rem,1.3vw,1.02rem);line-height:1.35;margin-top:4px}
-.qrbox{width:clamp(220px,32vw,360px);aspect-ratio:1;border:2px dashed var(--aws);border-radius:20px;display:flex;
-  align-items:center;justify-content:center;text-align:center;color:var(--faint);font-family:var(--mono);
-  font-size:.8rem;padding:20px;background:rgba(255,153,0,.05)}
-.pill{align-self:flex-start;background:rgba(255,153,0,.12);color:var(--aws);border:1px solid rgba(255,153,0,.4);
-  font-family:var(--mono);font-size:.72rem;padding:.4em 1em;border-radius:999px;letter-spacing:.06em;margin-bottom:20px}
-.term{background:#05070b;border:1px solid var(--line);border-radius:14px;padding:clamp(18px,2.4vw,30px);font-family:var(--mono);
-  font-size:clamp(.85rem,1.5vw,1.15rem);line-height:1.9;max-width:900px;margin-top:8px}
-.term .c{color:var(--faint)} .term .g{color:#3ddc84} .term b{color:var(--aws2);font-weight:500}
-.me{display:flex;align-items:center;gap:22px;margin-top:8px}
-.me .av{width:clamp(70px,9vw,110px);height:clamp(70px,9vw,110px);border-radius:50%;background:linear-gradient(135deg,var(--aws),#c46a00);
-  display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:clamp(1.6rem,3vw,2.4rem);color:var(--ink)}
-.me .t b{font-family:var(--display);font-size:clamp(1.3rem,2.6vw,2rem);display:block}
-.me .t span{color:var(--muted);font-size:clamp(.9rem,1.5vw,1.15rem)}
-.brand{position:absolute;left:clamp(40px,7vw,110px);bottom:clamp(28px,4vh,46px);font-family:var(--mono);font-size:.72rem;color:var(--faint);letter-spacing:.08em}
-.brand b{color:var(--aws)}
-.disc{position:absolute;right:clamp(40px,7vw,110px);bottom:clamp(28px,4vh,46px);font-family:var(--mono);font-size:.62rem;color:var(--faint);text-align:right;max-width:34ch;line-height:1.5}
-.contact{display:flex;flex-direction:column;gap:8px;margin-top:20px;font-family:var(--mono);font-size:clamp(.9rem,1.6vw,1.2rem)}
-.contact span b{color:var(--aws)}
-#bar{position:fixed;top:0;left:0;height:3px;background:var(--aws);width:0;z-index:20;transition:width .3s}
-#num{position:fixed;right:20px;bottom:16px;font-family:var(--mono);font-size:.72rem;color:var(--faint);z-index:20}
-.hint{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);font-family:var(--mono);font-size:.7rem;color:var(--faint);z-index:20}
-@media(max-width:760px){.two,.statgrid{grid-template-columns:1fr}}
+body{background:var(--bg);color:var(--text);font-family:var(--body);overflow:hidden;position:relative}
+/* ambient light — signature glow */
+body::before{content:"";position:fixed;inset:-20% -10% auto auto;width:70vw;height:70vw;pointer-events:none;z-index:0;
+  background:radial-gradient(closest-side,rgba(139,123,255,.20),transparent 70%);filter:blur(10px)}
+body::after{content:"";position:fixed;inset:auto auto -25% -15%;width:60vw;height:60vw;pointer-events:none;z-index:0;
+  background:radial-gradient(closest-side,rgba(56,224,216,.15),transparent 70%);filter:blur(10px)}
+.slide{position:absolute;inset:0;z-index:1;display:none;flex-direction:column;justify-content:center;padding:var(--pad)}
+.slide.on{display:flex}
+.slide.on>*{opacity:0;transform:translateY(14px);animation:rise .5s cubic-bezier(.2,.7,.2,1) forwards}
+.slide.on>*:nth-child(2){animation-delay:.06s}.slide.on>*:nth-child(3){animation-delay:.12s}
+.slide.on>*:nth-child(4){animation-delay:.18s}.slide.on>*:nth-child(5){animation-delay:.24s}
+@keyframes rise{to{opacity:1;transform:none}}
+
+/* type */
+.ey{display:inline-flex;align-items:center;gap:10px;font-family:var(--body);font-weight:500;font-size:clamp(.8rem,1.2vw,1rem);color:var(--muted);margin-bottom:26px;align-self:flex-start}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--t);box-shadow:0 0 0 0 rgba(56,224,216,.6);animation:pulse 2.2s infinite}
+.dot.aws{background:var(--aws);box-shadow:0 0 0 0 rgba(255,153,0,.6);animation:pulseA 2.2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 12px rgba(56,224,216,0)}100%{box-shadow:0 0 0 0 rgba(56,224,216,0)}}
+@keyframes pulseA{70%{box-shadow:0 0 0 12px rgba(255,153,0,0)}100%{box-shadow:0 0 0 0 rgba(255,153,0,0)}}
+h1{font-family:var(--display);font-weight:700;line-height:1.0;font-size:clamp(2.6rem,7.2vw,6rem);letter-spacing:-.03em}
+h2{font-family:var(--display);font-weight:700;line-height:1.05;font-size:clamp(2rem,5vw,3.9rem);letter-spacing:-.02em}
+.grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.grad-aws{background:var(--grad-aws);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--muted);font-size:clamp(1.05rem,1.8vw,1.55rem);line-height:1.5;margin-top:26px;max-width:26ch}
+.lead{font-size:clamp(1.2rem,2.4vw,2.1rem);line-height:1.35;max-width:22ch;font-weight:500;margin-top:24px}
+
+/* concept (sequence 01–05) */
+.concept{display:grid;grid-template-columns:auto 1fr;gap:clamp(28px,5vw,72px);align-items:center;max-width:1180px}
+.idx{font-family:var(--display);font-weight:700;font-size:clamp(5rem,15vw,13rem);line-height:.8;letter-spacing:-.04em;
+  -webkit-text-stroke:2px var(--p);color:transparent;opacity:.9}
+.cbody h2{margin-bottom:6px}
+.note{font-family:var(--mono);font-size:clamp(.9rem,1.5vw,1.2rem);color:var(--t);margin-top:16px;display:flex;gap:10px;align-items:baseline}
+.note .h{color:var(--faint)}
+.cbody .sub{max-width:34ch;margin-top:18px}
+.tag{font-family:var(--mono);font-size:clamp(.75rem,1.2vw,.95rem);color:var(--faint);margin-bottom:14px}
+
+/* stats readout */
+.readout{display:flex;flex-wrap:wrap;gap:0;margin-top:14px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.rd{flex:1 1 210px;padding:clamp(20px,2.6vw,34px) clamp(20px,2.4vw,32px);border-left:1px solid var(--line)}
+.rd:first-child{border-left:0;padding-left:0}
+.rd .n{font-family:var(--display);font-weight:700;font-size:clamp(2.2rem,4.6vw,3.6rem);line-height:1;letter-spacing:-.02em}
+.rd .l{color:var(--muted);font-size:clamp(.85rem,1.3vw,1.05rem);line-height:1.4;margin-top:12px;max-width:22ch}
+
+/* console / terminal panel */
+.console{max-width:920px;margin-top:10px;border-radius:16px;background:linear-gradient(var(--panel),var(--panel2));
+  border:1px solid var(--line);box-shadow:0 30px 80px -30px rgba(139,123,255,.35);overflow:hidden}
+.console .bar{display:flex;align-items:center;gap:8px;padding:14px 18px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}
+.console .bar i{width:11px;height:11px;border-radius:50%;background:#2c2c38;display:inline-block}
+.console .bar span{margin-left:12px;font-family:var(--mono);font-size:.8rem;color:var(--faint)}
+.console .body{padding:clamp(20px,2.6vw,34px);font-family:var(--mono);font-size:clamp(.9rem,1.5vw,1.2rem);line-height:1.95}
+.console .body .c{color:var(--faint)} .console .body .ok{color:var(--t)} .console .body .u{color:var(--p)} .console .body b{color:var(--aws);font-weight:500}
+.console .body .p{color:var(--aws)}
+
+/* steps (real sequence: the demo flow) */
+.flow{display:flex;flex-direction:column;gap:clamp(14px,2.2vh,22px);margin-top:26px;max-width:40ch}
+.step{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:baseline}
+.step .s{font-family:var(--display);font-weight:700;font-size:clamp(1.1rem,1.8vw,1.5rem);color:transparent;background:var(--grad);-webkit-background-clip:text;background-clip:text}
+.step p{font-size:clamp(1.02rem,1.8vw,1.4rem);line-height:1.4}
+.step p b{color:var(--aws)}
+
+/* qr */
+.qrwrap{display:flex;flex-direction:column;align-items:center;text-align:center;margin:0 auto}
+.qrframe{width:clamp(230px,34vw,380px);aspect-ratio:1;border-radius:22px;padding:3px;background:var(--grad);
+  box-shadow:0 0 70px -10px rgba(56,224,216,.5)}
+.qrframe .in{width:100%;height:100%;border-radius:19px;background:var(--panel);display:flex;align-items:center;justify-content:center;
+  text-align:center;color:var(--faint);font-family:var(--mono);font-size:.8rem;padding:22px;line-height:1.6}
+
+/* cta list */
+.cta{display:flex;flex-direction:column;gap:16px;margin-top:22px;max-width:44ch}
+.cta li{list-style:none;display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:baseline;font-size:clamp(1.05rem,1.9vw,1.5rem);line-height:1.4}
+.cta li .m{font-size:1.3em;line-height:1}
+.cta li b{color:var(--aws)}
+.fine{color:var(--faint);font-size:clamp(.82rem,1.3vw,1rem);margin-top:22px}
+
+/* contact */
+.contact{display:flex;flex-direction:column;gap:12px;margin-top:24px;font-size:clamp(1.02rem,1.7vw,1.35rem)}
+.contact span{color:var(--muted)} .contact span b{color:var(--text);font-weight:600}
+.contact span i{font-style:normal;font-family:var(--mono);color:var(--t)}
+
+/* brand + chrome */
+.foot{position:absolute;left:var(--pad);right:var(--pad);bottom:clamp(26px,4vh,44px);display:flex;justify-content:space-between;align-items:flex-end;gap:24px;z-index:2}
+.lock{font-family:var(--display);font-weight:600;font-size:clamp(.95rem,1.4vw,1.2rem);letter-spacing:.02em}
+.lock .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lock small{display:block;font-family:var(--body);font-weight:400;font-size:.62em;color:var(--faint);letter-spacing:0;margin-top:2px}
+.disc{font-family:var(--body);font-size:clamp(.62rem,1vw,.78rem);color:var(--faint);text-align:right;max-width:36ch;line-height:1.5}
+#bar{position:fixed;top:0;left:0;height:3px;background:var(--grad);width:0;z-index:30;transition:width .35s cubic-bezier(.2,.7,.2,1)}
+#num{position:fixed;right:20px;bottom:14px;font-family:var(--mono);font-size:.72rem;color:var(--faint);z-index:30}
+.hint{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);font-family:var(--mono);font-size:.7rem;color:var(--faint);z-index:30}
+
+@media(max-width:820px){
+  .concept{grid-template-columns:1fr;gap:18px}.idx{font-size:5.5rem}
+  .readout{border:0}.rd{flex-basis:45%;border-left:0;border-top:1px solid var(--line);padding-left:0}
+  .foot{flex-direction:column;align-items:flex-start}.disc{text-align:left}
+}
+@media(prefers-reduced-motion:reduce){.slide.on>*{animation:none;opacity:1;transform:none}.dot,.dot.aws{animation:none}}
 </style></head>
 <body>
 <div id="bar"></div>
 
 <!-- 1 · PORTADA -->
 <section class="slide">
-  <span class="k">AWS User Group · [Ciudad] · Meetup</span>
-  <h1>De 0 a <span class="or">deploy</span>:<br>tu primera app<br>viva en AWS</h1>
-  <p class="sub">Introducción práctica — con un toque de IA. Demo en vivo, sin humo.</p>
-  <div class="brand">Alejandro Barrera · Cloud Architect · <b>IAOps</b></div>
-  <div class="disc">Charla de comunidad · opiniones propias.<br>No representa ni cuenta con respaldo oficial de AWS.</div>
+  <span class="ey"><span class="dot aws"></span>AWS User Group Pereira · Meetup</span>
+  <h1><span class="grad">De 0 a deploy</span><br>tu primera app viva en AWS</h1>
+  <p class="sub">Introducción práctica, con un toque de IA. Construimos y desplegamos algo real — en vivo.</p>
+  <div class="foot">
+    <div class="lock"><span class="g">IAOps</span><small>Alejandro Barrera · Cloud Architect</small></div>
+    <div class="disc">Charla de comunidad · opiniones propias.<br>No representa ni cuenta con respaldo oficial de AWS.</div>
+  </div>
 </section>
 
 <!-- 2 · COLD OPEN -->
 <section class="slide">
-  <span class="k">Antes de empezar…</span>
-  <div class="big">+170%</div>
-  <p class="lead" style="margin-top:22px">Así creció, trimestre a trimestre en 2026, el gasto de clientes en IA sobre AWS.
-  Pasó más IA por esos servidores que en años anteriores juntos.</p>
-  <p class="sub" style="color:var(--aws2)">Y en los próximos minutos vamos a poner algo <b style="color:var(--aws)">VIVO</b> ahí. Entre todos. 📲</p>
+  <span class="ey"><span class="dot"></span>una cifra para empezar</span>
+  <h1 class="grad-aws" style="font-size:clamp(4rem,16vw,13rem)">+170%</h1>
+  <p class="lead">Así creció, trimestre a trimestre en 2026, el gasto en IA sobre AWS. Pasó más inteligencia por esos servidores que en años anteriores juntos.</p>
+  <p class="sub" style="max-width:30ch">En los próximos minutos vamos a poner algo <span class="grad-aws">vivo</span> ahí. Entre todos.</p>
 </section>
 
-<!-- 3 · QUIÉN (background, 1 slide máx) -->
+<!-- 3 · QUIÉN -->
 <section class="slide">
-  <span class="k">30 segundos y seguimos</span>
-  <div class="me">
-    <div class="av">AB</div>
-    <div class="t"><b>Alejandro Barrera</b><span>Cloud Architect. Hago que la IA y la nube trabajen juntas.</span></div>
-  </div>
-  <p class="sub" style="max-width:34ch">Es mi primera charla. No vengo a darte una clase — te traigo algo que puedes replicar hoy mismo.</p>
+  <span class="ey"><span class="dot"></span>30 segundos y seguimos</span>
+  <h2>Soy Alejandro. Diseño<br>infraestructura en la nube.</h2>
+  <p class="sub" style="max-width:38ch">Es mi primera charla. No vengo a darte una clase — te traigo algo que puedes replicar hoy mismo, en tu propia cuenta.</p>
 </section>
 
 <!-- 4 · AGENDA -->
 <section class="slide">
-  <span class="k">El plan de los próximos 30 min</span>
-  <h2>Entender, y luego <span class="or">construir en vivo</span></h2>
-  <ul class="clean" style="margin-top:24px">
-    <li>1 · Qué es la nube, en 5 ideas (con analogías, sin jerga)</li>
-    <li>2 · Por qué AWS y por qué <b>ahora</b></li>
-    <li>3 · <b>Demo en vivo:</b> de una idea a una app pública — y la abren en su celular</li>
-    <li>4 · Cómo empezar tú esta semana</li>
-  </ul>
+  <span class="ey"><span class="dot"></span>los próximos 30 minutos</span>
+  <h2>Entender, y luego<br><span class="grad">construir en vivo</span></h2>
+  <div class="flow" style="max-width:46ch">
+    <div class="step"><span class="s">01</span><p>La nube en 5 ideas, con analogías y sin jerga</p></div>
+    <div class="step"><span class="s">02</span><p>Por qué AWS, y por qué <b>ahora</b></p></div>
+    <div class="step"><span class="s">03</span><p>Demo en vivo: de una idea a una app pública que abren en su celular</p></div>
+    <div class="step"><span class="s">04</span><p>Cómo empezar tú esta semana</p></div>
+  </div>
 </section>
 
 <!-- 5 · CONCEPTO 1 -->
 <section class="slide">
-  <span class="pill">IDEA 1 de 5</span>
-  <div class="two">
-    <div><h2>La nube es <span class="or">pago por consumo</span></h2>
-      <span class="analogy">🔌 como la luz de tu casa</span>
-      <p class="sub">No compras la planta eléctrica: pagas los kilovatios que usas. Nadie compra un servidor de $10.000 “por si acaso”.</p>
+  <div class="concept">
+    <div class="idx">01</div>
+    <div class="cbody">
+      <div class="tag">la nube, idea 1 de 5</div>
+      <h2>Pagas por lo que consumes</h2>
+      <div class="note"><span class="h">// como</span> la luz de tu casa</div>
+      <p class="sub">No compras la planta eléctrica: pagas los kilovatios que usas. Nadie compra un servidor de USD 10.000 “por si acaso”.</p>
     </div>
-    <div class="card"><div class="ico">🔌</div><h3>Pay-as-you-go</h3>
-      <p>Enciendes lo que necesitas, pagas por lo que usas, y lo apagas. Cero infraestructura propia parada juntando polvo.</p></div>
   </div>
 </section>
 
 <!-- 6 · CONCEPTO 2 -->
 <section class="slide">
-  <span class="pill">IDEA 2 de 5</span>
-  <div class="two">
-    <div><h2>Regiones y <span class="or">zonas</span></h2>
-      <span class="analogy">🏦 como las sucursales de un banco</span>
-      <p class="sub">Tu app vive cerca de tus usuarios. Si una sede se cae, otra sigue. AWS tiene ~35 regiones en el mundo.</p>
+  <div class="concept">
+    <div class="idx">02</div>
+    <div class="cbody">
+      <div class="tag">la nube, idea 2 de 5</div>
+      <h2>Tu app vive cerca del usuario</h2>
+      <div class="note"><span class="h">// como</span> las sucursales de un banco</div>
+      <p class="sub">Regiones y zonas: si una sede se cae, otra sigue. AWS tiene ~35 regiones repartidas por el mundo.</p>
     </div>
-    <div class="card"><div class="ico">🗺️</div><h3>Cerca y resiliente</h3>
-      <p>Eliges dónde corre tu app; se replica en varias zonas para que un fallo no te tumbe el servicio.</p></div>
   </div>
 </section>
 
 <!-- 7 · CONCEPTO 3 -->
 <section class="slide">
-  <span class="pill">IDEA 3 de 5</span>
-  <div class="two">
-    <div><h2>Responsabilidad <span class="or">compartida</span></h2>
-      <span class="analogy">🏢 el edificio y tu apartamento</span>
-      <p class="sub">AWS asegura el edificio (hardware, red, data centers). Tú aseguras lo que hay dentro: tus datos, tus llaves, tus permisos.</p>
+  <div class="concept">
+    <div class="idx">03</div>
+    <div class="cbody">
+      <div class="tag">la nube, idea 3 de 5</div>
+      <h2>Seguridad: cada quien su parte</h2>
+      <div class="note"><span class="h">// como</span> el edificio y tu apartamento</div>
+      <p class="sub">AWS asegura el edificio; tú, lo que hay dentro: tus datos, tus llaves, tus permisos. El error más caro de quien empieza vive en tu mitad.</p>
     </div>
-    <div class="card"><div class="ico">🔐</div><h3>Tu mitad importa</h3>
-      <p>El error más caro de quien empieza vive en la parte del cliente: un permiso abierto, una llave expuesta.</p></div>
   </div>
 </section>
 
 <!-- 8 · CONCEPTO 4 -->
 <section class="slide">
-  <span class="pill">IDEA 4 de 5</span>
-  <div class="two">
-    <div><h2><span class="or">Serverless</span></h2>
-      <span class="analogy">🚕 taxi, no carro propio</span>
-      <p class="sub">El código corre solo cuando llega una petición, y pagas por milisegundo. “Sin servidores” no es magia: hay servidores, pero no son tu problema.</p>
+  <div class="concept">
+    <div class="idx">04</div>
+    <div class="cbody">
+      <div class="tag">la nube, idea 4 de 5</div>
+      <h2>Serverless: sin servidores tuyos</h2>
+      <div class="note"><span class="h">// como</span> un taxi, no un carro propio</div>
+      <p class="sub">El código corre solo cuando llega una petición y pagas por milisegundo. Hay servidores, pero no son tu problema.</p>
     </div>
-    <div class="card"><div class="ico">⚡</div><h3>Lambda</h3>
-      <p>Subes una función, AWS la ejecuta bajo demanda y escala sola. Nada prendido 24/7 gastando de más.</p></div>
   </div>
 </section>
 
 <!-- 9 · CONCEPTO 5 -->
 <section class="slide">
-  <span class="pill">IDEA 5 de 5</span>
-  <div class="two">
-    <div><h2>IA <span class="or">en la nube</span></h2>
-      <span class="analogy">🤖 antes para gigantes, hoy para todos</span>
-      <p class="sub">Con <b style="color:var(--aws2)">Amazon Bedrock</b> invocas modelos como Claude o Nova con una llamada de API y pagas por token. Sin entrenar nada, sin GPUs propias.</p>
+  <div class="concept">
+    <div class="idx" style="-webkit-text-stroke-color:var(--aws)">05</div>
+    <div class="cbody">
+      <div class="tag">la nube, idea 5 de 5</div>
+      <h2>La nube ahora <span class="grad-aws">piensa</span></h2>
+      <div class="note"><span class="h">// con</span> Amazon Bedrock</div>
+      <p class="sub">Invocas modelos como Claude o Nova con una llamada de API y pagas por token. Sin entrenar nada, sin GPUs propias.</p>
     </div>
-    <div class="card"><div class="ico">🧠</div><h3>Bedrock</h3>
-      <p>Un menú de modelos de IA listos para usar. La misma nube donde vive tu app ahora piensa por ella.</p></div>
   </div>
 </section>
 
 <!-- 10 · POR QUÉ AWS AHORA -->
 <section class="slide">
-  <span class="k">Por qué vale la pena aprenderlo</span>
-  <h2>AWS, ahora mismo</h2>
-  <div class="statgrid">
-    <div class="stat"><div class="n">~28%</div><div class="l">del mercado cloud global (líder; Azure ~21%, Google ~14%)</div></div>
-    <div class="stat"><div class="n">+37%</div><div class="l">crecimiento interanual de AWS en Q2 2026 — acelerando, no frenando</div></div>
-    <div class="stat"><div class="n">~55.000</div><div class="l">empleos AWS activos · salario promedio ~US$135.000/año</div></div>
-    <div class="stat"><div class="n">$0 → </div><div class="l">empezar es gratis. No necesitas ser programador para dar el primer paso</div></div>
+  <span class="ey"><span class="dot"></span>por qué vale la pena, ahora</span>
+  <h2>AWS no está frenando</h2>
+  <div class="readout">
+    <div class="rd"><div class="n grad">~28%</div><div class="l">del mercado cloud global. Es el líder (Azure ~21%, Google ~14%)</div></div>
+    <div class="rd"><div class="n grad">+37%</div><div class="l">creció AWS en un solo trimestre de 2026 — acelerando</div></div>
+    <div class="rd"><div class="n grad">~55K</div><div class="l">empleos AWS activos · ~USD 135K/año en promedio</div></div>
+    <div class="rd"><div class="n grad-aws">USD 0</div><div class="l">cuesta empezar. Y no necesitas ser programador</div></div>
   </div>
 </section>
 
 <!-- 11 · TRANSICIÓN -->
 <section class="slide">
-  <span class="k">Basta de teoría</span>
-  <h1>Saquen el<br><span class="or">celular</span>. 📲</h1>
-  <p class="sub">Todo lo anterior no vale nada si no lo ves funcionar. Vamos a construir y desplegar algo — ahora.</p>
+  <span class="ey"><span class="dot aws"></span>basta de teoría</span>
+  <h1>Saquen el celular.</h1>
+  <p class="sub" style="max-width:32ch">Todo esto no vale nada si no lo ves funcionar. Vamos a construir y desplegar algo — ahora mismo.</p>
 </section>
 
-<!-- 12 · DEMO: qué construimos -->
+<!-- 12 · DEMO (consola) -->
 <section class="slide">
-  <span class="pill">DEMO EN VIVO</span>
-  <h2>Una idea → una app pública, <span class="or">en minutos</span></h2>
-  <ul class="clean" style="margin-top:20px;max-width:38ch">
-    <li>1 · Le dicto la intención a la <b>IA</b> → genera el código (así trabaja hoy un arquitecto)</li>
-    <li>2 · Lo despliego en <b>AWS Amplify</b> → aparece una URL pública real</li>
-    <li>3 · Proyecto el <b>QR</b> → ustedes la abren en su celular</li>
-  </ul>
+  <span class="ey"><span class="dot aws"></span>demo en vivo</span>
+  <h2>De una idea a producción</h2>
+  <div class="console">
+    <div class="bar"><i></i><i></i><i></i><span>~/mi-primera-app</span></div>
+    <div class="body">
+      <div><span class="u">tú &gt;</span> “una landing para mi comunidad, con un contador de visitas”</div>
+      <div><span class="c"># la IA genera el código…</span> <span class="ok">✓ listo</span></div>
+      <div><span class="p">$</span> amplify deploy</div>
+      <div><span class="c"># desplegando en AWS…</span></div>
+      <div><span class="ok">✓ live:</span> <b>https://tu-app.amplifyapp.com</b></div>
+    </div>
+  </div>
 </section>
 
 <!-- 13 · QR EN VIVO -->
-<section class="slide" style="align-items:center;text-align:center">
-  <span class="k" style="text-align:center;width:100%">Está VIVO en AWS</span>
-  <h2 style="text-align:center">Ábranla ustedes 👇</h2>
-  <div class="qrbox" style="margin:26px auto 0">[ QR del demo en vivo<br>— se pega el día de la charla,<br>apuntando a la URL de Amplify ]</div>
-  <p class="sub" style="margin:22px auto 0;max-width:30ch;text-align:center">Lo que acaban de ver nacer corre en los mismos servidores del inicio.</p>
-</section>
-
-<!-- 14 · EMPIEZA HOY (CTA free tier) -->
 <section class="slide">
-  <span class="k">Tu turno — esta semana</span>
-  <h2>Empieza <span class="or">gratis</span> hoy</h2>
-  <ul class="clean" style="margin-top:20px;max-width:40ch">
-    <li>🎁 Cuenta nueva 2026: <b>plan gratuito de 6 meses + hasta US$200 en créditos</b></li>
-    <li>🚀 Reto de la semana: crea tu cuenta y haz <b>tu primer deploy</b> (lo que viste hoy)</li>
-    <li>💡 Regla de oro: <b>apaga lo que no uses</b> — así el free tier rinde</li>
-  </ul>
-  <p class="sub">*Condiciones del free tier cambian; verifícalas al crear la cuenta.</p>
-</section>
-
-<!-- 15 · GRACIAS / CONTACTO -->
-<section class="slide">
-  <span class="k">Gracias 🙌</span>
-  <h2>¿Seguimos <span class="or">construyendo</span>?</h2>
-  <div class="contact">
-    <span>💼 LinkedIn · <b>/in/alejobarrera</b></span>
-    <span>🌐 <b>alejandrobarrera.net</b></span>
-    <span>👥 Comunidad · <b>iaopslatam.com</b></span>
+  <span class="ey" style="align-self:center"><span class="dot aws"></span>está vivo en AWS · ábranla</span>
+  <div class="qrwrap">
+    <div class="qrframe"><div class="in">[ QR del demo en vivo — se pega el día de la charla, apuntando a la URL de Amplify ]</div></div>
+    <p class="sub" style="max-width:30ch;margin-top:26px">Lo que acaban de ver nacer corre en los mismos servidores del inicio.</p>
   </div>
-  <p class="sub" style="max-width:34ch">Si algo de hoy te movió, escríbeme. La mejor forma de aprender AWS es construyendo — y no tienes que hacerlo solo.</p>
-  <div class="disc">Charla de comunidad · opiniones propias · sin respaldo oficial de AWS.</div>
+</section>
+
+<!-- 14 · EMPIEZA HOY -->
+<section class="slide">
+  <span class="ey"><span class="dot aws"></span>tu turno · esta semana</span>
+  <h2>Empieza <span class="grad-aws">gratis</span> hoy</h2>
+  <ul class="cta">
+    <li><span class="m">🎁</span><div>Cuenta nueva 2026: <b>plan gratuito de 6 meses + hasta USD 200 en créditos</b></div></li>
+    <li><span class="m">🚀</span><div>El reto: crea tu cuenta y haz <b>tu primer deploy</b> — lo que viste hoy</div></li>
+    <li><span class="m">💡</span><div>Regla de oro: <b>apaga lo que no uses</b> y el free tier te rinde</div></li>
+  </ul>
+  <p class="fine">*Las condiciones del free tier cambian; verifícalas al crear tu cuenta.</p>
+</section>
+
+<!-- 15 · GRACIAS -->
+<section class="slide">
+  <span class="ey"><span class="dot"></span>gracias, Pereira 🙌</span>
+  <h2>¿Seguimos<br><span class="grad">construyendo</span>?</h2>
+  <div class="contact">
+    <span>LinkedIn <b>Alejandro Barrera</b> <i>/in/alejobarrera</i></span>
+    <span>Web <i>alejandrobarrera.net</i></span>
+    <span>Comunidad <i>iaopslatam.com</i></span>
+  </div>
+  <div class="foot">
+    <div class="lock"><span class="g">IAOps</span><small>la IA y la nube, trabajando juntas</small></div>
+    <div class="disc">Charla de comunidad · opiniones propias · sin respaldo oficial de AWS.</div>
+  </div>
 </section>
 
 <div id="num"></div>
-<div class="hint">← → para navegar · clic avanza</div>
-
+<div class="hint">← → navegar · clic avanza</div>
 <script>
 var slides=document.querySelectorAll(".slide"),i=0;
 function go(n){i=Math.max(0,Math.min(slides.length-1,n));
