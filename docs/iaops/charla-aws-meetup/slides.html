@@ -101,7 +101,13 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
   .readout{flex-wrap:wrap}.rd{flex-basis:45%;border-left:0;border-top:1px solid var(--line);padding-left:0}
   .foot{flex-direction:column;align-items:flex-start}.disc{text-align:left}
 }
-@media(prefers-reduced-motion:reduce){.slide.on>*{animation:none;opacity:1;transform:none}.dot,.dot.aws{animation:none}}
+.arch{width:100%;margin-top:clamp(16px,3vh,40px)}
+.arch svg{width:100%;height:auto;max-height:56vh;overflow:visible}
+.flowline{stroke-dasharray:9 13;animation:flow 1.1s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-22}}
+.nlabel{font-family:var(--display);font-weight:600;fill:var(--text)}
+.nsub{font-family:var(--mono);fill:var(--t)}
+@media(prefers-reduced-motion:reduce){.slide.on>*{animation:none;opacity:1;transform:none}.dot,.dot.aws{animation:none}.flowline{animation:none}}
 </style></head>
 <body>
 <!-- shared gradient/glow defs -->
@@ -171,8 +177,8 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
     <div class="flow">
       <div class="step"><span class="s">01</span><p>La nube en 5 ideas, con analogías y sin jerga</p></div>
       <div class="step"><span class="s">02</span><p>Por qué AWS, y por qué <b>ahora</b></p></div>
-      <div class="step"><span class="s">03</span><p>Demo en vivo: de una idea a una app pública</p></div>
-      <div class="step"><span class="s">04</span><p>Cómo empezar tú esta semana</p></div>
+      <div class="step"><span class="s">03</span><p>Demo en vivo: construimos <b>tu casa en internet</b></p></div>
+      <div class="step"><span class="s">04</span><p>Cómo ser el arquitecto — el tuyo y el de los demás</p></div>
     </div>
   </div>
   <div class="viz"><svg viewBox="0 0 360 400" fill="none" stroke-linecap="round">
@@ -279,12 +285,58 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
   </div>
 </section>
 
-<!-- 11 · TRANSICIÓN -->
+<!-- 11 · PROPÓSITO -->
+<section class="slide split">
+  <div class="col">
+    <span class="ey"><span class="dot"></span>por qué esto importa</span>
+    <h2>No es una app cualquiera:<br>es <span class="grad">tu casa</span> en internet</h2>
+    <p class="sub" style="max-width:37ch">Tu identidad digital — tu lugar propio en la web, con tu nombre. Y al construirla, aprendes a levantar la de cualquiera: a ser un <span class="grad-aws">arquitecto de la nube</span>. Eso vale, y eso puedes serlo tú.</p>
+  </div>
+  <div class="viz"><svg viewBox="0 0 460 360" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="24" y="34" width="412" height="292" rx="16" stroke="url(#gPT)" stroke-width="2.5" fill="var(--panel2)"/>
+    <line x1="24" y1="76" x2="436" y2="76" stroke="var(--line)" stroke-width="1.5"/>
+    <g fill="#2c2c38"><circle cx="46" cy="55" r="5"/><circle cx="64" cy="55" r="5"/><circle cx="82" cy="55" r="5"/></g>
+    <rect x="120" y="46" width="230" height="18" rx="9" fill="#0b0b12" stroke="var(--line)"/>
+    <text x="140" y="59" fill="var(--t)" font-family="JetBrains Mono, monospace" font-size="12">tucasa.dev</text>
+    <g stroke="url(#gPT)" stroke-width="2" opacity=".55"><path d="M230 108 a34 34 0 0 1 0 0"/><path d="M198 128 a44 44 0 0 1 64 0"/><path d="M212 140 a26 26 0 0 1 36 0"/></g>
+    <circle cx="230" cy="150" r="4" fill="url(#gPT)"/>
+    <path d="M150 210 L230 158 L310 210 Z" fill="rgba(139,123,255,.12)" stroke="url(#gPT)" stroke-width="2.5"/>
+    <path d="M166 210 L166 296 L294 296 L294 210" stroke="url(#gPT)" stroke-width="2.5" fill="rgba(139,123,255,.05)"/>
+    <rect x="212" y="250" width="36" height="46" rx="4" stroke="url(#gPT)" stroke-width="2"/>
+    <rect x="184" y="234" width="24" height="24" rx="3" fill="url(#gAWS)" filter="url(#glow)"/>
+  </svg></div>
+</section>
+
+<!-- 12 · ARQUITECTURA (flujo animado) -->
+<section class="slide left">
+  <span class="ey"><span class="dot aws"></span>lo que vamos a desplegar · el flujo</span>
+  <h2>Así viaja tu casa hasta el mundo</h2>
+  <div class="arch"><svg viewBox="0 0 1200 340" fill="none">
+    <!-- connectors -->
+    <g stroke="url(#gPT)" stroke-width="3" fill="none">
+      <line class="flowline" x1="178" y1="150" x2="302" y2="150"/>
+      <line class="flowline" x1="418" y1="150" x2="542" y2="150"/>
+      <line class="flowline" x1="658" y1="150" x2="782" y2="150"/>
+      <line class="flowline" x1="898" y1="150" x2="1022" y2="150"/>
+    </g>
+    <g fill="url(#gPT)"><path d="M302 150 l-14 -7 l0 14 z"/><path d="M542 150 l-14 -7 l0 14 z"/><path d="M782 150 l-14 -7 l0 14 z"/><path d="M1022 150 l-14 -7 l0 14 z"/></g>
+    <!-- traveling pulse -->
+    <circle r="8" fill="url(#gAWS)" filter="url(#glow)"><animateMotion path="M120 150 H1080" dur="3.6s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear"/></circle>
+    <!-- nodes -->
+    <g><circle cx="120" cy="150" r="52" fill="var(--panel2)" stroke="url(#gPT)" stroke-width="2.5"/><g transform="translate(120,150)" stroke="url(#gPT)" stroke-width="2.5" fill="none" stroke-linecap="round"><circle cx="0" cy="-4" r="13"/><path d="M-6 11 h12 M-4 17 h8"/></g><text x="120" y="242" text-anchor="middle" class="nlabel" font-size="20">tu idea</text><text x="120" y="268" text-anchor="middle" class="nsub" font-size="14">tú + IA</text></g>
+    <g><circle cx="360" cy="150" r="52" fill="var(--panel2)" stroke="url(#gPT)" stroke-width="2.5"/><g transform="translate(360,150)" stroke="url(#gPT)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="-13" y="-16" width="26" height="32" rx="3"/><path d="M-6 -8 h12 M-6 0 h12 M-6 8 h7"/></g><text x="360" y="242" text-anchor="middle" class="nlabel" font-size="20">los planos</text><text x="360" y="268" text-anchor="middle" class="nsub" font-size="14">GitHub</text></g>
+    <g><circle cx="600" cy="150" r="56" fill="var(--panel2)" stroke="url(#gAWS)" stroke-width="3" filter="url(#glow)"/><g transform="translate(600,150)" stroke="url(#gAWS)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M0 -16 V6"/><path d="M-9 -7 l9 -9 l9 9"/><path d="M-15 14 h30"/></g><text x="600" y="246" text-anchor="middle" class="nlabel" font-size="20">la constructora</text><text x="600" y="272" text-anchor="middle" class="nsub" font-size="14" fill="#ff9900">AWS Amplify</text></g>
+    <g><circle cx="840" cy="150" r="52" fill="var(--panel2)" stroke="url(#gPT)" stroke-width="2.5"/><g transform="translate(840,150)" stroke="url(#gPT)" stroke-width="2.2" fill="none"><circle cx="0" cy="0" r="15"/><path d="M-15 0 h30"/><ellipse cx="0" cy="0" rx="6" ry="15"/></g><text x="840" y="242" text-anchor="middle" class="nlabel" font-size="20">la dirección</text><text x="840" y="268" text-anchor="middle" class="nsub" font-size="14">CloudFront</text></g>
+    <g><circle cx="1080" cy="150" r="52" fill="var(--panel2)" stroke="url(#gPT)" stroke-width="2.5"/><g transform="translate(1080,150)" stroke="url(#gPT)" stroke-width="2.5" fill="none" stroke-linecap="round"><rect x="-10" y="-16" width="20" height="32" rx="4"/><line x1="-3" y1="11" x2="3" y2="11"/></g><text x="1080" y="242" text-anchor="middle" class="nlabel" font-size="20">las visitas</text><text x="1080" y="268" text-anchor="middle" class="nsub" font-size="14">el mundo</text></g>
+  </svg></div>
+</section>
+
+<!-- 13 · TRANSICIÓN -->
 <section class="slide split">
   <div class="col">
     <span class="ey"><span class="dot aws"></span>basta de teoría</span>
     <h1>Saquen el<br>celular.</h1>
-    <p class="sub" style="max-width:32ch">Todo esto no vale nada si no lo ves funcionar. Vamos a construir y desplegar algo — ahora mismo.</p>
+    <p class="sub" style="max-width:33ch">En un momento van a entrar a una casa que construimos aquí, en vivo. Y podría ser la de cualquiera de ustedes.</p>
   </div>
   <div class="viz"><svg viewBox="0 0 300 380" fill="none" stroke-linecap="round">
     <rect x="90" y="30" width="150" height="320" rx="28" stroke="url(#gPT)" stroke-width="2.5" fill="var(--panel2)"/>
@@ -300,26 +352,25 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
 <section class="slide split">
   <div class="col">
     <span class="ey"><span class="dot aws"></span>demo en vivo</span>
-    <h2>De una idea<br>a producción</h2>
+    <h2>Levantamos tu<br>casa en internet</h2>
     <div class="console" style="margin-top:22px">
-      <div class="bar"><i></i><i></i><i></i><span>~/mi-primera-app</span></div>
+      <div class="bar"><i></i><i></i><i></i><span>~/mi-identidad</span></div>
       <div class="b">
-        <div><span class="u">tú &gt;</span> “una landing para mi comunidad”</div>
-        <div><span class="c"># la IA genera el código…</span> <span class="ok">✓</span></div>
+        <div><span class="u">tú &gt;</span> “mi casa: Ana, futura Cloud Architect”</div>
+        <div><span class="c"># la IA construye tu identidad…</span> <span class="ok">✓</span></div>
         <div><span class="pr">$</span> amplify deploy</div>
-        <div><span class="ok">✓ live:</span> <b>tu-app.amplifyapp.com</b></div>
+        <div><span class="ok">✓ live:</span> <b>ana.tucasa.dev</b></div>
       </div>
     </div>
   </div>
   <div class="viz"><svg viewBox="0 0 300 380" fill="none">
     <rect x="80" y="24" width="150" height="332" rx="28" stroke="url(#gPT)" stroke-width="2.5" fill="var(--panel2)"/>
     <rect x="92" y="40" width="126" height="300" rx="14" fill="#0b0b12"/>
-    <rect x="92" y="40" width="126" height="70" rx="14" fill="url(#gPT)" opacity=".9"/>
-    <rect x="106" y="60" width="70" height="9" rx="4" fill="#08080b" opacity=".55"/>
-    <rect x="106" y="78" width="46" height="7" rx="3" fill="#08080b" opacity=".4"/>
-    <rect x="106" y="132" width="98" height="8" rx="4" fill="var(--line)"/>
-    <rect x="106" y="150" width="80" height="8" rx="4" fill="var(--line)"/>
-    <rect x="106" y="182" width="70" height="26" rx="8" fill="url(#gAWS)"/>
+    <circle cx="155" cy="92" r="27" fill="url(#gPT)"/>
+    <rect x="120" y="132" width="70" height="10" rx="5" fill="#e6e6ee"/>
+    <rect x="129" y="150" width="52" height="7" rx="3" fill="#38e0d8"/>
+    <rect x="106" y="184" width="98" height="7" rx="3" fill="var(--line)"/>
+    <rect x="120" y="212" width="70" height="26" rx="8" fill="url(#gAWS)"/>
     <g filter="url(#glow)"><circle cx="150" cy="300" r="7" fill="url(#gAWS)"/></g>
     <text x="164" y="305" fill="var(--aws)" font-family="JetBrains Mono, monospace" font-size="13">LIVE</text>
   </svg></div>
@@ -328,9 +379,9 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
 <!-- 13 · QR EN VIVO -->
 <section class="slide solo">
   <div>
-    <span class="ey" style="justify-content:center"><span class="dot aws"></span>está vivo en AWS · ábranla</span>
+    <span class="ey" style="justify-content:center"><span class="dot aws"></span>la casa ya está en internet · ábranla</span>
     <div class="qrframe"><div class="in">[ QR del demo en vivo — se pega el día de la charla, apuntando a la URL de Amplify ]</div></div>
-    <p class="sub" style="max-width:30ch;margin:26px auto 0">Lo que acaban de ver nacer corre en los mismos servidores del inicio.</p>
+    <p class="sub" style="max-width:32ch;margin:26px auto 0">Esta es la casa que construimos hoy. La tuya puede estar aquí la próxima semana.</p>
   </div>
 </section>
 
