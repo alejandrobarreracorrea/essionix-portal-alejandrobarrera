@@ -1,0 +1,248 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>De 0 a deploy: tu primera app viva en AWS — Meetup</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0e14; --bg2:#11151f; --line:#232a38; --text:#eef2f8; --muted:#9aa6b6; --faint:#6b7686;
+  --aws:#ff9900; --aws2:#ffb84d; --ink:#0b0e14;
+  --display:'Poppins',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--body);overflow:hidden}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+  padding:clamp(40px,7vw,110px);opacity:0;transition:opacity .4s ease}
+.slide.on{display:flex;opacity:1}
+.k{font-family:var(--mono);font-size:clamp(.62rem,1vw,.8rem);letter-spacing:.14em;text-transform:uppercase;color:var(--aws);margin-bottom:18px}
+h1{font-family:var(--display);font-weight:800;line-height:1.02;font-size:clamp(2.4rem,6.5vw,5.2rem);letter-spacing:-.02em}
+h2{font-family:var(--display);font-weight:700;line-height:1.05;font-size:clamp(1.7rem,4.4vw,3.4rem);letter-spacing:-.015em}
+h1 .or,h2 .or{color:var(--aws)}
+.sub{color:var(--muted);font-size:clamp(1rem,1.8vw,1.5rem);line-height:1.5;margin-top:22px;max-width:24ch}
+.lead{font-size:clamp(1.15rem,2.2vw,1.9rem);line-height:1.4;max-width:20ch;font-weight:500}
+.big{font-family:var(--display);font-weight:800;font-size:clamp(3.4rem,11vw,9rem);line-height:.95;color:var(--aws);letter-spacing:-.03em}
+.clean{list-style:none;display:flex;flex-direction:column;gap:clamp(10px,1.7vh,18px);margin-top:12px;max-width:30ch}
+.clean li{font-size:clamp(1rem,1.9vw,1.5rem);line-height:1.35;padding-left:0}
+.clean li b{color:var(--aws2);font-weight:600}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,60px);align-items:center}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:clamp(20px,2.6vw,34px)}
+.card .ico{font-size:clamp(2rem,4vw,3.2rem);line-height:1}
+.card h3{font-family:var(--display);font-weight:700;font-size:clamp(1.2rem,2.3vw,1.9rem);margin:12px 0 8px}
+.card p{color:var(--muted);font-size:clamp(.9rem,1.5vw,1.15rem);line-height:1.45}
+.analogy{font-family:var(--mono);color:var(--aws);font-size:clamp(.85rem,1.4vw,1.05rem);margin-top:14px;display:block}
+.statgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(16px,2.4vw,30px);margin-top:12px;max-width:1000px}
+.stat{background:var(--bg2);border:1px solid var(--line);border-left:4px solid var(--aws);border-radius:14px;padding:clamp(16px,2vw,26px)}
+.stat .n{font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,4vw,3rem);color:var(--aws)}
+.stat .l{color:var(--muted);font-size:clamp(.82rem,1.3vw,1.02rem);line-height:1.35;margin-top:4px}
+.qrbox{width:clamp(220px,32vw,360px);aspect-ratio:1;border:2px dashed var(--aws);border-radius:20px;display:flex;
+  align-items:center;justify-content:center;text-align:center;color:var(--faint);font-family:var(--mono);
+  font-size:.8rem;padding:20px;background:rgba(255,153,0,.05)}
+.pill{align-self:flex-start;background:rgba(255,153,0,.12);color:var(--aws);border:1px solid rgba(255,153,0,.4);
+  font-family:var(--mono);font-size:.72rem;padding:.4em 1em;border-radius:999px;letter-spacing:.06em;margin-bottom:20px}
+.term{background:#05070b;border:1px solid var(--line);border-radius:14px;padding:clamp(18px,2.4vw,30px);font-family:var(--mono);
+  font-size:clamp(.85rem,1.5vw,1.15rem);line-height:1.9;max-width:900px;margin-top:8px}
+.term .c{color:var(--faint)} .term .g{color:#3ddc84} .term b{color:var(--aws2);font-weight:500}
+.me{display:flex;align-items:center;gap:22px;margin-top:8px}
+.me .av{width:clamp(70px,9vw,110px);height:clamp(70px,9vw,110px);border-radius:50%;background:linear-gradient(135deg,var(--aws),#c46a00);
+  display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:clamp(1.6rem,3vw,2.4rem);color:var(--ink)}
+.me .t b{font-family:var(--display);font-size:clamp(1.3rem,2.6vw,2rem);display:block}
+.me .t span{color:var(--muted);font-size:clamp(.9rem,1.5vw,1.15rem)}
+.brand{position:absolute;left:clamp(40px,7vw,110px);bottom:clamp(28px,4vh,46px);font-family:var(--mono);font-size:.72rem;color:var(--faint);letter-spacing:.08em}
+.brand b{color:var(--aws)}
+.disc{position:absolute;right:clamp(40px,7vw,110px);bottom:clamp(28px,4vh,46px);font-family:var(--mono);font-size:.62rem;color:var(--faint);text-align:right;max-width:34ch;line-height:1.5}
+.contact{display:flex;flex-direction:column;gap:8px;margin-top:20px;font-family:var(--mono);font-size:clamp(.9rem,1.6vw,1.2rem)}
+.contact span b{color:var(--aws)}
+#bar{position:fixed;top:0;left:0;height:3px;background:var(--aws);width:0;z-index:20;transition:width .3s}
+#num{position:fixed;right:20px;bottom:16px;font-family:var(--mono);font-size:.72rem;color:var(--faint);z-index:20}
+.hint{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);font-family:var(--mono);font-size:.7rem;color:var(--faint);z-index:20}
+@media(max-width:760px){.two,.statgrid{grid-template-columns:1fr}}
+</style></head>
+<body>
+<div id="bar"></div>
+
+<!-- 1 · PORTADA -->
+<section class="slide">
+  <span class="k">AWS User Group · [Ciudad] · Meetup</span>
+  <h1>De 0 a <span class="or">deploy</span>:<br>tu primera app<br>viva en AWS</h1>
+  <p class="sub">Introducción práctica — con un toque de IA. Demo en vivo, sin humo.</p>
+  <div class="brand">Alejandro Barrera · Cloud Architect · <b>IAOps</b></div>
+  <div class="disc">Charla de comunidad · opiniones propias.<br>No representa ni cuenta con respaldo oficial de AWS.</div>
+</section>
+
+<!-- 2 · COLD OPEN -->
+<section class="slide">
+  <span class="k">Antes de empezar…</span>
+  <div class="big">+170%</div>
+  <p class="lead" style="margin-top:22px">Así creció, trimestre a trimestre en 2026, el gasto de clientes en IA sobre AWS.
+  Pasó más IA por esos servidores que en años anteriores juntos.</p>
+  <p class="sub" style="color:var(--aws2)">Y en los próximos minutos vamos a poner algo <b style="color:var(--aws)">VIVO</b> ahí. Entre todos. 📲</p>
+</section>
+
+<!-- 3 · QUIÉN (background, 1 slide máx) -->
+<section class="slide">
+  <span class="k">30 segundos y seguimos</span>
+  <div class="me">
+    <div class="av">AB</div>
+    <div class="t"><b>Alejandro Barrera</b><span>Cloud Architect. Hago que la IA y la nube trabajen juntas.</span></div>
+  </div>
+  <p class="sub" style="max-width:34ch">Es mi primera charla. No vengo a darte una clase — te traigo algo que puedes replicar hoy mismo.</p>
+</section>
+
+<!-- 4 · AGENDA -->
+<section class="slide">
+  <span class="k">El plan de los próximos 30 min</span>
+  <h2>Entender, y luego <span class="or">construir en vivo</span></h2>
+  <ul class="clean" style="margin-top:24px">
+    <li>1 · Qué es la nube, en 5 ideas (con analogías, sin jerga)</li>
+    <li>2 · Por qué AWS y por qué <b>ahora</b></li>
+    <li>3 · <b>Demo en vivo:</b> de una idea a una app pública — y la abren en su celular</li>
+    <li>4 · Cómo empezar tú esta semana</li>
+  </ul>
+</section>
+
+<!-- 5 · CONCEPTO 1 -->
+<section class="slide">
+  <span class="pill">IDEA 1 de 5</span>
+  <div class="two">
+    <div><h2>La nube es <span class="or">pago por consumo</span></h2>
+      <span class="analogy">🔌 como la luz de tu casa</span>
+      <p class="sub">No compras la planta eléctrica: pagas los kilovatios que usas. Nadie compra un servidor de $10.000 “por si acaso”.</p>
+    </div>
+    <div class="card"><div class="ico">🔌</div><h3>Pay-as-you-go</h3>
+      <p>Enciendes lo que necesitas, pagas por lo que usas, y lo apagas. Cero infraestructura propia parada juntando polvo.</p></div>
+  </div>
+</section>
+
+<!-- 6 · CONCEPTO 2 -->
+<section class="slide">
+  <span class="pill">IDEA 2 de 5</span>
+  <div class="two">
+    <div><h2>Regiones y <span class="or">zonas</span></h2>
+      <span class="analogy">🏦 como las sucursales de un banco</span>
+      <p class="sub">Tu app vive cerca de tus usuarios. Si una sede se cae, otra sigue. AWS tiene ~35 regiones en el mundo.</p>
+    </div>
+    <div class="card"><div class="ico">🗺️</div><h3>Cerca y resiliente</h3>
+      <p>Eliges dónde corre tu app; se replica en varias zonas para que un fallo no te tumbe el servicio.</p></div>
+  </div>
+</section>
+
+<!-- 7 · CONCEPTO 3 -->
+<section class="slide">
+  <span class="pill">IDEA 3 de 5</span>
+  <div class="two">
+    <div><h2>Responsabilidad <span class="or">compartida</span></h2>
+      <span class="analogy">🏢 el edificio y tu apartamento</span>
+      <p class="sub">AWS asegura el edificio (hardware, red, data centers). Tú aseguras lo que hay dentro: tus datos, tus llaves, tus permisos.</p>
+    </div>
+    <div class="card"><div class="ico">🔐</div><h3>Tu mitad importa</h3>
+      <p>El error más caro de quien empieza vive en la parte del cliente: un permiso abierto, una llave expuesta.</p></div>
+  </div>
+</section>
+
+<!-- 8 · CONCEPTO 4 -->
+<section class="slide">
+  <span class="pill">IDEA 4 de 5</span>
+  <div class="two">
+    <div><h2><span class="or">Serverless</span></h2>
+      <span class="analogy">🚕 taxi, no carro propio</span>
+      <p class="sub">El código corre solo cuando llega una petición, y pagas por milisegundo. “Sin servidores” no es magia: hay servidores, pero no son tu problema.</p>
+    </div>
+    <div class="card"><div class="ico">⚡</div><h3>Lambda</h3>
+      <p>Subes una función, AWS la ejecuta bajo demanda y escala sola. Nada prendido 24/7 gastando de más.</p></div>
+  </div>
+</section>
+
+<!-- 9 · CONCEPTO 5 -->
+<section class="slide">
+  <span class="pill">IDEA 5 de 5</span>
+  <div class="two">
+    <div><h2>IA <span class="or">en la nube</span></h2>
+      <span class="analogy">🤖 antes para gigantes, hoy para todos</span>
+      <p class="sub">Con <b style="color:var(--aws2)">Amazon Bedrock</b> invocas modelos como Claude o Nova con una llamada de API y pagas por token. Sin entrenar nada, sin GPUs propias.</p>
+    </div>
+    <div class="card"><div class="ico">🧠</div><h3>Bedrock</h3>
+      <p>Un menú de modelos de IA listos para usar. La misma nube donde vive tu app ahora piensa por ella.</p></div>
+  </div>
+</section>
+
+<!-- 10 · POR QUÉ AWS AHORA -->
+<section class="slide">
+  <span class="k">Por qué vale la pena aprenderlo</span>
+  <h2>AWS, ahora mismo</h2>
+  <div class="statgrid">
+    <div class="stat"><div class="n">~28%</div><div class="l">del mercado cloud global (líder; Azure ~21%, Google ~14%)</div></div>
+    <div class="stat"><div class="n">+37%</div><div class="l">crecimiento interanual de AWS en Q2 2026 — acelerando, no frenando</div></div>
+    <div class="stat"><div class="n">~55.000</div><div class="l">empleos AWS activos · salario promedio ~US$135.000/año</div></div>
+    <div class="stat"><div class="n">$0 → </div><div class="l">empezar es gratis. No necesitas ser programador para dar el primer paso</div></div>
+  </div>
+</section>
+
+<!-- 11 · TRANSICIÓN -->
+<section class="slide">
+  <span class="k">Basta de teoría</span>
+  <h1>Saquen el<br><span class="or">celular</span>. 📲</h1>
+  <p class="sub">Todo lo anterior no vale nada si no lo ves funcionar. Vamos a construir y desplegar algo — ahora.</p>
+</section>
+
+<!-- 12 · DEMO: qué construimos -->
+<section class="slide">
+  <span class="pill">DEMO EN VIVO</span>
+  <h2>Una idea → una app pública, <span class="or">en minutos</span></h2>
+  <ul class="clean" style="margin-top:20px;max-width:38ch">
+    <li>1 · Le dicto la intención a la <b>IA</b> → genera el código (así trabaja hoy un arquitecto)</li>
+    <li>2 · Lo despliego en <b>AWS Amplify</b> → aparece una URL pública real</li>
+    <li>3 · Proyecto el <b>QR</b> → ustedes la abren en su celular</li>
+  </ul>
+</section>
+
+<!-- 13 · QR EN VIVO -->
+<section class="slide" style="align-items:center;text-align:center">
+  <span class="k" style="text-align:center;width:100%">Está VIVO en AWS</span>
+  <h2 style="text-align:center">Ábranla ustedes 👇</h2>
+  <div class="qrbox" style="margin:26px auto 0">[ QR del demo en vivo<br>— se pega el día de la charla,<br>apuntando a la URL de Amplify ]</div>
+  <p class="sub" style="margin:22px auto 0;max-width:30ch;text-align:center">Lo que acaban de ver nacer corre en los mismos servidores del inicio.</p>
+</section>
+
+<!-- 14 · EMPIEZA HOY (CTA free tier) -->
+<section class="slide">
+  <span class="k">Tu turno — esta semana</span>
+  <h2>Empieza <span class="or">gratis</span> hoy</h2>
+  <ul class="clean" style="margin-top:20px;max-width:40ch">
+    <li>🎁 Cuenta nueva 2026: <b>plan gratuito de 6 meses + hasta US$200 en créditos</b></li>
+    <li>🚀 Reto de la semana: crea tu cuenta y haz <b>tu primer deploy</b> (lo que viste hoy)</li>
+    <li>💡 Regla de oro: <b>apaga lo que no uses</b> — así el free tier rinde</li>
+  </ul>
+  <p class="sub">*Condiciones del free tier cambian; verifícalas al crear la cuenta.</p>
+</section>
+
+<!-- 15 · GRACIAS / CONTACTO -->
+<section class="slide">
+  <span class="k">Gracias 🙌</span>
+  <h2>¿Seguimos <span class="or">construyendo</span>?</h2>
+  <div class="contact">
+    <span>💼 LinkedIn · <b>/in/alejobarrera</b></span>
+    <span>🌐 <b>alejandrobarrera.net</b></span>
+    <span>👥 Comunidad · <b>iaopslatam.com</b></span>
+  </div>
+  <p class="sub" style="max-width:34ch">Si algo de hoy te movió, escríbeme. La mejor forma de aprender AWS es construyendo — y no tienes que hacerlo solo.</p>
+  <div class="disc">Charla de comunidad · opiniones propias · sin respaldo oficial de AWS.</div>
+</section>
+
+<div id="num"></div>
+<div class="hint">← → para navegar · clic avanza</div>
+
+<script>
+var slides=document.querySelectorAll(".slide"),i=0;
+function go(n){i=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach(function(s,k){s.classList.toggle("on",k===i)});
+  document.getElementById("bar").style.width=((i+1)/slides.length*100)+"%";
+  document.getElementById("num").textContent=(i+1)+" / "+slides.length;
+  document.querySelector(".hint").style.display=i===0?"":"none";}
+document.addEventListener("keydown",function(e){
+  if(e.key==="ArrowRight"||e.key===" "||e.key==="PageDown")go(i+1);
+  if(e.key==="ArrowLeft"||e.key==="PageUp")go(i-1);
+  if(e.key==="Home")go(0);});
+document.addEventListener("click",function(e){if(e.clientX>innerWidth*0.25)go(i+1);else go(i-1);});
+go(0);
+</script>
+</body></html>
