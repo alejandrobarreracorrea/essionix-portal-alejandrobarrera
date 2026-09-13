@@ -5,13 +5,13 @@
 **Presentes: 38 · Ausentes: 5**
 
 ## Ausentes (los que se desmarcan en la plataforma)
-| # | Nombre | Correo |
-|---|---|---|
-| 12 | Dominic Alonso Higuita Jaramillo | dominichj2006@gmail.com |
-| 29 | Mauricio Cardona Colorado | cardona1504@hotmail.com |
-| 30 | Juan Pablo Solarte Arboleda | juan73solarteark@gmail.com |
-| 37 | Argelio Ramos Gracia | argelio17@hotmail.com |
-| 40 | Juan Pablo Muñoz Muñoz | juanpa6025@gmail.com |
+| # | Nombre |
+|---|---|
+| 12 | Dominic Alonso Higuita Jaramillo |
+| 29 | Mauricio Cardona Colorado |
+| 30 | Juan Pablo Solarte Arboleda |
+| 37 | Argelio Ramos Gracia |
+| 40 | Juan Pablo Muñoz Muñoz |
 
 ## Presentes (38)
 #1 Francisco Javier Calderón Arboleda · #2 Emerson Mazo Cardona · #3 Victor Augusto Molina Mejía ·
