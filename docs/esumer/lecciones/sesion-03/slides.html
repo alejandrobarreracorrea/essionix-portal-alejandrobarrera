@@ -269,7 +269,7 @@ ul.clean li:first-child { border-top:0; }
   <span class="k">El plan de hoy · clase 3</span>
   <h2>Ya tienes el taller. Hoy lo estrenamos y abrimos las calles.</h2>
   <ul class="rows">
-    <li><span class="t">Parte 1 · Estrenar Linux — la terminal en un servidor real<small>Lanzar tu propio Linux en la nube (EC2), los primeros comandos y el rito de paso: tu primer push</small></span><span class="m">primera mitad</span></li>
+    <li><span class="t">Parte 1 · Linux — un servidor real y tu propia terminal<small>Sentir Linux en la nube (EC2), y luego trabajar en TU máquina: comandos + tu primer push</small></span><span class="m">primera mitad</span></li>
     <li><span class="t">Parte 2 · Empezar redes — la dirección y las calles<small>Qué es una red, qué es una IP y cómo llegan las visitas a tu casa</small></span><span class="m">segunda mitad</span></li>
   </ul>
   <p class="sub" style="margin-top:18px">La clase pasada dejamos <b>las herramientas instaladas</b>. Hoy las usamos de verdad — y arrancamos el mundo de las redes.</p>
@@ -371,10 +371,22 @@ ul.clean li:first-child { border-top:0; }
   <p class="sub" style="margin-top:16px">Mini-reto al chat: ¿qué te respondió <b>whoami</b>? (todos serán <b>ubuntu</b> — están dentro del servidor, no en su PC)</p>
 </section>
 
+<!-- 12b · CAMBIO A TU MÁQUINA -->
+<section class="slide">
+  <span class="k">Cambio de escenario</span>
+  <h2>Eso es Linux en la nube. Ahora, <span class="grad">en tu máquina</span></h2>
+  <div class="sim"><span class="o">💻</span><p>La EC2 fue para <b>sentir</b> un servidor Linux real. Pero el trabajo del día a día lo haces en <b>tu propio equipo</b> — donde instalaste Git la clase pasada.</p></div>
+  <ul class="clean" style="margin-top:14px">
+    <li>🪟 <b>Windows:</b> abre <b>Git Bash</b></li>
+    <li>🍎 <b>macOS:</b> abre la <b>Terminal</b></li>
+  </ul>
+  <p class="sub" style="margin-top:12px">De aquí en adelante, todos los comandos son en TU terminal local.</p>
+</section>
+
 <!-- 13 · LAB 2 -->
 <section class="slide">
-  <span class="k"><span class="act-chip">LAB 2</span> Construir</span>
-  <h2>Las primeras piezas, en tu servidor Linux</h2>
+  <span class="k"><span class="act-chip">LAB 2</span> Construir · en tu máquina</span>
+  <h2>Las primeras piezas, en tu terminal</h2>
   <div class="demo">
     <p>$ mkdir curso && cd curso</p>
     <p>$ echo "Somos [tu empresa]" > lema.txt</p>
@@ -388,7 +400,7 @@ ul.clean li:first-child { border-top:0; }
 
 <!-- 14 · LAB 3 -->
 <section class="slide">
-  <span class="k"><span class="act-chip">LAB 3</span> Conectar el servidor con la oficina de planos</span>
+  <span class="k"><span class="act-chip">LAB 3</span> Conecta tu máquina con la oficina de planos</span>
   <h2>git config + traer tus planos</h2>
   <div class="demo">
     <p>$ git config --global user.name "Tu Nombre"</p>
@@ -396,7 +408,7 @@ ul.clean li:first-child { border-top:0; }
     <p>$ git clone https://github.com/TU-USUARIO/bitacora-tu-empresa.git</p>
     <p>$ cd bitacora-* && ls -la&nbsp;&nbsp;&nbsp;&nbsp;# el README… y la carpeta .git 👀</p>
   </div>
-  <p class="sub" style="margin-top:16px">Clonar un repo público no pide clave (es solo leer). La carpeta oculta <b>.git</b> ES el archivo del arquitecto — por eso Git solo ve lo que pasa dentro de esta carpeta. <br><b>Para SUBIR (push) desde el servidor</b> sí pedirá clave: ahí va tu <b>token</b> de GitHub (lo creamos en 1 minuto — ver chat).</p>
+  <p class="sub" style="margin-top:16px">Clonar un repo público no pide clave (es solo leer). La carpeta oculta <b>.git</b> ES el archivo del arquitecto — por eso Git solo ve lo que pasa dentro de esta carpeta. <br><b>La primera vez que subas (push)</b>, Git te pedirá <b>iniciar sesión en GitHub</b> en el navegador — una sola vez y queda guardado.</p>
 </section>
 
 <!-- 15 · EL RITO -->
