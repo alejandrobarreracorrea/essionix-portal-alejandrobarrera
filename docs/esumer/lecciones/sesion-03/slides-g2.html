@@ -317,34 +317,68 @@ ul.clean li:first-child { border-top:0; }
   <p class="sub" style="margin-top:12px">Checkpoint: ✅ al chat cuando veas <b>ec2-user@...$</b> · ¿No conecta? suele ser la llave (permisos) o el puerto 22 del security group — lo resolvemos en el momento.</p>
 </section>
 
-<!-- 12 · LAB 1 -->
+<!-- 12 · LAB 1 · CONOCE TU SERVIDOR -->
 <section class="slide">
-  <span class="k"><span class="act-chip">PARTE 1 · LINUX</span> Ubicarse — dentro de TU servidor Linux</span>
-  <h2>Calentamiento: ¿dónde estoy? ¿qué hay aquí?</h2>
+  <span class="k"><span class="act-chip">PARTE 1 · LINUX · lab 1</span> Ubícate y conoce tu servidor</span>
+  <h2>¿Quién soy, dónde estoy… y qué máquina es esta?</h2>
   <div class="demo">
-    <p>$ whoami&nbsp;&nbsp;&nbsp;# ¿quién soy en este servidor?</p>
-    <p>$ pwd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ¿en qué carpeta estoy?</p>
-    <p>$ ls -la&nbsp;&nbsp;# ¿qué hay aquí, incluso lo oculto?</p>
-    <p>$ uname -a&nbsp;# ¿qué sistema es este? (Linux 👀)</p>
-    <p>$ cd / && ls&nbsp;# la raíz del sistema — el mapa de Linux</p>
-    <p>$ cd ~&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# volver a casa · clear para limpiar</p>
+    <p>$ whoami&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ¿quién soy aquí?  → ec2-user</p>
+    <p>$ hostname&nbsp;&nbsp;&nbsp;# ¿cómo se llama este servidor?</p>
+    <p>$ pwd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ¿en qué carpeta estoy?</p>
+    <p>$ uname -a&nbsp;&nbsp;&nbsp;# ¿qué sistema es? (Linux 👀)</p>
+    <p>$ uptime&nbsp;&nbsp;&nbsp;&nbsp;# ¿hace cuánto está encendido?</p>
+    <p>$ df -h&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ¿cuánto disco tengo?</p>
+    <p>$ free -h&nbsp;&nbsp;&nbsp;# ¿cuánta memoria RAM?</p>
+    <p>$ nproc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ¿cuántos procesadores?</p>
   </div>
-  <p class="sub" style="margin-top:16px">Mini-reto al chat: ¿qué te respondió <b>whoami</b>? (todos serán <b>ec2-user</b> — están dentro del servidor, no en su PC)</p>
+  <p class="sub" style="margin-top:14px">Acaban de leerle las specs a un servidor real en Virginia. Al chat: ¿cuántos <b>GB de disco</b> te dio <b>df -h</b>?</p>
 </section>
 
-<!-- 13 · LAB 2 · EJERCICIO EN EL SERVIDOR -->
+<!-- 13 · LAB 2 · CONSTRUYE TU PROYECTO -->
 <section class="slide">
-  <span class="k"><span class="act-chip">PARTE 1 · LINUX</span> El ejercicio de hoy — dentro de tu servidor</span>
-  <h2>Construir, copiar, mover, borrar</h2>
+  <span class="k"><span class="act-chip">PARTE 1 · LINUX · lab 2</span> Construye la estructura de tu proyecto</span>
+  <h2>Carpetas, archivos y redirección</h2>
   <div class="demo">
-    <p>$ mkdir curso && cd curso</p>
-    <p>$ echo "Somos [tu empresa]" > lema.txt</p>
-    <p>$ cat lema.txt</p>
-    <p>$ cp lema.txt lema-v2.txt&nbsp;&nbsp;&nbsp;# copiar</p>
-    <p>$ mv lema-v2.txt slogan.txt&nbsp;# renombrar</p>
-    <p>$ rm slogan.txt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# borrar — SIN papelera ⚠️</p>
+    <p>$ mkdir -p mi-empresa/{web,datos,logs}&nbsp;&nbsp;# 3 carpetas de un golpe</p>
+    <p>$ cd mi-empresa && ls -R&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# míralas en árbol</p>
+    <p>$ echo "Bienvenido a mi empresa" > web/index.html&nbsp;&nbsp;# crea (>)</p>
+    <p>$ echo "nombre,ciudad" > datos/clientes.csv</p>
+    <p>$ echo "Ana,Medellín" >> datos/clientes.csv&nbsp;&nbsp;# AÑADE (>>)</p>
+    <p>$ echo "Luis,Bogotá" >> datos/clientes.csv</p>
+    <p>$ cat datos/clientes.csv&nbsp;&nbsp;&nbsp;# léelo completo</p>
+    <p>$ ls -lh datos/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# tamaño legible para humanos</p>
   </div>
-  <p class="sub" style="margin-top:14px"><b>rm no perdona.</b> Respirar, leer dos veces, y solo entonces borrar. Con esto cerramos el repaso de Linux — <b>ahora lo guardamos en internet</b>.</p>
+  <p class="sub" style="margin-top:12px"><b>&gt;</b> crea y pisa el archivo · <b>&gt;&gt;</b> añade sin borrar · <b>{a,b,c}</b> (brace expansion) te ahorra media vida.</p>
+</section>
+
+<!-- 13b · LAB 3 · COPIA, MUEVE, BORRA -->
+<section class="slide">
+  <span class="k"><span class="act-chip">PARTE 1 · LINUX · lab 3</span> Copiar, mover y borrar (con cuidado)</span>
+  <h2>Las tijeras de Linux</h2>
+  <div class="demo">
+    <p>$ cp datos/clientes.csv datos/backup.csv&nbsp;&nbsp;# copiar</p>
+    <p>$ mv datos/backup.csv datos/clientes-2024.csv&nbsp;# renombrar/mover</p>
+    <p>$ ls datos/</p>
+    <p>$ rm datos/clientes-2024.csv&nbsp;&nbsp;&nbsp;# borrar archivo — SIN papelera ⚠️</p>
+    <p>$ rm -r logs/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# borrar carpeta entera ⚠️⚠️</p>
+  </div>
+  <p class="sub" style="margin-top:14px"><b>rm no perdona</b> — no hay papelera. Respirar, leer dos veces, y solo entonces borrar. <b>rm -rf /</b> es la pesadilla de todo sysadmin: nunca lo escriban.</p>
+</section>
+
+<!-- 13c · LAB 4 · EXPLORA Y TOMA EL CONTROL -->
+<section class="slide">
+  <span class="k"><span class="act-chip">PARTE 1 · LINUX · lab 4</span> Explora, filtra… y sé el administrador</span>
+  <h2>Buscar, tuberías, e instalar software</h2>
+  <div class="demo">
+    <p>$ wc -l datos/clientes.csv&nbsp;&nbsp;&nbsp;# ¿cuántas líneas?</p>
+    <p>$ grep "Medellín" datos/*.csv&nbsp;# busca DENTRO de los archivos</p>
+    <p>$ find . -name "*.html"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# busca archivos por nombre</p>
+    <p>$ cat datos/clientes.csv | sort&nbsp;# tubería | : conecta comandos</p>
+    <p>$ history | tail -5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# tus últimos comandos</p>
+    <p>$ sudo yum install -y tree&nbsp;&nbsp;# instala software (root con sudo)</p>
+    <p>$ tree mi-empresa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# tu proyecto en árbol bonito 🌳</p>
+  </div>
+  <p class="sub" style="margin-top:12px">Buscaste, filtraste con <b>tuberías</b> e <b>instalaste software</b> en un servidor real. Eso es administrar infraestructura. Cerramos el repaso — <b>ahora lo guardamos en internet</b>.</p>
 </section>
 
 <!-- 14a · GITHUB · CAMBIO A TU MÁQUINA + QUÉ ES -->
