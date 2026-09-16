@@ -1,0 +1,130 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ejercicios de Linux — Esumer · Cloud, Redes y Ciberseguridad</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0E2841;--c1:#156082;--c2:#0F9ED5;--naranja:#E97132;--bg:#f6f8fb;--line:#dce3ec;--text:#0E2841;--muted:#5b6b7d;--faint:#8b98a9;
+  --display:'Poppins',system-ui,sans-serif;--body:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.55}
+.wrap{max-width:920px;margin:0 auto;padding:clamp(20px,4vw,44px) clamp(16px,4vw,32px) 80px}
+header{background:linear-gradient(120deg,var(--navy),var(--c1));color:#fff;border-radius:20px;padding:clamp(24px,4vw,40px);margin-bottom:28px}
+header .k{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--c2);opacity:.95}
+header h1{font-family:var(--display);font-weight:700;font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.1;margin:10px 0 12px}
+header p{color:#dbe6f2;font-size:clamp(.95rem,1.6vw,1.1rem);max-width:60ch}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.tools span{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:.35em 1em;font-family:var(--mono);font-size:.74rem}
+.lvl{margin:34px 0 14px;display:flex;align-items:center;gap:12px}
+.lvl .n{font-family:var(--display);font-weight:700;font-size:1.1rem;background:var(--naranja);color:#fff;width:2.1em;height:2.1em;display:flex;align-items:center;justify-content:center;border-radius:10px;flex:none}
+.lvl h2{font-family:var(--display);font-weight:700;font-size:clamp(1.2rem,2.6vw,1.6rem)}
+.lvl small{display:block;color:var(--muted);font-weight:400;font-family:var(--body);font-size:.85rem}
+.ex{background:#fff;border:1px solid var(--line);border-radius:14px;padding:clamp(16px,2.4vw,22px);margin-bottom:14px;box-shadow:0 1px 0 rgba(14,40,65,.03)}
+.ex .q{font-weight:600;font-size:1.02rem;margin-bottom:4px}
+.ex .q b{color:var(--naranja)}
+.ex .h{color:var(--muted);font-size:.92rem}
+.ex code{font-family:var(--mono);background:#eef3f8;border:1px solid var(--line);border-radius:5px;padding:.08em .4em;font-size:.88em;color:var(--c1)}
+details{margin-top:10px;border-top:1px dashed var(--line);padding-top:10px}
+summary{cursor:pointer;font-family:var(--mono);font-size:.82rem;color:var(--c1);user-select:none}
+summary::marker{color:var(--naranja)}
+pre{margin-top:8px;background:var(--navy);color:#e7eef6;border-radius:10px;padding:14px 16px;overflow-x:auto;font-family:var(--mono);font-size:.86rem;line-height:1.8}
+pre .c{color:#7f97ad}
+.warn{background:#fff5ef;border:1px solid #f3d3bd;border-left:4px solid var(--naranja);border-radius:12px;padding:14px 18px;margin:14px 0;font-size:.95rem}
+.reto{background:linear-gradient(120deg,#12324f,#0E2841);color:#fff;border-radius:16px;padding:clamp(20px,3vw,30px);margin-top:34px}
+.reto h2{font-family:var(--display);font-weight:700;font-size:clamp(1.3rem,2.8vw,1.8rem);margin-bottom:8px}
+.reto p{color:#cfdcea}.reto ol{margin:12px 0 0 20px;color:#e7eef6}.reto li{margin:6px 0}
+.reto code{font-family:var(--mono);background:rgba(255,255,255,.1);border-radius:5px;padding:.08em .4em;font-size:.9em}
+.entrega{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:24px}
+.entrega h3{font-family:var(--display);font-weight:700;margin-bottom:8px}
+.entrega code{font-family:var(--mono);background:#eef3f8;border:1px solid var(--line);border-radius:5px;padding:.08em .4em;font-size:.88em;color:var(--c1)}
+footer{margin-top:40px;color:var(--faint);font-size:.82rem;font-family:var(--mono);text-align:center}
+</style></head>
+<body>
+<div class="wrap">
+<header>
+  <span class="k">Esumer · Cloud, Redes y Ciberseguridad · Estud-IA</span>
+  <h1>Ejercicios de Linux 🐧</h1>
+  <p>Repasa y practica los comandos de la terminal. Hazlos en <b>tu terminal local</b> (Git Bash en Windows / Terminal en Mac) o, si quieres, en tu <b>servidor EC2</b>. La meta: sentirte cómodo moviéndote por el sistema sin tocar el mouse.</p>
+  <div class="tools"><span>Git Bash</span><span>Terminal</span><span>EC2 · Instance Connect</span></div>
+</header>
+
+<div class="warn">💡 <b>Cómo usarlos:</b> intenta cada ejercicio tú primero. Solo si te trabas, abre la pista o la solución. No hay afán — el objetivo es que los dedos aprendan solos.</div>
+
+<!-- NIVEL 1 -->
+<div class="lvl"><span class="n">1</span><div><h2>Ubicarte</h2><small>Saber siempre dónde estás y qué hay a tu alrededor</small></div></div>
+
+<div class="ex"><div class="q">1 · ¿En qué carpeta estás <b>ahora mismo</b>?</div><div class="h">Muestra la ruta completa de tu ubicación actual.</div>
+<details><summary>ver solución</summary><pre>$ pwd</pre></details></div>
+
+<div class="ex"><div class="q">2 · Lista <b>todo</b> lo que hay aquí, incluso lo oculto</div><div class="h">Los archivos que empiezan por <code>.</code> están escondidos.</div>
+<details><summary>ver solución</summary><pre>$ ls -la</pre></details></div>
+
+<div class="ex"><div class="q">3 · Entra a tu carpeta personal y luego vuelve a la <b>raíz</b> del sistema</div><div class="h">La casa se abrevia con <code>~</code>; la raíz es <code>/</code>.</div>
+<details><summary>ver solución</summary><pre>$ cd ~
+$ cd /
+$ ls        <span class="c"># mira el mapa de Linux: bin, etc, home, var...</span>
+$ cd ~      <span class="c"># de vuelta a casa</span></pre></details></div>
+
+<div class="ex"><div class="q">4 · Averigua <b>qué usuario</b> eres y <b>qué sistema</b> es</div>
+<details><summary>ver solución</summary><pre>$ whoami
+$ uname -a</pre></details></div>
+
+<!-- NIVEL 2 -->
+<div class="lvl"><span class="n">2</span><div><h2>Construir y mover</h2><small>Crear, copiar, renombrar y borrar — las piezas de tu casa</small></div></div>
+
+<div class="ex"><div class="q">5 · Crea una carpeta <code>practica</code> y entra en ella</div>
+<details><summary>ver solución</summary><pre>$ mkdir practica &amp;&amp; cd practica</pre></details></div>
+
+<div class="ex"><div class="q">6 · Crea un archivo <code>nota.txt</code> con el texto <i>"Mi primera nota"</i> y muéstralo</div><div class="h"><code>&gt;</code> escribe dentro de un archivo; <code>cat</code> lo muestra.</div>
+<details><summary>ver solución</summary><pre>$ echo "Mi primera nota" &gt; nota.txt
+$ cat nota.txt</pre></details></div>
+
+<div class="ex"><div class="q">7 · Haz una <b>copia</b> llamada <code>respaldo.txt</code> y luego <b>renómbrala</b> a <code>final.txt</code></div>
+<details><summary>ver solución</summary><pre>$ cp nota.txt respaldo.txt   <span class="c"># copiar</span>
+$ mv respaldo.txt final.txt  <span class="c"># renombrar/mover</span>
+$ ls</pre></details></div>
+
+<div class="ex"><div class="q">8 · Borra <code>final.txt</code> (con cuidado)</div><div class="h">En Linux <b>no hay papelera</b>.</div>
+<details><summary>ver solución</summary><pre>$ rm final.txt</pre></details></div>
+<div class="warn">⚠️ <b>rm no perdona.</b> Respira, lee dos veces la línea, y solo entonces ejecuta. Nunca hagas <code>rm -rf</code> sin estar 100% seguro de dónde estás (<code>pwd</code> primero).</div>
+
+<!-- NIVEL 3 -->
+<div class="lvl"><span class="n">3</span><div><h2>Explorar y buscar</h2><small>Encontrar cosas y recordar lo que hiciste</small></div></div>
+
+<div class="ex"><div class="q">9 · Muestra <b>todos los comandos</b> que has escrito hoy</div><div class="h">La terminal recuerda todo.</div>
+<details><summary>ver solución</summary><pre>$ history</pre></details></div>
+
+<div class="ex"><div class="q">10 · Busca en <code>nota.txt</code> las líneas que contengan la palabra <i>"nota"</i></div>
+<details><summary>ver solución</summary><pre>$ grep "nota" nota.txt</pre></details></div>
+
+<div class="ex"><div class="q">11 · ¿Qué hace el comando <code>ls</code>? Léelo <b>sin buscar en Google</b></div><div class="h">Casi todo comando trae su propia ayuda.</div>
+<details><summary>ver solución</summary><pre>$ ls --help
+<span class="c"># o, en un Linux completo:</span>
+$ man ls   <span class="c"># (salir con la tecla q)</span></pre></details></div>
+
+<!-- RETO -->
+<div class="reto">
+  <h2>🏴‍☠️ Reto final · el proyecto de la casa</h2>
+  <p>Solo con la terminal, arma esta estructura en tu carpeta <code>practica</code>:</p>
+  <ol>
+    <li>Una carpeta <code>casa</code> con dos subcarpetas dentro: <code>planos</code> y <code>materiales</code></li>
+    <li>Dentro de <code>materiales</code>, un archivo <code>lema.txt</code> con el lema de tu empresa</li>
+    <li>Copia <code>lema.txt</code> también dentro de <code>planos</code></li>
+    <li>Muestra el árbol completo para comprobar que quedó bien</li>
+  </ol>
+  <details style="margin-top:14px;border-top:1px solid rgba(255,255,255,.15)"><summary style="color:#8fd3f0">ver solución</summary>
+<pre>$ mkdir -p casa/planos casa/materiales
+$ echo "Construimos el futuro" &gt; casa/materiales/lema.txt
+$ cp casa/materiales/lema.txt casa/planos/
+$ ls -R casa      <span class="c"># -R = recursivo, muestra todo el árbol</span></pre></details>
+</div>
+
+<!-- ENTREGA -->
+<div class="entrega">
+  <h3>📤 Cómo entregar (opcional, suma)</h3>
+  <p>Crea tu <b>cheat-sheet</b>: un archivo <code>cheatsheet-linux.md</code> con 12–15 comandos explicados con TUS palabras, y súbelo a tu bitácora en GitHub desde tu máquina:</p>
+  <pre style="margin-top:10px"><code>git add . &amp;&amp; git commit -m "Mi cheat-sheet de Linux" &amp;&amp; git push</code></pre>
+</div>
+
+<footer>Esumer · Estud-IA · Cloud, Redes y Ciberseguridad — Prof. Alejandro Barrera</footer>
+</div>
+</body></html>
