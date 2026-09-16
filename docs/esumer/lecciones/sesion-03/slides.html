@@ -252,27 +252,28 @@ ul.clean li:first-child { border-top:0; }
 <!-- 2 · LA CASA -->
 <section class="slide casa-slide">
   <span class="k">El mapa del curso · ¿en qué fase estás?</span>
-  <h2 style="font-size:clamp(1.15rem,2.5vw,1.9rem); margin-bottom:6px;">Construimos una casa. Hoy terminamos los cimientos (Linux) y abrimos las calles (redes).</h2>
+  <h2 style="font-size:clamp(1.15rem,2.5vw,1.9rem); margin-bottom:6px;">Hoy: repasamos los cimientos (Linux), guardamos los planos (GitHub) y abrimos las calles (redes).</h2>
   <div class="house">
     <div class="roof"><span>🏡 La casa habitada — la web de tu empresa en internet</span></div>
     <div class="floor fA"><span class="fi">💧</span><b>Los servicios públicos</b><i>CLOUD · AWS</i></div>
     <div class="floor fB"><span class="fi">🚪</span><b>Puertas y cerraduras</b><i>CIBERSEGURIDAD</i></div>
     <div class="floor fC"><span class="fi">🧱</span><b>La estructura</b><i>SERVIDORES</i></div>
     <div class="floor fD hoy"><span class="fi">🗺</span><b>La dirección y las calles</b><i>REDES · NETWORKING</i><span class="here">◄ EMPEZAMOS HOY</span></div>
-    <div class="floor fE"><span class="fi">📐</span><b>Los planos</b><i>GIT · GITHUB</i></div>
-    <div class="floor fF hoy base"><span class="fi">🏗</span><b>Los cimientos</b><i>LINUX + TERMINAL</i><span class="here">◄ HOY</span></div>
+    <div class="floor fE hoy"><span class="fi">📐</span><b>Los planos</b><i>GIT · GITHUB</i><span class="here">◄ HOY</span></div>
+    <div class="floor fF hoy base"><span class="fi">🏗</span><b>Los cimientos</b><i>LINUX + TERMINAL</i><span class="here">◄ REPASO</span></div>
   </div>
 </section>
 
 <!-- 3 · EL PLAN -->
 <section class="slide">
-  <span class="k">El plan de hoy · clase 3</span>
-  <h2>Ya tienes el taller. Hoy lo estrenamos y abrimos las calles.</h2>
+  <span class="k">El plan de hoy</span>
+  <h2>Repasar, guardar en GitHub, y abrir las calles.</h2>
   <ul class="rows">
-    <li><span class="t">Parte 1 · Linux — un servidor real y tu propia terminal<small>Sentir Linux en la nube (EC2), y luego trabajar en TU máquina: comandos + tu primer push</small></span><span class="m">primera mitad</span></li>
-    <li><span class="t">Parte 2 · Empezar redes — la dirección y las calles<small>Qué es una red, qué es una IP y cómo llegan las visitas a tu casa</small></span><span class="m">segunda mitad</span></li>
+    <li><span class="t">Parte 1 · Linux — un repaso rápido<small>Reconéctate a tu servidor y hacemos un ejercicio juntos</small></span><span class="m">repaso</span></li>
+    <li><span class="t">Parte 2 · GitHub — sube tu primer ejercicio<small>Qué es Git/GitHub y cómo publicar tu trabajo en internet: tu primer push</small></span><span class="m">lo nuevo</span></li>
+    <li><span class="t">Parte 3 · Networking — abrimos las calles<small>Qué es una red, qué es una IP y cómo llegan las visitas a tu casa</small></span><span class="m">arranque</span></li>
   </ul>
-  <p class="sub" style="margin-top:18px">La clase pasada dejamos <b>las herramientas instaladas</b>. Hoy las usamos de verdad — y arrancamos el mundo de las redes.</p>
+  <p class="sub" style="margin-top:18px">Hoy tu trabajo deja de vivir solo en tu terminal: lo vas a <b>publicar en internet</b> con GitHub. Y arrancamos redes.</p>
 </section>
 
 <!-- 4 · GRÁFICA: LA CAJA DE HERRAMIENTAS -->
@@ -289,50 +290,10 @@ ul.clean li:first-child { border-top:0; }
   </div>
 </section>
 
-<!-- 11a · ¿QUÉ ES UN SO? -->
-<section class="slide os-slide">
-  <span class="k">Parte 2 · antes del cemento, el jefe de obra</span>
-  <h2 style="font-size:clamp(1.15rem,2.5vw,1.9rem); margin-bottom:6px;">¿Qué es un sistema operativo?</h2>
-  <div class="osstack">
-    <div class="oslayer top"><span class="oi">🧑‍💻</span><div><b>Tú y las aplicaciones</b><p>Lo que quieres hacer: navegar, editar, abrir un programa</p></div></div>
-    <div class="osarrow">▲ le pides al… ▼ le ordena al</div>
-    <div class="oslayer mid"><span class="oi">🧑‍🔧</span><div><b>El sistema operativo <span class="hoy-tag">el administrador</span></b><p>Reparte la memoria, el procesador y el disco entre todos. Traduce lo que pides a algo que el fierro entiende. Sin él, el hardware es un ladrillo.</p></div></div>
-    <div class="osarrow">▲ organiza · ▼ maneja</div>
-    <div class="oslayer bot"><span class="oi">🖥️</span><div><b>El hardware</b><p>Procesador, memoria, disco — la fuerza bruta, pero sin criterio</p></div></div>
-  </div>
-</section>
-
-<!-- 11b · ¿CUÁLES EXISTEN? -->
+<!-- 11d · ENCENDER EC2 (REPASO) -->
 <section class="slide">
-  <span class="k">Parte 2 · el mismo trabajo, distintos administradores</span>
-  <h2>¿Cuáles existen?</h2>
-  <div class="osgrid">
-    <div class="oscard"><span class="oe">🪟</span><b>Windows</b><small>el más común en computadores de casa y oficina</small></div>
-    <div class="oscard"><span class="oe">🍎</span><b>macOS</b><small>el de los Mac — de la familia Unix, primo de Linux</small></div>
-    <div class="oscard hi"><span class="oe">🐧</span><b>Linux</b><small>gratis y libre — <b>el rey de los servidores y la nube</b></small></div>
-    <div class="oscard"><span class="oe">🤖</span><b>Android</b><small>tu celular… corre sobre Linux por dentro</small></div>
-    <div class="oscard"><span class="oe">📱</span><b>iOS</b><small>el del iPhone — pariente de macOS</small></div>
-    <div class="oscard goal"><span class="oe">🎯</span><b>Todos hacen lo mismo</b><small>administrar el hardware. Aprendes uno, entiendes todos</small></div>
-  </div>
-  <p class="sub" style="margin-top:16px">Nosotros nos enfocamos en <b>Linux</b>: es donde vive la infraestructura del mundo (recuerden los cimientos 🏗). ¿Y cómo se le dan órdenes a Linux?…</p>
-</section>
-
-<!-- 11c · LA TERMINAL = MANEJAR EL SO -->
-<section class="slide">
-  <span class="k">Parte 2 · el cemento y la pala</span>
-  <h2>La terminal: cómo se le habla al sistema operativo</h2>
-  <ul class="rows">
-    <li><span class="t">Es el control remoto del SO<small>En Windows y Mac usas ventanas y clicks; a un servidor Linux le das ÓRDENES escritas — directo al administrador</small></span><span class="m">órdenes</span></li>
-    <li><span class="t">Los servidores no tienen pantalla ni mouse<small>El 100% de la operación real del mundo se maneja por terminal</small></span><span class="m">realidad</span></li>
-    <li><span class="t">Los clicks no dejan planos<small>Lo que escribes se guarda, se repite y se automatiza — lo que clickeas, no</small></span><span class="m">planos</span></li>
-    <li><span class="t">Es el idioma de la IA<small>Los agentes de IA que ya operan infraestructura… lo hacen por terminal</small></span><span class="m">2026</span></li>
-  </ul>
-</section>
-
-<!-- 11d · LANZAR EC2 -->
-<section class="slide">
-  <span class="k"><span class="act-chip">ACTIVIDAD</span> Tu primer servidor Linux — de verdad</span>
-  <h2>Lancemos una máquina Linux en la nube</h2>
+  <span class="k"><span class="act-chip">PARTE 1 · LINUX</span> Repaso — vuelve a encender tu servidor</span>
+  <h2>Enciende tu máquina Linux en la nube</h2>
   <ul class="clean">
     <li>1 · Consola AWS → busca <b>EC2</b> → arriba a la derecha elige región <b>N. Virginia (us-east-1)</b></li>
     <li>2 · <b>Launch instance</b> → nombre: <b>mi-primer-servidor</b></li>
@@ -340,12 +301,12 @@ ul.clean li:first-child { border-top:0; }
     <li>4 · Key pair: <b>Create new key pair</b> → tipo <b>.pem</b> → <b>descárgala</b> (es tu llave — no la pierdas)</li>
     <li>5 · Network settings: ✓ <b>Allow SSH from Anywhere</b> · <b>Launch instance</b></li>
   </ul>
-  <p class="sub" style="margin-top:14px">Acaban de pedir un computador Linux completo, encendiéndose en un datacenter de Virginia. Costo: <b>$0</b> en capa gratuita — hoy lo apagamos al terminar.</p>
+  <p class="sub" style="margin-top:14px">La clase pasada ya lo hicieron — hoy es repaso. Si la <b>terminaste</b>, créala otra vez (es rapidísimo); si la dejaste en <b>Stop</b>, solo pon <b>Start</b>. Costo: <b>$0</b> en capa gratuita.</p>
 </section>
 
 <!-- 11e · CONEXIÓN SSH -->
 <section class="slide">
-  <span class="k"><span class="act-chip">ACTIVIDAD</span> Entra a tu servidor por SSH</span>
+  <span class="k"><span class="act-chip">PARTE 1 · LINUX</span> Reconéctate a tu servidor por SSH</span>
   <h2>Conéctate a tu servidor con SSH</h2>
   <ul class="clean">
     <li>1 · EC2 → <b>Instances</b> → espera a <b>Running</b> ✅ y copia su <b>IP pública</b></li>
@@ -358,8 +319,8 @@ ul.clean li:first-child { border-top:0; }
 
 <!-- 12 · LAB 1 -->
 <section class="slide">
-  <span class="k"><span class="act-chip">LAB 1</span> Ubicarse — dentro de TU servidor Linux</span>
-  <h2>¿Dónde estoy? ¿Qué hay aquí?</h2>
+  <span class="k"><span class="act-chip">PARTE 1 · LINUX</span> Ubicarse — dentro de TU servidor Linux</span>
+  <h2>Calentamiento: ¿dónde estoy? ¿qué hay aquí?</h2>
   <div class="demo">
     <p>$ whoami&nbsp;&nbsp;&nbsp;# ¿quién soy en este servidor?</p>
     <p>$ pwd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ¿en qué carpeta estoy?</p>
@@ -371,22 +332,10 @@ ul.clean li:first-child { border-top:0; }
   <p class="sub" style="margin-top:16px">Mini-reto al chat: ¿qué te respondió <b>whoami</b>? (todos serán <b>ec2-user</b> — están dentro del servidor, no en su PC)</p>
 </section>
 
-<!-- 12b · CAMBIO A TU MÁQUINA -->
+<!-- 13 · LAB 2 · EJERCICIO EN EL SERVIDOR -->
 <section class="slide">
-  <span class="k">Cambio de escenario</span>
-  <h2>Eso es Linux en la nube. Ahora, <span class="grad">en tu máquina</span></h2>
-  <div class="sim"><span class="o">💻</span><p>La EC2 fue para <b>sentir</b> un servidor Linux real. Pero el trabajo del día a día lo haces en <b>tu propio equipo</b> — donde instalaste Git la clase pasada.</p></div>
-  <ul class="clean" style="margin-top:14px">
-    <li>🪟 <b>Windows:</b> abre <b>Git Bash</b></li>
-    <li>🍎 <b>macOS:</b> abre la <b>Terminal</b></li>
-  </ul>
-  <p class="sub" style="margin-top:12px">De aquí en adelante, todos los comandos son en TU terminal local.</p>
-</section>
-
-<!-- 13 · LAB 2 -->
-<section class="slide">
-  <span class="k"><span class="act-chip">LAB 2</span> Construir · en tu máquina</span>
-  <h2>Las primeras piezas, en tu terminal</h2>
+  <span class="k"><span class="act-chip">PARTE 1 · LINUX</span> El ejercicio de hoy — dentro de tu servidor</span>
+  <h2>Construir, copiar, mover, borrar</h2>
   <div class="demo">
     <p>$ mkdir curso && cd curso</p>
     <p>$ echo "Somos [tu empresa]" > lema.txt</p>
@@ -395,36 +344,61 @@ ul.clean li:first-child { border-top:0; }
     <p>$ mv lema-v2.txt slogan.txt&nbsp;# renombrar</p>
     <p>$ rm slogan.txt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# borrar — SIN papelera ⚠️</p>
   </div>
-  <p class="sub" style="margin-top:14px"><b>rm no perdona.</b> Respirar, leer dos veces, y solo entonces borrar.</p>
+  <p class="sub" style="margin-top:14px"><b>rm no perdona.</b> Respirar, leer dos veces, y solo entonces borrar. Con esto cerramos el repaso de Linux — <b>ahora lo guardamos en internet</b>.</p>
 </section>
 
-<!-- 14 · LAB 3 -->
+<!-- 14a · GITHUB · CAMBIO A TU MÁQUINA + QUÉ ES -->
 <section class="slide">
-  <span class="k"><span class="act-chip">LAB 3</span> Conecta tu máquina con la oficina de planos</span>
-  <h2>git config + traer tus planos</h2>
+  <span class="k"><span class="act-chip">PARTE 2 · GITHUB</span> Cambio de escenario</span>
+  <h2>Tu trabajo vive solo en el server. Vamos a <span class="grad">guardarlo en internet</span></h2>
+  <div class="sim"><span class="o">📐</span><p><b>Git</b> es el archivo del arquitecto: guarda cada versión de tu trabajo. <b>GitHub</b> es la oficina en internet donde ese archivo vive y lo puede ver el mundo. Así trabaja todo equipo de tecnología del planeta.</p></div>
+  <ul class="clean" style="margin-top:14px">
+    <li>Esto lo hacemos en <b>tu propia máquina</b> (donde instalaste Git la clase 2):</li>
+    <li>🪟 <b>Windows:</b> abre <b>Git Bash</b> &nbsp;·&nbsp; 🍎 <b>macOS:</b> abre la <b>Terminal</b></li>
+  </ul>
+  <p class="sub" style="margin-top:12px">De aquí en adelante, los comandos son en TU terminal local.</p>
+</section>
+
+<!-- 14b · CREAR REPO EN GITHUB -->
+<section class="slide">
+  <span class="k"><span class="act-chip">PARTE 2 · GITHUB</span> Paso 1 — crea tu repositorio</span>
+  <h2>Tu casillero en internet, en github.com</h2>
+  <ul class="clean">
+    <li>1 · Entra a <b>github.com</b> e inicia sesión (si no tienes cuenta, créala — es gratis)</li>
+    <li>2 · Arriba a la derecha: <b>+</b> → <b>New repository</b></li>
+    <li>3 · Nombre: <b>bitacora-tu-empresa</b> · visibilidad <b>Public</b></li>
+    <li>4 · <b>Create repository</b> → copia la <b>URL</b> que te muestra (…​.git)</li>
+  </ul>
+  <p class="sub" style="margin-top:14px">Un repositorio es una carpeta con memoria: guarda tu trabajo y todas sus versiones. Aún está vacío — ya lo llenamos desde tu terminal.</p>
+</section>
+
+<!-- 14c · GIT CONFIG + INIT + COMMIT (LOCAL) -->
+<section class="slide">
+  <span class="k"><span class="act-chip">PARTE 2 · GITHUB</span> Paso 2 — prepara y firma tu trabajo</span>
+  <h2>git config + init + commit</h2>
   <div class="demo">
     <p>$ git config --global user.name "Tu Nombre"</p>
-    <p>$ git config --global user.email "tu@correo.com"&nbsp;&nbsp;# el MISMO de GitHub</p>
-    <p>$ git clone https://github.com/TU-USUARIO/bitacora-tu-empresa.git</p>
-    <p>$ cd bitacora-* && ls -la&nbsp;&nbsp;&nbsp;&nbsp;# el README… y la carpeta .git 👀</p>
+    <p>$ git config --global user.email "tu@correo.com"&nbsp;# el MISMO de GitHub</p>
+    <p>$ mkdir bitacora-tu-empresa && cd bitacora-tu-empresa</p>
+    <p>$ echo "Aprendí Linux y GitHub" > cheat-sheet.md</p>
+    <p>$ git init&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# crea el archivo del arquitecto (.git)</p>
+    <p>$ git add .&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# "arquitecto: mira esto"</p>
+    <p>$ git commit -m "Mi primer ejercicio"&nbsp;# fírmalo en el plano</p>
   </div>
-  <p class="sub" style="margin-top:16px">Clonar un repo público no pide clave (es solo leer). La carpeta oculta <b>.git</b> ES el archivo del arquitecto — por eso Git solo ve lo que pasa dentro de esta carpeta. <br><b>La primera vez que subas (push)</b>, Git te pedirá <b>iniciar sesión en GitHub</b> en el navegador — una sola vez y queda guardado.</p>
+  <p class="sub" style="margin-top:12px">La carpeta oculta <b>.git</b> ES el archivo del arquitecto — por eso Git solo ve lo que pasa dentro de esta carpeta.</p>
 </section>
 
-<!-- 15 · EL RITO -->
+<!-- 15 · EL RITO · PRIMER PUSH -->
 <section class="slide">
-  <span class="k"><span class="act-chip">EL RITO DE PASO</span> tu primer push</span>
-  <h2>De tu máquina al mundo — en 3 comandos</h2>
+  <span class="k"><span class="act-chip">EL RITO DE PASO</span> Paso 3 — tu primer push</span>
+  <h2>De tu máquina al mundo</h2>
   <div class="demo">
-    <p>$ mkdir planos materiales && echo "Somos [empresa]" > materiales/lema.txt</p>
-    <p>$ git add .&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# "arquitecto: mira esto"</p>
-    <p>$ git commit -m "Primeras piezas de la casa"&nbsp;# "fírmalo en el plano"</p>
-    <p>$ git push&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# "archívalo en la oficina"</p>
+    <p>$ git remote add origin &lt;URL-que-copiaste&gt;&nbsp;# conecta con tu repo</p>
+    <p>$ git branch -M main</p>
+    <p>$ git push -u origin main&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# "archívalo en la oficina"</p>
   </div>
-  <ul class="clean" style="margin-top:14px">
-    <li>Abran <b>github.com/[usuario]/bitacora-[empresa]</b>… ahí están sus carpetas, publicadas</li>
-  </ul>
-  <p class="sub" style="margin-top:12px">Editar local → push al mundo: el flujo de los equipos de tecnología del planeta. Ya son parte. 📐</p>
+  <div class="sim" style="margin-top:14px"><span class="o">🌐</span><p>La primera vez, se abre el <b>navegador</b> para iniciar sesión en GitHub — <b>una sola vez</b> y queda guardado. <b>Sin token.</b></p></div>
+  <p class="sub" style="margin-top:12px">Recarga <b>github.com/tu-usuario/bitacora-tu-empresa</b>… ahí está <b>cheat-sheet.md</b>, publicado. Editar local → push al mundo: ya son parte del flujo del planeta. 📐</p>
 </section>
 
 <!-- 16 · RETO -->
@@ -466,21 +440,21 @@ ul.clean li:first-child { border-top:0; }
 
 <!-- 19 · PRODUCTO -->
 <section class="slide">
-  <span class="k">El producto de hoy</span>
-  <h2>Tu <span class="grad">cheat-sheet</span>, subida como los profesionales</h2>
+  <span class="k">El producto de hoy · ya tienes repo</span>
+  <h2>Enriquece tu <span class="grad">bitácora</span> — otro push, tú solo</h2>
   <ul class="clean">
-    <li>1 · <b>history</b> — todo lo que aprendiste hoy está ahí</li>
-    <li>2 · <b>cheatsheet-terminal.md</b> en tu bitácora: 12-15 comandos con TUS palabras</li>
-    <li>3 · <b>git add . && git commit -m "Mi cheat-sheet" && git push</b></li>
-    <li>4 · Link al chat ✅</li>
+    <li>1 · <b>history</b> — todo lo que repasaste hoy está ahí</li>
+    <li>2 · Agrega <b>cheatsheet-terminal.md</b> a tu repo: 12-15 comandos de Linux con TUS palabras</li>
+    <li>3 · Repite el rito: <b>git add . && git commit -m "Mi cheat-sheet" && git push</b></li>
+    <li>4 · Link a tu repo, al chat ✅</li>
   </ul>
 </section>
 
 <!-- 19b · TRANSICIÓN A REDES -->
 <section class="slide">
-  <span class="k">Parte 2 · abrimos las calles</span>
+  <span class="k">Parte 3 · Networking · abrimos las calles</span>
   <h2>De los cimientos a <span class="grad">las calles</span></h2>
-  <div class="sim"><span class="o">🗺</span><p>Ya tienes una casa (tu servidor). Pero una casa sola no sirve de nada si nadie puede llegar a ella. Hoy abrimos <b>las calles y la dirección</b>: las redes.</p></div>
+  <div class="sim"><span class="o">🗺</span><p>Ya repasaste tu casa (Linux) y la publicaste en internet (GitHub). Pero una casa sola no sirve de nada si nadie puede llegar a ella. Ahora abrimos <b>las calles y la dirección</b>: las redes.</p></div>
   <p class="sub" style="margin-top:14px">Redes = cómo las casas se encuentran y se hablan entre sí. Es el módulo que le da el nombre al curso.</p>
 </section>
 
