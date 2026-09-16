@@ -2,7 +2,7 @@
 
 **Grupo:** RED-01 · Cloud Computing, Redes y Ciberseguridad (Mar/Jue)
 **Fecha:** 2026-09-15 · Sesión 3 (virtual) — Linux/terminal en un servidor real
-**Contenido visto:** EC2 por **Instance Connect** con **Amazon Linux** (`ec2-user@…`) + primeros comandos de Linux. (No se vio redes ni Git.)
+**Contenido visto:** EC2 por **SSH** con **Amazon Linux** (`ec2-user@…`) + primeros comandos de Linux. (No se vio redes ni Git.)
 **Fuente:** ticket de salida (Google Form) cruzado contra el roster oficial (43 matriculados)
 **Hoja de respuestas:** https://docs.google.com/spreadsheets/d/1Xo6v2oRgU2JJy9zkP7Gn0UmbExM7xuSLYDA4b4LA81s/edit
 **Presentes: 30 · Ausentes: 13**

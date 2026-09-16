@@ -11,7 +11,7 @@
 | 6:45 | 30 | Verificar/completar herramientas | GitHub, VS Code, Terraform, AWS (prerequisito). Rápido si llegaron listos. Checkpoints |
 | 7:15 | 5 | ¿Qué es un SO? (stack animado) | El administrador entre hardware y apps |
 | 7:20 | 5 | ¿Cuáles existen? + terminal = manejar el SO | Cierra en "¿cómo se le habla a Linux?" |
-| 7:25 | 20 | **Lanzar EC2 + Instance Connect** | El bloque estelar. Ir despacio, monitores activos. Checkpoint: `ubuntu@...$` |
+| 7:25 | 20 | **Lanzar EC2 + conexión SSH** | El bloque estelar. Ir despacio, monitores activos. Checkpoint: `ec2-user@...$` |
 | 7:45 | 5 | PAUSA corta | |
 | 7:50 | 25 | Labs 1-2 EN el servidor | whoami/uname para que SIENTAN que es Linux real. Checkpoint por lab |
 | 8:15 | 15 | Lab 3: git config + clone + crear token | El token es el paso nuevo — pasos al chat, despacio |

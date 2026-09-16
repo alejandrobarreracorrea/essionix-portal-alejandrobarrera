@@ -336,24 +336,24 @@ ul.clean li:first-child { border-top:0; }
   <ul class="clean">
     <li>1 · Consola AWS → busca <b>EC2</b> → arriba a la derecha elige región <b>N. Virginia (us-east-1)</b></li>
     <li>2 · <b>Launch instance</b> → nombre: <b>mi-primer-servidor</b></li>
-    <li>3 · Imagen: <b>Ubuntu</b> (Free tier eligible) · Tipo: <b>t2.micro</b> o <b>t3.micro</b> (Free tier) 🟢</li>
-    <li>4 · Key pair: <b>Proceed without a key pair</b> (entraremos por el navegador)</li>
+    <li>3 · Imagen: <b>Amazon Linux</b> (Free tier eligible) · Tipo: <b>t2.micro</b> o <b>t3.micro</b> (Free tier) 🟢</li>
+    <li>4 · Key pair: <b>Create new key pair</b> → tipo <b>.pem</b> → <b>descárgala</b> (es tu llave — no la pierdas)</li>
     <li>5 · Network settings: ✓ <b>Allow SSH from Anywhere</b> · <b>Launch instance</b></li>
   </ul>
   <p class="sub" style="margin-top:14px">Acaban de pedir un computador Linux completo, encendiéndose en un datacenter de Virginia. Costo: <b>$0</b> en capa gratuita — hoy lo apagamos al terminar.</p>
 </section>
 
-<!-- 11e · INSTANCE CONNECT -->
+<!-- 11e · CONEXIÓN SSH -->
 <section class="slide">
-  <span class="k"><span class="act-chip">ACTIVIDAD</span> Entra a tu servidor — sin llaves, sin líos</span>
-  <h2>EC2 Instance Connect: Linux en tu navegador</h2>
+  <span class="k"><span class="act-chip">ACTIVIDAD</span> Entra a tu servidor por SSH</span>
+  <h2>Conéctate a tu servidor con SSH</h2>
   <ul class="clean">
-    <li>1 · EC2 → <b>Instances</b> → espera a que diga <b>Running</b> ✅ (~1 min)</li>
-    <li>2 · Selecciona tu instancia → botón <b>Connect</b> → pestaña <b>EC2 Instance Connect</b> → <b>Connect</b></li>
-    <li>3 · Se abre una terminal negra en el navegador con: <b>ubuntu@ip-...:~$</b></li>
+    <li>1 · EC2 → <b>Instances</b> → espera a <b>Running</b> ✅ y copia su <b>IP pública</b></li>
+    <li>2 · En tu terminal, donde está tu llave: <b>chmod 400 tu-llave.pem</b></li>
+    <li>3 · <b>ssh -i tu-llave.pem ec2-user@&lt;IP-pública&gt;</b> → responde <b>yes</b> → entras: <b>ec2-user@ip-...:~$</b></li>
   </ul>
-  <div class="sim" style="margin-top:16px"><span class="o">🐧</span><p><b>Esto SÍ es Linux 100% real</b> — el kernel, los paquetes, todo. Aquí sí se cumple lo que vimos: la terminal manejando el sistema operativo.</p></div>
-  <p class="sub" style="margin-top:12px">Checkpoint: ✅ al chat cuando veas <b>ubuntu@...$</b> · ¿No te conecta? lo resolvemos en el momento — nadie se queda por fuera.</p>
+  <div class="sim" style="margin-top:16px"><span class="o">🐧</span><p><b>Esto SÍ es Linux 100% real</b> (Amazon Linux) — el kernel, los paquetes, todo. La terminal manejando el sistema operativo.</p></div>
+  <p class="sub" style="margin-top:12px">Checkpoint: ✅ al chat cuando veas <b>ec2-user@...$</b> · ¿No conecta? suele ser la llave (permisos) o el puerto 22 del security group — lo resolvemos en el momento.</p>
 </section>
 
 <!-- 12 · LAB 1 -->
@@ -368,7 +368,7 @@ ul.clean li:first-child { border-top:0; }
     <p>$ cd / && ls&nbsp;# la raíz del sistema — el mapa de Linux</p>
     <p>$ cd ~&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# volver a casa · clear para limpiar</p>
   </div>
-  <p class="sub" style="margin-top:16px">Mini-reto al chat: ¿qué te respondió <b>whoami</b>? (todos serán <b>ubuntu</b> — están dentro del servidor, no en su PC)</p>
+  <p class="sub" style="margin-top:16px">Mini-reto al chat: ¿qué te respondió <b>whoami</b>? (todos serán <b>ec2-user</b> — están dentro del servidor, no en su PC)</p>
 </section>
 
 <!-- 12b · CAMBIO A TU MÁQUINA -->
@@ -532,7 +532,7 @@ ul.clean li:first-child { border-top:0; }
   <h2>Su misión</h2>
   <ul class="clean">
     <li>1 · Cheat-sheet subida (con push): 12-15 comandos de Linux con TUS palabras</li>
-    <li>2 · Pantallazo del prompt de tu servidor EC2 (<b>ubuntu@...$</b>) a la bitácora</li>
+    <li>2 · Pantallazo del prompt de tu servidor EC2 (<b>ec2-user@...$</b>) a la bitácora</li>
     <li>3 · Próxima clase <b>virtual</b>: seguimos las calles — direccionamiento IP y los servicios de red. Conéctate a tiempo</li>
   </ul>
   <p class="sub" style="margin-top:24px">Hoy estrenaron Linux en un servidor real y abrieron las primeras calles. La casa ya se conecta. 🗺</p>

@@ -1,8 +1,8 @@
 # Sesión 2 · Lab: la caja de herramientas + Linux real en EC2 — guía del docente
 
-**Enfoque (opción B):** el Linux real donde se practican los comandos es una **instancia EC2 (Ubuntu)**
-lanzada por cada estudiante, conectada por **EC2 Instance Connect** (navegador, sin llaves .pem ni
-cliente SSH). Prerequisito: cuenta AWS activa (se pidió en la sesión 1).
+**Enfoque:** el Linux real donde se practican los comandos es una **instancia EC2 (Amazon Linux)**
+lanzada por cada estudiante, conectada por **SSH** (con su llave .pem, usuario `ec2-user`).
+Prerequisito: cuenta AWS activa (se pidió en la sesión 1).
 
 **Todos deben tener cuenta AWS activa** (prerequisito de la sesión 1). El lab corre **solo en EC2**:
 no hay entorno alternativo. Quien llegue sin cuenta activa, la activamos en el momento (verificación /
@@ -18,19 +18,18 @@ compañero mientras se destraba — todo sigue en EC2.
 ## LANZAR LA INSTANCIA EC2 (el corazón de hoy)
 Consola AWS → región **N. Virginia (us-east-1)** → servicio **EC2** → **Launch instance**:
 - Name: `mi-primer-servidor`
-- AMI: **Ubuntu** (marca "Free tier eligible")
+- AMI: **Amazon Linux** (marca "Free tier eligible")
 - Type: **t2.micro** o **t3.micro** (Free tier)
-- Key pair: **Proceed without a key pair** ← clave para evitar el lío de .pem
+- Key pair: **Create new key pair** → tipo **.pem** → **descargar** (es tu llave para SSH)
 - Network: ✓ **Allow SSH traffic from Anywhere (0.0.0.0/0)**
 - **Launch instance** → Instances → esperar **Running** (~1 min)
 
-## CONECTARSE (sin SSH client, sin llaves)
-Instancia → **Connect** → pestaña **EC2 Instance Connect** → **Connect** → terminal en el navegador
-con `ubuntu@ip-...:~$`. Eso es Ubuntu 100% real.
+## CONECTARSE (por SSH con la llave)
+En la terminal, donde quedó la llave descargada:
+- `chmod 400 tu-llave.pem`  (permisos correctos; en Windows, terminal con `ssh`)
+- `ssh -i tu-llave.pem ec2-user@<IP-pública>` → responder `yes` → entra `ec2-user@ip-...:~$`. Eso es Amazon Linux 100% real.
 
-> Nota de por qué "Proceed without a key pair" funciona con Instance Connect: EC2 Instance Connect
-> inyecta una llave temporal por 60s al conectar desde la consola. No necesitas gestionar .pem.
-> (En módulo 2, cuando enseñemos SSH "de verdad", sí generamos y usamos key pairs.)
+> Gotchas de SSH: "Permission denied (publickey)" → revisar `chmod 400` y que el usuario sea `ec2-user` (Amazon Linux). "Connection timed out" → puerto 22 abierto en el security group.
 
 ## LABS (todos DENTRO de la instancia)
 - Lab 1 ubicarse: `whoami` `pwd` `ls -la` `uname -a` `cd / && ls` `cd ~` `clear`
@@ -76,8 +75,7 @@ Al inicio de la próxima clase: revisar en consola que nadie dejó nada corriend
 
 ## Riesgos conocidos y mitigación
 - **Sin cuenta AWS activa** → es prerequisito: todos deben tenerla. Se activa en el momento (verificación / tarjeta); mientras se destraba, trabaja en pareja sobre la instancia de un compañero. No hay entorno alterno.
-- **Instance Connect falla** ("unable to connect") → suele ser el security group sin puerto 22:
-  editar security group de la instancia → Inbound → Add rule → SSH → Anywhere.
+- **SSH falla** ("Permission denied" / "Connection timed out") → llave con `chmod 400`, usuario `ec2-user`, y puerto 22 abierto en el security group (Inbound → SSH → Anywhere).
 - **La instancia no lanza** (límite/verificación de cuenta nueva) → resolver la verificación de la cuenta; si tarda, en pareja sobre la instancia de un compañero mientras se destraba.
 - **Push falla** → 99% es token mal copiado o sin scope `repo`. Regenerar.
 - **Olvidan apagar** → recordatorio en el grupo esa misma noche + revisión al inicio de sesión 3.

@@ -30,7 +30,7 @@ Grupos: **RED-01** (Mar/Jue) y **RED-02** (Mié/Vie).
   (la de `/main/` cachea ~10 min; usar `/<sha>/` para verla al instante).
 
 ## 3. Política EC2-only (todos con AWS)
-- El Linux real se hace **solo en EC2** (Instance Connect, sin llaves .pem). Se quitó **Killercoda** y
+- El Linux real se hace **solo en EC2** — conexión por **SSH** con llave .pem; SO **Amazon Linux** (usuario `ec2-user`). Se quitó **Killercoda** y
   **WSL** de todo (decks + guías `ritmo.md` y `lab-terminal.md`).
 - **Todos deben tener cuenta AWS activa** (prerequisito). Contingencia si una cuenta nueva no verifica
   a tiempo: trabajar en pareja sobre la instancia de un compañero (sigue en EC2), sin entorno alterno.
