@@ -93,17 +93,24 @@ def build(path: str) -> bool:
     default_clase = cm.group(1)
     # overrides por grupo:  clase-g1=4  clase-g2=5
     overrides = dict(re.findall(r"clase-g(\d+)=(\d+)", meta))
+    # nº de "Sesión N" mostrado en portada/título; por defecto = clase de ese grupo.
+    # Se puede fijar aparte con  sesion=3  y overrides  sesion-g1=4
+    sm = re.search(r"\bsesion=(\d+)", meta)
+    default_sesion = sm.group(1) if sm else None
+    overrides_sesion = dict(re.findall(r"sesion-g(\d+)=(\d+)", meta))
     for g in GROUPS:
         clase = overrides.get(g["num"], default_clase)
+        sesion = overrides_sesion.get(g["num"]) or default_sesion or clase
         html = src
         html = re.sub(r"<!--\s*deck-meta:.*?-->", BANNER, html)
         html = html.replace("{{QR_TICKET}}", qr_svg(prefill_url(g["grupo_value"], clase)))
         html = html.replace("{{G_NUM}}", g["num"])
         html = html.replace("{{G_ID}}", g["id"])
+        html = html.replace("{{SESION}}", sesion)
         out = re.sub(r"slides\.html$", f"slides-g{g['num']}.html", path)
         with open(out, "w", encoding="utf-8") as f:
             f.write(html)
-        print(f"  -> {out}  (clase {clase}, {g['id']})")
+        print(f"  -> {out}  (Sesión {sesion} · clase {clase}, {g['id']})")
     return True
 
 
