@@ -9,6 +9,13 @@ sobrescriben. Edita el canónico y vuelve a correr este script.
 Un deck se considera "canónico" (y se genera) solo si su slides.html contiene
 el marcador:  <!-- deck-meta: clase=N -->
 
+Número de clase POR GRUPO (cuando los grupos divergen en el contador de
+asistencia pero comparten contenido): añade overrides al mismo marcador, p. ej.
+  <!-- deck-meta: clase=3 clase-g1=4 -->
+genera slides-g1.html con clase=4 en su QR y slides-g2.html con clase=3.
+"Sesión N" en portada/título es el TEMA (igual para todos); el número por grupo
+solo afecta el QR del ticket de salida (el contador de asistencia).
+
 Placeholders que se sustituyen en el canónico:
   {{G_NUM}}     -> "1" | "2"           (número de grupo)
   {{G_ID}}      -> "RED-01" | "RED-02" (identificador del grupo)
@@ -76,13 +83,20 @@ def qr_svg(url: str) -> str:
 
 def build(path: str) -> bool:
     src = open(path, encoding="utf-8").read()
-    m = re.search(r"deck-meta:\s*clase=(\d+)", src)
+    m = re.search(r"<!--\s*deck-meta:\s*(.*?)\s*-->", src)
     if not m:
         return False  # no es un deck canónico templado
-    clase = m.group(1)
+    meta = m.group(1)
+    cm = re.search(r"\bclase=(\d+)", meta)
+    if not cm:
+        return False
+    default_clase = cm.group(1)
+    # overrides por grupo:  clase-g1=4  clase-g2=5
+    overrides = dict(re.findall(r"clase-g(\d+)=(\d+)", meta))
     for g in GROUPS:
+        clase = overrides.get(g["num"], default_clase)
         html = src
-        html = html.replace(f"<!-- deck-meta: clase={clase} -->", BANNER)
+        html = re.sub(r"<!--\s*deck-meta:.*?-->", BANNER, html)
         html = html.replace("{{QR_TICKET}}", qr_svg(prefill_url(g["grupo_value"], clase)))
         html = html.replace("{{G_NUM}}", g["num"])
         html = html.replace("{{G_ID}}", g["id"])
