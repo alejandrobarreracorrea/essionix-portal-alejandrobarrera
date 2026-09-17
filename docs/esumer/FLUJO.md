@@ -26,12 +26,14 @@ clase de Linux). Confirmar siempre grupo + N° de sesión/clase de hoy antes de 
    identificar) y actualizar el índice `asistencia/README.md`.
 
 ## 2. Alistar los insumos de la clase de hoy
-1. **Deck**: editar el `slides.html` canónico y regenerar con
-   `python scripts/build-decks.py docs/esumer/lecciones/sesion-0N/slides.html`
-   (venv con `segno`). Verificar: 0 placeholders `{{`, QR de asistencia con la clase
-   correcta por grupo, label “Sesión N” correcto por grupo, portada acorde al tema.
-   El deck-meta soporta números por grupo: `<!-- deck-meta: clase=3 clase-g1=4 -->`
-   (y `sesion-g1=4` si el nº de Sesión difiere del de clase).
+1. **Deck** (LINEAMIENTO: carpeta por grupo): crear/editar el canónico en
+   `docs/esumer/lecciones/<GRUPO>/sesion-0N/slides.html` (deck-meta
+   `grupo=RED-0N sesion=N clase=N`) y regenerar con
+   `python scripts/build-decks.py docs/esumer/lecciones/<GRUPO>/sesion-0N/slides.html`
+   (venv con `segno`). Para una sesión con el MISMO contenido que otro grupo, copiar su
+   `slides.html`, cambiar el `deck-meta` (grupo/sesion/clase) y **ajustar las rutas de
+   assets** (`../../assets/` → `../../../assets/` por la profundidad). Verificar: 0
+   placeholders `{{`, QR con la clase correcta, label “Sesión N” y portada acorde al tema.
 2. **Mensaje de WhatsApp de anuncio**: Meet link del grupo + plan del día + frase de
    motivación. **Copiar al portapapeles (`pbcopy`) Y guardarlo** en `mensajes/RED-0N/`.
 
@@ -51,11 +53,23 @@ clase de Linux). Confirmar siempre grupo + N° de sesión/clase de hoy antes de 
 - RED-02: https://meet.google.com/dzm-ohyv-wez
 
 ## Estructura de carpetas
+**LINEAMIENTO: cada sesión tiene su propia carpeta, POR GRUPO** — `lecciones/<GRUPO>/sesion-0N/`.
+No se comparten carpetas entre grupos (van desfasados: el mismo contenido es sesión 3 para
+RED-02 y sesión 4 para RED-01, y a futuro el nº de sesión colisiona). Cada carpeta = un deck
+autocontenido de UN grupo.
 ```
 docs/esumer/
-  FLUJO.md                       ← este archivo
-  lecciones/sesion-0N/           ← decks (canónico + g1/g2 generados)
-  asistencia/RED-0N/clase-0M.md  ← asistencia por grupo+clase (+ README índice)
-  mensajes/RED-0N/               ← mensajes de WhatsApp enviados (anuncios + recaps)
-  bitacora/                      ← bitácoras técnicas
+  FLUJO.md                          ← este archivo
+  lecciones/
+    RED-01/sesion-0N/               ← deck de RED-01 para esa sesión
+    RED-02/sesion-0N/               ← deck de RED-02 para esa sesión
+      slides.html                   (canónico: placeholders + deck-meta grupo/sesion/clase)
+      slides-gN.html                (GENERADO — es el que se abre/enlaza; no editar a mano)
+    sesion-01/ · sesion-02/         (legacy plano, previas al lineamiento)
+  asistencia/RED-0N/clase-0M.md     ← asistencia por grupo+clase (+ README índice)
+  mensajes/RED-0N/                  ← mensajes de WhatsApp enviados (anuncios + recaps)
+  bitacora/                         ← bitácoras técnicas
 ```
+El deck-meta de un canónico por grupo es: `<!-- deck-meta: grupo=RED-01 sesion=4 clase=4 -->`
+(genera solo el `slides-gN.html` de ese grupo). Descubrimiento recursivo:
+`python scripts/build-decks.py` (o pasar la ruta del `slides.html`).

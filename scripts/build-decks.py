@@ -98,7 +98,11 @@ def build(path: str) -> bool:
     sm = re.search(r"\bsesion=(\d+)", meta)
     default_sesion = sm.group(1) if sm else None
     overrides_sesion = dict(re.findall(r"sesion-g(\d+)=(\d+)", meta))
-    for g in GROUPS:
+    # LINEAMIENTO: cada sesión su carpeta, por grupo (lecciones/<GRUPO>/sesion-0N/).
+    # Con  grupo=RED-0N  el deck es de UN solo grupo (genera solo su slides-gN.html).
+    gm = re.search(r"grupo=(RED-0\d)", meta)
+    groups = [x for x in GROUPS if x["id"] == gm.group(1)] if gm else GROUPS
+    for g in groups:
         clase = overrides.get(g["num"], default_clase)
         sesion = overrides_sesion.get(g["num"]) or default_sesion or clase
         html = src
@@ -118,7 +122,7 @@ def main(argv):
     if argv:
         paths = argv
     else:
-        paths = glob.glob("docs/esumer/lecciones/*/slides.html")
+        paths = glob.glob("docs/esumer/lecciones/**/slides.html", recursive=True)
     built = 0
     for p in sorted(paths):
         if os.path.basename(p) != "slides.html":
