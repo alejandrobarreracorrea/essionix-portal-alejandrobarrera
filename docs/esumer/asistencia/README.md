@@ -16,6 +16,7 @@ Se filtra por **Grupo** + **N° de clase** + **Marca temporal** (la hora delata 
 | Clase | Fecha | Tema | Pres. | Aus. | Registro |
 |---|---|---|---|---|---|
 | 2 | 2026-09-11 | Caja de herramientas + Linux en EC2 | 17 | 7 | [RED-02/clase-02.md](RED-02/clase-02.md) |
+| 3 | 2026-09-16 | Repaso Linux + primer push a GitHub + intro redes | 13 | 11 | [RED-02/clase-03.md](RED-02/clase-03.md) |
 
 ## Convenciones
 - Presentes por **# de roster**; ausentes por # + nombre. **Sin correos** (repo público).
