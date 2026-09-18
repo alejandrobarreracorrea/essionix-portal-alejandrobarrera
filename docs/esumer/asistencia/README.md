@@ -11,6 +11,7 @@ Se filtra por **Grupo** + **N° de clase** + **Marca temporal** (la hora delata 
 |---|---|---|---|---|---|
 | 1 | 2026-09-09 | Presentación + diagnóstico | 38 | 5 | [RED-01/clase-01.md](RED-01/clase-01.md) |
 | 3 | 2026-09-15 | Linux/terminal en EC2 (SSH · Amazon Linux) | 30 | 13 | [RED-01/clase-03.md](RED-01/clase-03.md) |
+| 4 | 2026-09-17 | Repaso Linux + primer push a GitHub + intro redes | 37 | 6 | [RED-01/clase-04.md](RED-01/clase-04.md) |
 
 ## RED-02 (Mié/Vie)
 | Clase | Fecha | Tema | Pres. | Aus. | Registro |
