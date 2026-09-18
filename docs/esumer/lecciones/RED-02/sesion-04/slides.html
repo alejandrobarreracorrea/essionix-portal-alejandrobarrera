@@ -247,14 +247,14 @@ ul.clean li:first-child { border-top:0; }
 .vnode { font-family:"Poppins",sans-serif; font-weight:600; }
 @media (prefers-reduced-motion:reduce){ .viz *{animation:none!important} }
 
-.vexp { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; max-width:1010px; margin:14px auto 0; }
-.vexp .c { border:1px solid var(--line); border-top:4px solid var(--a2); border-radius:14px; padding:11px 16px 13px; background:#fff; }
-.vexp .c h4 { font-family:"Poppins",sans-serif; font-weight:700; font-size:clamp(.98rem,1.65vw,1.28rem); color:var(--a1); margin-bottom:5px; }
-.vexp .c p { font-size:clamp(.76rem,1.2vw,.94rem); color:var(--muted); line-height:1.38; margin:3px 0; }
+.vexp { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:1010px; margin:10px auto 0; }
+.vexp .c { border:1px solid var(--line); border-top:3px solid var(--a2); border-radius:12px; padding:7px 13px 9px; background:#fff; }
+.vexp .c h4 { font-family:"Poppins",sans-serif; font-weight:700; font-size:clamp(.86rem,1.4vw,1.08rem); color:var(--a1); margin-bottom:3px; }
+.vexp .c p { font-size:clamp(.7rem,1.08vw,.84rem); color:var(--muted); line-height:1.28; margin:2px 0; }
 .vexp .c p b { color:var(--text); }
 .vexp .c .ej b { color:var(--a1); }
 @media (max-width:760px){ .vexp { grid-template-columns:1fr; } }
-.viz.sm svg{ width:auto; height:clamp(168px,24vh,238px); max-width:100%; margin:0 auto; }
+.viz.sm svg{ width:auto; height:clamp(240px,36vh,360px); max-width:100%; margin:0 auto; }
 </style></head><body>
 <div class="bar" id="bar"></div>
 <div class="num" id="num"></div>
@@ -302,15 +302,23 @@ ul.clean li:first-child { border-top:0; }
 
 <!-- P1 · LINUX REPASO RELÁMPAGO -->
 <section class="slide">
-  <span class="k"><span class="act-chip">PARTE 1 · LINUX</span> Repaso relámpago</span>
+  <span class="k"><span class="act-chip">PARTE 1 · LINUX</span> Reconéctate con MobaXterm</span>
   <h2>Calienta motores en tu servidor</h2>
-  <div class="demo">
-    <p>$ ssh -i tu-llave.pem ec2-user@&lt;IP-pública&gt;&nbsp;# reconéctate</p>
-    <p>$ whoami &amp;&amp; pwd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ¿quién soy y dónde estoy?</p>
-    <p>$ ls -la&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ¿qué hay aquí?</p>
-    <p>$ history | tail&nbsp;# lo que ya sabes hacer</p>
+  <div class="grid2" style="align-items:start">
+    <ul class="clean">
+      <li>1 · Abre <b>MobaXterm</b> → <b>Session</b> → <b>SSH</b></li>
+      <li>2 · <b>Remote host:</b> tu <b>IP pública</b> · <b>username:</b> ec2-user</li>
+      <li>3 · <b>Advanced SSH</b> → <b>Use private key</b> → tu <b>.pem</b> → <b>OK</b></li>
+      <li>4 · Ya estás dentro: verás <b>ec2-user@…$</b></li>
+    </ul>
+    <div class="demo">
+      <p># ya conectado, calienta:</p>
+      <p>$ whoami &amp;&amp; pwd</p>
+      <p>$ ls -la</p>
+      <p>$ history | tail</p>
+    </div>
   </div>
-  <p class="sub" style="margin-top:14px">Ya manejan la terminal. Hoy la usamos para <b>ver la red por dentro</b>. Manos listas. 🐧</p>
+  <p class="sub" style="margin-top:14px"><b>MobaXterm</b> es su llave de entrada al servidor (SSH con su <b>.pem</b>). Ya dentro, hoy usamos la terminal para <b>ver la red por dentro</b>. 🐧
 </section>
 
 <!-- P2a · LAN / WAN / INTERNET (animado + detalle) -->
@@ -623,9 +631,11 @@ ul.clean li:first-child { border-top:0; }
         <animate attributeName="opacity" values=".45;1;.45" dur="2.4s" repeatCount="indefinite"/>
       </circle>
       <text x="395" y="286" text-anchor="middle" class="vlbl" fill="#E97132">Security Group</text>
-      <rect x="357" y="184" width="76" height="52" rx="10" fill="#156082"/>
-      <text x="395" y="207" text-anchor="middle" class="vname">EC2</text>
-      <text x="395" y="224" text-anchor="middle" class="vname" font-size="10">web</text>
+      <rect x="345" y="176" width="100" height="64" rx="10" fill="#156082" stroke="#E97132" stroke-width="3"/>
+      <rect x="345" y="176" width="100" height="15" rx="10" fill="#0c3348"/>
+      <circle cx="356" cy="183.5" r="2.6" fill="#E97132"/><circle cx="365" cy="183.5" r="2.6" fill="#fff" fill-opacity=".55"/><circle cx="374" cy="183.5" r="2.6" fill="#fff" fill-opacity=".55"/>
+      <text x="395" y="213" text-anchor="middle" class="vname" font-size="14">EC2 web</text>
+      <text x="395" y="230" text-anchor="middle" class="vname" font-size="10" fill="#ffd9c2">tu página</text>
       <!-- Subred privada -->
       <rect x="600" y="80" width="350" height="228" rx="12" fill="#44546A" fill-opacity=".06" stroke="#8B98A9" stroke-width="1.4"/>
       <text x="620" y="106" class="vnode" fill="#44546A" font-size="14">Subred privada</text>
@@ -654,11 +664,15 @@ ul.clean li:first-child { border-top:0; }
           keyPoints="0;.18;.62;1" keyTimes="0;.28;.66;1"
           path="M72,120 L177,120 C220,150 320,175 395,200 L775,205"/>
       </circle>
+      <circle r="7" fill="#0F9ED5">
+        <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.5;.56;.92;1" dur="5s" repeatCount="indefinite"/>
+        <animateMotion dur="5s" repeatCount="indefinite" calcMode="linear" keyPoints="0;0;1;1" keyTimes="0;.56;.9;1" path="M395,200 C300,150 200,132 120,122"/>
+      </circle>
     </svg>
   </div>
   <div class="vexp">
   <div class="c" style="border-top-color:#0F9ED5"><h4>La VPC</h4><p><b>Qué es:</b> tu propia red privada dentro de AWS.</p><p>🏠 <b>En tu casa:</b> tu urbanización cerrada, solo tuya.</p><p class="ej">✅ <b>Ejemplo:</b> creas una VPC 10.0.0.0/16 y ahí viven tus servidores.</p></div>
-  <div class="c" style="border-top-color:#156082"><h4>Subred pública</h4><p><b>Qué es:</b> la parte que da a internet.</p><p>🏠 <b>En tu casa:</b> la fachada que da a la calle.</p><p class="ej">✅ <b>Ejemplo:</b> ahí pones el servidor web para que el mundo lo vea.</p></div>
+  <div class="c" style="border-top-color:#156082"><h4>Subred pública</h4><p><b>Qué es:</b> la parte que da a internet.</p><p>🏠 <b>En tu casa:</b> la fachada que da a la calle.</p><p class="ej">✅ <b>Ejemplo:</b> ahí vive tu <b>servidor web</b> — el que YA desplegaste. Pronto publicas tu propia página. 🚀</p></div>
   <div class="c" style="border-top-color:#0E2841"><h4>Subred privada</h4><p><b>Qué es:</b> la parte sin salida directa a internet.</p><p>🏠 <b>En tu casa:</b> el cuarto de seguridad, sin ventana a la calle.</p><p class="ej">✅ <b>Ejemplo:</b> ahí guardas la base de datos con la info sensible.</p></div>
   </div>
 </section>
