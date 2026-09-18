@@ -482,16 +482,51 @@ ul.clean li:first-child { border-top:0; }
   <p class="vcap">La <b>máscara /24</b> dice: los primeros 3 octetos son la <b style="color:#156082">RED</b>; el último es el <b style="color:#E97132">HOST</b>. Por eso un mensaje llega primero al barrio y luego a la casa exacta. &nbsp;·&nbsp; <b>Privada</b>: 192.168.x.x / 10.x.x.x &nbsp;·&nbsp; <b>Pública</b>: única en el mundo.</p>
 </section>
 
-<!-- P2d · DNS / DHCP / NAT -->
+<!-- P2d · DNS / DHCP / NAT (animado) -->
 <section class="slide">
   <span class="k"><span class="act-chip">PARTE 2 · TEORÍA</span> Los servicios que hacen la magia invisible</span>
-  <h2>DNS, DHCP y NAT</h2>
-  <div class="osgrid" style="grid-template-columns:repeat(3,1fr)">
-    <div class="oscard hi"><span class="oe">📖</span><b>DNS</b><small>La agenda de internet: traduce <b>google.com</b> → su IP. Nadie memoriza números</small></div>
-    <div class="oscard hi"><span class="oe">🎫</span><b>DHCP</b><small>El repartidor: al conectarte, te <b>asigna una IP</b> automáticamente</small></div>
-    <div class="oscard hi"><span class="oe">🚪</span><b>NAT</b><small>El portero del barrio: deja que muchas IP privadas salgan al mundo por <b>una pública</b></small></div>
+  <h2 style="margin-bottom:6px">DNS, DHCP y NAT — <span class="grad">trabajan callados en cada conexión</span></h2>
+  <div class="viz">
+    <svg viewBox="0 0 1000 330" role="img" aria-label="Animaciones de DNS, DHCP y NAT">
+      <!-- ===== DNS ===== -->
+      <rect x="12" y="40" width="316" height="252" rx="16" fill="#0F9ED5" fill-opacity=".05" stroke="#dfe5ee"/>
+      <text x="34" y="72" class="vzone" fill="#156082" font-size="17">DNS</text>
+      <text x="86" y="72" class="vlbl">la agenda de internet</text>
+      <rect x="34" y="150" width="86" height="46" rx="9" fill="#fff" stroke="#156082" stroke-width="1.6"/><text x="77" y="178" text-anchor="middle" class="vlbl" fill="#156082">tú</text>
+      <rect x="220" y="150" width="86" height="46" rx="9" fill="#156082"/><text x="263" y="178" text-anchor="middle" class="vname">DNS</text>
+      <line x1="120" y1="164" x2="220" y2="164" stroke="#dfe5ee" stroke-width="2"/>
+      <line x1="120" y1="182" x2="220" y2="182" stroke="#dfe5ee" stroke-width="2"/>
+      <text x="170" y="140" text-anchor="middle" class="vlbl" fill="#44546A">google.com ▸</text>
+      <text x="170" y="216" text-anchor="middle" class="vlbl" fill="#E97132">◂ 142.250.4.5</text>
+      <circle r="6" fill="#156082"><animateMotion path="M120,164 L214,164" dur="1.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;1;0;0" keyTimes="0;.5;.5;1" dur="1.6s" repeatCount="indefinite"/></circle>
+      <circle r="6" fill="#E97132"><animateMotion path="M214,182 L120,182" dur="1.6s" begin=".8s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;1;0;0" keyTimes="0;.5;.5;1" dur="1.6s" begin=".8s" repeatCount="indefinite"/></circle>
+      <text x="170" y="266" text-anchor="middle" class="vlbl">nombre → número</text>
+      <!-- ===== DHCP ===== -->
+      <rect x="342" y="40" width="316" height="252" rx="16" fill="#156082" fill-opacity=".05" stroke="#dfe5ee"/>
+      <text x="364" y="72" class="vzone" fill="#156082" font-size="17">DHCP</text>
+      <text x="430" y="72" class="vlbl">el repartidor de IPs</text>
+      <rect x="364" y="150" width="96" height="46" rx="9" fill="#fff" stroke="#156082" stroke-width="1.6"/><text x="412" y="172" text-anchor="middle" class="vlbl" fill="#156082">PC nuevo</text><text x="412" y="188" text-anchor="middle" class="vlbl" fill="#8B98A9">¿mi IP?</text>
+      <rect x="552" y="150" width="86" height="46" rx="9" fill="#156082"/><text x="595" y="178" text-anchor="middle" class="vname">DHCP</text>
+      <line x1="460" y1="173" x2="552" y2="173" stroke="#dfe5ee" stroke-width="2"/>
+      <g><rect x="-40" y="-13" width="80" height="26" rx="6" fill="#E97132"/><text x="0" y="5" text-anchor="middle" class="vname" font-size="11">10.0.0.42</text>
+        <animateMotion path="M552,173 L460,173" dur="2.2s" repeatCount="indefinite" keyPoints="0;0;1;1" keyTimes="0;.25;.75;1" calcMode="linear"/>
+        <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.25;.75;1" dur="2.2s" repeatCount="indefinite"/></g>
+      <text x="500" y="266" text-anchor="middle" class="vlbl">al conectarte, te asigna una IP</text>
+      <!-- ===== NAT ===== -->
+      <rect x="672" y="40" width="316" height="252" rx="16" fill="#0F9ED5" fill-opacity=".05" stroke="#dfe5ee"/>
+      <text x="694" y="72" class="vzone" fill="#156082" font-size="17">NAT</text>
+      <text x="748" y="72" class="vlbl">el portero del barrio</text>
+      <rect x="686" y="150" width="80" height="46" rx="9" fill="#fff" stroke="#156082" stroke-width="1.6"/><text x="726" y="172" text-anchor="middle" class="vlbl" fill="#156082" font-size="11">privada</text><text x="726" y="188" text-anchor="middle" class="vlbl" fill="#156082" font-size="11">192.168.0.5</text>
+      <rect x="800" y="152" width="48" height="42" rx="8" fill="#E97132"/><text x="824" y="177" text-anchor="middle" class="vname" font-size="11">NAT</text>
+      <circle cx="928" cy="173" r="26" fill="#0F9ED5" fill-opacity=".12" stroke="#0F9ED5" stroke-width="1.4"/><ellipse cx="928" cy="173" rx="26" ry="9" fill="none" stroke="#0F9ED5" stroke-width="1" opacity=".6"/><line x1="902" y1="173" x2="954" y2="173" stroke="#0F9ED5" stroke-width="1" opacity=".6"/>
+      <line x1="766" y1="173" x2="800" y2="173" stroke="#dfe5ee" stroke-width="2"/><line x1="848" y1="173" x2="902" y2="173" stroke="#dfe5ee" stroke-width="2"/>
+      <circle r="6" fill="#156082"><animateMotion path="M766,173 L800,173" dur="2.4s" repeatCount="indefinite" keyPoints="0;0;1;1" keyTimes="0;.15;.45;1" calcMode="linear"/><animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;.15;.45;.46;1" dur="2.4s" repeatCount="indefinite"/></circle>
+      <circle r="6" fill="#0F9ED5"><animateMotion path="M848,173 L902,173" dur="2.4s" repeatCount="indefinite" keyPoints="0;0;1;1" keyTimes="0;.55;.85;1" calcMode="linear"/><animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.55;.56;.85;1" dur="2.4s" repeatCount="indefinite"/></circle>
+      <text x="830" y="230" text-anchor="middle" class="vlbl" fill="#E97132">3.220.15.4 (pública)</text>
+      <text x="830" y="266" text-anchor="middle" class="vlbl">muchas privadas salen por una pública</text>
+    </svg>
   </div>
-  <p class="sub" style="margin-top:18px">Los tres trabajan callados en cada conexión que hacen — hasta en el wifi de su casa.</p>
+  <p class="vcap">Los tres trabajan callados en <b>cada conexión</b> que hacen — hasta en el wifi de su casa: <b>DHCP</b> te da IP, <b>DNS</b> encuentra la dirección por el nombre y <b>NAT</b> te saca al mundo.</p>
 </section>
 
 <!-- P2e · DIAGNÓSTICO -->
@@ -508,16 +543,35 @@ ul.clean li:first-child { border-top:0; }
   <p class="sub" style="margin-top:12px">Al chat: ¿cuántos <b>saltos</b> hay entre tu servidor de Virginia y google? 🌎</p>
 </section>
 
-<!-- P3a · TRANSICIÓN AWS -->
+<!-- P3a · TRANSICIÓN AWS (mapeo animado) -->
 <section class="slide">
   <span class="k"><span class="act-chip">PARTE 3 · AWS</span> Las mismas ideas… en la nube</span>
-  <h2>Todo esto ya existe en <span class="grad">AWS</span></h2>
-  <div class="sim"><span class="o">☁️</span><p>Lo que acaban de ver (redes, IP, puertos, firewalls) no cambia en la nube: AWS solo le pone <b>nombre y botones</b>. Conocen la teoría → van a reconocer las piezas al instante.</p></div>
-  <ul class="clean" style="margin-top:14px">
-    <li>Su <b>barrio privado</b> → la <b>VPC</b></li>
-    <li>Las <b>cerraduras y puertos</b> → los <b>Security Groups</b></li>
-    <li>El <b>recepcionista</b> que reparte visitas → el <b>Load Balancer</b></li>
-  </ul>
+  <h2 style="margin-bottom:6px">Todo lo que aprendiste ya existe en <span class="grad">AWS</span> — con otro nombre</h2>
+  <div class="viz">
+    <svg viewBox="0 0 1000 320" role="img" aria-label="Cada concepto de redes se mapea a un servicio de AWS">
+      <text x="235" y="34" text-anchor="middle" class="vlbl" fill="#44546A">LA IDEA QUE YA CONOCES</text>
+      <text x="770" y="34" text-anchor="middle" class="vlbl" fill="#E97132">SU NOMBRE EN AWS</text>
+      <!-- filas -->
+      <g font-family="Poppins">
+      <!-- fila 1 -->
+      <rect x="70" y="58" width="330" height="58" rx="12" fill="#fff" stroke="#dfe5ee" stroke-width="1.4"/><text x="92" y="84" fill="#0E2841" font-weight="600" font-size="16">Tu barrio privado</text><text x="92" y="104" class="vlbl">tu red aislada, con sus calles</text>
+      <path d="M400,87 H600" stroke="#0F9ED5" stroke-width="2.4" stroke-dasharray="7 7" fill="none"><animate attributeName="stroke-dashoffset" from="28" to="0" dur="1s" repeatCount="indefinite"/></path>
+      <circle r="5" fill="#0F9ED5"><animateMotion path="M400,87 H600" dur="1.6s" repeatCount="indefinite"/></circle>
+      <rect x="600" y="58" width="330" height="58" rx="12" fill="#156082"/><text x="622" y="94" fill="#fff" font-weight="700" font-size="20">VPC</text><text x="720" y="94" fill="#cfe6f2" font-size="13">Virtual Private Cloud</text>
+      <!-- fila 2 -->
+      <rect x="70" y="131" width="330" height="58" rx="12" fill="#fff" stroke="#dfe5ee" stroke-width="1.4"/><text x="92" y="157" fill="#0E2841" font-weight="600" font-size="16">Las cerraduras y puertos</text><text x="92" y="177" class="vlbl">qué puerta se abre y para quién</text>
+      <path d="M400,160 H600" stroke="#E97132" stroke-width="2.4" stroke-dasharray="7 7" fill="none"><animate attributeName="stroke-dashoffset" from="28" to="0" dur="1s" repeatCount="indefinite"/></path>
+      <circle r="5" fill="#E97132"><animateMotion path="M400,160 H600" dur="1.6s" begin=".5s" repeatCount="indefinite"/></circle>
+      <rect x="600" y="131" width="330" height="58" rx="12" fill="#156082"/><text x="622" y="167" fill="#fff" font-weight="700" font-size="18">Security Groups</text><text x="792" y="167" fill="#cfe6f2" font-size="13">el firewall</text>
+      <!-- fila 3 -->
+      <rect x="70" y="204" width="330" height="58" rx="12" fill="#fff" stroke="#dfe5ee" stroke-width="1.4"/><text x="92" y="230" fill="#0E2841" font-weight="600" font-size="16">El recepcionista</text><text x="92" y="250" class="vlbl">reparte las visitas entre servidores</text>
+      <path d="M400,233 H600" stroke="#0F9ED5" stroke-width="2.4" stroke-dasharray="7 7" fill="none"><animate attributeName="stroke-dashoffset" from="28" to="0" dur="1s" repeatCount="indefinite"/></path>
+      <circle r="5" fill="#0F9ED5"><animateMotion path="M400,233 H600" dur="1.6s" begin="1s" repeatCount="indefinite"/></circle>
+      <rect x="600" y="204" width="330" height="58" rx="12" fill="#156082"/><text x="622" y="240" fill="#fff" font-weight="700" font-size="18">Load Balancer</text><text x="782" y="240" fill="#cfe6f2" font-size="13">el balanceador</text>
+      </g>
+    </svg>
+  </div>
+  <p class="vcap">No es tecnología nueva: es <b>lo mismo que ya entienden</b>, con nombre de AWS. Por eso la teoría de hoy los vuelve rápidos en la nube.</p>
 </section>
 
 <!-- P3b · VPC (diagrama animado) -->
@@ -586,30 +640,81 @@ ul.clean li:first-child { border-top:0; }
   <p class="vcap">Una petición entra por el <b>IGW</b>, la revisa el <b style="color:#E97132">Security Group</b> y llega al <b>EC2</b> en la subred pública. La <b>base de datos</b> vive en la subred privada, <b style="color:#c74a4a">sin puerta al internet</b>.</p>
 </section>
 
-<!-- P3c · SECURITY GROUPS -->
+<!-- P3c · SECURITY GROUPS (firewall animado) -->
 <section class="slide">
   <span class="k"><span class="act-chip">PARTE 3 · AWS</span> Las cerraduras de tu servidor</span>
-  <h2><span class="grad">Security Groups</span>: el firewall de tu EC2</h2>
-  <ul class="clean">
-    <li>Un <b>firewall</b> que decide qué puertos están abiertos y para quién</li>
-    <li>Por defecto: <b>todo cerrado</b>. Tú abres solo lo necesario, regla por regla</li>
-    <li>Ej.: <b>22 (SSH)</b> solo para TU IP · <b>80/443 (web)</b> para todo el mundo</li>
-    <li>Cuando lanzaron la EC2 y marcaron "Allow SSH from Anywhere" → eso <b>era</b> un Security Group</li>
-  </ul>
-  <p class="sub" style="margin-top:16px">Cada puerto abierto es una puerta. Menos puertas = menos formas de entrar sin permiso. 🔐</p>
+  <h2 style="margin-bottom:6px"><span class="grad">Security Groups</span>: el firewall deja pasar solo lo permitido</h2>
+  <div class="viz">
+    <svg viewBox="0 0 1000 340" role="img" aria-label="Un firewall deja pasar los puertos permitidos y bloquea el resto">
+      <text x="90" y="28" text-anchor="middle" class="vlbl">INTERNET</text>
+      <text x="500" y="28" text-anchor="middle" class="vlbl" fill="#E97132">SECURITY GROUP (firewall)</text>
+      <text x="905" y="28" text-anchor="middle" class="vlbl" fill="#156082">TU EC2</text>
+      <!-- muro -->
+      <rect x="484" y="46" width="32" height="264" rx="6" fill="#0E2841"/>
+      <!-- puertas abiertas (permitidos) -->
+      <rect x="484" y="70" width="32" height="26" rx="3" fill="#2e9e6b"/>
+      <rect x="484" y="150" width="32" height="26" rx="3" fill="#2e9e6b"/>
+      <rect x="484" y="196" width="32" height="26" rx="3" fill="#2e9e6b"/>
+      <!-- EC2 -->
+      <rect x="852" y="130" width="104" height="80" rx="12" fill="#156082"/><text x="904" y="176" text-anchor="middle" class="vname" font-size="16">EC2</text>
+      <!-- reglas (leyenda en el muro) -->
+      <text x="470" y="88" text-anchor="end" class="vlbl" fill="#2e9e6b">22 · mi IP ✓</text>
+      <text x="470" y="168" text-anchor="end" class="vlbl" fill="#2e9e6b">80 ✓</text>
+      <text x="470" y="214" text-anchor="end" class="vlbl" fill="#2e9e6b">443 ✓</text>
+      <!-- PERMITIDOS: cruzan hasta EC2 -->
+      <g><circle r="9" fill="#2e9e6b"/><text x="0" y="4" text-anchor="middle" class="vname" font-size="9">80</text>
+        <animateMotion path="M70,163 L500,163 L890,170" dur="3s" repeatCount="indefinite" keyPoints="0;.52;1" keyTimes="0;.5;1" calcMode="linear"/></g>
+      <g><circle r="9" fill="#2e9e6b"/><text x="0" y="4" text-anchor="middle" class="vname" font-size="9">443</text>
+        <animateMotion path="M70,209 L500,209 L890,190" dur="3s" begin="1s" repeatCount="indefinite" keyPoints="0;.52;1" keyTimes="0;.5;1" calcMode="linear"/></g>
+      <g><circle r="9" fill="#2e9e6b"/><text x="0" y="4" text-anchor="middle" class="vname" font-size="8">22</text>
+        <animateMotion path="M70,83 L500,83 L890,150" dur="3s" begin="2s" repeatCount="indefinite" keyPoints="0;.52;1" keyTimes="0;.5;1" calcMode="linear"/></g>
+      <!-- BLOQUEADOS: rebotan en el muro -->
+      <g><circle r="9" fill="#c74a4a"/><text x="0" y="4" text-anchor="middle" class="vname" font-size="8">23</text>
+        <animateMotion path="M70,120 L470,120 L70,120" dur="3s" begin=".5s" repeatCount="indefinite" keyPoints="0;.5;1" keyTimes="0;.5;1" calcMode="linear"/></g>
+      <g><circle r="9" fill="#c74a4a"/><text x="0" y="3" text-anchor="middle" class="vname" font-size="7">3306</text>
+        <animateMotion path="M70,255 L470,255 L70,255" dur="3s" begin="1.6s" repeatCount="indefinite" keyPoints="0;.5;1" keyTimes="0;.5;1" calcMode="linear"/></g>
+      <g><circle r="9" fill="#c74a4a"/><text x="0" y="4" text-anchor="middle" class="vname" font-size="7">22?</text>
+        <animateMotion path="M70,288 L470,288 L70,288" dur="3s" begin="2.4s" repeatCount="indefinite" keyPoints="0;.5;1" keyTimes="0;.5;1" calcMode="linear"/></g>
+      <text x="90" y="316" text-anchor="middle" class="vlbl" fill="#c74a4a">lo demás: rebota</text>
+    </svg>
+  </div>
+  <p class="vcap">Todo llega, pero <b>solo cruza lo que abriste</b>: <b style="color:#2e9e6b">SSH desde tu IP, 80 y 443</b> pasan; telnet, la base de datos y el SSH de desconocidos <b style="color:#c74a4a">rebotan</b>. Menos puertas = más seguro. 🔐</p>
 </section>
 
-<!-- P3d · LOAD BALANCER -->
+<!-- P3d · LOAD BALANCER (reparto animado) -->
 <section class="slide">
   <span class="k"><span class="act-chip">PARTE 3 · AWS</span> Cuando un servidor no alcanza</span>
-  <h2>El <span class="grad">balanceador de carga</span></h2>
-  <div class="sim"><span class="o">🛎️</span><p>Es el <b>recepcionista</b> de un edificio con muchas taquillas: recibe a todas las visitas y las reparte entre varios servidores para que ninguno colapse.</p></div>
-  <ul class="clean" style="margin-top:14px">
-    <li>Reparte el tráfico entre <b>varias EC2</b> → aguanta muchos más usuarios</li>
-    <li>Si un servidor se cae, <b>manda las visitas a los que siguen vivos</b> (alta disponibilidad)</li>
-    <li>En AWS: <b>Elastic Load Balancer (ELB / ALB)</b></li>
-  </ul>
-  <p class="sub" style="margin-top:12px">Así funcionan Netflix, los bancos, todo lo que no se puede caer: nunca un solo servidor solo.</p>
+  <h2 style="margin-bottom:6px">El <span class="grad">balanceador</span> reparte las visitas — y esquiva al que se cae</h2>
+  <div class="viz">
+    <svg viewBox="0 0 1000 340" role="img" aria-label="Un balanceador reparte el tráfico entre varios servidores y evita el que está caído">
+      <text x="86" y="28" text-anchor="middle" class="vlbl">USUARIOS</text>
+      <text x="470" y="28" text-anchor="middle" class="vlbl" fill="#E97132">LOAD BALANCER</text>
+      <text x="880" y="28" text-anchor="middle" class="vlbl" fill="#156082">SERVIDORES EC2</text>
+      <!-- usuarios -->
+      <g fill="#8B98A9"><circle cx="70" cy="110" r="12"/><circle cx="70" cy="175" r="12"/><circle cx="70" cy="240" r="12"/></g>
+      <!-- LB -->
+      <rect x="410" y="120" width="120" height="110" rx="14" fill="#E97132"/><text x="470" y="170" text-anchor="middle" class="vname" font-size="15">Load</text><text x="470" y="190" text-anchor="middle" class="vname" font-size="15">Balancer</text>
+      <!-- servidores -->
+      <rect x="820" y="70" width="120" height="60" rx="12" fill="#156082"/><text x="880" y="106" text-anchor="middle" class="vname" font-size="14">EC2 · 1</text>
+      <rect x="820" y="150" width="120" height="60" rx="12" fill="#156082"/><text x="880" y="186" text-anchor="middle" class="vname" font-size="14">EC2 · 2</text>
+      <rect x="820" y="230" width="120" height="60" rx="12" fill="#eef1f5" stroke="#c74a4a" stroke-width="1.6"/><text x="880" y="260" text-anchor="middle" class="vlbl" fill="#c74a4a" font-size="14">EC2 · 3</text>
+      <g stroke="#c74a4a" stroke-width="2.4"><line x1="864" y1="248" x2="896" y2="272"/><line x1="896" y1="248" x2="864" y2="272"/></g>
+      <text x="880" y="308" text-anchor="middle" class="vlbl" fill="#c74a4a">caído</text>
+      <!-- líneas guía -->
+      <g stroke="#eef1f5" stroke-width="2">
+        <line x1="82" y1="110" x2="410" y2="160"/><line x1="82" y1="175" x2="410" y2="175"/><line x1="82" y1="240" x2="410" y2="190"/>
+        <line x1="530" y1="150" x2="820" y2="100"/><line x1="530" y1="175" x2="820" y2="180"/>
+      </g>
+      <!-- paquetes: usuarios -> LB -->
+      <circle r="7" fill="#0F9ED5"><animateMotion path="M82,110 L410,165" dur="1.4s" repeatCount="indefinite"/></circle>
+      <circle r="7" fill="#0F9ED5"><animateMotion path="M82,240 L410,190" dur="1.4s" begin=".7s" repeatCount="indefinite"/></circle>
+      <!-- paquetes: LB -> servidores vivos (round robin) -->
+      <circle r="7" fill="#0F9ED5"><animateMotion path="M530,150 L820,100" dur="1.4s" begin=".7s" repeatCount="indefinite"/></circle>
+      <circle r="7" fill="#0F9ED5"><animateMotion path="M530,178 L820,180" dur="1.4s" begin="1.4s" repeatCount="indefinite"/></circle>
+      <circle r="7" fill="#0F9ED5"><animateMotion path="M530,150 L820,100" dur="1.4s" begin="2.1s" repeatCount="indefinite"/></circle>
+    </svg>
+  </div>
+  <p class="vcap">El balanceador <b>reparte el tráfico</b> entre varias EC2 para aguantar más usuarios; si una <b style="color:#c74a4a">se cae</b>, manda las visitas a las que siguen vivas. Así nunca se cae el servicio. 🛎️</p>
 </section>
 
 <!-- P4a · TRANSICIÓN SEGURIDAD -->
