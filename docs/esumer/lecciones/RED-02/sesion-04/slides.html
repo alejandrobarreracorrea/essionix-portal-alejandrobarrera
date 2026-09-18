@@ -254,6 +254,7 @@ ul.clean li:first-child { border-top:0; }
 .vexp .c p b { color:var(--text); }
 .vexp .c .ej b { color:var(--a1); }
 @media (max-width:760px){ .vexp { grid-template-columns:1fr; } }
+.viz.sm svg{ width:auto; height:clamp(168px,24vh,238px); max-width:100%; margin:0 auto; }
 </style></head><body>
 <div class="bar" id="bar"></div>
 <div class="num" id="num"></div>
@@ -372,8 +373,8 @@ ul.clean li:first-child { border-top:0; }
 <!-- P2b · MODELO OSI (encapsulación animada) -->
 <section class="slide">
   <span class="k"><span class="act-chip">PARTE 2 · TEORÍA</span> ¿Cómo se ponen de acuerdo dos máquinas?</span>
-  <h2 style="margin-bottom:4px">El <span class="grad">modelo OSI</span>: el dato baja envolviéndose y sube desenvolviéndose</h2>
-  <div class="viz">
+  <h2 style="font-size:clamp(1.3rem,2.8vw,2.1rem);margin-bottom:6px">El <span class="grad">modelo OSI</span>: 7 capas, cada una su oficio</h2>
+  <div class="viz sm">
     <svg viewBox="0 0 1000 402" role="img" aria-label="Un dato baja por las 7 capas OSI del emisor, cruza el cable y sube por las 7 del receptor">
       <text x="285" y="16" text-anchor="middle" class="vnode" fill="#156082" font-size="13">Tú (emisor)</text>
       <text x="715" y="16" text-anchor="middle" class="vnode" fill="#156082" font-size="13">Servidor (receptor)</text>
@@ -435,14 +436,18 @@ ul.clean li:first-child { border-top:0; }
       </g>
     </svg>
   </div>
-  <p class="vcap">Cada capa <b>envuelve</b> el dato con su cabecera (encapsula) al bajar, lo manda por el cable, y el receptor lo <b>desenvuelve</b> capa por capa al subir. <b>TCP/IP</b> es la versión práctica de estas 7 capas.</p>
+  <div class="vexp">
+  <div class="c" style="border-top-color:#0F9ED5"><h4>Qué es OSI</h4><p><b>Qué es:</b> un mapa de 7 capas; cada una hace UN solo trabajo.</p><p>🏠 <b>En tu casa:</b> como enviar un paquete: lo empacas, le pones dirección y lo mandas.</p><p class="ej">✅ <b>Ejemplo:</b> abrir una web usa las 7 capas sin que te des cuenta.</p></div>
+  <div class="c" style="border-top-color:#156082"><h4>Bajar = encapsular</h4><p><b>Qué es:</b> cada capa envuelve el dato con su etiqueta.</p><p>🏠 <b>En tu casa:</b> metes la carta en un sobre, el sobre en una caja, la caja en el camión.</p><p class="ej">✅ <b>Ejemplo:</b> tu "hola" se envuelve con puerto, con IP y con MAC.</p></div>
+  <div class="c" style="border-top-color:#0E2841"><h4>Subir = desencapsular</h4><p><b>Qué es:</b> el que recibe quita las etiquetas una por una.</p><p>🏠 <b>En tu casa:</b> abren el camión, la caja y el sobre, y leen la carta.</p><p class="ej">✅ <b>Ejemplo:</b> el servidor desarma todo y recibe tu "hola".</p></div>
+  </div>
 </section>
 
 <!-- P2c · IPv4 (máscara anima RED|HOST) -->
 <section class="slide">
   <span class="k"><span class="act-chip">PARTE 2 · TEORÍA</span> La dirección, a fondo</span>
-  <h2 style="margin-bottom:6px">Una <span class="grad">IPv4</span> se parte en dos: la RED (el barrio) y el HOST (la casa)</h2>
-  <div class="viz">
+  <h2 style="font-size:clamp(1.3rem,2.8vw,2.1rem);margin-bottom:6px">Una <span class="grad">IPv4</span>: la RED (barrio) + el HOST (casa)</h2>
+  <div class="viz sm">
     <svg viewBox="0 0 1000 320" role="img" aria-label="La máscara /24 divide la IP 192.168.1.10 en parte de red y parte de host">
       <!-- globo origen -->
       <circle cx="66" cy="104" r="30" fill="#0F9ED5" fill-opacity=".10" stroke="#0F9ED5" stroke-width="1.6"/>
@@ -479,14 +484,18 @@ ul.clean li:first-child { border-top:0; }
       </g>
     </svg>
   </div>
-  <p class="vcap">La <b>máscara /24</b> dice: los primeros 3 octetos son la <b style="color:#156082">RED</b>; el último es el <b style="color:#E97132">HOST</b>. Por eso un mensaje llega primero al barrio y luego a la casa exacta. &nbsp;·&nbsp; <b>Privada</b>: 192.168.x.x / 10.x.x.x &nbsp;·&nbsp; <b>Pública</b>: única en el mundo.</p>
+  <div class="vexp">
+  <div class="c" style="border-top-color:#0F9ED5"><h4>La dirección IP</h4><p><b>Qué es:</b> 4 números de 0 a 255 que identifican un aparato en la red.</p><p>🏠 <b>En tu casa:</b> la dirección completa de tu casa.</p><p class="ej">✅ <b>Ejemplo:</b> 3.220.15.4 es la IP pública de tu EC2.</p></div>
+  <div class="c" style="border-top-color:#156082"><h4>La parte de RED</h4><p><b>Qué es:</b> los primeros octetos; dicen a qué red perteneces.</p><p>🏠 <b>En tu casa:</b> el barrio o la urbanización.</p><p class="ej">✅ <b>Ejemplo:</b> en 192.168.1.10 /24, "192.168.1" es la red.</p></div>
+  <div class="c" style="border-top-color:#0E2841"><h4>La parte de HOST</h4><p><b>Qué es:</b> el último octeto; identifica al aparato dentro de esa red.</p><p>🏠 <b>En tu casa:</b> el número de tu casa en el barrio.</p><p class="ej">✅ <b>Ejemplo:</b> en 192.168.1.10, "10" es el host.</p></div>
+  </div>
 </section>
 
 <!-- P2d · DNS / DHCP / NAT (animado) -->
 <section class="slide">
   <span class="k"><span class="act-chip">PARTE 2 · TEORÍA</span> Los servicios que hacen la magia invisible</span>
-  <h2 style="margin-bottom:6px">DNS, DHCP y NAT — <span class="grad">trabajan callados en cada conexión</span></h2>
-  <div class="viz">
+  <h2 style="font-size:clamp(1.3rem,2.8vw,2.1rem);margin-bottom:6px">DNS, DHCP y NAT — <span class="grad">los 3 servicios invisibles</span></h2>
+  <div class="viz sm">
     <svg viewBox="0 0 1000 330" role="img" aria-label="Animaciones de DNS, DHCP y NAT">
       <!-- ===== DNS ===== -->
       <rect x="12" y="40" width="316" height="252" rx="16" fill="#0F9ED5" fill-opacity=".05" stroke="#dfe5ee"/>
@@ -526,7 +535,11 @@ ul.clean li:first-child { border-top:0; }
       <text x="830" y="266" text-anchor="middle" class="vlbl">muchas privadas salen por una pública</text>
     </svg>
   </div>
-  <p class="vcap">Los tres trabajan callados en <b>cada conexión</b> que hacen — hasta en el wifi de su casa: <b>DHCP</b> te da IP, <b>DNS</b> encuentra la dirección por el nombre y <b>NAT</b> te saca al mundo.</p>
+  <div class="vexp">
+  <div class="c" style="border-top-color:#0F9ED5"><h4>DNS — la agenda</h4><p><b>Qué es:</b> traduce nombres (google.com) a números (su IP).</p><p>🏠 <b>En tu casa:</b> la agenda de contactos que guarda el número por el nombre.</p><p class="ej">✅ <b>Ejemplo:</b> escribes "youtube.com" y DNS busca su IP para poder llegar.</p></div>
+  <div class="c" style="border-top-color:#156082"><h4>DHCP — el repartidor</h4><p><b>Qué es:</b> le da una IP a cada aparato que se conecta.</p><p>🏠 <b>En tu casa:</b> quien te asigna tu cuarto apenas llegas.</p><p class="ej">✅ <b>Ejemplo:</b> conectas el celular al WiFi y "solo funciona": DHCP ya le dio su IP.</p></div>
+  <div class="c" style="border-top-color:#0E2841"><h4>NAT — el portero</h4><p><b>Qué es:</b> deja que muchas IP privadas salgan a internet por UNA pública.</p><p>🏠 <b>En tu casa:</b> el portero que saca a todos por la misma puerta.</p><p class="ej">✅ <b>Ejemplo:</b> tu casa tiene 5 aparatos pero internet ve una sola dirección.</p></div>
+  </div>
 </section>
 
 <!-- P2e · DIAGNÓSTICO -->
@@ -577,8 +590,8 @@ ul.clean li:first-child { border-top:0; }
 <!-- P3b · VPC (diagrama animado) -->
 <section class="slide">
   <span class="k"><span class="act-chip">PARTE 3 · AWS</span> Tu barrio privado en la nube</span>
-  <h2 style="margin-bottom:6px">La <span class="grad">VPC</span> — Virtual Private Cloud</h2>
-  <div class="viz">
+  <h2 style="font-size:clamp(1.3rem,2.8vw,2.1rem);margin-bottom:6px">La <span class="grad">VPC</span> — tu red privada en la nube</h2>
+  <div class="viz sm">
     <svg viewBox="0 0 1000 360" role="img" aria-label="Diagrama de una VPC con subred pública, subred privada, Internet Gateway y flujo de tráfico">
       <!-- Internet / usuarios -->
       <g>
@@ -637,14 +650,18 @@ ul.clean li:first-child { border-top:0; }
       </circle>
     </svg>
   </div>
-  <p class="vcap">Una petición entra por el <b>IGW</b>, la revisa el <b style="color:#E97132">Security Group</b> y llega al <b>EC2</b> en la subred pública. La <b>base de datos</b> vive en la subred privada, <b style="color:#c74a4a">sin puerta al internet</b>.</p>
+  <div class="vexp">
+  <div class="c" style="border-top-color:#0F9ED5"><h4>La VPC</h4><p><b>Qué es:</b> tu propia red privada dentro de AWS.</p><p>🏠 <b>En tu casa:</b> tu urbanización cerrada, solo tuya.</p><p class="ej">✅ <b>Ejemplo:</b> creas una VPC 10.0.0.0/16 y ahí viven tus servidores.</p></div>
+  <div class="c" style="border-top-color:#156082"><h4>Subred pública</h4><p><b>Qué es:</b> la parte que da a internet.</p><p>🏠 <b>En tu casa:</b> la fachada que da a la calle.</p><p class="ej">✅ <b>Ejemplo:</b> ahí pones el servidor web para que el mundo lo vea.</p></div>
+  <div class="c" style="border-top-color:#0E2841"><h4>Subred privada</h4><p><b>Qué es:</b> la parte sin salida directa a internet.</p><p>🏠 <b>En tu casa:</b> el cuarto de seguridad, sin ventana a la calle.</p><p class="ej">✅ <b>Ejemplo:</b> ahí guardas la base de datos con la info sensible.</p></div>
+  </div>
 </section>
 
 <!-- P3c · SECURITY GROUPS (firewall animado) -->
 <section class="slide">
   <span class="k"><span class="act-chip">PARTE 3 · AWS</span> Las cerraduras de tu servidor</span>
-  <h2 style="margin-bottom:6px"><span class="grad">Security Groups</span>: el firewall deja pasar solo lo permitido</h2>
-  <div class="viz">
+  <h2 style="font-size:clamp(1.3rem,2.8vw,2.1rem);margin-bottom:6px"><span class="grad">Security Groups</span>: el firewall de tu servidor</h2>
+  <div class="viz sm">
     <svg viewBox="0 0 1000 340" role="img" aria-label="Un firewall deja pasar los puertos permitidos y bloquea el resto">
       <text x="90" y="28" text-anchor="middle" class="vlbl">INTERNET</text>
       <text x="500" y="28" text-anchor="middle" class="vlbl" fill="#E97132">SECURITY GROUP (firewall)</text>
@@ -678,14 +695,18 @@ ul.clean li:first-child { border-top:0; }
       <text x="90" y="316" text-anchor="middle" class="vlbl" fill="#c74a4a">lo demás: rebota</text>
     </svg>
   </div>
-  <p class="vcap">Todo llega, pero <b>solo cruza lo que abriste</b>: <b style="color:#2e9e6b">SSH desde tu IP, 80 y 443</b> pasan; telnet, la base de datos y el SSH de desconocidos <b style="color:#c74a4a">rebotan</b>. Menos puertas = más seguro. 🔐</p>
+  <div class="vexp">
+  <div class="c" style="border-top-color:#156082"><h4>Qué es (el firewall)</h4><p><b>Qué es:</b> decide qué puertos se abren y para quién.</p><p>🏠 <b>En tu casa:</b> las cerraduras de cada puerta.</p><p class="ej">✅ <b>Ejemplo:</b> abres el 443 (web) al mundo y el 22 (SSH) solo a tu IP.</p></div>
+  <div class="c" style="border-top-color:#0F9ED5"><h4>Lo permitido</h4><p><b>Qué es:</b> las reglas que SÍ dejas pasar.</p><p>🏠 <b>En tu casa:</b> la puerta que le abres a quien conoces.</p><p class="ej">✅ <b>Ejemplo:</b> "SSH desde MI IP" cruza.</p></div>
+  <div class="c" style="border-top-color:#E97132"><h4>Lo bloqueado</h4><p><b>Qué es:</b> todo lo que no abriste, rebota.</p><p>🏠 <b>En tu casa:</b> al desconocido no le abres.</p><p class="ej">✅ <b>Ejemplo:</b> un bot prueba el 22 desde otro país y rebota.</p></div>
+  </div>
 </section>
 
 <!-- P3d · LOAD BALANCER (reparto animado) -->
 <section class="slide">
   <span class="k"><span class="act-chip">PARTE 3 · AWS</span> Cuando un servidor no alcanza</span>
-  <h2 style="margin-bottom:6px">El <span class="grad">balanceador</span> reparte las visitas — y esquiva al que se cae</h2>
-  <div class="viz">
+  <h2 style="font-size:clamp(1.3rem,2.8vw,2.1rem);margin-bottom:6px">El <span class="grad">balanceador</span>: reparte y no se cae</h2>
+  <div class="viz sm">
     <svg viewBox="0 0 1000 340" role="img" aria-label="Un balanceador reparte el tráfico entre varios servidores y evita el que está caído">
       <text x="86" y="28" text-anchor="middle" class="vlbl">USUARIOS</text>
       <text x="470" y="28" text-anchor="middle" class="vlbl" fill="#E97132">LOAD BALANCER</text>
@@ -714,7 +735,11 @@ ul.clean li:first-child { border-top:0; }
       <circle r="7" fill="#0F9ED5"><animateMotion path="M530,150 L820,100" dur="1.4s" begin="2.1s" repeatCount="indefinite"/></circle>
     </svg>
   </div>
-  <p class="vcap">El balanceador <b>reparte el tráfico</b> entre varias EC2 para aguantar más usuarios; si una <b style="color:#c74a4a">se cae</b>, manda las visitas a las que siguen vivas. Así nunca se cae el servicio. 🛎️</p>
+  <div class="vexp">
+  <div class="c" style="border-top-color:#0F9ED5"><h4>Reparte</h4><p><b>Qué es:</b> reparte las visitas entre varios servidores.</p><p>🏠 <b>En tu casa:</b> el recepcionista que manda cada visita a una fila.</p><p class="ej">✅ <b>Ejemplo:</b> 10.000 usuarios repartidos entre 3 EC2.</p></div>
+  <div class="c" style="border-top-color:#156082"><h4>No se cae</h4><p><b>Qué es:</b> si un servidor falla, sigue con los demás.</p><p>🏠 <b>En tu casa:</b> si un cajero cierra, la fila pasa a otro.</p><p class="ej">✅ <b>Ejemplo:</b> se cae EC2·3 y nadie lo nota.</p></div>
+  <div class="c" style="border-top-color:#0E2841"><h4>Escala</h4><p><b>Qué es:</b> agregas más servidores para aguantar más gente.</p><p>🏠 <b>En tu casa:</b> abres más cajas cuando llega más clientela.</p><p class="ej">✅ <b>Ejemplo:</b> en Black Friday sumas EC2 detrás del balanceador.</p></div>
+  </div>
 </section>
 
 <!-- P4a · TRANSICIÓN SEGURIDAD -->
