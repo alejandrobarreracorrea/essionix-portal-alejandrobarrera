@@ -496,7 +496,7 @@ ul.clean li:first-child { border-top:0; }
       <text x="442" y="69" text-anchor="middle" fill="#8B98A9" font-size="26">.</text> 
       <text x="572" y="69" text-anchor="middle" fill="#8B98A9" font-size="26">.</text> 
       <rect x="712" y="42" width="66" height="40" rx="8" fill="#fff" stroke="#8B98A9" stroke-width="1.6"/><text x="745" y="70" text-anchor="middle" fill="#44546A" font-size="20">/24</text></g> 
-      <text x="745" y="100" text-anchor="middle" class="vlbl">máscara</text> 
+      <text x="745" y="100" text-anchor="middle" class="vlbl">máscara /24</text><text x="745" y="113" text-anchor="middle" class="vlbl" fill="#E97132" font-size="10">= la cerca del barrio</text> 
       <rect x="196" y="100" width="364" height="9" rx="4.5" fill="#156082"/> 
       <rect x="586" y="100" width="104" height="9" rx="4.5" fill="#E97132"/> 
       <text x="378" y="128" text-anchor="middle" class="vzone" fill="#156082" font-size="16">RED — el barrio</text> 
@@ -530,10 +530,10 @@ ul.clean li:first-child { border-top:0; }
       <circle r="6" fill="#E97132"><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.1;.85;1" dur="2s" begin="1.6s" repeatCount="indefinite"/><animateMotion path="M500,300 L305,275" dur="2s" begin="1.6s" repeatCount="indefinite"/></circle> 
       </svg>
   </div>
-  <div class="vexp">
+  <div class="vexp" style="grid-template-columns:repeat(4,1fr)">
   <div class="c" style="border-top-color:#0F9ED5"><h4>La dirección IP</h4><p><b>Qué es:</b> 4 números de 0 a 255 que identifican un aparato en la red.</p><p>🏠 <b>En tu casa:</b> la dirección completa de tu casa.</p><p class="ej">✅ <b>Ejemplo:</b> 3.220.15.4 es la IP pública de tu EC2.</p></div>
   <div class="c" style="border-top-color:#156082"><h4>La parte de RED</h4><p><b>Qué es:</b> los primeros octetos; dicen a qué red perteneces.</p><p>🏠 <b>En tu casa:</b> el barrio o la urbanización.</p><p class="ej">✅ <b>Ejemplo:</b> en 192.168.1.10 /24, "192.168.1" es la red.</p></div>
-  <div class="c" style="border-top-color:#0E2841"><h4>La parte de HOST</h4><p><b>Qué es:</b> el último octeto; identifica al aparato dentro de esa red.</p><p>🏠 <b>En tu casa:</b> el número de tu casa en el barrio.</p><p class="ej">✅ <b>Ejemplo:</b> en 192.168.1.10, "10" es el host.</p></div>
+  <div class="c" style="border-top-color:#0E2841"><h4>La parte de HOST</h4><p><b>Qué es:</b> el último octeto; identifica al aparato dentro de esa red.</p><p>🏠 <b>En tu casa:</b> el número de tu casa en el barrio.</p><p class="ej">✅ <b>Ejemplo:</b> en 192.168.1.10, "10" es el host.</p></div><div class="c" style="border-top-color:#E97132"><h4>La máscara /24</h4><p><b>Qué es:</b> dice cuántos números son de la RED y cuántos del HOST.</p><p>🏠 <b>En tu casa:</b> la <b>cerca del barrio</b>: marca dónde termina el barrio y empieza tu casa.</p><p class="ej">✅ <b>Ejemplo:</b> /24 = los 3 primeros números son el barrio; el último, la casa.</p></div>
   </div>
 </section>
 
