@@ -374,7 +374,7 @@ ul.clean li:first-child { border-top:0; }
 <section class="slide">
   <span class="k"><span class="act-chip">PARTE 2 · TEORÍA</span> ¿Cómo se ponen de acuerdo dos máquinas?</span>
   <h2 style="font-size:clamp(1.3rem,2.8vw,2.1rem);margin-bottom:6px">El <span class="grad">modelo OSI</span>: 7 capas, cada una su oficio</h2>
-  <div class="viz sm">
+  <div class="viz">
     <svg viewBox="0 0 1000 402" role="img" aria-label="Un dato baja por las 7 capas OSI del emisor, cruza el cable y sube por las 7 del receptor">
       <text x="285" y="16" text-anchor="middle" class="vnode" fill="#156082" font-size="13">Tú (emisor)</text>
       <text x="715" y="16" text-anchor="middle" class="vnode" fill="#156082" font-size="13">Servidor (receptor)</text>
@@ -434,13 +434,19 @@ ul.clean li:first-child { border-top:0; }
           keyPoints="0;.298;.702;1" keyTimes="0;.45;.55;1"
           path="M285,45 L285,362 L715,362 L715,45"/>
       </g>
+    <text x="500" y="14" text-anchor="middle" class="vlbl" fill="#E97132">qué vive en cada capa</text>
+      <g font-family="JetBrains Mono">
+      <rect x="416" y="32" width="168" height="26" rx="13" fill="#E97132" fill-opacity=".10" stroke="#E97132" stroke-width="1"/><text x="500" y="49" text-anchor="middle" fill="#E97132" font-size="11">HTTP · DNS · web</text>
+      <rect x="416" y="78" width="168" height="26" rx="13" fill="#E97132" fill-opacity=".10" stroke="#E97132" stroke-width="1"/><text x="500" y="95" text-anchor="middle" fill="#E97132" font-size="11">TLS · cifrado</text>
+      <rect x="416" y="124" width="168" height="26" rx="13" fill="#E97132" fill-opacity=".10" stroke="#E97132" stroke-width="1"/><text x="500" y="141" text-anchor="middle" fill="#E97132" font-size="11">sesión · login</text>
+      <rect x="416" y="170" width="168" height="26" rx="13" fill="#E97132" fill-opacity=".10" stroke="#E97132" stroke-width="1"/><text x="500" y="187" text-anchor="middle" fill="#E97132" font-size="11">TCP · UDP · puertos</text>
+      <rect x="416" y="216" width="168" height="26" rx="13" fill="#E97132" fill-opacity=".10" stroke="#E97132" stroke-width="1"/><text x="500" y="233" text-anchor="middle" fill="#E97132" font-size="11">IP · routers</text>
+      <rect x="416" y="262" width="168" height="26" rx="13" fill="#E97132" fill-opacity=".10" stroke="#E97132" stroke-width="1"/><text x="500" y="279" text-anchor="middle" fill="#E97132" font-size="11">switch · MAC</text>
+      <rect x="416" y="308" width="168" height="26" rx="13" fill="#E97132" fill-opacity=".10" stroke="#E97132" stroke-width="1"/><text x="500" y="325" text-anchor="middle" fill="#E97132" font-size="11">cable · WiFi · fibra</text>
+      </g>
     </svg>
   </div>
-  <div class="vexp">
-  <div class="c" style="border-top-color:#0F9ED5"><h4>Qué es OSI</h4><p><b>Qué es:</b> un mapa de 7 capas; cada una hace UN solo trabajo.</p><p>🏠 <b>En tu casa:</b> como enviar un paquete: lo empacas, le pones dirección y lo mandas.</p><p class="ej">✅ <b>Ejemplo:</b> abrir una web usa las 7 capas sin que te des cuenta.</p></div>
-  <div class="c" style="border-top-color:#156082"><h4>Bajar = encapsular</h4><p><b>Qué es:</b> cada capa envuelve el dato con su etiqueta.</p><p>🏠 <b>En tu casa:</b> metes la carta en un sobre, el sobre en una caja, la caja en el camión.</p><p class="ej">✅ <b>Ejemplo:</b> tu "hola" se envuelve con puerto, con IP y con MAC.</p></div>
-  <div class="c" style="border-top-color:#0E2841"><h4>Subir = desencapsular</h4><p><b>Qué es:</b> el que recibe quita las etiquetas una por una.</p><p>🏠 <b>En tu casa:</b> abren el camión, la caja y el sobre, y leen la carta.</p><p class="ej">✅ <b>Ejemplo:</b> el servidor desarma todo y recibe tu "hola".</p></div>
-  </div>
+  <p class="vcap">En el centro ves <b>qué vive en cada capa</b> (protocolos y aparatos). Al <b>bajar</b>, cada capa envuelve el dato con su cabecera (encapsula); al <b>subir</b>, el receptor lo desenvuelve. <b>TCP/IP</b> es la versión práctica de todo esto.</p>
 </section>
 
 <!-- P2c · IPv4 (máscara anima RED|HOST) -->
