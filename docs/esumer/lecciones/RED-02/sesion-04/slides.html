@@ -1,0 +1,509 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- deck-meta: grupo=RED-02 sesion=4 clase=4 -->
+<title>Sesión {{SESION}} · Grupo {{G_NUM}} · Cloud, Redes y Ciberseguridad — Esumer</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#ffffff; --line:#dfe5ee; --text:#0E2841; --muted:#44546A; --faint:#8B98A9;
+  --a1:#156082; --a2:#0F9ED5; --naranja:#E97132; --grad:linear-gradient(100deg,#156082,#0F9ED5);
+  --display:"Poppins",sans-serif; --body:"Inter",sans-serif; --mono:"JetBrains Mono",monospace; }
+* { box-sizing:border-box; margin:0; padding:0; }
+html,body { height:100%; }
+body { background:var(--bg); color:var(--text); font-family:var(--body); overflow:hidden;
+  background-image:radial-gradient(55% 45% at 80% -12%, rgba(15,158,213,.10), transparent 70%); }
+.slide { position:absolute; inset:0; display:none; flex-direction:column; justify-content:center;
+  padding:6vh clamp(30px,8vw,120px); }
+.slide.on { display:flex; }
+.k { font-family:var(--mono); font-size:clamp(.7rem,1.1vw,.85rem); letter-spacing:.08em; text-transform:uppercase; color:var(--a1); margin-bottom:18px; }
+h1 { font-family:var(--display); font-size:clamp(2rem,5.2vw,4.2rem); letter-spacing:-.02em; line-height:1.06; max-width:22ch; }
+h2 { font-family:var(--display); font-size:clamp(1.5rem,3.6vw,2.8rem); letter-spacing:-.02em; line-height:1.1; margin-bottom:26px; max-width:26ch; }
+.grad { background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.sub { color:var(--muted); font-size:clamp(1rem,1.8vw,1.4rem); max-width:52ch; margin-top:20px; line-height:1.5; }
+.rows { list-style:none; max-width:900px; }
+.rows li { display:flex; justify-content:space-between; align-items:baseline; gap:24px; padding:clamp(10px,1.6vh,16px) 0; border-top:1px solid var(--line); }
+.rows .t { font-family:var(--display); font-weight:600; font-size:clamp(1rem,1.9vw,1.5rem); }
+.rows .t small { display:block; font-family:var(--body); font-weight:400; color:var(--muted); font-size:clamp(.8rem,1.3vw,1rem); margin-top:2px; }
+.rows .m { font-family:var(--mono); color:var(--a2); font-size:clamp(.8rem,1.4vw,1.05rem); white-space:nowrap; }
+.big { font-family:var(--display); font-size:clamp(3rem,9vw,7.5rem); font-weight:700; letter-spacing:-.03em; line-height:1; }
+.act-chip { display:inline-block; background:var(--naranja); color:#fff; font-family:var(--mono);
+  font-size:.68rem; padding:.35em 1em; border-radius:999px; margin-right:10px; letter-spacing:.05em; vertical-align:middle; }
+
+.stack { display:flex; flex-direction:column; gap:9px; max-width:940px; margin-top:6px; }
+.layer { display:flex; align-items:center; gap:18px; border:1px solid var(--line); border-left:5px solid var(--a2);
+  border-radius:12px; padding:clamp(6px,1.1vh,11px) 18px; opacity:0; transform:translateY(12px);
+  transition:opacity .35s ease, transform .35s ease; }
+.layer.on { opacity:1; transform:none; }
+.layer .ln { font-family:var(--mono); font-size:.85rem; color:var(--a1); }
+.layer b { font-family:var(--display); font-size:clamp(.95rem,1.7vw,1.25rem); }
+.layer p { color:var(--muted); font-size:clamp(.78rem,1.3vw,.98rem); line-height:1.35; margin-top:1px; }
+.layer .lt { margin-left:auto; font-family:var(--mono); font-size:.72rem; color:var(--a2); white-space:nowrap; }
+.layer.l1 { border-left-color:#44546A; } .layer.l2 { border-left-color:#156082; }
+.layer.l3 { border-left-color:#0F9ED5; } .layer.l4 { border-left-color:#1FB5C9; }
+.layer.l5 { border-left-color:var(--naranja); }
+.layer.l6 { border:0; border-left:5px solid var(--naranja); background:rgba(233,113,50,.06); }
+
+.casa .layer { border-left-width:5px; }
+.casa .lt { margin-left:auto; font-family:var(--mono); font-size:.68rem; color:var(--faint); white-space:nowrap; }
+.casa .l3 .lt, .casa .l4 .lt, .casa .l5 .lt { color:var(--c2, #0F9ED5); font-weight:600; }
+.casa .hoy { outline:3px solid var(--naranja); outline-offset:2px; background:rgba(233,113,50,.05); }
+.hoy-tag { font-family:var(--mono); font-size:.65rem; color:#fff; background:var(--naranja); border-radius:999px; padding:.25em .8em; margin-left:10px; }
+.toolgrid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; max-width:1000px; margin-top:8px; }
+.tool { display:flex; align-items:center; gap:14px; border:1px solid var(--line); border-radius:14px; padding:12px 16px; }
+.tool .o { font-size:clamp(1.4rem,2.6vw,2rem); }
+.tool .arrow { font-family:var(--mono); color:var(--faint); font-size:1.1rem; }
+.tool b { font-family:var(--display); font-size:clamp(.9rem,1.5vw,1.1rem); display:block; }
+.tool small { color:var(--muted); font-size:clamp(.72rem,1.2vw,.88rem); line-height:1.3; display:block; }
+.tool .tech { margin-left:auto; text-align:right; }
+.tool .tech b { color:var(--c1, #156082); }
+.dl { display:flex; align-items:center; gap:22px; margin-top:18px; flex-wrap:wrap; }
+.dlbtn { display:inline-flex; align-items:center; gap:10px; background:var(--naranja); color:#fff;
+  font-family:var(--display); font-weight:700; font-size:clamp(1rem,1.9vw,1.35rem); text-decoration:none;
+  padding:.7em 1.5em; border-radius:12px; box-shadow:0 6px 18px rgba(233,113,50,.28); transition:transform .15s ease; }
+.dlbtn:hover { transform:translateY(-2px); }
+.dlbtn small { display:block; font-family:var(--mono); font-weight:400; font-size:.62rem; opacity:.9; margin-top:1px; }
+.dlqr { display:flex; align-items:center; gap:12px; }
+.dlqr svg { width:clamp(84px,10vw,120px); height:auto; border-radius:8px; }
+.dlqr span { font-family:var(--mono); font-size:.72rem; color:var(--faint); max-width:14ch; line-height:1.4; }
+.sim { display:flex; align-items:center; gap:14px; border:1px solid var(--line); border-left:5px solid var(--naranja);
+  border-radius:12px; padding:10px 18px; margin-bottom:18px; max-width:820px; }
+.sim .o { font-size:1.7rem; }
+.sim p { color:var(--muted); font-size:clamp(.85rem,1.4vw,1rem); }
+.sim p b { color:var(--text, #0E2841); }
+.check li::before { content:"☐  "; font-family:var(--mono); color:var(--naranja); }
+
+/* ---- casa animada (mapa de fases) ---- */
+.casa-slide { justify-content:flex-start; padding-top:clamp(30px,5vh,60px); }
+.house { max-width:720px; margin:14px auto 0; width:100%; }
+.roof {
+  width:0; height:0; margin:0 auto;
+  border-left:clamp(180px,26vw,360px) solid transparent;
+  border-right:clamp(180px,26vw,360px) solid transparent;
+  border-bottom:clamp(52px,7vh,80px) solid var(--naranja);
+  position:relative; opacity:0;
+}
+.roof span {
+  position:absolute; top:clamp(30px,4vh,48px); left:50%; transform:translateX(-50%);
+  white-space:nowrap; color:#fff; font-family:var(--display); font-weight:600;
+  font-size:clamp(.72rem,1.25vw,1rem); text-shadow:0 1px 3px rgba(0,0,0,.25);
+}
+.floor {
+  display:flex; align-items:center; gap:14px; padding:clamp(9px,1.5vh,15px) 22px;
+  border:1px solid var(--line); border-top:0; background:#fff; position:relative;
+  opacity:0; transform:translateY(26px);
+}
+.floor.fA { background:linear-gradient(90deg, rgba(15,158,213,.08), #fff); }
+.floor.fB { background:linear-gradient(90deg, rgba(21,96,130,.07), #fff); }
+.floor.base { border-radius:0 0 6px 6px; border-bottom-width:6px; border-bottom-color:var(--navy); }
+.floor .fi { font-size:clamp(1.3rem,2.4vw,1.9rem); flex:none; }
+.floor b { font-family:var(--display); font-weight:600; font-size:clamp(.9rem,1.6vw,1.2rem); }
+.floor i { margin-left:auto; font-family:var(--mono); font-style:normal; font-size:clamp(.66rem,1.15vw,.85rem); color:var(--faint); letter-spacing:.03em; }
+.floor.hoy { border-color:var(--naranja); z-index:2; }
+.floor.hoy i { color:var(--naranja); font-weight:600; }
+.floor.fD i, .floor.fB i, .floor.fA i { color:var(--c2, #0F9ED5); font-weight:600; }
+.here {
+  position:absolute; left:calc(100% + 14px); top:50%; transform:translateY(-50%);
+  font-family:var(--mono); font-size:clamp(.68rem,1.15vw,.85rem); color:#fff;
+  background:var(--naranja); padding:.3em .9em; border-radius:999px; white-space:nowrap;
+  opacity:0; animation:hereIn .5s ease 2.4s forwards, herePulse 1.8s ease 2.9s infinite;
+}
+/* entrada: construir de abajo (fF) hacia arriba, y el techo al final */
+.slide.on .floor { animation:floorUp .5s cubic-bezier(.2,.7,.3,1) forwards; }
+.slide.on .floor.fF { animation-delay:.1s; }
+.slide.on .floor.fE { animation-delay:.45s; }
+.slide.on .floor.fD { animation-delay:.8s; }
+.slide.on .floor.fC { animation-delay:1.1s; }
+.slide.on .floor.fB { animation-delay:1.4s; }
+.slide.on .floor.fA { animation-delay:1.7s; }
+.slide.on .roof { animation:roofDrop .55s cubic-bezier(.2,.7,.3,1) 2s forwards; }
+.slide.on .floor.hoy { animation:floorUp .5s cubic-bezier(.2,.7,.3,1) forwards, hoyGlow 2s ease 2.6s infinite; }
+.slide.on .floor.fF.hoy { animation-delay:.1s, 2.6s; }
+.slide.on .floor.fE.hoy { animation-delay:.45s, 2.9s; }
+@keyframes floorUp { to { opacity:1; transform:none; } }
+@keyframes roofDrop { from { opacity:0; transform:translateY(-30px); } to { opacity:1; transform:none; } }
+@keyframes hoyGlow { 0%,100% { box-shadow:0 0 0 0 rgba(233,113,50,0); } 50% { box-shadow:0 0 0 4px rgba(233,113,50,.18); } }
+@keyframes hereIn { to { opacity:1; } }
+@keyframes herePulse { 0%,100% { transform:translateY(-50%) scale(1); } 50% { transform:translateY(-50%) scale(1.06); } }
+@media (prefers-reduced-motion: reduce) {
+  .floor, .roof, .here { opacity:1 !important; transform:none !important; animation:none !important; }
+}
+@media (max-width:640px) { .here { position:static; display:inline-block; margin-left:8px; transform:none; } }
+
+/* ---- caja de herramientas animada ---- */
+.tools-slide { justify-content:flex-start; padding-top:clamp(28px,5vh,56px); }
+.toolbox { max-width:840px; margin:16px auto 0; width:100%; position:relative; }
+.tbox { font-size:clamp(2.4rem,6vw,4rem); text-align:center; margin-bottom:14px; opacity:0; transform:scale(.5) rotate(-12deg); }
+.slide.on .tbox { animation:tboxPop .6s cubic-bezier(.2,1.4,.4,1) .1s forwards; }
+.trow { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:16px;
+  padding:clamp(8px,1.4vh,13px) 20px; border:1px solid var(--line); border-radius:12px; margin-bottom:10px;
+  opacity:0; transform:translateY(20px); background:#fff; }
+.trow .obra { font-family:var(--display); font-weight:500; font-size:clamp(.82rem,1.5vw,1.12rem); color:var(--muted); }
+.trow .tech { font-family:var(--display); font-weight:700; font-size:clamp(.95rem,1.8vw,1.3rem); color:var(--c1, #156082); text-align:right; }
+.trow .link { width:clamp(40px,6vw,78px); height:2px; background:linear-gradient(90deg,var(--line),var(--naranja)); position:relative; }
+.trow .link::after { content:"→"; position:absolute; right:-4px; top:-11px; color:var(--naranja); font-family:var(--mono); font-size:.9rem;
+  opacity:0; }
+.slide.on .trow { animation:trowIn .5s cubic-bezier(.2,.7,.3,1) forwards; }
+.slide.on .trow .link::after { animation:arrowShine .6s ease forwards; }
+.slide.on .tr1 { animation-delay:.5s; } .slide.on .tr1 .link::after { animation-delay:.9s; }
+.slide.on .tr2 { animation-delay:.75s; } .slide.on .tr2 .link::after { animation-delay:1.15s; }
+.slide.on .tr3 { animation-delay:1s; }  .slide.on .tr3 .link::after { animation-delay:1.4s; }
+.slide.on .tr4 { animation-delay:1.25s; } .slide.on .tr4 .link::after { animation-delay:1.65s; }
+.slide.on .tr5 { animation-delay:1.5s; } .slide.on .tr5 .link::after { animation-delay:1.9s; }
+@keyframes tboxPop { to { opacity:1; transform:none; } }
+@keyframes trowIn { to { opacity:1; transform:none; } }
+@keyframes arrowShine { 0% { opacity:0; transform:translateX(-8px); } 100% { opacity:1; transform:none; } }
+@media (prefers-reduced-motion: reduce) { .tbox,.trow,.trow .link::after { opacity:1 !important; transform:none !important; animation:none !important; } }
+
+/* ---- ¿qué es un SO? — stack animado ---- */
+.os-slide { justify-content:flex-start; padding-top:clamp(26px,4.5vh,52px); }
+.osstack { max-width:760px; margin:12px auto 0; width:100%; }
+.oslayer { display:flex; align-items:center; gap:16px; border:1px solid var(--line); border-radius:12px;
+  padding:clamp(9px,1.5vh,15px) 20px; background:#fff; opacity:0; transform:translateX(-24px); }
+.oslayer .oi { font-size:clamp(1.5rem,2.8vw,2.2rem); flex:none; }
+.oslayer b { font-family:var(--display); font-weight:600; font-size:clamp(.9rem,1.6vw,1.2rem); }
+.oslayer p { color:var(--muted); font-size:clamp(.75rem,1.3vw,.95rem); line-height:1.35; margin-top:1px; }
+.oslayer.mid { border-color:var(--naranja); background:linear-gradient(90deg,rgba(233,113,50,.07),#fff); }
+.osarrow { text-align:center; font-family:var(--mono); font-size:.7rem; color:var(--faint); padding:5px 0; opacity:0; }
+.slide.on .oslayer.top { animation:osIn .5s ease .2s forwards; }
+.slide.on .oslayer.mid { animation:osIn .5s ease .9s forwards, osGlow 2.2s ease 1.6s infinite; }
+.slide.on .oslayer.bot { animation:osIn .5s ease 1.5s forwards; }
+.slide.on .osarrow { animation:osFade .4s ease forwards; }
+.slide.on .osarrow:nth-of-type(2) { animation-delay:.7s; }
+.slide.on .osarrow:nth-of-type(4) { animation-delay:1.3s; }
+@keyframes osIn { to{opacity:1;transform:none} }
+@keyframes osFade { to{opacity:1} }
+@keyframes osGlow { 0%,100%{box-shadow:0 0 0 0 rgba(233,113,50,0)} 50%{box-shadow:0 0 0 4px rgba(233,113,50,.15)} }
+/* ---- grid de sistemas operativos ---- */
+.osgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:900px; margin-top:8px; }
+.oscard { border:1px solid var(--line); border-radius:14px; padding:14px 16px; text-align:left; background:#fff;
+  opacity:0; transform:translateY(18px); }
+.oscard .oe { font-size:clamp(1.6rem,3vw,2.2rem); display:block; margin-bottom:4px; }
+.oscard b { font-family:var(--display); font-size:clamp(.95rem,1.7vw,1.2rem); }
+.oscard small { display:block; color:var(--muted); font-size:clamp(.72rem,1.2vw,.86rem); line-height:1.3; margin-top:3px; }
+.oscard.hi { border-color:var(--naranja); border-width:2px; background:linear-gradient(160deg,rgba(233,113,50,.08),#fff); }
+.oscard.goal { border-style:dashed; border-color:var(--c1, #156082); }
+.slide.on .oscard { animation:osCard .45s ease forwards; }
+.slide.on .oscard:nth-child(1){animation-delay:.15s} .slide.on .oscard:nth-child(2){animation-delay:.3s}
+.slide.on .oscard:nth-child(3){animation-delay:.45s} .slide.on .oscard:nth-child(4){animation-delay:.6s}
+.slide.on .oscard:nth-child(5){animation-delay:.75s} .slide.on .oscard:nth-child(6){animation-delay:.9s}
+@keyframes osCard { to{opacity:1;transform:none} }
+@media (max-width:640px){ .osgrid { grid-template-columns:1fr 1fr; } }
+@media (prefers-reduced-motion: reduce) { .oslayer,.osarrow,.oscard { opacity:1 !important; transform:none !important; animation:none !important; } }
+.src { position:absolute; bottom:3vh; left:clamp(30px,8vw,120px); right:clamp(30px,8vw,120px); font-family:var(--mono); font-size:.68rem; color:var(--faint); }
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:clamp(16px,3vw,40px); max-width:1000px; }
+.chipset { display:flex; gap:10px; flex-wrap:wrap; margin-top:24px; }
+.chip { font-family:var(--mono); font-size:clamp(.75rem,1.2vw,.95rem); padding:.5em 1.1em; border:1px solid var(--line); border-radius:999px; color:var(--muted); }
+.chip.hi { color:var(--naranja); border-color:rgba(233,113,50,.45); font-weight:600; }
+.q { font-family:var(--display); font-size:clamp(1.4rem,3vw,2.3rem); border-left:3px solid; border-image:var(--grad) 1; padding-left:22px; margin:14px 0; max-width:30ch; line-height:1.25; }
+.cover { padding:0; }
+.cover-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.cover-txt { position:absolute; left:clamp(24px,6vw,90px); bottom:4.5vh; z-index:2; max-width:36ch; }
+.cover-k { font-family:var(--mono); font-size:clamp(.6rem,.95vw,.78rem); letter-spacing:.07em; text-transform:uppercase; color:#7fd8f5; }
+.cover-h { color:#fff; font-family:var(--display); font-size:clamp(1.15rem,2.3vw,1.9rem); line-height:1.15; margin:8px 0 8px; }
+.cover-s { color:#c9d4e6; font-size:clamp(.78rem,1.15vw,.95rem); line-height:1.5; }
+.cover-logo { position:absolute; right:clamp(30px,6vw,90px); bottom:8vh; width:clamp(140px,16vw,230px); z-index:2; }
+.inst-footer { position:fixed; bottom:2.2vh; left:clamp(30px,8vw,120px); z-index:9; }
+.inst-footer img { height:clamp(30px,4.6vh,44px); display:block; }
+.cover ~ style, .cover .inst-footer { display:none; }
+.bar { position:fixed; top:0; left:0; height:3px; background:var(--grad); width:0; transition:width .25s ease; z-index:10; }
+.num { position:fixed; bottom:3vh; right:clamp(30px,8vw,120px); font-family:var(--mono); font-size:.8rem; color:var(--faint); z-index:10; }
+.nav-hint { position:fixed; bottom:3vh; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:.68rem; color:var(--faint); z-index:10; }
+.chart { max-width:520px; }
+.chart-title { font-family:var(--mono); font-size:.78rem; color:var(--muted); letter-spacing:.04em; text-transform:uppercase; margin-bottom:14px; }
+.chart-bars { display:flex; align-items:flex-end; gap:clamp(14px,2.5vw,30px); height:clamp(180px,34vh,320px); border-bottom:1px solid var(--line); padding-bottom:2px; }
+.cbar { flex:1; height:var(--h); background:linear-gradient(180deg, rgba(21,96,130,.55), rgba(21,96,130,.12)); border-radius:8px 8px 0 0; position:relative; }
+.cbar.hi { background:var(--grad); }
+.cbar.dim { background:linear-gradient(180deg, rgba(233,113,50,.30), rgba(233,113,50,.06)); border:1px dashed rgba(233,113,50,.55); border-bottom:0; }
+.cv { position:absolute; top:-26px; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:clamp(.7rem,1.2vw,.9rem); color:var(--text); white-space:nowrap; }
+.cy { position:absolute; bottom:-26px; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:.72rem; color:var(--faint); }
+.chart-note { margin-top:34px; font-family:var(--mono); font-size:.68rem; color:var(--faint); }
+.qrs { display:flex; gap:clamp(20px,4vw,54px); margin-top:24px; }
+.qr { display:flex; flex-direction:column; gap:10px; align-items:flex-start; }
+.qr svg { width:clamp(90px,11vw,150px); height:auto; border-radius:10px; }
+.slide .grid2 .qr svg { width:clamp(160px,20vw,260px); }
+.qr.qr-ticket svg { width:clamp(150px,18vw,220px); }
+.qr span { font-family:var(--mono); font-size:.72rem; color:var(--faint); line-height:1.5; }
+.qr span b { color:var(--a1); font-weight:500; }
+.demo { background:#0E2841; border:0; border-radius:18px; padding:clamp(18px,3vh,30px); max-width:820px; margin-top:10px; }
+.demo p { font-family:var(--mono); color:#39c8e8; font-size:clamp(.85rem,1.5vw,1.1rem); padding:6px 0; }
+ul.clean { list-style:none; max-width:880px; }
+ul.clean li { padding:clamp(8px,1.4vh,14px) 0; border-top:1px solid var(--line); color:var(--muted); font-size:clamp(.95rem,1.7vw,1.3rem); }
+ul.clean li b { color:var(--text); }
+ul.clean li:first-child { border-top:0; }
+.tag9 { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:1000px; margin-top:10px; }
+.t9 { border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:clamp(.75rem,1.25vw,.95rem); color:var(--muted); }
+.t9 b { color:var(--a1); font-family:var(--mono); margin-right:6px; }
+</style></head><body>
+<div class="bar" id="bar"></div>
+<div class="num" id="num"></div>
+<div class="inst-footer" id="instf"><img src="../../../assets/logos-medellin.png" alt="Alcaldía de Medellín · SAPIENCIA · Esumer"></div>
+<div class="nav-hint">← → o click para avanzar</div>
+
+<!-- 1 · PORTADA -->
+<section class="slide on cover">
+  <img class="cover-bg" src="../../../assets/portada.png" alt="">
+  <div class="cover-txt">
+    <span class="cover-k">Estud-IA · Ruta TI · 2026-2 · Sesión {{SESION}} · clase virtual · {{G_ID}}</span>
+    <h1 class="cover-h">Las calles y la dirección: redes de verdad</h1>
+    <p class="cover-s">De la teoría (LAN/WAN, modelo OSI, IP) a la nube (VPC, balanceadores) — y empezamos a blindar tu servidor.<br>Alejandro Barrera · Cloud Architect</p>
+  </div>
+  <img class="cover-logo" src="../../../assets/estudia-blanco.png" alt="Estud-IA">
+</section>
+
+<!-- 2 · LA CASA -->
+<section class="slide casa-slide">
+  <span class="k">El mapa del curso · ¿en qué fase estás?</span>
+  <h2 style="font-size:clamp(1.15rem,2.5vw,1.9rem); margin-bottom:6px;">Hoy vamos a fondo en las calles (redes) — la teoría y su forma en la nube.</h2>
+  <div class="house">
+    <div class="roof"><span>🏡 La casa habitada — la web de tu empresa en internet</span></div>
+    <div class="floor fA"><span class="fi">💧</span><b>Los servicios públicos</b><i>CLOUD · AWS</i></div>
+    <div class="floor fB"><span class="fi">🚪</span><b>Puertas y cerraduras</b><i>CIBERSEGURIDAD</i></div>
+    <div class="floor fC hoy"><span class="fi">🧱</span><b>La estructura</b><i>SERVIDORES · EC2</i><span class="here">◄ EMPEZAMOS A BLINDAR</span></div>
+    <div class="floor fD hoy"><span class="fi">🗺</span><b>La dirección y las calles</b><i>REDES · NETWORKING</i><span class="here">◄ HOY · A FONDO</span></div>
+    <div class="floor fE"><span class="fi">📐</span><b>Los planos</b><i>GIT · GITHUB</i></div>
+    <div class="floor fF hoy base"><span class="fi">🏗</span><b>Los cimientos</b><i>LINUX + TERMINAL</i><span class="here">◄ REPASO</span></div>
+  </div>
+</section>
+
+<!-- 3 · EL PLAN -->
+<section class="slide">
+  <span class="k">El plan de hoy · clase 4</span>
+  <h2>De la teoría de redes… a la nube y a blindar tu servidor.</h2>
+  <ul class="rows">
+    <li><span class="t">Parte 1 · Linux — repaso relámpago<small>Reconéctate y calienta la terminal</small></span><span class="m">repaso</span></li>
+    <li><span class="t">Parte 2 · Teoría de redes<small>LAN/WAN, modelo OSI, IP, DNS/DHCP/NAT y diagnóstico</small></span><span class="m">fundamentos</span></li>
+    <li><span class="t">Parte 3 · Redes en AWS<small>VPC, subredes, security groups y balanceadores de carga</small></span><span class="m">nube</span></li>
+    <li><span class="t">Parte 4 · Blinda tu EC2<small>Cierra puertos, cuida tu llave, endurece el servidor</small></span><span class="m">seguridad</span></li>
+  </ul>
+  <p class="sub" style="margin-top:18px">Hoy entienden CÓMO se conecta el mundo — y lo aplican a su propio servidor en la nube.</p>
+</section>
+
+<!-- P1 · LINUX REPASO RELÁMPAGO -->
+<section class="slide">
+  <span class="k"><span class="act-chip">PARTE 1 · LINUX</span> Repaso relámpago</span>
+  <h2>Calienta motores en tu servidor</h2>
+  <div class="demo">
+    <p>$ ssh -i tu-llave.pem ec2-user@&lt;IP-pública&gt;&nbsp;# reconéctate</p>
+    <p>$ whoami &amp;&amp; pwd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ¿quién soy y dónde estoy?</p>
+    <p>$ ls -la&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ¿qué hay aquí?</p>
+    <p>$ history | tail&nbsp;# lo que ya sabes hacer</p>
+  </div>
+  <p class="sub" style="margin-top:14px">Ya manejan la terminal. Hoy la usamos para <b>ver la red por dentro</b>. Manos listas. 🐧</p>
+</section>
+
+<!-- P2a · LAN / WAN -->
+<section class="slide">
+  <span class="k"><span class="act-chip">PARTE 2 · TEORÍA</span> El tamaño de las redes</span>
+  <h2>De tu casa al mundo: <span class="grad">LAN, WAN e Internet</span></h2>
+  <div class="osgrid">
+    <div class="oscard"><span class="oe">🏠</span><b>LAN</b><small>Red local — tu casa u oficina: router, PC y celular hablando entre sí</small></div>
+    <div class="oscard"><span class="oe">🏙️</span><b>MAN</b><small>Red metropolitana — una ciudad o un campus conectado</small></div>
+    <div class="oscard"><span class="oe">🌍</span><b>WAN</b><small>Red amplia — ciudades y países enlazados a larga distancia</small></div>
+    <div class="oscard hi"><span class="oe">🌐</span><b>Internet</b><small>La WAN más grande: <b>una red de redes</b>, todos los barrios del planeta</small></div>
+    <div class="oscard"><span class="oe">📦</span><b>Paquetes</b><small>Todo viaja partido en paquetes, como cartas con remitente y destino</small></div>
+    <div class="oscard goal"><span class="oe">🎯</span><b>Misma idea, distinta escala</b><small>Entiendes una red pequeña y entiendes internet</small></div>
+  </div>
+</section>
+
+<!-- P2b · MODELO OSI -->
+<section class="slide">
+  <span class="k"><span class="act-chip">PARTE 2 · TEORÍA</span> ¿Cómo se ponen de acuerdo dos máquinas?</span>
+  <h2>El <span class="grad">modelo OSI</span>: 7 capas, cada una con su oficio</h2>
+  <div class="stack">
+    <div class="layer l5 on"><span class="ln">7</span><b>Aplicación</b><span class="lt">web, correo · HTTP, DNS</span></div>
+    <div class="layer l4 on"><span class="ln">6</span><b>Presentación</b><span class="lt">formato y cifrado · TLS</span></div>
+    <div class="layer l4 on"><span class="ln">5</span><b>Sesión</b><span class="lt">abre y mantiene la charla</span></div>
+    <div class="layer l3 on"><span class="ln">4</span><b>Transporte</b><span class="lt">completo y en orden · TCP/UDP</span></div>
+    <div class="layer l3 on"><span class="ln">3</span><b>Red</b><span class="lt">la ruta por la dirección · IP</span></div>
+    <div class="layer l2 on"><span class="ln">2</span><b>Enlace</b><span class="lt">al equipo vecino · MAC</span></div>
+    <div class="layer l1 on"><span class="ln">1</span><b>Física</b><span class="lt">cable, fibra, wifi · bits</span></div>
+  </div>
+  <p class="sub" style="margin-top:12px">Cada capa hace UN trabajo y le pasa a la siguiente — como una mensajería donde cada área sabe lo suyo. <b>TCP/IP</b> (lo que ya vieron) es la versión práctica de esto.</p>
+</section>
+
+<!-- P2c · IPv4 -->
+<section class="slide">
+  <span class="k"><span class="act-chip">PARTE 2 · TEORÍA</span> La dirección, a fondo</span>
+  <h2>Direcciones <span class="grad">IPv4</span>: pública, privada y puertos</h2>
+  <div class="grid2" style="align-items:start">
+    <ul class="clean">
+      <li><b>IPv4</b> = 4 números de 0 a 255: <b>3.220.15.4</b></li>
+      <li><b>Privada</b> (dentro de tu barrio): 192.168.x.x · 10.x.x.x — no se ve desde internet</li>
+      <li><b>Pública</b>: única en el mundo, la que da la cara (tu EC2 tiene una)</li>
+      <li><b>Máscara</b> (/24): dice qué parte es el barrio y qué parte la casa</li>
+      <li><b>Puerto</b>: la puerta del servicio — 22 SSH · 80 HTTP · 443 HTTPS</li>
+    </ul>
+    <div class="sim"><span class="o">🏘️</span><p><b>IP</b> = la dirección del edificio. <b>Puerto</b> = el número del apartamento. Juntos llevan el mensaje a la puerta exacta.</p></div>
+  </div>
+</section>
+
+<!-- P2d · DNS / DHCP / NAT -->
+<section class="slide">
+  <span class="k"><span class="act-chip">PARTE 2 · TEORÍA</span> Los servicios que hacen la magia invisible</span>
+  <h2>DNS, DHCP y NAT</h2>
+  <div class="osgrid" style="grid-template-columns:repeat(3,1fr)">
+    <div class="oscard hi"><span class="oe">📖</span><b>DNS</b><small>La agenda de internet: traduce <b>google.com</b> → su IP. Nadie memoriza números</small></div>
+    <div class="oscard hi"><span class="oe">🎫</span><b>DHCP</b><small>El repartidor: al conectarte, te <b>asigna una IP</b> automáticamente</small></div>
+    <div class="oscard hi"><span class="oe">🚪</span><b>NAT</b><small>El portero del barrio: deja que muchas IP privadas salgan al mundo por <b>una pública</b></small></div>
+  </div>
+  <p class="sub" style="margin-top:18px">Los tres trabajan callados en cada conexión que hacen — hasta en el wifi de su casa.</p>
+</section>
+
+<!-- P2e · DIAGNÓSTICO -->
+<section class="slide">
+  <span class="k"><span class="act-chip">PARTE 2 · LAB</span> Ver la red con tus propios ojos</span>
+  <h2>Herramientas de diagnóstico — en tu EC2</h2>
+  <div class="demo">
+    <p>$ ping google.com&nbsp;&nbsp;&nbsp;&nbsp;# ¿llega? ¿cuánto tarda? (Ctrl+C para parar)</p>
+    <p>$ curl ifconfig.me&nbsp;&nbsp;&nbsp;&nbsp;# ¿cuál es mi IP pública?</p>
+    <p>$ nslookup google.com&nbsp;# el DNS en acción: nombre → IP</p>
+    <p>$ tracepath google.com&nbsp;# el camino, salto por salto</p>
+    <p>$ ss -tuln&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ¿qué puertos tengo abiertos?</p>
+  </div>
+  <p class="sub" style="margin-top:12px">Al chat: ¿cuántos <b>saltos</b> hay entre tu servidor de Virginia y google? 🌎</p>
+</section>
+
+<!-- P3a · TRANSICIÓN AWS -->
+<section class="slide">
+  <span class="k"><span class="act-chip">PARTE 3 · AWS</span> Las mismas ideas… en la nube</span>
+  <h2>Todo esto ya existe en <span class="grad">AWS</span></h2>
+  <div class="sim"><span class="o">☁️</span><p>Lo que acaban de ver (redes, IP, puertos, firewalls) no cambia en la nube: AWS solo le pone <b>nombre y botones</b>. Conocen la teoría → van a reconocer las piezas al instante.</p></div>
+  <ul class="clean" style="margin-top:14px">
+    <li>Su <b>barrio privado</b> → la <b>VPC</b></li>
+    <li>Las <b>cerraduras y puertos</b> → los <b>Security Groups</b></li>
+    <li>El <b>recepcionista</b> que reparte visitas → el <b>Load Balancer</b></li>
+  </ul>
+</section>
+
+<!-- P3b · VPC -->
+<section class="slide">
+  <span class="k"><span class="act-chip">PARTE 3 · AWS</span> Tu barrio privado en la nube</span>
+  <h2>La <span class="grad">VPC</span> — Virtual Private Cloud</h2>
+  <div class="grid2" style="align-items:start">
+    <ul class="clean">
+      <li>Una <b>red privada tuya</b> dentro de AWS, con su propio rango de IPs</li>
+      <li><b>Subred pública</b>: da a la calle (internet) — ahí va lo que el mundo debe ver</li>
+      <li><b>Subred privada</b>: sin salida directa — bases de datos, cosas sensibles</li>
+      <li>Tu <b>EC2</b> vive dentro de una subred de tu VPC</li>
+    </ul>
+    <div class="sim"><span class="o">🏘️</span><p>La VPC es <b>tu urbanización cerrada</b>: tú decides las calles (subredes) y quién entra por dónde. Nadie más comparte tu red.</p></div>
+  </div>
+  <p class="sub" style="margin-top:12px">Un <b>túnel VPN</b> te deja entrar a ese barrio privado de forma segura desde afuera — como una puerta lateral cifrada.</p>
+</section>
+
+<!-- P3c · SECURITY GROUPS -->
+<section class="slide">
+  <span class="k"><span class="act-chip">PARTE 3 · AWS</span> Las cerraduras de tu servidor</span>
+  <h2><span class="grad">Security Groups</span>: el firewall de tu EC2</h2>
+  <ul class="clean">
+    <li>Un <b>firewall</b> que decide qué puertos están abiertos y para quién</li>
+    <li>Por defecto: <b>todo cerrado</b>. Tú abres solo lo necesario, regla por regla</li>
+    <li>Ej.: <b>22 (SSH)</b> solo para TU IP · <b>80/443 (web)</b> para todo el mundo</li>
+    <li>Cuando lanzaron la EC2 y marcaron "Allow SSH from Anywhere" → eso <b>era</b> un Security Group</li>
+  </ul>
+  <p class="sub" style="margin-top:16px">Cada puerto abierto es una puerta. Menos puertas = menos formas de entrar sin permiso. 🔐</p>
+</section>
+
+<!-- P3d · LOAD BALANCER -->
+<section class="slide">
+  <span class="k"><span class="act-chip">PARTE 3 · AWS</span> Cuando un servidor no alcanza</span>
+  <h2>El <span class="grad">balanceador de carga</span></h2>
+  <div class="sim"><span class="o">🛎️</span><p>Es el <b>recepcionista</b> de un edificio con muchas taquillas: recibe a todas las visitas y las reparte entre varios servidores para que ninguno colapse.</p></div>
+  <ul class="clean" style="margin-top:14px">
+    <li>Reparte el tráfico entre <b>varias EC2</b> → aguanta muchos más usuarios</li>
+    <li>Si un servidor se cae, <b>manda las visitas a los que siguen vivos</b> (alta disponibilidad)</li>
+    <li>En AWS: <b>Elastic Load Balancer (ELB / ALB)</b></li>
+  </ul>
+  <p class="sub" style="margin-top:12px">Así funcionan Netflix, los bancos, todo lo que no se puede caer: nunca un solo servidor solo.</p>
+</section>
+
+<!-- P4a · TRANSICIÓN SEGURIDAD -->
+<section class="slide">
+  <span class="k"><span class="act-chip">PARTE 4 · SEGURIDAD</span> Cambio de sombrero</span>
+  <h2>Ahora, <span class="grad">blindemos</span> tu servidor</h2>
+  <div class="sim"><span class="o">🛡️</span><p>Un servidor abierto al mundo es una casa con puertas: hay que ponerles cerradura. Empezamos a <b>perfilar tu EC2</b> para que sea más seguro — el primer paso del módulo de ciberseguridad.</p></div>
+  <p class="sub" style="margin-top:12px">Regla de oro: <b>abre lo mínimo, cierra todo lo demás.</b></p>
+</section>
+
+<!-- P4b · CERRAR PUERTOS -->
+<section class="slide">
+  <span class="k"><span class="act-chip">PARTE 4 · SEGURIDAD</span> Paso 1 — cierra puertas</span>
+  <h2>Afina el Security Group de tu EC2</h2>
+  <ul class="clean">
+    <li>1 · Consola AWS → <b>EC2</b> → tu instancia → pestaña <b>Security</b> → el <b>security group</b></li>
+    <li>2 · <b>Edit inbound rules</b></li>
+    <li>3 · <b>SSH (22):</b> cámbialo de "Anywhere" a <b>My IP</b> — solo tú entras por SSH</li>
+    <li>4 · Deja abierto al mundo <b>solo</b> lo que sirva a los visitantes (80/443 si publicas web)</li>
+    <li>5 · <b>Borra</b> cualquier regla que no reconozcas o no uses</li>
+  </ul>
+  <p class="sub" style="margin-top:14px">"SSH abierto a todo internet" es la puerta #1 que golpean los bots. Ciérrenla hoy. 🔒</p>
+</section>
+
+<!-- P4c · HARDENING BÁSICO -->
+<section class="slide">
+  <span class="k"><span class="act-chip">PARTE 4 · SEGURIDAD</span> Paso 2 — endurece el servidor</span>
+  <h2>Cuatro hábitos que te cuidan (y te ahorran sustos)</h2>
+  <div class="grid2" style="align-items:start">
+    <ul class="clean">
+      <li>🔑 <b>Tu llave .pem es sagrada</b> — no la subas a GitHub ni la compartas</li>
+      <li>🔄 <b>Actualiza</b> el sistema: parches de seguridad al día</li>
+      <li>👤 <b>No trabajes como root</b> — usa tu usuario y <b>sudo</b> solo cuando toca</li>
+      <li>🚪 <b>Menos es más</b>: menos puertos y programas = menor superficie de ataque</li>
+    </ul>
+    <div class="demo">
+      <p># mantén tu servidor al día</p>
+      <p>$ sudo yum update -y</p>
+      <p># ¿quién escucha en el puerto 22?</p>
+      <p>$ sudo ss -tuln | grep :22</p>
+    </div>
+  </div>
+</section>
+
+<!-- 20 · CIERRE -->
+<section class="slide">
+  <span class="k">Para la próxima clase</span>
+  <h2>Su misión</h2>
+  <ul class="clean">
+    <li>1 · En tu EC2: corre <b>ping</b>, <b>tracepath</b> y <b>curl ifconfig.me</b> — pantallazo a la bitácora</li>
+    <li>2 · Revisa el <b>Security Group</b> de tu instancia: deja SSH solo para TU IP y cierra lo que no uses</li>
+    <li>3 · Dibuja tu <b>VPC</b>: barrio privado, subred pública, tu servidor y por dónde entran las visitas</li>
+  </ul>
+  <p class="sub" style="margin-top:24px">Hoy entendieron cómo se conecta el mundo y empezaron a blindar su servidor. Ya no solo construyen: <b>aseguran</b>. 🔐</p>
+  <div class="qrs">
+    <div class="qr qr-ticket">{{QR_TICKET}}
+
+<span>🎟️ Ticket de salida<br><b>tu asistencia de hoy</b><br>escanea al cierre</span></div>
+    <div class="qr"><svg xmlns="http://www.w3.org/2000/svg" width="132" height="132" class="segno"><g transform="scale(4)"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#0a0a0e" d="M2 2.5h7m1 0h1m2 0h1m2 0h1m1 0h5m1 0h7m-29 1h1m5 0h1m1 0h2m2 0h3m3 0h1m3 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m4 0h1m1 0h1m1 0h2m1 0h1m3 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h1m2 0h5m4 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m2 0h1m2 0h1m1 0h3m2 0h1m2 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m2 0h1m1 0h4m3 0h2m2 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h2m7 0h3m-20 1h1m1 0h2m1 0h3m1 0h2m1 0h1m1 0h1m1 0h2m4 0h1m2 0h1m1 0h2m-29 1h1m1 0h1m2 0h1m3 0h3m2 0h1m1 0h4m1 0h4m3 0h1m-29 1h1m5 0h6m1 0h2m3 0h1m1 0h5m1 0h2m-26 1h1m2 0h1m2 0h6m1 0h2m1 0h1m1 0h1m1 0h3m3 0h1m-29 1h3m2 0h3m3 0h1m1 0h3m1 0h1m1 0h1m5 0h2m-23 1h1m3 0h5m1 0h3m2 0h1m2 0h2m2 0h3m-28 1h1m2 0h1m1 0h1m1 0h2m1 0h3m5 0h2m2 0h2m1 0h3m-27 1h1m1 0h2m3 0h1m1 0h1m2 0h1m1 0h1m6 0h2m2 0h1m-27 1h3m2 0h4m3 0h3m2 0h4m2 0h2m1 0h1m-27 1h1m2 0h1m2 0h3m1 0h2m2 0h1m1 0h1m2 0h1m2 0h1m1 0h3m-28 1h1m3 0h1m1 0h1m2 0h1m2 0h4m1 0h1m4 0h2m2 0h1m-23 1h2m1 0h1m1 0h3m3 0h1m1 0h1m4 0h1m3 0h1m-26 1h1m1 0h2m1 0h1m2 0h2m2 0h1m1 0h3m1 0h8m-19 1h1m1 0h3m3 0h3m1 0h1m3 0h5m-29 1h7m1 0h3m3 0h1m1 0h1m1 0h3m1 0h1m1 0h2m1 0h1m-28 1h1m5 0h1m1 0h1m2 0h1m1 0h1m4 0h1m1 0h1m3 0h2m1 0h2m-29 1h1m1 0h3m1 0h1m3 0h1m1 0h1m2 0h1m1 0h1m2 0h5m1 0h3m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h1m2 0h5m1 0h3m2 0h2m2 0h1m-29 1h1m1 0h3m1 0h1m1 0h3m1 0h1m3 0h1m6 0h1m2 0h1m1 0h1m-29 1h1m5 0h1m3 0h2m1 0h4m3 0h4m1 0h1m1 0h1m-28 1h7m1 0h1m2 0h1m2 0h2m2 0h5m2 0h1m1 0h1"/></g></svg>
+
+<span>LinkedIn<br><b>/in/alejobarrera</b></span></div>
+    <div class="qr"><svg xmlns="http://www.w3.org/2000/svg" width="132" height="132" class="segno"><g transform="scale(4)"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#0a0a0e" d="M2 2.5h7m6 0h1m8 0h7m-29 1h1m5 0h1m4 0h3m1 0h1m3 0h1m2 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m2 0h2m2 0h4m1 0h1m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m3 0h1m2 0h2m3 0h1m3 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m3 0h1m1 0h1m3 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m1 0h2m1 0h2m3 0h1m2 0h2m1 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-20 1h1m1 0h1m2 0h2m1 0h1m2 0h1m-20 1h1m2 0h1m1 0h1m1 0h1m3 0h1m5 0h1m1 0h2m1 0h2m1 0h1m-25 1h1m1 0h2m2 0h1m1 0h1m2 0h1m1 0h1m1 0h2m2 0h8m-29 1h4m1 0h2m4 0h1m1 0h2m6 0h1m4 0h1m1 0h1m-29 1h1m3 0h2m2 0h2m7 0h1m1 0h3m3 0h1m1 0h2m-29 1h3m1 0h1m1 0h2m1 0h2m1 0h1m4 0h1m2 0h1m2 0h1m1 0h1m2 0h1m-28 1h2m4 0h1m4 0h4m2 0h1m3 0h1m1 0h1m1 0h1m1 0h1m-28 1h2m1 0h3m1 0h2m3 0h1m1 0h1m1 0h1m2 0h3m1 0h1m3 0h1m-29 1h5m2 0h3m2 0h1m1 0h1m2 0h1m3 0h1m1 0h1m1 0h1m-26 1h1m1 0h2m2 0h3m1 0h2m3 0h1m2 0h4m5 0h2m-29 1h1m1 0h2m4 0h2m2 0h3m1 0h1m1 0h1m3 0h5m1 0h1m-23 1h1m1 0h2m4 0h1m1 0h2m5 0h3m2 0h1m-27 1h4m2 0h2m1 0h1m2 0h1m2 0h4m2 0h1m1 0h1m1 0h2m-29 1h5m1 0h2m2 0h1m4 0h3m2 0h5m2 0h2m-21 1h3m1 0h2m1 0h6m3 0h1m1 0h1m1 0h1m-29 1h7m2 0h2m2 0h1m1 0h2m1 0h3m1 0h1m1 0h1m3 0h1m-29 1h1m5 0h1m2 0h1m2 0h1m2 0h1m3 0h2m3 0h2m1 0h1m-28 1h1m1 0h3m1 0h1m1 0h4m1 0h1m2 0h1m2 0h6m-25 1h1m1 0h3m1 0h1m2 0h2m1 0h1m4 0h2m4 0h1m1 0h3m-28 1h1m1 0h3m1 0h1m3 0h2m1 0h1m1 0h1m2 0h4m4 0h3m-29 1h1m5 0h1m1 0h2m4 0h4m2 0h4m1 0h1m1 0h2m-29 1h7m3 0h1m1 0h2m3 0h1m1 0h3m2 0h1m2 0h1"/></g></svg>
+
+<span>Web<br><b>alejandrobarrera.net</b></span></div>
+    <div class="qr"><svg xmlns="http://www.w3.org/2000/svg" width="116" height="116" class="segno"><g transform="scale(4)"><path fill="#fff" d="M0 0h29v29h-29z"/><path class="qrline" stroke="#0a0a0e" d="M2 2.5h7m2 0h2m3 0h1m3 0h7m-25 1h1m5 0h1m1 0h1m2 0h2m1 0h1m1 0h1m1 0h1m5 0h1m-25 1h1m1 0h3m1 0h1m1 0h1m3 0h1m1 0h2m2 0h1m1 0h3m1 0h1m-25 1h1m1 0h3m1 0h1m1 0h1m3 0h3m1 0h1m1 0h1m1 0h3m1 0h1m-25 1h1m1 0h3m1 0h1m4 0h1m1 0h1m2 0h1m1 0h1m1 0h3m1 0h1m-25 1h1m5 0h1m2 0h2m2 0h2m3 0h1m5 0h1m-25 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-17 1h1m2 0h2m3 0h1m-17 1h1m5 0h1m1 0h1m1 0h1m2 0h6m2 0h3m-24 1h1m4 0h1m1 0h1m3 0h1m2 0h2m3 0h5m-20 1h1m1 0h6m1 0h1m1 0h2m1 0h2m1 0h1m1 0h2m-25 1h1m2 0h1m3 0h5m2 0h1m2 0h2m1 0h2m2 0h1m-25 1h2m4 0h3m3 0h1m2 0h2m1 0h2m4 0h1m-25 1h1m2 0h3m2 0h1m4 0h1m1 0h2m2 0h1m3 0h1m-24 1h1m2 0h2m1 0h3m2 0h5m1 0h1m1 0h3m1 0h2m-25 1h1m1 0h2m3 0h1m1 0h1m1 0h1m5 0h1m1 0h1m1 0h2m1 0h1m-25 1h1m2 0h1m1 0h2m3 0h2m1 0h2m1 0h5m1 0h1m-15 1h1m1 0h1m1 0h2m2 0h1m3 0h1m-21 1h7m3 0h2m1 0h1m2 0h1m1 0h1m1 0h1m3 0h1m-25 1h1m5 0h1m3 0h1m1 0h1m1 0h3m3 0h1m-21 1h1m1 0h3m1 0h1m2 0h1m2 0h1m2 0h6m1 0h3m-25 1h1m1 0h3m1 0h1m3 0h1m3 0h2m1 0h2m4 0h2m-25 1h1m1 0h3m1 0h1m2 0h1m1 0h2m2 0h1m1 0h1m3 0h2m1 0h1m-25 1h1m5 0h1m4 0h1m3 0h2m1 0h3m3 0h1m-25 1h7m1 0h1m1 0h1m1 0h3m1 0h3m2 0h1m2 0h1"/></g></svg>
+
+<span>Comunidad<br><b>iaopslatam.com</b></span></div>
+</section>
+
+<script>
+var slides = document.querySelectorAll(".slide"), i = 0;
+function go(n) {
+  i = Math.max(0, Math.min(slides.length - 1, n));
+  slides.forEach(function(s, k){ s.classList.toggle("on", k === i); });
+  document.getElementById("bar").style.width = ((i + 1) / slides.length * 100) + "%";
+  document.getElementById("num").textContent = (i + 1) + " / " + slides.length;
+  document.querySelector(".nav-hint").style.display = i === 0 ? "" : "none";
+  document.getElementById("instf").style.display = i === 0 ? "none" : "";
+}
+function fwd() {
+  var hid = slides[i].querySelector(".layer:not(.on)");
+  if (hid) { hid.classList.add("on"); return; }
+  go(i + 1);
+}
+document.addEventListener("keydown", function(e){
+  if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") fwd();
+  if (e.key === "ArrowLeft" || e.key === "PageUp") go(i - 1);
+  if (e.key === "Home") go(0);
+});
+
+document.addEventListener("click", function(e){ if (e.clientX > innerWidth * 0.25) { fwd(); } else { go(i - 1); } });
+go(0);
+</script></body></html>
