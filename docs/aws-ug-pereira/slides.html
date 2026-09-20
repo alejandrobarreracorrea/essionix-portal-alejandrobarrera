@@ -116,6 +116,20 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
   opacity:.42;background:url(assets/cityscapes/Usergroups-cityscapes_1.svg) center bottom / contain no-repeat}
 .chip{display:inline-block;font-family:var(--mono);font-size:clamp(.66rem,1vw,.8rem);color:var(--p);
   border:1px solid rgba(172,91,255,.4);border-radius:999px;padding:.3em 1em;margin-top:14px}
+
+/* ---- portada oficial: degradado vibrante + badge Pereira ---- */
+.slide.cover{background:#0aa1c9 url(assets/gradients/mesh-tbp.png) center/cover no-repeat}
+.slide.cover .ey{color:#151D25;font-weight:600}
+.slide.cover .dot.aws{background:#151D25;box-shadow:none;animation:none}
+.slide.cover h1{color:#151D25}
+.slide.cover .sub{color:#1c2833}
+.slide.cover .uglogo{filter:none}
+.slide.cover .lock .g{background:none;-webkit-text-fill-color:#151D25;color:#151D25}
+.slide.cover .lock small{color:#33414f}
+.slide.cover .disc{color:#2a3742}
+.pbadge{width:clamp(230px,33vw,420px);height:auto;display:block;margin:0 auto;
+  clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
+  filter:drop-shadow(0 24px 60px rgba(10,20,30,.45))}
 </style></head>
 <body>
 <!-- shared gradient/glow defs -->
@@ -127,22 +141,14 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
 <div id="bar"></div>
 
 <!-- 1 · PORTADA -->
-<section class="slide split">
-  <img class="uglogo" src="assets/logo/logo-dark.svg" alt="AWS User Groups">
-  <div class="cityband"></div>
+<section class="slide split cover">
+  <img class="uglogo" src="assets/logo/logo-light.svg" alt="AWS User Groups">
   <div class="col">
     <span class="ey"><span class="dot aws"></span>Capítulo Pereira · lunes 28 · 7 pm</span>
-    <h1><span class="grad">De tu cabeza</span><br>al mundo</h1>
+    <h1>De tu cabeza<br>al mundo</h1>
     <p class="sub">En lo que se enfría un café: una idea tuya, encendida y viva en internet. En vivo, con AWS.</p>
   </div>
-  <div class="viz"><svg viewBox="0 0 420 420" fill="none" stroke-linecap="round">
-    <g stroke="url(#gPT)" opacity=".22" stroke-width="1.5"><circle cx="210" cy="210" r="70"/><circle cx="210" cy="210" r="120"/><circle cx="210" cy="210" r="170"/><circle cx="210" cy="210" r="205"/></g>
-    <g stroke="url(#gPT)" stroke-width="1.6" opacity=".5"><path d="M210 210 L120 110"/><path d="M210 210 L330 130"/><path d="M210 210 L96 290"/><path d="M210 210 L318 300"/><path d="M210 210 L210 40"/></g>
-    <g fill="url(#gPT)"><circle cx="120" cy="110" r="7"/><circle cx="330" cy="130" r="6"/><circle cx="96" cy="290" r="6"/><circle cx="318" cy="300" r="7"/><circle cx="210" cy="40" r="5"/></g>
-    <circle cx="318" cy="300" r="13" fill="none" stroke="url(#gAWS)" stroke-width="2"/><circle cx="318" cy="300" r="6" fill="url(#gAWS)"/>
-    <circle cx="210" cy="210" r="30" fill="url(#gPT)" filter="url(#glow)"/><circle cx="210" cy="210" r="30" fill="#151D25" opacity=".25"/>
-    <path d="M203 210 l6 6 l12 -14" stroke="#151D25" stroke-width="3" fill="none"/>
-  </svg></div>
+  <div class="viz"><img class="pbadge" src="assets/pereira-badge.jpg" alt="AWS User Group Pereira"></div>
   <div class="foot">
     <div class="lock"><span class="g">IAOps</span><small>Alejandro Barrera · Cloud Architect</small></div>
     <div class="disc">Charla de comunidad · opiniones propias.<br>No representa ni cuenta con respaldo oficial de AWS.</div>
