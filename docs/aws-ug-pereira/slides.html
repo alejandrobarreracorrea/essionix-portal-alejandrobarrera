@@ -118,10 +118,18 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
   border:1px solid rgba(172,91,255,.4);border-radius:999px;padding:.3em 1em;margin-top:14px}
 
 /* ---- portada oficial: degradado vibrante + badge Pereira ---- */
-.slide.cover{background:#0aa1c9 url(assets/gradients/mesh-tbp.png) center/cover no-repeat}
+.slide.cover{background-color:#7a5cff;background-size:cover;background-position:center;background-repeat:no-repeat}
+.slide.cover .uglogo{background:rgba(14,20,28,.62);border-radius:12px;padding:9px 14px;box-sizing:content-box}
+.slide.cover .dot{background:#151D25;box-shadow:none;animation:none}
+.slide.cover .sub b{color:#151D25 !important}
+.slide.cover .grad,.slide.cover .grad-aws{background:none;-webkit-text-fill-color:#151D25;color:#151D25}
+.slide.cover .contact span{color:#33414f}
+.slide.cover .contact span b{color:#151D25}
+.slide.cover .contact span i{color:#0e1620}
+.slide.cover .lead{color:#151D25}
 .slide.cover .ey{color:#151D25;font-weight:600}
 .slide.cover .dot.aws{background:#151D25;box-shadow:none;animation:none}
-.slide.cover h1{color:#151D25}
+.slide.cover h1,.slide.cover h2{color:#151D25}
 .slide.cover .sub{color:#1c2833}
 .slide.cover .uglogo{filter:none}
 .slide.cover .lock .g{background:none;-webkit-text-fill-color:#151D25;color:#151D25}
@@ -141,8 +149,8 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
 <div id="bar"></div>
 
 <!-- 1 · PORTADA -->
-<section class="slide split cover">
-  <img class="uglogo" src="assets/logo/logo-light.svg" alt="AWS User Groups">
+<section class="slide split cover" style="background-image:url(assets/gradients/mesh-tbp.png)">
+  <img class="uglogo" src="assets/logo/logo-dark.svg" alt="AWS User Groups">
   <div class="col">
     <span class="ey"><span class="dot aws"></span>Capítulo Pereira · lunes 28 · 7 pm</span>
     <h1>De tu cabeza<br>al mundo</h1>
@@ -156,10 +164,10 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
 </section>
 
 <!-- 2 · COLD OPEN -->
-<section class="slide split">
+<section class="slide split cover" style="background-image:url(assets/gradients/mesh-pmp.png)">
   <div class="col">
     <span class="ey"><span class="dot"></span>una cifra para empezar</span>
-    <h1 class="grad-aws" style="font-size:clamp(3.2rem,10vw,7.5rem)">5.500 M</h1>
+    <h1 style="font-size:clamp(3.2rem,10vw,7.5rem)">5.500 M</h1>
     <p class="lead">de personas conectadas al mundo, ahora mismo.</p>
     <p class="sub" style="max-width:33ch">En los próximos minutos, algo que hoy <b style="color:var(--text);font-weight:600">no existe</b> va a poder abrirlo cualquiera de ellas.</p>
   </div>
@@ -381,7 +389,7 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
 </section>
 
 <!-- 13 · TRANSICIÓN -->
-<section class="slide split">
+<section class="slide split cover" style="background-image:url(assets/gradients/mesh-yg.png)">
   <div class="col">
     <span class="ey"><span class="dot aws"></span>basta de teoría</span>
     <h1>Saquen el<br>celular.</h1>
@@ -456,9 +464,8 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
 </section>
 
 <!-- 15 · GRACIAS -->
-<section class="slide split">
+<section class="slide split cover" style="background-image:url(assets/gradients/mesh-tbp.png)">
   <img class="uglogo" src="assets/logo/logo-dark.svg" alt="AWS User Groups">
-  <div class="cityband"></div>
   <div class="col">
     <span class="ey"><span class="dot"></span>gracias, Pereira 🙌</span>
     <h2>¿Qué vas a<br><span class="grad-aws">encender</span>?</h2>
