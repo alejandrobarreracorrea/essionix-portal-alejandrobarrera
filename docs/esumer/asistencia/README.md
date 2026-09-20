@@ -18,6 +18,7 @@ Se filtra por **Grupo** + **N° de clase** + **Marca temporal** (la hora delata 
 |---|---|---|---|---|---|
 | 2 | 2026-09-11 | Caja de herramientas + Linux en EC2 | 17 | 7 | [RED-02/clase-02.md](RED-02/clase-02.md) |
 | 3 | 2026-09-16 | Repaso Linux + primer push a GitHub + intro redes | 21 | 3 | [RED-02/clase-03.md](RED-02/clase-03.md) |
+| 4 | 2026-09-18 | Teoría de redes + redes en AWS + blindar EC2 | 20 | 4 | [RED-02/clase-04.md](RED-02/clase-04.md) |
 
 ## Convenciones
 - Presentes por **# de roster**; ausentes por # + nombre. **Sin correos** (repo público).
