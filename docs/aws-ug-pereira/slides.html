@@ -251,7 +251,7 @@ h2{font-family:var(--display);font-weight:700;line-height:1.14;font-size:clamp(1
 .awsc-row.active,.awsc-row.done{opacity:1}
 .awsc-row.active{border-color:rgba(255,153,0,.55)}
 .awsc-row.done{border-color:rgba(61,208,127,.45)}
-.svc-ic{width:40px;height:40px}.svc-ic svg{width:100%;height:100%;display:block}
+.svc-ic{width:40px;height:40px}.svc-ic svg,.svc-ic img{width:100%;height:100%;display:block}.svc-ic img{border-radius:8px}.svc-ic.chip{background:#232f3e;border-radius:8px;padding:6px;box-sizing:border-box}
 .awsc-info b{font-family:var(--body);font-weight:700;font-size:.98rem;color:#fff;display:block}
 .awsc-info small{font-family:var(--mono);font-size:.72rem;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
 .awsc-status{font-family:var(--mono);font-size:.8rem;color:var(--faint);white-space:nowrap;display:flex;align-items:center;gap:7px}
@@ -549,7 +549,7 @@ h2{font-family:var(--display);font-weight:700;line-height:1.14;font-size:clamp(1
     <g transform="translate(200,140)">
       <circle r="40" fill="rgba(255,153,0,.06)" stroke="url(#gAWS)" stroke-width="2"/>
       <circle r="50" fill="none" stroke="url(#gAWS)" stroke-width="1.3" stroke-dasharray="5 10" opacity=".7"><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="9s" repeatCount="indefinite"/></circle>
-      <path d="M0 -26 L7 -7 L26 0 L7 7 L0 26 L-7 7 L-26 0 L-7 -7 Z" fill="url(#gAWS)" filter="url(#glow)"><animate attributeName="opacity" values="0.65;1;0.65" dur="2.2s" repeatCount="indefinite"/></path>
+      <image href="assets/aws/Arch_Amazon-Bedrock_48.svg" x="-28" y="-28" width="56" height="56"/>
       <text x="0" y="66" fill="#c26a12" font-family="Inter,sans-serif" font-weight="700" font-size="15" text-anchor="middle">IA · Bedrock</text>
     </g>
     <line class="flowline" x1="244" y1="140" x2="278" y2="140" stroke="url(#gPT)" stroke-width="3"/>
@@ -628,7 +628,7 @@ h2{font-family:var(--display);font-weight:700;line-height:1.14;font-size:clamp(1
     <!-- nodos -->
     <g>
       <circle cx="120" cy="150" r="52" fill="var(--panel2)" stroke="url(#gPT)" stroke-width="2.5"/>
-      <path transform="translate(120,150)" d="M0 -17 L4 -4 L17 0 L4 4 L0 17 L-4 4 L-17 0 L-4 -4 Z" fill="url(#gPT)"/>
+      <image href="assets/aws/Arch_Amazon-Bedrock_48.svg" x="92" y="122" width="56" height="56"/>
       <text x="120" y="242" text-anchor="middle" class="nlabel" font-size="20">la chispa</text><text x="120" y="268" text-anchor="middle" class="nsub" font-size="14">tú + Bedrock</text>
     </g>
     <g>
@@ -638,12 +638,12 @@ h2{font-family:var(--display);font-weight:700;line-height:1.14;font-size:clamp(1
     </g>
     <g>
       <circle cx="600" cy="150" r="52" fill="var(--panel2)" stroke="url(#gPT)" stroke-width="2.5"/>
-      <g transform="translate(600,150)" stroke="url(#gPT)" stroke-width="2.5" fill="none" stroke-linejoin="round"><ellipse cx="0" cy="-8" rx="13" ry="4"/><path d="M-13 -8 L-9 15 L9 15 L13 -8"/></g>
+      <image href="assets/aws/Arch_Amazon-S3_48.svg" x="572" y="122" width="56" height="56"/>
       <text x="600" y="242" text-anchor="middle" class="nlabel" font-size="20">donde vive</text><text x="600" y="268" text-anchor="middle" class="nsub" font-size="14">Amazon S3</text>
     </g>
     <g>
       <circle cx="840" cy="150" r="52" fill="var(--panel2)" stroke="url(#gPT)" stroke-width="2.5"/>
-      <g transform="translate(840,150)"><g stroke="url(#gPT)" stroke-width="2.2" fill="none"><circle cx="0" cy="0" r="14"/><ellipse cx="0" cy="0" rx="14" ry="5.5"/><ellipse cx="0" cy="0" rx="5.5" ry="14"/></g><g fill="url(#gPT)"><circle cx="14" cy="0" r="2.5"/><circle cx="-7" cy="-12" r="2.5"/><circle cx="9" cy="11" r="2.5"/></g></g>
+      <image href="assets/aws/Arch_Amazon-CloudFront_48.svg" x="812" y="122" width="56" height="56"/>
       <text x="840" y="242" text-anchor="middle" class="nlabel" font-size="20">el cableado</text><text x="840" y="268" text-anchor="middle" class="nsub" font-size="14">CloudFront</text>
     </g>
     <g>
@@ -694,7 +694,7 @@ h2{font-family:var(--display);font-weight:700;line-height:1.14;font-size:clamp(1
       <button id="demo-go">Encender ⚡</button>
     </div>
     <div class="demo-steps">
-      <div class="dstep" data-step="prov"><span class="di">1</span><div><b>Recursos en AWS</b><small>bucket S3 · CloudFront · 39 regiones</small></div></div>
+      <div class="dstep" data-step="prov"><span class="di">1</span><div><b>Recursos en AWS</b><small>bucket S3 · CloudFront · 600+ puntos</small></div></div>
       <div class="dstep" data-step="ia"><span class="di">2</span><div><b>La IA la crea</b><small>Amazon Bedrock · de la nada</small></div></div>
       <div class="dstep" data-step="deploy"><span class="di">3</span><div><b>Se despliega en AWS</b><small>S3 · CloudFront</small></div></div>
       <div class="dstep" data-step="live"><span class="di">4</span><div><b>¡Está vivo!</b><small>en internet, para el mundo</small></div></div>
@@ -705,27 +705,27 @@ h2{font-family:var(--display);font-weight:700;line-height:1.14;font-size:clamp(1
       <div class="awsc-bar"><span class="awsc-aws">aws</span><span class="awsc-title">Aprovisionando recursos · us-east-1</span></div>
       <div class="awsc-body">
         <div class="awsc-row" data-r="s3" data-creating="Creando bucket…" data-done="Creado">
-          <span class="svc-ic"><svg viewBox="0 0 48 48"><defs><linearGradient id="ig-s3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7DBE4A"/><stop offset="1" stop-color="#3F7E1E"/></linearGradient></defs><rect width="48" height="48" rx="9" fill="url(#ig-s3)"/><g fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"><ellipse cx="24" cy="15" rx="11" ry="3.5"/><path d="M13 15 L16 34 L32 34 L35 15"/><path d="M15.5 27 h17"/></g></svg></span>
+          <span class="svc-ic"><img src="assets/aws/Arch_Amazon-S3_48.svg" alt=""></span>
           <div class="awsc-info"><b>Amazon S3</b><small>almacenamiento · donde vive tu página</small></div>
           <span class="awsc-status"></span>
         </div>
         <div class="awsc-row" data-r="policy" data-creating="Aplicando política…" data-done="Público">
-          <span class="svc-ic"><svg viewBox="0 0 48 48"><defs><linearGradient id="ig-pol" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF9F4A"/><stop offset="1" stop-color="#D9700F"/></linearGradient></defs><rect width="48" height="48" rx="9" fill="url(#ig-pol)"/><g fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="15" y="23" width="18" height="14" rx="2.5"/><path d="M19 23 v-4 a5 5 0 0 1 10 0 v4"/></g><circle cx="24" cy="30" r="2.2" fill="#fff"/></svg></span>
+          <span class="svc-ic"><img src="assets/aws/Arch_AWS-Identity-and-Access-Management_48.svg" alt=""></span>
           <div class="awsc-info"><b>Acceso público</b><small>lectura pública · visible para todos</small></div>
           <span class="awsc-status"></span>
         </div>
         <div class="awsc-row" data-r="cloudfront" data-creating="Verificando distribución…" data-done="Desplegado">
-          <span class="svc-ic"><svg viewBox="0 0 48 48"><defs><linearGradient id="ig-cf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A97BFF"/><stop offset="1" stop-color="#6B3FD9"/></linearGradient></defs><rect width="48" height="48" rx="9" fill="url(#ig-cf)"/><g fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><circle cx="24" cy="24" r="10.5"/><path d="M24 13.5 L24 34.5 M13.5 24 L34.5 24 M16.6 16.6 L31.4 31.4 M31.4 16.6 L16.6 31.4"/></g><g fill="#fff"><circle cx="24" cy="13.5" r="2.2"/><circle cx="24" cy="34.5" r="2.2"/><circle cx="13.5" cy="24" r="2.2"/><circle cx="34.5" cy="24" r="2.2"/><circle cx="16.6" cy="16.6" r="2.2"/><circle cx="31.4" cy="31.4" r="2.2"/><circle cx="31.4" cy="16.6" r="2.2"/><circle cx="16.6" cy="31.4" r="2.2"/></g></svg></span>
+          <span class="svc-ic"><img src="assets/aws/Arch_Amazon-CloudFront_48.svg" alt=""></span>
           <div class="awsc-info"><b>Amazon CloudFront</b><small>red global · HTTPS · 600+ puntos de entrega</small></div>
           <span class="awsc-status"></span>
         </div>
         <div class="awsc-row" data-r="bedrock" data-creating="Conectando modelo…" data-done="IA lista">
-          <span class="svc-ic"><svg viewBox="0 0 48 48"><defs><linearGradient id="ig-br" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4FD1C5"/><stop offset="1" stop-color="#1F8F86"/></linearGradient></defs><rect width="48" height="48" rx="9" fill="url(#ig-br)"/><g fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M24 12 L34 18 L34 30 L24 36 L14 30 L14 18 Z"/><path d="M24 12 L24 36 M14 18 L34 30 M34 18 L14 30"/></g><circle cx="24" cy="24" r="3" fill="#fff"/></svg></span>
+          <span class="svc-ic"><img src="assets/aws/Arch_Amazon-Bedrock_48.svg" alt=""></span>
           <div class="awsc-info"><b>Amazon Bedrock</b><small>la IA que crea tu página · Claude</small></div>
           <span class="awsc-status"></span>
         </div>
         <div class="awsc-row" data-r="https" data-creating="Publicando…" data-done="HTTPS listo">
-          <span class="svc-ic"><svg viewBox="0 0 48 48"><defs><linearGradient id="ig-eg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5A9BFF"/><stop offset="1" stop-color="#3A5FD0"/></linearGradient></defs><rect width="48" height="48" rx="9" fill="url(#ig-eg)"/><g fill="none" stroke="#fff" stroke-width="2"><circle cx="24" cy="24" r="11"/><ellipse cx="24" cy="24" rx="11" ry="4.5"/><ellipse cx="24" cy="24" rx="4.5" ry="11"/><path d="M13 24 h22"/></g></svg></span>
+          <span class="svc-ic chip"><img src="assets/aws/Res_Internet_48_Dark.svg" alt=""></span>
           <div class="awsc-info"><b>En internet · HTTPS</b><small>endpoint seguro · accesible al mundo</small></div>
           <span class="awsc-status"></span>
         </div>
@@ -759,18 +759,18 @@ h2{font-family:var(--display);font-weight:700;line-height:1.14;font-size:clamp(1
           <text x="68" y="172" text-anchor="middle" class="nlabel" font-size="14" fill="#aab6c2">tu página</text></g>
         <!-- nodo: S3 -->
         <g><circle id="dn-s3" cx="216" cy="120" r="30" fill="var(--panel2)" stroke="url(#gPT)" stroke-width="2.5"/>
-          <g transform="translate(216,120)" stroke="url(#gPT)" stroke-width="2.4" fill="none"><ellipse cx="0" cy="-9" rx="15" ry="5"/><path d="M-15 -9 L-11 16 L11 16 L15 -9"/></g>
+          <image href="assets/aws/Arch_Amazon-S3_48.svg" x="198" y="102" width="36" height="36"/>
           <text x="216" y="172" text-anchor="middle" font-size="14" fill="#aab6c2">Amazon S3</text></g>
         <!-- nodo: CloudFront -->
         <g><circle cx="384" cy="120" r="32" fill="var(--panel2)" stroke="url(#gAWS)" stroke-width="3" filter="url(#glow)"/>
-          <g transform="translate(384,120)" stroke="url(#gAWS)" stroke-width="2.2" fill="none"><circle cx="0" cy="0" r="15"/><ellipse cx="0" cy="0" rx="15" ry="6"/><ellipse cx="0" cy="0" rx="6" ry="15"/><line x1="-15" y1="0" x2="15" y2="0"/></g>
-          <text x="384" y="174" text-anchor="middle" font-size="14" fill="#c9a">CloudFront</text><text x="384" y="192" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#ff9900">39 regiones</text></g>
+          <image href="assets/aws/Arch_Amazon-CloudFront_48.svg" x="365" y="101" width="38" height="38"/>
+          <text x="384" y="174" text-anchor="middle" font-size="14" fill="#c9a">CloudFront</text><text x="384" y="192" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#ff9900">600+ puntos</text></g>
       </svg>
       <ul class="deploy-log" id="deploy-log">
         <li>Empaquetando tu página</li>
         <li>Subiendo a Amazon S3</li>
-        <li>Invalidando caché en CloudFront</li>
-        <li>Distribuyendo a 39 regiones</li>
+        <li>CloudFront la toma del origen</li>
+        <li>Entregando desde 600+ puntos</li>
         <li>Servido por HTTPS al mundo 🌍</li>
       </ul>
     </div>
@@ -912,15 +912,16 @@ go(0);
     else if(order.indexOf(o)<order.indexOf(k)){d.classList.remove("active");d.classList.add("done");num(d,"✓");}});}
   var es=null,deployT=0;
   var logItems=deployEl.querySelectorAll(".deploy-log li");
+  var DEPLOY_STEP=2600;  // ms por línea del log de despliegue (5 líneas ≈ 13 s); el "vivo" espera a que termine
   function runDeployAnim(){
     var s3=document.getElementById("dn-s3"),world=document.getElementById("dn-world");
     if(s3)s3.classList.remove("lit");if(world)world.classList.remove("lit");
     logItems.forEach(function(li){li.classList.remove("active","done");});
-    logItems.forEach(function(li,ix){var t=ix*1200;
+    logItems.forEach(function(li,ix){var t=ix*DEPLOY_STEP;
       setTimeout(function(){li.classList.add("active");
         if(ix===1&&s3)s3.classList.add("lit");
         if(ix===3&&world)world.classList.add("lit");},t);
-      setTimeout(function(){li.classList.remove("active");li.classList.add("done");},t+1000);});}
+      setTimeout(function(){li.classList.remove("active");li.classList.add("done");},t+DEPLOY_STEP-300);});}
   function showDeploy(){consoleEl.hidden=true;deployEl.hidden=false;deployT=Date.now();runDeployAnim();}
   function hidePanels(){consoleEl.hidden=true;provEl.hidden=true;deployEl.hidden=true;res.hidden=true;}
   function highlight(k){order.forEach(function(o,ix){steps[o].classList.remove("active","done");num(steps[o],ix+1);});steps[k].classList.add("active");}
@@ -958,7 +959,7 @@ go(0);
     es.addEventListener("delta",function(e){out.textContent+=JSON.parse(e.data).t;out.scrollTop=out.scrollHeight;});
     es.addEventListener("generated",function(){cap.textContent="listo · desplegando…";});
     es.addEventListener("live",function(e){var d=JSON.parse(e.data);
-      var wait=Math.max(0,6300-(Date.now()-(deployT||Date.now())));
+      var wait=Math.max(0,DEPLOY_STEP*logItems.length+400-(Date.now()-(deployT||Date.now())));
       setTimeout(function(){deployEl.hidden=true;
         ["deploy","live"].forEach(function(k){steps[k].classList.remove("active");steps[k].classList.add("done");num(steps[k],"✓");});
         urlEl.textContent=d.url;urlEl.href=d.url;secsEl.textContent=d.secs;
