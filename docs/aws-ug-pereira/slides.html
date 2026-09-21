@@ -82,6 +82,7 @@ h2{font-family:var(--display);font-weight:700;line-height:1.14;font-size:clamp(1
 
 .contact{display:flex;flex-direction:column;gap:12px;margin-top:22px;font-size:clamp(1rem,1.5vw,1.3rem)}
 .contact span{color:var(--muted)} .contact span b{color:var(--text);font-weight:600} .contact span i{font-style:normal;font-family:var(--mono);color:var(--t)}
+.contact span.main{font-size:1.25em;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:rgba(255,153,0,.06)} .contact span.main b{color:var(--aws)}
 
 .foot{position:absolute;left:var(--pad);right:var(--pad);bottom:clamp(22px,3.4vh,38px);display:flex;justify-content:space-between;align-items:flex-end;gap:24px;z-index:2}
 .lock{font-family:var(--display);font-weight:600;font-size:clamp(.92rem,1.3vw,1.15rem)}
@@ -209,9 +210,26 @@ h2{font-family:var(--display);font-weight:700;line-height:1.14;font-size:clamp(1
 .demo-bar i{width:11px;height:11px;border-radius:50%;background:#2c2c38}
 .demo-bar span{margin-left:10px;font-family:var(--mono);font-size:.78rem;color:var(--faint)}
 #demo-out{flex:1;overflow:auto;margin:0;padding:16px;font-family:var(--mono);font-size:.7rem;line-height:1.5;color:#8fd6ff;white-space:pre-wrap;word-break:break-word}
-.demo-result{position:absolute;inset:0;background:linear-gradient(var(--panel),var(--panel2));border:1px solid var(--line);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:24px}
+.demo-result{position:relative;width:100%;max-width:560px;height:min(64vh,500px);background:linear-gradient(var(--panel),var(--panel2));border:1px solid var(--line);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:24px}
+.live-frame{position:relative;width:100%;max-width:500px;flex:1;min-height:0;border-radius:12px;overflow:hidden;background:#0b1118;border:1px solid var(--line);box-shadow:0 30px 80px -30px rgba(255,153,0,.55);opacity:0;transform:scale(.72);filter:brightness(3) saturate(0)}
+.live-frame.on{animation:encender 1.6s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes encender{0%{opacity:0;transform:scale(.72);filter:brightness(3) saturate(0)}18%{opacity:1;transform:scale(1.02);filter:brightness(2.2) saturate(0)}30%{opacity:.35;filter:brightness(1.4) saturate(.4)}42%{opacity:1;filter:brightness(1.9) saturate(.7)}100%{opacity:1;transform:scale(1);filter:brightness(1) saturate(1)}}
+.lf-bar{height:26px;background:#151d25;display:flex;align-items:center;gap:6px;padding:0 10px;border-bottom:1px solid var(--line)}
+.lf-bar i{width:9px;height:9px;border-radius:50%;background:#2b3742}.lf-bar i:nth-child(1){background:#ff5f57}.lf-bar i:nth-child(2){background:#febc2e}.lf-bar i:nth-child(3){background:#28c840}
+.lf-bar span{margin-left:8px;font-family:var(--mono);font-size:.7rem;color:var(--faint);background:#0b1118;border-radius:6px;padding:2px 10px;flex:1;text-align:left;overflow:hidden;white-space:nowrap}
+.live-frame iframe{width:100%;height:calc(100% - 26px);border:0;background:#fff;opacity:0;transition:opacity .6s}
+.live-frame.loaded iframe{opacity:1}
+.lf-flash{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(255,153,0,.55),transparent 60%);opacity:0}
+.live-frame.on .lf-flash{animation:flash 1.6s ease-out forwards}
+@keyframes flash{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
+.demo-result #demo-url::after{content:"▍";animation:caret 1s steps(1) infinite;color:var(--aws)}
+.demo-result #demo-url.typed::after{content:""}
+@keyframes caret{50%{opacity:0}}
+/* diagrama de despliegue: todo apagado hasta su fase */
+.demo-deploy .dseg,.demo-deploy .dnode{opacity:.22;transition:opacity .5s}
+.demo-deploy .dnode.lit,.demo-deploy .dseg.lit{opacity:1}
+.demo-deploy #dp-1,.demo-deploy #dp-2{opacity:0}.demo-deploy #dp-1.lit,.demo-deploy #dp-2.lit{opacity:1}
 .demo-result[hidden]{display:none}
-.demo-qr{width:clamp(150px,22vw,210px);height:auto;background:#fff;border-radius:12px;display:block}
 .demo-check{width:72px;height:72px;border-radius:50%;background:#12a15a;color:#fff;display:grid;place-items:center;font-size:40px;box-shadow:0 0 60px -10px rgba(18,161,90,.7)}
 .demo-result p{font-size:clamp(1rem,1.6vw,1.3rem)}
 .demo-result #demo-url{font-family:var(--mono);color:var(--t);word-break:break-all;font-size:.95rem}
@@ -233,6 +251,7 @@ h2{font-family:var(--display);font-weight:700;line-height:1.14;font-size:clamp(1
 .deploy-log li{color:var(--faint);display:flex;align-items:center;gap:10px;opacity:.4;transition:opacity .3s,color .3s}
 .deploy-log li::before{content:"○";width:1em;text-align:center}
 .deploy-log li.active{opacity:1;color:var(--t)}
+.deploy-log li[data-detail]::after{content:attr(data-detail);margin-left:auto;font-size:.78em;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:45%}
 .deploy-log li.active::before{content:"▸";color:var(--aws)}
 .deploy-log li.done{opacity:1;color:var(--text)}
 .deploy-log li.done::before{content:"✓";color:#12a15a}
@@ -736,47 +755,61 @@ h2{font-family:var(--display);font-weight:700;line-height:1.14;font-size:clamp(1
       <pre id="demo-out"></pre>
     </div>
     <div class="demo-deploy" id="demo-deploy" hidden>
+      <!-- El diagrama se enciende por fases (data-phase = pack|s3|cf|edge|https), en
+           sincronía con la línea del log de abajo. En la corrida real cada fase la
+           marca el servidor cuando AWS confirma; en la vista previa, un reloj. -->
       <svg viewBox="0 0 520 260" fill="none" stroke-linecap="round" stroke-linejoin="round">
-        <!-- conectores animados -->
+        <!-- conectores -->
         <g stroke="url(#gPT)" stroke-width="3">
-          <line class="flowline" x1="108" y1="120" x2="176" y2="120"/>
-          <line class="flowline" x1="256" y1="120" x2="324" y2="120"/>
+          <line id="dl-1" class="dseg" x1="108" y1="120" x2="176" y2="120"/>
+          <line id="dl-2" class="dseg" x1="256" y1="120" x2="324" y2="120"/>
         </g>
-        <g fill="url(#gPT)"><path d="M176 120 l-13 -7 l0 14 z"/><path d="M324 120 l-13 -7 l0 14 z"/></g>
-        <!-- fan-out CloudFront → mundo -->
-        <g stroke="url(#gAWS)" stroke-width="2" opacity=".6">
+        <g fill="url(#gPT)"><path id="da-1" class="dseg" d="M176 120 l-13 -7 l0 14 z"/><path id="da-2" class="dseg" d="M324 120 l-13 -7 l0 14 z"/></g>
+        <!-- fan-out CloudFront → puntos de presencia -->
+        <g id="dn-fan" class="dseg" stroke="url(#gAWS)" stroke-width="2">
           <path class="flowline" d="M408 120 L470 74"/><path class="flowline" d="M408 120 L478 120"/><path class="flowline" d="M408 120 L470 166"/>
         </g>
-        <g id="dn-world" fill="url(#gAWS)"><circle cx="474" cy="72" r="4"/><circle cx="484" cy="120" r="4"/><circle cx="474" cy="168" r="4"/><circle cx="452" cy="52" r="3"/><circle cx="500" cy="96" r="3"/><circle cx="500" cy="146" r="3"/><circle cx="452" cy="188" r="3"/></g>
-        <!-- partículas viajando -->
-        <g fill="url(#gAWS)" filter="url(#glow)">
-          <circle r="6"><animateMotion path="M70 120 H384" dur="2s" repeatCount="indefinite"/></circle>
-          <circle r="5"><animateMotion path="M70 120 H384" dur="2s" begin="0.8s" repeatCount="indefinite"/></circle>
+        <g id="dn-world" class="dseg" fill="url(#gAWS)"><circle cx="474" cy="72" r="4"/><circle cx="484" cy="120" r="4"/><circle cx="474" cy="168" r="4"/><circle cx="452" cy="52" r="3"/><circle cx="500" cy="96" r="3"/><circle cx="500" cy="146" r="3"/><circle cx="452" cy="188" r="3"/></g>
+        <!-- partículas: tramo 1 (tu página → S3) y tramo 2 (S3 → CloudFront) -->
+        <g id="dp-1" class="dseg" fill="url(#gAWS)" filter="url(#glow)">
+          <circle r="6"><animateMotion path="M96 120 H186" dur="1.6s" repeatCount="indefinite"/></circle>
+          <circle r="5"><animateMotion path="M96 120 H186" dur="1.6s" begin="0.8s" repeatCount="indefinite"/></circle>
+        </g>
+        <g id="dp-2" class="dseg" fill="url(#gAWS)" filter="url(#glow)">
+          <circle r="6"><animateMotion path="M246 120 H352" dur="1.6s" repeatCount="indefinite"/></circle>
+          <circle r="5"><animateMotion path="M246 120 H352" dur="1.6s" begin="0.8s" repeatCount="indefinite"/></circle>
         </g>
         <!-- nodo: tu página -->
-        <g><rect x="42" y="94" width="52" height="52" rx="8" fill="var(--panel2)" stroke="url(#gPT)" stroke-width="2.5"/>
+        <g id="dn-page" class="dnode"><rect x="42" y="94" width="52" height="52" rx="8" fill="var(--panel2)" stroke="url(#gPT)" stroke-width="2.5"/>
           <g transform="translate(68,120)" stroke="url(#gPT)" stroke-width="2" fill="none"><rect x="-11" y="-14" width="22" height="28" rx="2"/><line x1="-6" y1="-7" x2="6" y2="-7"/><line x1="-6" y1="-1" x2="6" y2="-1"/><line x1="-6" y1="5" x2="2" y2="5"/></g>
           <text x="68" y="172" text-anchor="middle" class="nlabel" font-size="14" fill="#aab6c2">tu página</text></g>
         <!-- nodo: S3 -->
-        <g><circle id="dn-s3" cx="216" cy="120" r="30" fill="var(--panel2)" stroke="url(#gPT)" stroke-width="2.5"/>
+        <g id="dn-s3" class="dnode"><circle cx="216" cy="120" r="30" fill="var(--panel2)" stroke="url(#gPT)" stroke-width="2.5"/>
           <image href="assets/aws/Arch_Amazon-S3_48.svg" x="198" y="102" width="36" height="36"/>
           <text x="216" y="172" text-anchor="middle" font-size="14" fill="#aab6c2">Amazon S3</text></g>
         <!-- nodo: CloudFront -->
-        <g><circle cx="384" cy="120" r="32" fill="var(--panel2)" stroke="url(#gAWS)" stroke-width="3" filter="url(#glow)"/>
+        <g id="dn-cf" class="dnode"><circle cx="384" cy="120" r="32" fill="var(--panel2)" stroke="url(#gAWS)" stroke-width="3" filter="url(#glow)"/>
           <image href="assets/aws/Arch_Amazon-CloudFront_48.svg" x="365" y="101" width="38" height="38"/>
-          <text x="384" y="174" text-anchor="middle" font-size="14" fill="#c9a">CloudFront</text><text x="384" y="192" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#ff9900">600+ puntos</text></g>
+          <text x="384" y="174" text-anchor="middle" font-size="14" fill="#c9a">CloudFront</text><text id="dn-pop" x="384" y="192" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#ff9900">600+ puntos</text></g>
       </svg>
       <ul class="deploy-log" id="deploy-log">
-        <li>Empaquetando tu página</li>
-        <li>Subiendo a Amazon S3</li>
-        <li>CloudFront la toma del origen</li>
-        <li>Entregando desde 600+ puntos</li>
-        <li>Servido por HTTPS al mundo 🌍</li>
+        <li data-n="pack">Empaquetando tu página</li>
+        <li data-n="s3">Subiendo a Amazon S3</li>
+        <li data-n="cf">CloudFront la toma del origen</li>
+        <li data-n="edge">Entregando desde 600+ puntos</li>
+        <li data-n="https">Servido por HTTPS al mundo 🌍</li>
       </ul>
     </div>
     <div class="demo-result" id="demo-result" hidden>
-      <img id="demo-qr" class="demo-qr" alt="QR de tu sitio">
-      <p><b>¡Está vivo!</b> en <span id="demo-secs">–</span>s · escanéalo 👆</p>
+      <!-- La idea se vuelve real: un marco de navegador se "enciende" y carga la
+           página recién publicada (iframe al dominio de CloudFront); la URL se
+           escribe debajo. El QR va en la diapositiva siguiente. -->
+      <div class="live-frame" id="live-frame">
+        <div class="lf-bar"><i></i><i></i><i></i><span id="lf-host"></span></div>
+        <iframe id="live-iframe" title="tu página, viva en internet" referrerpolicy="no-referrer"></iframe>
+        <div class="lf-flash"></div>
+      </div>
+      <p><b>¡Está vivo!</b> en <span id="demo-secs">–</span>s · para todo el mundo</p>
       <a id="demo-url" href="#" target="_blank" rel="noopener"></a>
     </div>
   </div>
@@ -826,26 +859,6 @@ h2{font-family:var(--display);font-weight:700;line-height:1.14;font-size:clamp(1
   </svg></div>
 </section>
 
-<!-- 14 · EMPIEZA HOY -->
-<section class="slide split light">
-  <div class="col">
-    <span class="ey"><span class="dot aws"></span>tu turno · esta semana</span>
-    <h2><span class="grad-aws">Enciende</span> las tuyas</h2>
-    <ul class="cta">
-      <li><span class="m">⚡</span><div>Escanea → <b>crea tu cuenta ahora</b>, aquí mismo</div></li>
-      <li><span class="m">🔥</span><div>El reto: <b>enciende tu primera idea</b> antes del lunes</div></li>
-      <li><span class="m">📣</span><div>Compártela en la comunidad → <b>iaopslatam.com</b></div></li>
-      <li><span class="m">💡</span><div>Regla de oro: <b>apaga lo que no uses</b></div></li>
-    </ul>
-    <p class="fine">*La capa gratuita cambia sus condiciones; verifícalas al crear tu cuenta.</p>
-  </div>
-  <div class="viz"><div style="text-align:center">
-    <div class="qrframe" style="width:clamp(180px,26vw,250px)"><div class="in">[ QR → aws.amazon.com/free<br>crea tu cuenta ]</div></div>
-    <p style="margin:18px auto 0;font-family:var(--display);font-weight:700;color:#151D25;font-size:clamp(1.05rem,1.7vw,1.35rem)">Crea tu cuenta gratis</p>
-    <p style="margin:4px auto 0;font-family:var(--mono);color:#5b6b78;font-size:clamp(.8rem,1.2vw,.98rem)">hasta USD 200 en créditos · 6 meses gratis</p>
-  </div></div>
-</section>
-
 <!-- 15 · GRACIAS -->
 <section class="slide left title">
   <div class="gridmotif">
@@ -859,14 +872,13 @@ h2{font-family:var(--display);font-weight:700;line-height:1.14;font-size:clamp(1
     <h2>¿Qué vas a<br><span class="grad-aws">encender</span>?</h2>
     <p class="sub" style="max-width:38ch">Tienes ideas muertas en la cabeza. Esta semana, enciende una. Hoy algo que no existía quedó vivo — la próxima puede ser tuya.</p>
     <div class="contact">
+      <span class="main">Meetup <b>AWS User Group Pereira</b> <i>meetup.com</i></span>
       <span>LinkedIn <b>Alejandro Barrera</b> <i>/in/alejobarrera</i></span>
       <span>Web <i>alejandrobarrera.net</i></span>
-      <span>Comunidad <i>iaopslatam.com</i></span>
     </div>
   </div>
   <div class="foot">
     <div class="lock"><span class="g">IAOps</span><small>la IA y la nube, trabajando juntas</small></div>
-    <div class="disc">Charla de comunidad · opiniones propias · sin respaldo oficial de AWS.</div>
   </div>
 </section>
 
@@ -905,31 +917,55 @@ go(0);
   slide.querySelectorAll(".chip-idea").forEach(function(c){c.addEventListener("click",function(){
     slide.querySelectorAll(".chip-idea").forEach(function(x){x.classList.remove("sel");});
     c.classList.add("sel");inp.value=c.dataset.idea;});});
-  function reset(){out.textContent="";res.hidden=true;deployEl.hidden=true;provEl.hidden=true;consoleEl.hidden=false;cap.textContent="la IA está escribiendo…";
+  function reset(){out.textContent="";res.hidden=true;liveFrame.classList.remove("on","loaded");liveIframe.removeAttribute("src");deployEl.hidden=true;provEl.hidden=true;consoleEl.hidden=false;cap.textContent="la IA está escribiendo…";
     order.forEach(function(k,ix){steps[k].classList.remove("active","done");num(steps[k],ix+1);});}
   function mark(k){order.forEach(function(o){var d=steps[o];
     if(o===k){d.classList.add("active");d.classList.remove("done");}
     else if(order.indexOf(o)<order.indexOf(k)){d.classList.remove("active");d.classList.add("done");num(d,"✓");}});}
-  var es=null,deployT=0;
+  var es=null;
+  // ---- despliegue: fases sincronizadas diagrama ↔ log ----
   var logItems=deployEl.querySelectorAll(".deploy-log li");
-  var DEPLOY_STEP=2600;  // ms por línea del log de despliegue (5 líneas ≈ 13 s); el "vivo" espera a que termine
-  function runDeployAnim(){
-    var s3=document.getElementById("dn-s3"),world=document.getElementById("dn-world");
-    if(s3)s3.classList.remove("lit");if(world)world.classList.remove("lit");
-    logItems.forEach(function(li){li.classList.remove("active","done");});
-    logItems.forEach(function(li,ix){var t=ix*DEPLOY_STEP;
-      setTimeout(function(){li.classList.add("active");
-        if(ix===1&&s3)s3.classList.add("lit");
-        if(ix===3&&world)world.classList.add("lit");},t);
-      setTimeout(function(){li.classList.remove("active");li.classList.add("done");},t+DEPLOY_STEP-300);});}
-  function showDeploy(){consoleEl.hidden=true;deployEl.hidden=false;deployT=Date.now();runDeployAnim();}
+  var DEPLOY_ORDER=["pack","s3","cf","edge","https"];
+  var DEPLOY_STEP=8000;  // ms por fase en la VISTA PREVIA; en la corrida real manda el servidor (DEPLOY_PAUSE)
+  var deployTimers=[];
+  // qué se enciende en el diagrama en cada fase (acumulativo)
+  var DEPLOY_LIGHTS={pack:["dn-page"],s3:["dl-1","da-1","dp-1","dn-s3"],cf:["dl-2","da-2","dp-2","dn-cf"],edge:["dn-fan","dn-world"],https:[]};
+  function deployReset(){deployTimers.forEach(clearTimeout);deployTimers=[];
+    deployEl.querySelectorAll(".dseg,.dnode").forEach(function(e){e.classList.remove("lit");});
+    logItems.forEach(function(li){li.classList.remove("active","done");li.removeAttribute("data-detail");});
+    var pop=document.getElementById("dn-pop");if(pop)pop.textContent="600+ puntos";}
+  function deployPhase(n,status,detail){var ix=DEPLOY_ORDER.indexOf(n);if(ix<0)return;
+    DEPLOY_ORDER.forEach(function(k,i){var li=logItems[i];
+      if(i<ix){li.classList.remove("active");li.classList.add("done");}
+      else if(i===ix){if(status==="done"){li.classList.remove("active");li.classList.add("done");}else{li.classList.add("active");li.classList.remove("done");}}
+      else{li.classList.remove("active","done");}
+      // las partículas del tramo solo viajan mientras la fase está en curso
+      if(i<=ix)DEPLOY_LIGHTS[k].forEach(function(id){var e=document.getElementById(id);if(!e)return;
+        if((id==="dp-1"||id==="dp-2")&&(i<ix||status==="done"))e.classList.remove("lit");else e.classList.add("lit");});});
+    if(detail)logItems[ix].setAttribute("data-detail",detail);
+    if(n==="edge"&&detail&&detail.indexOf("presencia ")>0){var pop=document.getElementById("dn-pop");if(pop)pop.textContent=detail.replace("punto de presencia ","");}
+    if(n==="https"&&status==="done")deployEl.querySelectorAll(".dseg,.dnode").forEach(function(e){if(e.id!=="dp-1"&&e.id!=="dp-2")e.classList.add("lit");});}
+  function runDeployAnim(){deployReset();
+    DEPLOY_ORDER.forEach(function(k,ix){var t=ix*DEPLOY_STEP;
+      deployTimers.push(setTimeout(function(){deployPhase(k,"creating");},t));
+      deployTimers.push(setTimeout(function(){deployPhase(k,"done");},t+DEPLOY_STEP-400));});}
+  function showDeploy(){consoleEl.hidden=true;deployEl.hidden=false;deployReset();}
+  // ---- resultado: la idea se vuelve real ----
+  var liveFrame=document.getElementById("live-frame"),liveIframe=document.getElementById("live-iframe"),lfHost=document.getElementById("lf-host");
+  function escribirUrl(url){urlEl.textContent="";urlEl.classList.remove("typed");urlEl.href=url;var i=0;
+    (function tick(){if(i<url.length){urlEl.textContent+=url[i++];setTimeout(tick,28);}else urlEl.classList.add("typed");})();}
+  function mostrarVivo(url,secs){res.hidden=false;secsEl.textContent=secs;lfHost.textContent=url.replace(/^https?:\/\//,"");
+    liveFrame.classList.remove("on","loaded");void liveFrame.offsetWidth;liveFrame.classList.add("on");
+    liveIframe.onload=function(){liveFrame.classList.add("loaded");};
+    liveIframe.src=url+(url.indexOf("?")<0?"?":"&")+"v="+Date.now();   // sin caché del navegador
+    setTimeout(function(){escribirUrl(url);},900);}
   function hidePanels(){consoleEl.hidden=true;provEl.hidden=true;deployEl.hidden=true;res.hidden=true;}
   function highlight(k){order.forEach(function(o,ix){steps[o].classList.remove("active","done");num(steps[o],ix+1);});steps[k].classList.add("active");}
   function previewPhase(k){if(go2.disabled)return;highlight(k);hidePanels();
     if(k==="prov"){provEl.hidden=false;runProvAnim();}
     else if(k==="ia"){consoleEl.hidden=false;out.textContent="// aquí la IA escribe tu página, en vivo…\n// (dale «Encender» para verlo de verdad)";cap.textContent="la IA crea la página";}
     else if(k==="deploy"){deployEl.hidden=false;runDeployAnim();}
-    else if(k==="live"){if(urlEl.textContent){res.hidden=false;}else{consoleEl.hidden=false;out.textContent="";cap.textContent="aquí queda la URL viva + el QR";}}}
+    else if(k==="live"){if(urlEl.href&&urlEl.href.indexOf("http")===0&&urlEl.textContent){mostrarVivo(urlEl.href,secsEl.textContent);}else{consoleEl.hidden=false;out.textContent="";cap.textContent="aquí se enciende tu página, con su URL";}}}
   slide.querySelectorAll(".dstep").forEach(function(d){d.style.cursor="pointer";d.title="clic para ver esta fase";
     d.addEventListener("click",function(){previewPhase(d.dataset.step);});});
   var provLog=provEl.querySelectorAll(".deploy-log li");
@@ -940,11 +976,9 @@ go(0);
       setTimeout(function(){r.classList.add("active");r.querySelector(".awsc-status").innerHTML='<span class="awsc-spin"></span> '+r.getAttribute("data-creating");},t);
       setTimeout(function(){r.classList.remove("active");r.classList.add("done");r.querySelector(".awsc-status").textContent="✓ "+r.getAttribute("data-done");},t+PROV_STEP-350);});
     return rows.length*PROV_STEP+300;}
-  var qrImg=document.getElementById("demo-qr");
   function resetRows(){provEl.querySelectorAll(".awsc-row").forEach(function(r){r.classList.remove("active","done");r.querySelector(".awsc-status").textContent="";});}
   function run(){if(es)es.close();reset();go2.disabled=true;
     mark("prov");consoleEl.hidden=true;deployEl.hidden=true;provEl.hidden=false;resetRows();
-    if(qrImg){qrImg.removeAttribute("src");qrImg.style.display="none";}
     es=new EventSource("/api/enciende?p="+encodeURIComponent(inp.value||"una idea"));
     es.addEventListener("prov",function(e){var d=JSON.parse(e.data);var r=provEl.querySelector('.awsc-row[data-r="'+d.r+'"]');if(!r)return;var st=r.querySelector(".awsc-status");
       if(d.status==="creating"){r.classList.remove("done");r.classList.add("active");
@@ -958,13 +992,11 @@ go(0);
       if(n==="deploy")showDeploy();});
     es.addEventListener("delta",function(e){out.textContent+=JSON.parse(e.data).t;out.scrollTop=out.scrollHeight;});
     es.addEventListener("generated",function(){cap.textContent="listo · desplegando…";});
+    es.addEventListener("deploy",function(e){var d=JSON.parse(e.data);deployPhase(d.n,d.status,d.detail);});
     es.addEventListener("live",function(e){var d=JSON.parse(e.data);
-      var wait=Math.max(0,DEPLOY_STEP*logItems.length+400-(Date.now()-(deployT||Date.now())));
       setTimeout(function(){deployEl.hidden=true;
         ["deploy","live"].forEach(function(k){steps[k].classList.remove("active");steps[k].classList.add("done");num(steps[k],"✓");});
-        urlEl.textContent=d.url;urlEl.href=d.url;secsEl.textContent=d.secs;
-        if(d.qr&&qrImg){qrImg.src=d.qr;qrImg.style.display="block";}
-        res.hidden=false;go2.disabled=false;},wait);
+        mostrarVivo(d.url,d.secs);go2.disabled=false;},900);
       es.close();});
     es.addEventListener("failed",function(e){deployEl.hidden=true;provEl.hidden=true;consoleEl.hidden=false;
       out.textContent="⚠ "+JSON.parse(e.data).error;cap.textContent="error — revisa el server";

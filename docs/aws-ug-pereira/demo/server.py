@@ -9,6 +9,7 @@ from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)              # docs/aws-ug-pereira (la presentación)
+DEPLOY_PAUSE = 8.0                          # segundos mínimos por paso del despliegue (5 pasos ≈ 40 s)
 PAUSE = 4.0                                 # segundos mínimos por fila del panel "Aprovisionando" (5 filas ≈ 20 s)
 
 def cfg():
@@ -139,27 +140,58 @@ class H(SimpleHTTPRequestHandler):
             html = re.sub(r"\s*```$", "", re.sub(r"^```(?:html)?\s*", "", "".join(parts).strip()))
             self.sse("generated", {"bytes": len(html)})
 
-            # ---- Fase 3: desplegar (subir la página al bucket que sirve CloudFront) ----
-            # La distribución usa la política de caché "CachingDisabled" (provision.sh):
-            # cada visita va al origen, así que la página nueva se ve al instante sin
-            # invalidaciones. `no-cache` evita que el navegador del público guarde la
-            # corrida anterior.
+            # ---- Fase 3: desplegar. Igual que la fase 1: cada paso es real, se confirma
+            # con AWS y queda >= DEPLOY_PAUSE s en pantalla, sincronizado con el diagrama
+            # (tu página → S3 → CloudFront → puntos de presencia → HTTPS).
             self.sse("step", {"n": "deploy"})
-            s3.put_object(Bucket=bucket, Key="index.html", Body=html.encode(),
-                ContentType="text/html; charset=utf-8", CacheControl="no-cache")
             url = "https://%s/" % st["domain"]
-            # "¡Está vivo!" solo cuando CloudFront ya entrega ESTA página (no la anterior).
-            def sirve_la_nueva():
-                try:
-                    req = urllib.request.Request(url, headers={"Cache-Control": "no-cache"})
-                    return urllib.request.urlopen(req, timeout=8).read() == html.encode()
-                except Exception: return False
-            tw = time.time()
-            while not sirve_la_nueva():
-                if time.time() - tw > 120: raise RuntimeError("CloudFront no entregó la página nueva en 120 s")
-                time.sleep(2)
-            qr = segno.make(url, error="h").svg_data_uri(scale=4, border=2, dark="#151D25", light="#ffffff")
+            def paso(n, fn):
+                self.sse("deploy", {"n": n, "status": "creating"})
+                t = time.time()
+                def progreso(txt):
+                    self.sse("deploy", {"n": n, "status": "creating", "detail": "%s · %ds" % (txt, int(time.time() - t))})
+                det = fn(progreso)
+                time.sleep(max(0, DEPLOY_PAUSE - (time.time() - t)))
+                self.sse("deploy", {"n": n, "status": "done", "detail": det or ""})
 
+            cuerpo = html.encode()
+            def empaquetar(progreso):
+                return "%.1f KB" % (len(cuerpo) / 1024)
+            paso("pack", empaquetar)
+
+            def subir(progreso):
+                s3.put_object(Bucket=bucket, Key="index.html", Body=cuerpo,
+                    ContentType="text/html; charset=utf-8", CacheControl="no-cache")
+                progreso("confirmando en S3")
+                s3.get_waiter("object_exists").wait(Bucket=bucket, Key="index.html", WaiterConfig={"Delay": 1, "MaxAttempts": 30})
+                return "confirmado"
+            paso("s3", subir)
+
+            pop = {"v": ""}
+            def desde_cloudfront(progreso):
+                # "Está vivo" solo cuando CloudFront entrega ESTA página (no la anterior).
+                def trae_la_nueva():
+                    try:
+                        req = urllib.request.Request(url, headers={"Cache-Control": "no-cache"})
+                        r = urllib.request.urlopen(req, timeout=8)
+                        pop["v"] = r.headers.get("x-amz-cf-pop", "")
+                        return r.read() == cuerpo
+                    except Exception: return False
+                esperar(trae_la_nueva, progreso, "CloudFront leyendo el origen", cada=2.0, maximo=120)
+                return "página nueva ✓"
+            paso("cf", desde_cloudfront)
+
+            def borde(progreso):
+                # x-amz-cf-pop es el punto de presencia real que atendió la petición.
+                return ("punto de presencia " + pop["v"]) if pop["v"] else "600+ puntos"
+            paso("edge", borde)
+
+            def https(progreso):
+                r = urllib.request.urlopen(url, timeout=8)
+                return "HTTPS %d" % r.status
+            paso("https", https)
+
+            qr = segno.make(url, error="h").svg_data_uri(scale=4, border=2, dark="#151D25", light="#ffffff")
             self.sse("live", {"url": url, "qr": qr, "secs": round(time.time() - t0)})
         except Exception as e:
             self.sse("failed", {"error": str(e)})
