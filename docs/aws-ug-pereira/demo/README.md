@@ -35,11 +35,13 @@ Imprime la URL viva y `IA: Xs · deploy: Ys · total: Zs`. El público escanea e
 ## Después
 `./cleanup.sh` — borra bucket + CloudFront para no dejar nada corriendo (ni costos).
 
-La demo de la diapositiva (`server.py`) crea POR CORRIDA un bucket y una distribución
-CloudFront reales (comentario `encender <bucket>`); cada corrida borra el bucket y
-deshabilita la distribución de la anterior. CloudFront tarda minutos en propagarse,
-así que la URL viva es la de S3. Para borrar todas las distribuciones de la demo:
-`./finish_delete.sh $(aws cloudfront list-distributions --profile essionix --query "DistributionList.Items[?starts_with(Comment,'encender ')].Id" --output text)`
+La demo de la diapositiva (`server.py`) usa el MISMO bucket y la MISMA distribución
+que creó `provision.sh` (CloudFront tarda 5-15 min en propagarse, por eso no se crea en
+vivo). En la corrida, cada fila del panel es una llamada real e idempotente (crear el
+bucket, reaplicar la política, consultar la distribución = Deployed, verificar Bedrock);
+la página se sube al bucket y la URL viva + QR son `https://$CF_DOMAIN/`. La distribución
+usa la política de caché CachingDisabled: cada visita va al origen, sin invalidaciones.
+Si `DISTRIBUTION_ID` falta o aún no está Deployed, la URL viva cae a la de S3.
 
 ## Costo
 Centavos: Bedrock por tokens de unas pocas llamadas + S3/CloudFront de un archivo. Free tier cubre casi todo.

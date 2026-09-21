@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 """Sirve la presentación Y ejecuta el demo REAL:
-crea la infraestructura en AWS (bucket S3) en vivo, genera con Bedrock, despliega
-y sirve por HTTPS. Cada paso se envía a la diapositiva por SSE.
+verifica/aplica la infraestructura en AWS en vivo (bucket S3, política, CloudFront
+pre-creado por provision.sh, Bedrock), genera con Bedrock, despliega y sirve por HTTPS
+desde CloudFront. Cada paso se envía a la diapositiva por SSE.
 Correr: ./presentar.sh   →   http://localhost:8777/slides.html"""
 import os, json, re, time, urllib.parse, boto3, segno
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)              # docs/aws-ug-pereira (la presentación)
-STATE = os.path.join(HERE, ".last_bucket")
-STATE_CF = os.path.join(HERE, ".last_cf")   # distribución CloudFront de la última corrida
 PAUSE = 2.2                                 # segundos mínimos por fila del panel "Aprovisionando"
 
 def cfg():
@@ -44,18 +43,25 @@ class H(SimpleHTTPRequestHandler):
         s3 = SESSION.client("s3")
         try:
             t0 = time.time()
-            bucket = "encender-%d" % int(time.time())
+            bucket = C["BUCKET"]                      # fijo: lo creó provision.sh antes de la charla
+            dist_id = C.get("DISTRIBUTION_ID", ""); cf_domain = C.get("CF_DOMAIN", "")
 
-            # ---- Fase 1: crear la infra REAL en AWS (con pausas para que se vea) ----
-            # Cada fila queda >= PAUSE s en "creando" aunque la llamada tarde menos:
-            # en tarima, lo que pasa en 300 ms no se ve.
+            # ---- Fase 1: la infra en AWS, en vivo. Cada llamada es real e idempotente
+            # (volver a crear el bucket que ya es tuyo en us-east-1 responde 200; la
+            # política se reaplica; CloudFront se consulta de verdad). La distribución
+            # NO se crea aquí: tarda 5-15 min en propagarse y por eso la crea
+            # provision.sh antes. Cada fila queda >= PAUSE s en pantalla: en tarima,
+            # lo que pasa en 300 ms no se ve.
             def fila(r, fn):
                 self.sse("prov", {"r": r, "status": "creating"})
                 t = time.time(); fn()
                 time.sleep(max(0, PAUSE - (time.time() - t)))
                 self.sse("prov", {"r": r, "status": "done"})
 
-            fila("s3", lambda: s3.create_bucket(Bucket=bucket))   # us-east-1: sin LocationConstraint
+            def crear_bucket():
+                try: s3.create_bucket(Bucket=bucket)   # us-east-1: sin LocationConstraint
+                except s3.exceptions.BucketAlreadyOwnedByYou: pass
+            fila("s3", crear_bucket)
 
             def politica():
                 s3.put_public_access_block(Bucket=bucket, PublicAccessBlockConfiguration={
@@ -66,33 +72,22 @@ class H(SimpleHTTPRequestHandler):
                     "Action": "s3:GetObject", "Resource": "arn:aws:s3:::%s/*" % bucket}]}))
             fila("policy", politica)
 
-            # CloudFront: la distribución se crea DE VERDAD (la llamada vuelve en ~1 s),
-            # pero tarda minutos en propagarse a los puntos de presencia; por eso la
-            # URL viva de esta corrida sigue siendo la de S3. La de la corrida anterior
-            # se deshabilita más abajo para no acumular.
-            cf = SESSION.client("cloudfront"); dist = {}
+            cf_ok = {"v": False}
             def cloudfront():
+                if not dist_id: return
                 try:
-                    out = cf.create_distribution(DistributionConfig={
-                        "CallerReference": bucket, "Comment": "encender " + bucket, "Enabled": True,
-                        "DefaultRootObject": "index.html",
-                        "Origins": {"Quantity": 1, "Items": [{"Id": "s3", "DomainName": "%s.s3.%s.amazonaws.com" % (bucket, REGION),
-                            "CustomOriginConfig": {"HTTPPort": 80, "HTTPSPort": 443, "OriginProtocolPolicy": "https-only",
-                                "OriginSslProtocols": {"Quantity": 1, "Items": ["TLSv1.2"]}}}]},
-                        "DefaultCacheBehavior": {"TargetOriginId": "s3", "ViewerProtocolPolicy": "redirect-to-https",
-                            "AllowedMethods": {"Quantity": 2, "Items": ["GET", "HEAD"]}, "Compress": True,
-                            "CachePolicyId": "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"}})
-                    dist["id"] = out["Distribution"]["Id"]; dist["domain"] = out["Distribution"]["DomainName"]
+                    d = SESSION.client("cloudfront").get_distribution(Id=dist_id)["Distribution"]
+                    cf_ok["v"] = d["Status"] == "Deployed" and d["DistributionConfig"]["Enabled"]
+                    if not cf_ok["v"]: print("[cloudfront] %s aún no está Deployed: la URL viva será la de S3" % dist_id)
                 except Exception as e:
-                    print("[cloudfront] no se pudo crear:", e)   # la demo sigue: la página vive en S3
+                    print("[cloudfront] no se pudo consultar:", e)   # la demo sigue por S3
             fila("cloudfront", cloudfront)
 
-            # Bedrock: se confirma el acceso al modelo antes de pedirle la página.
-            def bedrock():
+            def bedrock():   # se confirma el acceso al modelo antes de pedirle la página
                 SESSION.client("bedrock").list_inference_profiles(maxResults=1)
             fila("bedrock", bedrock)
 
-            fila("https", lambda: None)   # el endpoint de S3 ya sirve por HTTPS
+            fila("https", lambda: None)   # CloudFront (o el endpoint de S3) ya sirven por HTTPS
 
             # ---- Fase 2: la IA crea la página (streaming) ----
             self.sse("step", {"n": "ia"})
@@ -108,40 +103,21 @@ class H(SimpleHTTPRequestHandler):
             html = re.sub(r"\s*```$", "", re.sub(r"^```(?:html)?\s*", "", "".join(parts).strip()))
             self.sse("generated", {"bytes": len(html)})
 
-            # ---- Fase 3: desplegar (subir la página) ----
+            # ---- Fase 3: desplegar (subir la página al bucket que sirve CloudFront) ----
+            # La distribución usa la política de caché "CachingDisabled" (provision.sh):
+            # cada visita va al origen, así que la página nueva se ve al instante sin
+            # invalidaciones. `no-cache` evita que el navegador del público guarde la
+            # corrida anterior.
             self.sse("step", {"n": "deploy"})
             s3.put_object(Bucket=bucket, Key="index.html", Body=html.encode(),
                 ContentType="text/html; charset=utf-8", CacheControl="no-cache")
-            url = "https://%s.s3.%s.amazonaws.com/index.html" % (bucket, REGION)
+            if cf_ok["v"] and cf_domain:
+                url = "https://%s/" % cf_domain
+            else:
+                url = "https://%s.s3.%s.amazonaws.com/index.html" % (bucket, REGION)
             qr = segno.make(url, error="h").svg_data_uri(scale=4, border=2, dark="#151D25", light="#ffffff")
 
-            # borrar el bucket y deshabilitar la distribución de la corrida anterior
-            # (no acumular recursos; CloudFront no se puede borrar hasta ~15 min
-            # después de deshabilitar: eso lo hace finish_delete.sh)
-            try:
-                if os.path.exists(STATE):
-                    prev = open(STATE).read().strip()
-                    if prev and prev != bucket:
-                        for o in s3.list_objects_v2(Bucket=prev).get("Contents", []):
-                            s3.delete_object(Bucket=prev, Key=o["Key"])
-                        s3.delete_bucket(Bucket=prev)
-            except Exception:
-                pass
-            open(STATE, "w").write(bucket)
-            try:
-                if os.path.exists(STATE_CF):
-                    prev_cf = open(STATE_CF).read().strip()
-                    if prev_cf and prev_cf != dist.get("id"):
-                        cfg = cf.get_distribution_config(Id=prev_cf)
-                        if cfg["DistributionConfig"]["Enabled"]:
-                            cfg["DistributionConfig"]["Enabled"] = False
-                            cf.update_distribution(Id=prev_cf, DistributionConfig=cfg["DistributionConfig"], IfMatch=cfg["ETag"])
-            except Exception as e:
-                print("[cloudfront] no se pudo deshabilitar la anterior:", e)
-            if dist.get("id"):
-                open(STATE_CF, "w").write(dist["id"])
-
-            self.sse("live", {"url": url, "qr": qr, "secs": round(time.time() - t0)})
+            self.sse("live", {"url": url, "qr": qr, "secs": round(time.time() - t0), "cdn": cf_ok["v"]})
         except Exception as e:
             self.sse("failed", {"error": str(e)})
 
