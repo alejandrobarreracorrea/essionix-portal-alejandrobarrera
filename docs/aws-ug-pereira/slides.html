@@ -37,10 +37,12 @@ body::after{content:"";position:fixed;inset:auto auto -25% -15%;width:56vw;heigh
 .dot.aws{background:var(--aws);box-shadow:0 0 0 0 rgba(255,153,0,.6);animation:pulseA 2.2s infinite}
 @keyframes pulse{70%{box-shadow:0 0 0 12px rgba(65,179,255,0)}100%{box-shadow:0 0 0 0 rgba(65,179,255,0)}}
 @keyframes pulseA{70%{box-shadow:0 0 0 12px rgba(255,153,0,0)}100%{box-shadow:0 0 0 0 rgba(255,153,0,0)}}
-h1{font-family:var(--display);font-weight:700;line-height:1.0;font-size:clamp(2.4rem,6.2vw,5.3rem);letter-spacing:-.03em}
-h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1.8rem,4.2vw,3.4rem);letter-spacing:-.02em}
-.grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-.grad-aws{background:var(--grad-aws);-webkit-background-clip:text;background-clip:text;color:transparent}
+h1{font-family:var(--display);font-weight:700;line-height:1.08;font-size:clamp(2.4rem,6.2vw,5.3rem);letter-spacing:-.03em;padding-bottom:.04em}
+h2{font-family:var(--display);font-weight:700;line-height:1.14;font-size:clamp(1.8rem,4.2vw,3.4rem);letter-spacing:-.02em;padding-bottom:.04em}
+.grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+  padding-bottom:.14em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.grad-aws{background:var(--grad-aws);-webkit-background-clip:text;background-clip:text;color:transparent;
+  padding-bottom:.14em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .sub{color:var(--muted);font-size:clamp(1rem,1.6vw,1.4rem);line-height:1.5;margin-top:22px;max-width:30ch}
 .lead{font-size:clamp(1.1rem,2vw,1.7rem);line-height:1.4;max-width:24ch;font-weight:500;margin-top:20px}
 .tag{font-family:var(--mono);font-size:clamp(.78rem,1.2vw,.98rem);color:var(--faint);margin-bottom:14px}
@@ -159,6 +161,104 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
 .slide.light .grad{background:linear-gradient(105deg,#7b2ff5,#1f7fc4);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
 .slide.light .grad-aws{background:linear-gradient(105deg,#e07600,#d1381a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
 .slide.light .dot{background:#7b2ff5}
+
+/* ---- portada/cierre: título blanco oficial + grid modular (rasgo distintivo AWS UG) ---- */
+.slide.title{background:#ffffff;color:#151D25;align-content:center}
+.slide.title h1,.slide.title h2{color:#151D25}
+.slide.title .tcol{max-width:min(560px,53%);position:relative;z-index:1}
+.slide.title .ey{color:#5b6b78}
+.slide.title .dot,.slide.title .dot.aws{box-shadow:none;animation:none}
+.slide.title .sub{color:#44546a}
+.slide.title .sub b{color:#151D25 !important}
+.slide.title .grad{background:linear-gradient(105deg,#7b2ff5,#1f7fc4);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.slide.title .grad-aws{background:linear-gradient(105deg,#e07600,#d1381a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.slide.title .contact span{color:#44546a}
+.slide.title .contact span b{color:#151D25;font-weight:600}
+.slide.title .contact span i{color:#0d6a95}
+.slide.title .lock .g{background:linear-gradient(105deg,#7b2ff5,#1f7fc4);-webkit-background-clip:text;background-clip:text;color:transparent}
+.slide.title .lock small,.slide.title .disc{color:#5b6b78}
+
+.gridmotif{position:absolute;top:0;right:0;bottom:0;width:46%;z-index:0;pointer-events:none;--gl:#e7ebf1;
+  background-image:linear-gradient(90deg,var(--gl) 1px,transparent 1px),linear-gradient(var(--gl) 1px,transparent 1px);
+  background-size:20% 16.6667%;background-position:right top}
+.gridmotif .tile{position:absolute;background-size:cover;background-position:center}
+.gridmotif .hero{position:absolute;object-fit:cover;
+  clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
+  filter:drop-shadow(0 20px 46px rgba(10,20,30,.26))}
+.gridmotif .awsmark{position:absolute;top:9%;right:8%;height:auto;width:min(19vw,150px);z-index:2}
+@media(max-width:860px){.slide.title .tcol{max-width:100%}.gridmotif{display:none}}
+
+/* ---- demo en vivo interactivo ---- */
+#demoslide .demo-form{display:flex;gap:10px;margin-top:22px;max-width:46ch}
+#demoslide #demo-prompt{flex:1;min-width:0;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px 16px;color:var(--text);font-family:var(--body);font-size:clamp(.9rem,1.3vw,1.05rem)}
+#demoslide #demo-prompt:focus{outline:none;border-color:var(--t)}
+#demoslide #demo-go{background:var(--grad-aws);color:#151D25;font-weight:700;border:0;border-radius:12px;padding:12px 20px;font-family:var(--display);font-size:clamp(.9rem,1.3vw,1.05rem);cursor:pointer;white-space:nowrap}
+#demoslide #demo-go:disabled{opacity:.45;cursor:default}
+.demo-steps{display:flex;flex-direction:column;gap:14px;margin-top:26px;max-width:42ch}
+.dstep{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;opacity:.38;transition:opacity .3s}
+.dstep .di{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:700;background:var(--panel2);border:2px solid var(--line);color:var(--muted)}
+.dstep b{font-size:clamp(1rem,1.5vw,1.22rem)}
+.dstep small{display:block;color:var(--faint);font-family:var(--mono);font-size:.78em}
+.dstep.active{opacity:1}
+.dstep.active .di{border-color:transparent;background:var(--grad-aws);color:#151D25;animation:pulseA 1.6s infinite}
+.dstep.done{opacity:1}
+.dstep.done .di{border-color:#12a15a;background:#12a15a;color:#fff}
+.demo-viz{width:100%;flex-direction:column;position:relative}
+.demo-console{width:100%;max-width:560px;height:min(56vh,440px);border-radius:16px;background:linear-gradient(var(--panel),var(--panel2));border:1px solid var(--line);box-shadow:0 30px 80px -30px rgba(172,91,255,.4);overflow:hidden;display:flex;flex-direction:column}
+.demo-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line);flex-shrink:0}
+.demo-bar i{width:11px;height:11px;border-radius:50%;background:#2c2c38}
+.demo-bar span{margin-left:10px;font-family:var(--mono);font-size:.78rem;color:var(--faint)}
+#demo-out{flex:1;overflow:auto;margin:0;padding:16px;font-family:var(--mono);font-size:.7rem;line-height:1.5;color:#8fd6ff;white-space:pre-wrap;word-break:break-word}
+.demo-result{position:absolute;inset:0;background:linear-gradient(var(--panel),var(--panel2));border:1px solid var(--line);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:24px}
+.demo-result[hidden]{display:none}
+.demo-qr{width:clamp(150px,22vw,210px);height:auto;background:#fff;border-radius:12px;display:block}
+.demo-check{width:72px;height:72px;border-radius:50%;background:#12a15a;color:#fff;display:grid;place-items:center;font-size:40px;box-shadow:0 0 60px -10px rgba(18,161,90,.7)}
+.demo-result p{font-size:clamp(1rem,1.6vw,1.3rem)}
+.demo-result #demo-url{font-family:var(--mono);color:var(--t);word-break:break-all;font-size:.95rem}
+.demo-result .demo-hint{color:var(--faint);font-family:var(--mono);font-size:.85rem;margin-top:8px}
+@media(max-width:860px){.demo-console{height:38vh}.demo-viz{display:flex}}
+#demoslide .demo-lbl{margin-top:20px;color:var(--muted);font-size:clamp(.85rem,1.2vw,1rem)}
+#demoslide .demo-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;max-width:48ch}
+.chip-idea{background:var(--panel2);border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:7px 13px;font-family:var(--body);font-size:clamp(.8rem,1.1vw,.95rem);cursor:pointer;transition:.2s}
+.chip-idea:hover{border-color:var(--t);color:var(--text)}
+.chip-idea.sel{background:var(--grad-aws);color:#151D25;border-color:transparent;font-weight:700}
+#demoslide .demo-form{margin-top:12px}
+#demoslide .demo-steps{margin-top:20px}
+.demo-console[hidden]{display:none}
+.demo-deploy{width:100%;max-width:560px;height:min(64vh,500px);border-radius:16px;background:linear-gradient(var(--panel),var(--panel2));border:1px solid var(--line);box-shadow:0 30px 80px -30px rgba(65,179,255,.4);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px}
+.demo-deploy[hidden]{display:none}
+.demo-deploy svg{width:100%;height:auto}
+.deploy-cap{font-family:var(--mono);color:var(--t);font-size:clamp(.85rem,1.2vw,1rem);text-align:center}
+.deploy-log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;font-family:var(--mono);font-size:clamp(.8rem,1.15vw,.96rem);width:100%;max-width:420px}
+.deploy-log li{color:var(--faint);display:flex;align-items:center;gap:10px;opacity:.4;transition:opacity .3s,color .3s}
+.deploy-log li::before{content:"○";width:1em;text-align:center}
+.deploy-log li.active{opacity:1;color:var(--t)}
+.deploy-log li.active::before{content:"▸";color:var(--aws)}
+.deploy-log li.done{opacity:1;color:var(--text)}
+.deploy-log li.done::before{content:"✓";color:#12a15a}
+#dn-s3,#dn-world{transition:filter .4s,stroke-width .4s}
+#dn-s3.lit{stroke:url(#gAWS);stroke-width:4;filter:url(#glow)}
+#dn-world.lit{filter:url(#glow)}
+.pv{opacity:.16;transition:opacity .45s}
+.pv.on{opacity:1}
+.awsconsole{padding:0!important;align-items:stretch!important;justify-content:flex-start!important;background:#0d141d;overflow:hidden}
+.awsc-bar{display:flex;align-items:center;gap:12px;background:#232F3E;padding:12px 18px;flex-shrink:0}
+.awsc-aws{font-family:var(--display);font-weight:800;color:#fff;font-size:1.05rem;letter-spacing:-.03em;position:relative;padding-bottom:4px}
+.awsc-aws::after{content:"";position:absolute;left:2px;right:2px;bottom:1px;height:3px;border-radius:2px;background:#FF9900}
+.awsc-title{font-family:var(--mono);font-size:.8rem;color:#c9d2dc}
+.awsc-body{padding:14px 16px;display:flex;flex-direction:column;gap:8px;justify-content:center;flex:1}
+.awsc-row{display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:13px;opacity:.3;transition:opacity .45s,border-color .45s;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:9px 14px}
+.awsc-row.active,.awsc-row.done{opacity:1}
+.awsc-row.active{border-color:rgba(255,153,0,.55)}
+.awsc-row.done{border-color:rgba(61,208,127,.45)}
+.svc-ic{width:40px;height:40px}.svc-ic svg{width:100%;height:100%;display:block}
+.awsc-info b{font-family:var(--body);font-weight:700;font-size:.98rem;color:#fff;display:block}
+.awsc-info small{font-family:var(--mono);font-size:.72rem;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.awsc-status{font-family:var(--mono);font-size:.8rem;color:var(--faint);white-space:nowrap;display:flex;align-items:center;gap:7px}
+.awsc-row.active .awsc-status{color:#FF9900}
+.awsc-row.done .awsc-status{color:#3DD07F}
+.awsc-spin{width:13px;height:13px;border:2px solid rgba(255,153,0,.3);border-top-color:#FF9900;border-radius:50%;animation:awsspin .8s linear infinite}
+@keyframes awsspin{to{transform:rotate(360deg)}}
 </style></head>
 <body>
 <!-- shared gradient/glow defs -->
@@ -170,15 +270,18 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
 <div id="bar"></div>
 
 <!-- 1 · PORTADA -->
-<section class="slide split">
-  <img class="uglogo" src="assets/logo/logo-dark.svg" alt="AWS User Groups">
-  <div class="cityband"></div>
-  <div class="col">
+<section class="slide left title">
+  <div class="gridmotif">
+    <img class="awsmark" src="assets/logo/logo-light.svg" alt="AWS User Groups">
+    <img class="hero" src="assets/pereira-badge.jpg" alt="AWS User Group Pereira" style="left:15%;top:15%;width:70%;height:58%">
+    <span class="tile" style="left:80%;top:16.6667%;width:20%;height:16.6667%;background-image:url(assets/gradients/mesh-tbp.png)"></span>
+    <span class="tile" style="left:0;top:66.6667%;width:20%;height:16.6667%;background-image:url(assets/gradients/mesh-yg.png)"></span>
+  </div>
+  <div class="tcol">
     <span class="ey"><span class="dot aws"></span>Capítulo Pereira · lunes 28 de septiembre · 7:00 pm</span>
     <h1><span class="grad">De tu cabeza</span><br>al mundo</h1>
     <p class="sub">En lo que se enfría un café: una idea tuya, encendida y viva en internet. En vivo, con AWS.</p>
   </div>
-  <div class="viz"><img class="pbadge" src="assets/pereira-badge.jpg" alt="AWS User Group Pereira"></div>
   <div class="foot">
     <div class="lock"><span class="g">IAOps</span><small>Alejandro Barrera · Cloud Architect</small></div>
     <div class="disc">Charla de comunidad · opiniones propias.<br>No representa ni cuenta con respaldo oficial de AWS.</div>
@@ -191,7 +294,7 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
     <span class="ey"><span class="dot"></span>una cifra para empezar</span>
     <h1 class="grad-aws" style="font-size:clamp(3.2rem,10vw,7.5rem)">5.500 M</h1>
     <p class="lead">de personas conectadas al mundo, ahora mismo.</p>
-    <p class="sub" style="max-width:33ch">En los próximos minutos, algo que hoy <b style="color:var(--text);font-weight:600">no existe</b> va a poder abrirlo cualquiera de ellas.</p>
+    <p class="sub" style="max-width:35ch"><b style="color:var(--text);font-weight:600">Más de 400 millones</b> están aquí, en América Latina. En los próximos minutos, algo que hoy <b style="color:var(--text);font-weight:600">no existe</b> va a poder abrirlo cualquiera de ellas.</p>
   </div>
   <div class="viz"><svg viewBox="0 0 420 420" fill="none">
     <g stroke="url(#gAWS)" stroke-width="1.4" opacity=".4">
@@ -201,6 +304,8 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
     </g>
     <g fill="url(#gPT)"><circle cx="70" cy="90" r="6"/><circle cx="340" cy="80" r="6"/><circle cx="360" cy="200" r="6"/><circle cx="330" cy="330" r="6"/><circle cx="180" cy="370" r="6"/><circle cx="70" cy="320" r="6"/><circle cx="50" cy="210" r="6"/><circle cx="150" cy="60" r="6"/></g>
     <g fill="url(#gAWS)"><circle cx="340" cy="80" r="8"/><circle cx="70" cy="320" r="8"/></g>
+    <!-- clúster LATAM -->
+    <g><circle cx="70" cy="320" r="13" fill="none" stroke="url(#gAWS)" stroke-width="2" opacity=".75"><animate attributeName="r" values="12;20;12" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values=".75;0;.75" dur="2.6s" repeatCount="indefinite"/></circle><text x="70" y="356" fill="#ff9900" font-family="Inter,sans-serif" font-weight="700" font-size="17" text-anchor="middle">LATAM</text></g>
     <circle cx="210" cy="210" r="26" fill="url(#gAWS)" filter="url(#glow)"/>
     <circle cx="210" cy="210" r="46" fill="none" stroke="url(#gAWS)" stroke-width="2" opacity="0"><animate attributeName="opacity" values="0;.6;0" dur="2.6s" repeatCount="indefinite"/><animate attributeName="r" values="30;90;30" dur="2.6s" repeatCount="indefinite"/></circle>
   </svg></div>
@@ -228,13 +333,38 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
       <div class="step"><span class="s">04</span><p>Cómo encender las tuyas, esta semana</p></div>
     </div>
   </div>
-  <div class="viz"><svg viewBox="0 0 360 400" fill="none" stroke-linecap="round">
-    <line x1="60" y1="40" x2="60" y2="360" stroke="var(--line)" stroke-width="2"/>
-    <line x1="60" y1="40" x2="60" y2="360" stroke="url(#gPT)" stroke-width="2.5" stroke-dasharray="2 10"/>
-    <g><circle cx="60" cy="60" r="14" fill="#151D25" stroke="url(#gPT)" stroke-width="2.5"/><circle cx="60" cy="60" r="5" fill="url(#gPT)"/><rect x="100" y="46" width="200" height="28" rx="8" fill="var(--panel2)" stroke="var(--line)"/></g>
-    <g><circle cx="60" cy="160" r="14" fill="#151D25" stroke="url(#gPT)" stroke-width="2.5"/><circle cx="60" cy="160" r="5" fill="url(#gPT)"/><rect x="100" y="146" width="170" height="28" rx="8" fill="var(--panel2)" stroke="var(--line)"/></g>
-    <g><circle cx="60" cy="260" r="16" fill="#151D25" stroke="url(#gAWS)" stroke-width="3" filter="url(#glow)"/><circle cx="60" cy="260" r="6" fill="url(#gAWS)"/><rect x="100" y="244" width="220" height="32" rx="8" fill="var(--panel2)" stroke="url(#gAWS)" opacity=".9"/></g>
-    <g><circle cx="60" cy="360" r="14" fill="#151D25" stroke="url(#gPT)" stroke-width="2.5"/><circle cx="60" cy="360" r="5" fill="url(#gPT)"/><rect x="100" y="346" width="150" height="28" rx="8" fill="var(--panel2)" stroke="var(--line)"/></g>
+  <div class="viz"><svg viewBox="0 0 380 400" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="56" y1="56" x2="56" y2="344" stroke="#e3e6ec" stroke-width="4"/>
+    <line x1="56" y1="56" x2="56" y2="344" stroke="url(#gPT)" stroke-width="4" stroke-dasharray="3 12"/>
+    <circle r="6" fill="url(#gAWS)" filter="url(#glow)"><animateMotion path="M56 56 V344" dur="3.4s" repeatCount="indefinite"/></circle>
+    <!-- 01 entender -->
+    <g>
+      <circle cx="56" cy="56" r="22" fill="#ffffff" stroke="url(#gPT)" stroke-width="3"/>
+      <g transform="translate(56,56)" stroke="url(#gPT)" stroke-width="2.4" fill="none"><circle cx="0" cy="-3" r="7"/><path d="M-4 9 h8"/><path d="M-2 13 h4"/></g>
+      <text x="92" y="50" fill="#151D25" font-family="Inter,sans-serif" font-weight="700" font-size="20">Entender la nube</text>
+      <text x="92" y="73" fill="#5b6b78" font-family="Inter,sans-serif" font-size="14">5 ideas, sin jerga</text>
+    </g>
+    <!-- 02 por qué ahora -->
+    <g>
+      <circle cx="56" cy="152" r="22" fill="#ffffff" stroke="url(#gPT)" stroke-width="3"/>
+      <g transform="translate(56,152)" stroke="url(#gPT)" stroke-width="2.6" fill="none"><path d="M-10 7 L-3 -2 L3 3 L10 -7"/><path d="M4 -8 L11 -8 L11 -1"/></g>
+      <text x="92" y="146" fill="#151D25" font-family="Inter,sans-serif" font-weight="700" font-size="20">Por qué AWS, ahora</text>
+      <text x="92" y="169" fill="#5b6b78" font-family="Inter,sans-serif" font-size="14">el momento es hoy</text>
+    </g>
+    <!-- 03 demo (clímax) -->
+    <g>
+      <circle cx="56" cy="248" r="26" fill="#ffffff" stroke="url(#gAWS)" stroke-width="3.4" filter="url(#glow)"/>
+      <path d="M49 237 L71 248 L49 259 Z" fill="url(#gAWS)"/>
+      <text x="96" y="242" fill="#151D25" font-family="Inter,sans-serif" font-weight="700" font-size="21">Demo en vivo</text>
+      <text x="96" y="266" fill="#c26a12" font-family="Inter,sans-serif" font-weight="600" font-size="14">encendemos una idea</text>
+    </g>
+    <!-- 04 tu turno -->
+    <g>
+      <circle cx="56" cy="344" r="22" fill="#ffffff" stroke="url(#gPT)" stroke-width="3"/>
+      <path transform="translate(56,344)" d="M0 -9 L2.6 -2.6 L9 0 L2.6 2.6 L0 9 L-2.6 2.6 L-9 0 L-2.6 -2.6 Z" fill="url(#gPT)"/>
+      <text x="92" y="338" fill="#151D25" font-family="Inter,sans-serif" font-weight="700" font-size="20">Tu turno</text>
+      <text x="92" y="361" fill="#5b6b78" font-family="Inter,sans-serif" font-size="14">enciende las tuyas</text>
+    </g>
   </svg></div>
 </section>
 
@@ -246,12 +376,23 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
     <div class="note"><span class="h">// como</span> la luz de tu casa</div>
     <p class="sub">Pagas la electricidad solo mientras algo está prendido. En la nube igual: una idea apagada casi no cuesta. Nadie compra un servidor de USD 10.000 “por si acaso”.</p>
   </div>
-  <div class="viz"><svg viewBox="0 0 360 320" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M60 260 A120 120 0 0 1 300 260" stroke="var(--line)" stroke-width="14"/>
-    <path d="M60 260 A120 120 0 0 1 210 152" stroke="url(#gPT)" stroke-width="14" filter="url(#glow)"/>
-    <g stroke="var(--faint)" stroke-width="2"><line x1="60" y1="260" x2="76" y2="255"/><line x1="180" y1="140" x2="180" y2="156"/><line x1="300" y1="260" x2="284" y2="255"/></g>
-    <line x1="180" y1="260" x2="232" y2="176" stroke="url(#gAWS)" stroke-width="4"/><circle cx="180" cy="260" r="9" fill="url(#gAWS)"/>
-    <path d="M168 292 l14 0 l-6 20 l16 0 l-22 30 l6 -26 l-12 0 z" fill="url(#gPT)"/>
+  <div class="viz"><svg viewBox="0 0 360 262" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M50 210 A130 130 0 0 1 310 210" stroke="#e3e6ec" stroke-width="18"/>
+    <path d="M50 210 A130 130 0 0 1 180 80" stroke="url(#gPT)" stroke-width="18" filter="url(#glow)"/>
+    <g stroke="#b7c0cb" stroke-width="2.5"><line x1="50" y1="210" x2="67" y2="205"/><line x1="180" y1="80" x2="180" y2="97"/><line x1="310" y1="210" x2="293" y2="205"/></g>
+    <text x="52" y="238" fill="#5b6b78" font-family="JetBrains Mono,monospace" font-size="14" text-anchor="middle">apagado</text>
+    <text x="308" y="238" fill="#c26a12" font-family="JetBrains Mono,monospace" font-size="14" text-anchor="middle">encendido</text>
+    <!-- rayo que pulsa -->
+    <path d="M250 96 l-24 38 l17 0 l-6 34 l27 -44 l-19 0 l6 -28 z" fill="url(#gAWS)" filter="url(#glow)">
+      <animate attributeName="opacity" values="0.25;1;0.25" dur="4s" keyTimes="0;0.5;1" repeatCount="indefinite"/>
+    </path>
+    <!-- aguja que barre -->
+    <g>
+      <line x1="180" y1="210" x2="180" y2="104" stroke="url(#gAWS)" stroke-width="5">
+        <animateTransform attributeName="transform" type="rotate" values="-72 180 210; 34 180 210; -18 180 210; -72 180 210" keyTimes="0;0.45;0.75;1" dur="4s" repeatCount="indefinite"/>
+      </line>
+      <circle cx="180" cy="210" r="11" fill="url(#gAWS)"/>
+    </g>
   </svg></div>
 </section>
 
@@ -261,14 +402,56 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
     <div class="tag"><b>02</b>para encender · idea 2 de 5</div>
     <h2>La enciendes desde cualquier parte</h2>
     <div class="note"><span class="h">// como</span> un enchufe en cada país</div>
-    <p class="sub">Regiones: eliges en qué parte del mundo la conectas, y siempre hay una cerca. AWS tiene ~35 repartidas por el planeta.</p>
+    <p class="sub">Regiones: eliges dónde vive tu idea, y siempre hay una cerca. AWS tiene <b>39 en el mundo</b> — 2 en LATAM (São Paulo y México) y una <b>Local Zone en Bogotá</b>.</p>
   </div>
-  <div class="viz"><svg viewBox="0 0 360 340" fill="none" stroke-linecap="round">
-    <circle cx="180" cy="175" r="130" stroke="url(#gPT)" stroke-width="2" opacity=".7"/>
-    <g stroke="url(#gPT)" stroke-width="1.4" opacity=".4"><ellipse cx="180" cy="175" rx="130" ry="48"/><ellipse cx="180" cy="175" rx="130" ry="95"/><ellipse cx="180" cy="175" rx="60" ry="130"/><line x1="50" y1="175" x2="310" y2="175"/></g>
-    <g><path d="M110 120 a16 16 0 1 1 32 0 c0 12 -16 30 -16 30 c0 0 -16 -18 -16 -30 z" fill="url(#gPT)"/><circle cx="126" cy="120" r="6" fill="#151D25"/></g>
-    <g><path d="M232 210 a14 14 0 1 1 28 0 c0 11 -14 26 -14 26 c0 0 -14 -15 -14 -26 z" fill="url(#gPT)" opacity=".8"/><circle cx="246" cy="210" r="5" fill="#151D25"/></g>
-    <g filter="url(#glow)"><path d="M186 96 a18 18 0 1 1 36 0 c0 14 -18 34 -18 34 c0 0 -18 -20 -18 -34 z" fill="url(#gAWS)"/><circle cx="204" cy="96" r="7" fill="#151D25"/></g>
+  <div class="viz"><svg viewBox="0 0 440 300" fill="none" stroke-linejoin="round" stroke-linecap="round">
+    <!-- contador 39 -->
+    <text x="24" y="40" font-family="'Plus Jakarta Sans',system-ui,sans-serif" font-weight="800" font-size="46" fill="#ff9900">39</text>
+    <text x="80" y="26" font-family="Inter,sans-serif" font-weight="700" font-size="15" fill="#151D25">regiones</text>
+    <text x="80" y="44" font-family="Inter,sans-serif" font-size="12.5" fill="#5b6b78">en el mundo</text>
+    <!-- continentes (mapamundi plano: se ven TODAS) -->
+    <g fill="#e7ecf2">
+      <path d="M45 72 C50 52 95 46 125 58 C150 69 148 95 132 110 C122 130 92 132 82 118 C60 118 42 95 45 72 Z"/>
+      <path d="M120 150 C120 138 143 134 153 149 C165 168 158 206 142 233 C132 251 118 247 116 224 C110 196 116 170 120 150 Z"/>
+      <path d="M212 60 C220 50 250 52 260 64 C266 78 254 92 236 90 C220 92 206 76 212 60 Z"/>
+      <path d="M222 104 C232 96 265 100 275 118 C283 141 268 181 250 201 C238 213 226 203 224 181 C218 152 216 124 222 104 Z"/>
+      <path d="M268 58 C288 44 360 46 404 62 C430 74 424 106 398 118 C360 128 316 126 292 114 C272 106 258 78 268 58 Z"/>
+      <path d="M360 190 C372 182 402 186 410 202 C414 218 396 230 380 226 C364 224 352 204 360 190 Z"/>
+    </g>
+    <!-- 39 regiones (32 puntos + 4 hubs + 3 LATAM) -->
+    <g fill="url(#gPT)" opacity=".9">
+      <circle cx="60" cy="72" r="4"/><circle cx="78" cy="64" r="4"/><circle cx="112" cy="68" r="4"/><circle cx="70" cy="92" r="4"/><circle cx="122" cy="86" r="4"/><circle cx="86" cy="78" r="4"/>
+      <circle cx="218" cy="66" r="4"/><circle cx="230" cy="60" r="4"/><circle cx="250" cy="70" r="4"/><circle cx="236" cy="84" r="4"/><circle cx="252" cy="86" r="4"/><circle cx="244" cy="62" r="4"/>
+      <circle cx="280" cy="64" r="4"/><circle cx="300" cy="58" r="4"/><circle cx="322" cy="56" r="4"/><circle cx="346" cy="60" r="4"/><circle cx="372" cy="66" r="4"/><circle cx="296" cy="84" r="4"/><circle cx="322" cy="82" r="4"/><circle cx="350" cy="84" r="4"/><circle cx="312" cy="98" r="4"/><circle cx="360" cy="100" r="4"/><circle cx="386" cy="90" r="4"/>
+      <circle cx="232" cy="120" r="4"/><circle cx="248" cy="140" r="4"/><circle cx="244" cy="168" r="4"/><circle cx="258" cy="112" r="4"/><circle cx="238" cy="150" r="4"/>
+      <circle cx="372" cy="198" r="4"/><circle cx="402" cy="196" r="4"/>
+      <circle cx="140" cy="172" r="4"/>
+    </g>
+    <!-- conexiones animadas (rutas globales) -->
+    <g fill="none" stroke="url(#gPT)" stroke-width="1.8" opacity=".7">
+      <path class="flowline" d="M120 152 Q96 116 100 90"/>
+      <path class="flowline" d="M150 206 Q198 132 238 80"/>
+      <path class="flowline" d="M100 90 Q250 26 392 80"/>
+      <path class="flowline" d="M150 206 Q280 250 388 206"/>
+    </g>
+    <g fill="url(#gAWS)" filter="url(#glow)">
+      <circle r="4"><animateMotion path="M150 206 Q198 132 238 80" dur="2.8s" repeatCount="indefinite"/></circle>
+      <circle r="4"><animateMotion path="M100 90 Q250 26 392 80" dur="3.4s" repeatCount="indefinite"/></circle>
+    </g>
+    <!-- hubs etiquetados (1 por continente) -->
+    <g><circle cx="100" cy="90" r="6" fill="url(#gPT)"/><text x="100" y="78" fill="#151D25" font-family="Inter,sans-serif" font-weight="600" font-size="12" text-anchor="middle">N. Virginia</text></g>
+    <g><circle cx="238" cy="80" r="6" fill="url(#gPT)"/><text x="248" y="72" fill="#151D25" font-family="Inter,sans-serif" font-weight="600" font-size="12" text-anchor="start">Frankfurt</text></g>
+    <g><circle cx="392" cy="80" r="6" fill="url(#gPT)"/><text x="402" y="76" fill="#151D25" font-family="Inter,sans-serif" font-weight="600" font-size="12" text-anchor="end">Tokio</text></g>
+    <g><circle cx="388" cy="206" r="6" fill="url(#gPT)"/><text x="388" y="226" fill="#151D25" font-family="Inter,sans-serif" font-weight="600" font-size="12" text-anchor="middle">Sídney</text></g>
+    <!-- LATAM -->
+    <g><circle cx="94" cy="120" r="6.5" fill="url(#gAWS)"/><text x="82" y="124" fill="#c26a12" font-family="Inter,sans-serif" font-weight="700" font-size="12" text-anchor="end">México</text></g>
+    <g><circle cx="150" cy="206" r="6.5" fill="url(#gAWS)"/><text x="160" y="210" fill="#c26a12" font-family="Inter,sans-serif" font-weight="700" font-size="12" text-anchor="start">São Paulo</text></g>
+    <!-- Bogotá Local Zone -->
+    <g filter="url(#glow)"><circle cx="120" cy="152" r="8" fill="url(#gAWS)"/><circle cx="120" cy="152" r="13" fill="none" stroke="url(#gAWS)" stroke-width="2"><animate attributeName="r" values="11;22;11" dur="2.4s" repeatCount="indefinite"/><animate attributeName="opacity" values=".85;0;.85" dur="2.4s" repeatCount="indefinite"/></circle></g>
+    <text x="106" y="150" fill="#c26a12" font-family="Inter,sans-serif" font-weight="700" font-size="12" text-anchor="end">Bogotá</text>
+    <text x="106" y="164" fill="#5b6b78" font-family="JetBrains Mono,monospace" font-size="10" text-anchor="end">Local Zone</text>
+    <!-- pie -->
+    <text x="220" y="290" text-anchor="middle" font-family="Inter,sans-serif" fill="#5b6b78" font-size="12.5">2 en LATAM (México · São Paulo) + Local Zone en Bogotá = menor latencia</text>
   </svg></div>
 </section>
 
@@ -280,11 +463,27 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
     <div class="note"><span class="h">// como</span> la central eléctrica y tu interruptor</div>
     <p class="sub">AWS pone y protege la central; tú cuidas tu interruptor y tus llaves. El error más caro de quien empieza vive en su mitad.</p>
   </div>
-  <div class="viz"><svg viewBox="0 0 340 340" fill="none" stroke-linejoin="round">
-    <path d="M170 34 L290 78 L290 168 C290 244 238 292 170 314 C102 292 50 244 50 168 L50 78 Z" stroke="url(#gPT)" stroke-width="2.5" fill="rgba(172,91,255,.05)"/>
-    <path d="M170 34 L290 78 L290 168 C290 244 238 292 170 314 Z" fill="rgba(255,153,0,.06)"/>
-    <line x1="170" y1="34" x2="170" y2="314" stroke="var(--line)" stroke-width="1.5" stroke-dasharray="4 6"/>
-    <circle cx="170" cy="150" r="26" stroke="url(#gAWS)" stroke-width="3" filter="url(#glow)"/><circle cx="170" cy="144" r="8" fill="url(#gAWS)"/><path d="M170 150 l0 26" stroke="url(#gAWS)" stroke-width="6"/>
+  <div class="viz"><svg viewBox="0 0 360 340" fill="none" stroke-linejoin="round" stroke-linecap="round">
+    <text x="180" y="22" fill="#5b6b78" font-family="JetBrains Mono,monospace" font-size="13" text-anchor="middle">responsabilidad compartida</text>
+    <!-- capa AWS -->
+    <rect x="30" y="44" width="300" height="120" rx="16" fill="rgba(124,60,237,.07)" stroke="url(#gPT)" stroke-width="2.5"/>
+    <g transform="translate(72,104)" stroke="url(#gPT)" stroke-width="2.6" fill="none">
+      <rect x="-22" y="-16" width="44" height="32" rx="4"/><line x1="-22" y1="-4" x2="22" y2="-4"/><line x1="-22" y1="6" x2="22" y2="6"/>
+      <circle cx="-14" cy="-10" r="1.7" fill="url(#gPT)"><animate attributeName="fill-opacity" values="1;0.15;1" dur="1.8s" repeatCount="indefinite"/></circle><circle cx="-14" cy="1" r="1.7" fill="url(#gPT)"><animate attributeName="fill-opacity" values="0.15;1;0.15" dur="1.8s" repeatCount="indefinite"/></circle>
+    </g>
+    <text x="112" y="88" fill="#151D25" font-family="Inter,sans-serif" font-weight="700" font-size="19">AWS protege la central</text>
+    <text x="112" y="114" fill="#5b6b78" font-family="Inter,sans-serif" font-size="15">Hardware · red · regiones</text>
+    <text x="112" y="136" fill="#5b6b78" font-family="Inter,sans-serif" font-size="15">De eso no te preocupas</text>
+    <!-- capa TÚ -->
+    <rect x="30" y="180" width="300" height="120" rx="16" fill="rgba(255,153,0,.08)" stroke="url(#gAWS)" stroke-width="2.5" filter="url(#glow)"/>
+    <rect x="30" y="180" width="300" height="120" rx="16" fill="none" stroke="url(#gAWS)" stroke-width="2.5"><animate attributeName="stroke-width" values="2.5;6;2.5" dur="2.2s" repeatCount="indefinite"/><animate attributeName="opacity" values=".9;.15;.9" dur="2.2s" repeatCount="indefinite"/></rect>
+    <circle cx="72" cy="240" r="18" fill="none" stroke="url(#gAWS)" stroke-width="2.5" opacity=".7"><animate attributeName="r" values="15;30;15" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" values=".7;0;.7" dur="2s" repeatCount="indefinite"/></circle>
+    <g transform="translate(72,240)" stroke="url(#gAWS)" stroke-width="2.6" fill="none">
+      <circle cx="-6" cy="-8" r="9"/><path d="M0 -2 L16 14"/><path d="M9 7 L15 1"/><path d="M13 11 L19 5"/>
+    </g>
+    <text x="112" y="224" fill="#151D25" font-family="Inter,sans-serif" font-weight="700" font-size="19">Tú cuidas tus llaves</text>
+    <text x="112" y="250" fill="#5b6b78" font-family="Inter,sans-serif" font-size="15">Tus datos · claves · accesos</text>
+    <text x="112" y="272" fill="#c26a12" font-family="Inter,sans-serif" font-weight="600" font-size="15">Aquí vive el error más caro</text>
   </svg></div>
 </section>
 
@@ -292,15 +491,39 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
 <section class="slide split light">
   <div class="col cbody">
     <div class="tag"><b>04</b>para encender · idea 4 de 5</div>
-    <h2>No construyes la central</h2>
-    <div class="note"><span class="h">// solo</span> prendes la luz</div>
-    <p class="sub">Serverless: el código corre solo cuando alguien lo enciende, y pagas por milisegundo. Hay servidores, pero no son tu problema.</p>
+    <h2>No pones la planta eléctrica</h2>
+    <div class="note"><span class="h">// solo</span> aprietas el botón</div>
+    <p class="sub">Serverless: tu idea se enciende sola cuando alguien la usa y se apaga cuando nadie la necesita. Hay computadores detrás, pero no son tu problema — no los pagas si están quietos.</p>
   </div>
-  <div class="viz"><svg viewBox="0 0 360 340" fill="none" stroke-linejoin="round" stroke-linecap="round">
-    <path d="M180 40 L300 108 L300 232 L180 300 L60 232 L60 108 Z" stroke="url(#gPT)" stroke-width="2.5" fill="rgba(172,91,255,.05)"/>
-    <path d="M188 120 l-52 78 l40 0 l-8 62 l60 -92 l-42 0 l6 -48 z" fill="url(#gAWS)" filter="url(#glow)"/>
-    <g stroke="url(#gPT)" stroke-width="2" opacity=".55"><path d="M300 170 l40 -22"/><path d="M300 170 l40 22"/><path d="M60 170 l-40 -22"/><path d="M60 170 l-40 22"/></g>
-    <g fill="url(#gPT)"><circle cx="344" cy="146" r="4"/><circle cx="344" cy="194" r="4"/><circle cx="16" cy="146" r="4"/><circle cx="16" cy="194" r="4"/></g>
+  <div class="viz"><svg viewBox="0 0 380 300" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- alguien lo llama -->
+    <g transform="translate(50,120)">
+      <circle r="26" fill="#ffffff" stroke="#c9d2dc" stroke-width="2.5"/>
+      <g stroke="#5b6b78" stroke-width="2.4" fill="none"><circle cx="0" cy="-6" r="7"/><path d="M-12 13 a12 12 0 0 1 24 0"/></g>
+      <text x="0" y="52" fill="#5b6b78" font-family="Inter,sans-serif" font-size="14" text-anchor="middle">alguien</text>
+      <text x="0" y="70" fill="#5b6b78" font-family="Inter,sans-serif" font-size="14" text-anchor="middle">lo llama</text>
+    </g>
+    <line class="flowline" x1="90" y1="120" x2="146" y2="120" stroke="url(#gPT)" stroke-width="3"/>
+    <path d="M146 120 l-12 -6 l0 12 z" fill="url(#gPT)"/>
+    <!-- la función -->
+    <g transform="translate(190,120)">
+      <rect x="-44" y="-44" width="88" height="88" rx="16" fill="rgba(255,153,0,.08)" stroke="url(#gAWS)" stroke-width="2.8" filter="url(#glow)">
+        <animate attributeName="opacity" values="0.45;1;1;0.45" keyTimes="0;0.3;0.7;1" dur="3s" repeatCount="indefinite"/>
+      </rect>
+      <text x="0" y="12" fill="#c26a12" font-family="JetBrains Mono,monospace" font-weight="700" font-size="30" text-anchor="middle">fn</text>
+    </g>
+    <text x="190" y="196" fill="#151D25" font-family="Inter,sans-serif" font-weight="700" font-size="15" text-anchor="middle">se enciende, corre</text>
+    <text x="190" y="215" fill="#151D25" font-family="Inter,sans-serif" font-weight="700" font-size="15" text-anchor="middle">y responde</text>
+    <line class="flowline" x1="234" y1="120" x2="290" y2="120" stroke="url(#gPT)" stroke-width="3"/>
+    <path d="M290 120 l-12 -6 l0 12 z" fill="url(#gPT)"/>
+    <!-- listo -->
+    <g transform="translate(330,120)">
+      <circle r="24" fill="rgba(0,170,90,.1)" stroke="#12a15a" stroke-width="2.6"/>
+      <path d="M-9 0 l6 7 l12 -14" stroke="#12a15a" stroke-width="3.4" fill="none"/>
+      <text x="0" y="50" fill="#5b6b78" font-family="Inter,sans-serif" font-size="14" text-anchor="middle">listo</text>
+    </g>
+    <text x="190" y="256" fill="#151D25" font-family="Inter,sans-serif" font-weight="700" font-size="17" text-anchor="middle">0 servidores que administrar</text>
+    <text x="190" y="280" fill="#5b6b78" font-family="JetBrains Mono,monospace" font-size="12.5" text-anchor="middle">al terminar se apaga · pagas por milisegundo</text>
   </svg></div>
 </section>
 
@@ -310,11 +533,36 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
     <div class="tag"><b>05</b>para encender · idea 5 de 5</div>
     <h2>La <span class="grad-aws">chispa</span> que crea de la nada</h2>
     <div class="note"><span class="h">// con</span> Amazon Bedrock</div>
-    <p class="sub">Le pides a la IA y crea el contenido en el momento — con una llamada de API, pagando por token. Sin entrenar nada, sin GPUs propias.</p>
+    <p class="sub">Le pides a la IA en español y crea el contenido al instante. Pagas solo por lo que procesa (unos centavos), sin entrenar nada y sin comprar computadores carísimos.</p>
   </div>
-  <div class="viz"><svg viewBox="0 0 340 340" fill="none">
-    <path d="M170 40 L192 148 L300 170 L192 192 L170 300 L148 192 L40 170 L148 148 Z" fill="url(#gAWS)" filter="url(#glow)"/>
-    <g fill="url(#gPT)"><path d="M272 68 L281 95 L308 104 L281 113 L272 140 L263 113 L236 104 L263 95 Z"/><path d="M78 226 L85 245 L104 252 L85 259 L78 278 L71 259 L52 252 L71 245 Z"/></g>
+  <div class="viz"><svg viewBox="0 0 380 300" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- tu prompt -->
+    <g transform="translate(20,108)">
+      <rect x="0" y="0" width="96" height="66" rx="12" fill="#ffffff" stroke="#c9d2dc" stroke-width="2.2"/>
+      <path d="M18 66 l0 16 l18 -16 z" fill="#ffffff" stroke="#c9d2dc" stroke-width="2.2"/>
+      <g stroke="#9aa6b2" stroke-width="4"><line x1="16" y1="22" x2="80" y2="22"/><line x1="16" y1="36" x2="66" y2="36"/><line x1="16" y1="50" x2="50" y2="50"/></g>
+      <text x="48" y="-12" fill="#5b6b78" font-family="Inter,sans-serif" font-size="14" text-anchor="middle">tu prompt</text>
+    </g>
+    <line class="flowline" x1="122" y1="140" x2="156" y2="140" stroke="url(#gPT)" stroke-width="3"/>
+    <path d="M156 140 l-12 -6 l0 12 z" fill="url(#gPT)"/>
+    <!-- IA Bedrock -->
+    <g transform="translate(200,140)">
+      <circle r="40" fill="rgba(255,153,0,.06)" stroke="url(#gAWS)" stroke-width="2"/>
+      <circle r="50" fill="none" stroke="url(#gAWS)" stroke-width="1.3" stroke-dasharray="5 10" opacity=".7"><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="9s" repeatCount="indefinite"/></circle>
+      <path d="M0 -26 L7 -7 L26 0 L7 7 L0 26 L-7 7 L-26 0 L-7 -7 Z" fill="url(#gAWS)" filter="url(#glow)"><animate attributeName="opacity" values="0.65;1;0.65" dur="2.2s" repeatCount="indefinite"/></path>
+      <text x="0" y="66" fill="#c26a12" font-family="Inter,sans-serif" font-weight="700" font-size="15" text-anchor="middle">IA · Bedrock</text>
+    </g>
+    <line class="flowline" x1="244" y1="140" x2="278" y2="140" stroke="url(#gPT)" stroke-width="3"/>
+    <path d="M278 140 l-12 -6 l0 12 z" fill="url(#gPT)"/>
+    <!-- contenido creado de la nada -->
+    <g transform="translate(292,104)">
+      <rect x="0" y="0" width="76" height="60" rx="10" fill="#ffffff" stroke="url(#gPT)" stroke-width="2.2"/>
+      <g><circle cx="20" cy="22" r="8" fill="url(#gAWS)"/><path d="M8 52 l18 -18 l12 10 l16 -20 l14 28 z" fill="url(#gPT)"/>
+        <animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.45;0.7;1" dur="2.6s" repeatCount="indefinite"/></g>
+      <text x="38" y="-10" fill="#5b6b78" font-family="Inter,sans-serif" font-size="14" text-anchor="middle">creado</text>
+    </g>
+    <text x="190" y="234" fill="#151D25" font-family="Inter,sans-serif" font-weight="700" font-size="17" text-anchor="middle">Le pides… y lo crea de la nada</text>
+    <text x="190" y="258" fill="#5b6b78" font-family="JetBrains Mono,monospace" font-size="12.5" text-anchor="middle">sin entrenar nada · pagas unos centavos</text>
   </svg></div>
 </section>
 
@@ -323,10 +571,10 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
   <span class="ey"><span class="dot"></span>por qué justo ahora</span>
   <h2>Nunca fue tan fácil <span class="grad-aws">encender</span> algo</h2>
   <div class="readout">
-    <div class="rd"><div class="n grad">~28%</div><div class="l">del mercado cloud global. Es el líder (Azure ~21%, Google ~14%)</div></div>
-    <div class="rd"><div class="n grad">+37%</div><div class="l">creció AWS en un solo trimestre de 2026 — acelerando</div></div>
-    <div class="rd"><div class="n grad">~55K</div><div class="l">empleos AWS activos · ~USD 135K/año en promedio</div></div>
-    <div class="rd"><div class="n grad-aws">USD 0</div><div class="l">cuesta empezar. Y no necesitas ser programador</div></div>
+    <div class="rd"><div class="n grad">~30%</div><div class="l">del mercado cloud global. Es el líder mundial (Azure ~21%, Google ~13%)</div></div>
+    <div class="rd"><div class="n grad">millones</div><div class="l">de apps corren sobre AWS: Netflix, Rappi, bancos y gobiernos enteros</div></div>
+    <div class="rd"><div class="n grad">en USD</div><div class="l">estas habilidades se contratan remoto: trabaja desde Pereira para el mundo</div></div>
+    <div class="rd"><div class="n grad-aws">USD 0</div><div class="l">para empezar — la MISMA plataforma enterprise. No pagas por ser pequeño</div></div>
   </div>
 </section>
 
@@ -368,7 +616,7 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
     <!-- conector al mundo (la corriente sale) -->
     <line class="flowline" x1="898" y1="150" x2="1022" y2="150" stroke="url(#gPT)" stroke-width="3" fill="none"/>
     <path d="M1022 150 l-14 -7 l0 14 z" fill="url(#gPT)"/>
-    <text x="960" y="92" text-anchor="middle" class="nsub" font-size="13" fill="#ff9900">Route 53 · el nombre</text>
+    <text x="960" y="92" text-anchor="middle" class="nsub" font-size="13" fill="#ff9900">por HTTPS · a todos</text>
     <!-- partículas: la corriente lleva tu idea al mundo -->
     <g fill="url(#gAWS)" filter="url(#glow)">
       <circle r="7"><animateMotion path="M120 150 H1080" dur="3s" begin="0s" repeatCount="indefinite"/></circle>
@@ -381,12 +629,12 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
     <g>
       <circle cx="120" cy="150" r="52" fill="var(--panel2)" stroke="url(#gPT)" stroke-width="2.5"/>
       <path transform="translate(120,150)" d="M0 -17 L4 -4 L17 0 L4 4 L0 17 L-4 4 L-17 0 L-4 -4 Z" fill="url(#gPT)"/>
-      <text x="120" y="242" text-anchor="middle" class="nlabel" font-size="20">la chispa</text><text x="120" y="268" text-anchor="middle" class="nsub" font-size="14">tú + IA</text>
+      <text x="120" y="242" text-anchor="middle" class="nlabel" font-size="20">la chispa</text><text x="120" y="268" text-anchor="middle" class="nsub" font-size="14">tú + Bedrock</text>
     </g>
     <g>
       <circle cx="360" cy="150" r="56" fill="var(--panel2)" stroke="url(#gAWS)" stroke-width="3" filter="url(#glow)"/>
       <g transform="translate(360,150)" stroke="url(#gAWS)" stroke-width="3" fill="none" stroke-linecap="round"><path d="M-11 -5 a15 15 0 1 0 22 0"/><line x1="0" y1="-16" x2="0" y2="1"/></g>
-      <text x="360" y="246" text-anchor="middle" class="nlabel" font-size="20">el interruptor</text><text x="360" y="272" text-anchor="middle" class="nsub" font-size="14" fill="#ff9900">AWS Amplify</text>
+      <text x="360" y="246" text-anchor="middle" class="nlabel" font-size="20">el interruptor</text><text x="360" y="272" text-anchor="middle" class="nsub" font-size="14" fill="#ff9900">un comando</text>
     </g>
     <g>
       <circle cx="600" cy="150" r="52" fill="var(--panel2)" stroke="url(#gPT)" stroke-width="2.5"/>
@@ -427,41 +675,155 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
   </svg></div>
 </section>
 
-<!-- 12 · DEMO (consola + teléfono) -->
-<section class="slide split">
+<!-- 12 · DEMO EN VIVO (interactivo, corre dentro de la presentación vía demo/server.py) -->
+<section class="slide split" id="demoslide">
   <div class="col">
-    <span class="ey"><span class="dot aws"></span>demo en vivo</span>
-    <h2>El instante en que<br>algo cobra <span class="grad-aws">vida</span></h2>
-    <div class="console" style="margin-top:22px">
-      <div class="bar"><i></i><i></i><i></i><span>~/mi-idea</span></div>
-      <div class="b">
-        <div><span class="u">tú &gt;</span> “una página para mi idea”</div>
-        <div><span class="c"># la IA la crea de la nada…</span> <span class="ok">✓</span></div>
-        <div><span class="pr">$</span> amplify deploy</div>
-        <div><span class="ok">✓ vivo:</span> <b>mi-idea.dev</b></div>
-      </div>
+    <span class="ey"><span class="dot aws"></span>demo en vivo · de verdad</span>
+    <h2>Encendamos una idea<br><span class="grad-aws">ahora mismo</span></h2>
+    <p class="demo-lbl">Elige una idea (o escribe la que grite el público):</p>
+    <div class="demo-chips" id="demo-chips">
+      <button class="chip-idea" data-idea="una cafetería de especialidad en Pereira">☕ Cafetería</button>
+      <button class="chip-idea" data-idea="una marca de ropa deportiva local">👕 Ropa deportiva</button>
+      <button class="chip-idea" data-idea="una app para pasear perros">🐕 Pasear perros</button>
+      <button class="chip-idea" data-idea="un restaurante de comida típica risaraldense">🍲 Comida típica</button>
+      <button class="chip-idea" data-idea="una escuela de música online">🎸 Música online</button>
+      <button class="chip-idea" data-idea="una barbería moderna en el centro de Pereira">💈 Barbería</button>
+    </div>
+    <div class="demo-form">
+      <input id="demo-prompt" type="text" value="una cafetería de especialidad en Pereira" aria-label="tu idea">
+      <button id="demo-go">Encender ⚡</button>
+    </div>
+    <div class="demo-steps">
+      <div class="dstep" data-step="prov"><span class="di">1</span><div><b>Recursos en AWS</b><small>bucket S3 · CloudFront · 39 regiones</small></div></div>
+      <div class="dstep" data-step="ia"><span class="di">2</span><div><b>La IA la crea</b><small>Amazon Bedrock · de la nada</small></div></div>
+      <div class="dstep" data-step="deploy"><span class="di">3</span><div><b>Se despliega en AWS</b><small>S3 · CloudFront</small></div></div>
+      <div class="dstep" data-step="live"><span class="di">4</span><div><b>¡Está vivo!</b><small>en internet, para el mundo</small></div></div>
     </div>
   </div>
-  <div class="viz"><svg viewBox="0 0 300 380" fill="none">
-    <rect x="80" y="24" width="150" height="332" rx="28" stroke="url(#gPT)" stroke-width="2.5" fill="var(--panel2)"/>
-    <rect x="92" y="40" width="126" height="300" rx="14" fill="#0e1620"/>
-    <circle cx="155" cy="92" r="27" fill="url(#gPT)"/>
-    <rect x="120" y="132" width="70" height="10" rx="5" fill="#e6e6ee"/>
-    <rect x="129" y="150" width="52" height="7" rx="3" fill="#41B3FF"/>
-    <rect x="106" y="184" width="98" height="7" rx="3" fill="var(--line)"/>
-    <rect x="120" y="212" width="70" height="26" rx="8" fill="url(#gAWS)"/>
-    <g filter="url(#glow)"><circle cx="150" cy="300" r="7" fill="url(#gAWS)"/></g>
-    <text x="164" y="305" fill="var(--aws)" font-family="JetBrains Mono, monospace" font-size="13">LIVE</text>
-  </svg></div>
+  <div class="viz demo-viz">
+    <div class="demo-deploy awsconsole" id="demo-prov" hidden>
+      <div class="awsc-bar"><span class="awsc-aws">aws</span><span class="awsc-title">Aprovisionando recursos · us-east-1</span></div>
+      <div class="awsc-body">
+        <div class="awsc-row" data-r="s3" data-creating="Creando bucket…" data-done="Creado">
+          <span class="svc-ic"><svg viewBox="0 0 48 48"><defs><linearGradient id="ig-s3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7DBE4A"/><stop offset="1" stop-color="#3F7E1E"/></linearGradient></defs><rect width="48" height="48" rx="9" fill="url(#ig-s3)"/><g fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"><ellipse cx="24" cy="15" rx="11" ry="3.5"/><path d="M13 15 L16 34 L32 34 L35 15"/><path d="M15.5 27 h17"/></g></svg></span>
+          <div class="awsc-info"><b>Amazon S3</b><small>almacenamiento · donde vive tu página</small></div>
+          <span class="awsc-status"></span>
+        </div>
+        <div class="awsc-row" data-r="policy" data-creating="Aplicando política…" data-done="Público">
+          <span class="svc-ic"><svg viewBox="0 0 48 48"><defs><linearGradient id="ig-pol" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF9F4A"/><stop offset="1" stop-color="#D9700F"/></linearGradient></defs><rect width="48" height="48" rx="9" fill="url(#ig-pol)"/><g fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="15" y="23" width="18" height="14" rx="2.5"/><path d="M19 23 v-4 a5 5 0 0 1 10 0 v4"/></g><circle cx="24" cy="30" r="2.2" fill="#fff"/></svg></span>
+          <div class="awsc-info"><b>Acceso público</b><small>lectura pública · visible para todos</small></div>
+          <span class="awsc-status"></span>
+        </div>
+        <div class="awsc-row" data-r="cloudfront" data-creating="Creando distribución…" data-done="Propagando">
+          <span class="svc-ic"><svg viewBox="0 0 48 48"><defs><linearGradient id="ig-cf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A97BFF"/><stop offset="1" stop-color="#6B3FD9"/></linearGradient></defs><rect width="48" height="48" rx="9" fill="url(#ig-cf)"/><g fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><circle cx="24" cy="24" r="10.5"/><path d="M24 13.5 L24 34.5 M13.5 24 L34.5 24 M16.6 16.6 L31.4 31.4 M31.4 16.6 L16.6 31.4"/></g><g fill="#fff"><circle cx="24" cy="13.5" r="2.2"/><circle cx="24" cy="34.5" r="2.2"/><circle cx="13.5" cy="24" r="2.2"/><circle cx="34.5" cy="24" r="2.2"/><circle cx="16.6" cy="16.6" r="2.2"/><circle cx="31.4" cy="31.4" r="2.2"/><circle cx="31.4" cy="16.6" r="2.2"/><circle cx="16.6" cy="31.4" r="2.2"/></g></svg></span>
+          <div class="awsc-info"><b>Amazon CloudFront</b><small>red global · 600+ puntos de entrega</small></div>
+          <span class="awsc-status"></span>
+        </div>
+        <div class="awsc-row" data-r="bedrock" data-creating="Conectando modelo…" data-done="IA lista">
+          <span class="svc-ic"><svg viewBox="0 0 48 48"><defs><linearGradient id="ig-br" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4FD1C5"/><stop offset="1" stop-color="#1F8F86"/></linearGradient></defs><rect width="48" height="48" rx="9" fill="url(#ig-br)"/><g fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M24 12 L34 18 L34 30 L24 36 L14 30 L14 18 Z"/><path d="M24 12 L24 36 M14 18 L34 30 M34 18 L14 30"/></g><circle cx="24" cy="24" r="3" fill="#fff"/></svg></span>
+          <div class="awsc-info"><b>Amazon Bedrock</b><small>la IA que crea tu página · Claude</small></div>
+          <span class="awsc-status"></span>
+        </div>
+        <div class="awsc-row" data-r="https" data-creating="Publicando…" data-done="HTTPS listo">
+          <span class="svc-ic"><svg viewBox="0 0 48 48"><defs><linearGradient id="ig-eg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5A9BFF"/><stop offset="1" stop-color="#3A5FD0"/></linearGradient></defs><rect width="48" height="48" rx="9" fill="url(#ig-eg)"/><g fill="none" stroke="#fff" stroke-width="2"><circle cx="24" cy="24" r="11"/><ellipse cx="24" cy="24" rx="11" ry="4.5"/><ellipse cx="24" cy="24" rx="4.5" ry="11"/><path d="M13 24 h22"/></g></svg></span>
+          <div class="awsc-info"><b>En internet · HTTPS</b><small>endpoint seguro · accesible al mundo</small></div>
+          <span class="awsc-status"></span>
+        </div>
+      </div>
+    </div>
+    <div class="demo-console" id="demo-console">
+      <div class="demo-bar"><i></i><i></i><i></i><span id="demo-cap">esperando tu idea…</span></div>
+      <pre id="demo-out"></pre>
+    </div>
+    <div class="demo-deploy" id="demo-deploy" hidden>
+      <svg viewBox="0 0 520 260" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <!-- conectores animados -->
+        <g stroke="url(#gPT)" stroke-width="3">
+          <line class="flowline" x1="108" y1="120" x2="176" y2="120"/>
+          <line class="flowline" x1="256" y1="120" x2="324" y2="120"/>
+        </g>
+        <g fill="url(#gPT)"><path d="M176 120 l-13 -7 l0 14 z"/><path d="M324 120 l-13 -7 l0 14 z"/></g>
+        <!-- fan-out CloudFront → mundo -->
+        <g stroke="url(#gAWS)" stroke-width="2" opacity=".6">
+          <path class="flowline" d="M408 120 L470 74"/><path class="flowline" d="M408 120 L478 120"/><path class="flowline" d="M408 120 L470 166"/>
+        </g>
+        <g id="dn-world" fill="url(#gAWS)"><circle cx="474" cy="72" r="4"/><circle cx="484" cy="120" r="4"/><circle cx="474" cy="168" r="4"/><circle cx="452" cy="52" r="3"/><circle cx="500" cy="96" r="3"/><circle cx="500" cy="146" r="3"/><circle cx="452" cy="188" r="3"/></g>
+        <!-- partículas viajando -->
+        <g fill="url(#gAWS)" filter="url(#glow)">
+          <circle r="6"><animateMotion path="M70 120 H384" dur="2s" repeatCount="indefinite"/></circle>
+          <circle r="5"><animateMotion path="M70 120 H384" dur="2s" begin="0.8s" repeatCount="indefinite"/></circle>
+        </g>
+        <!-- nodo: tu página -->
+        <g><rect x="42" y="94" width="52" height="52" rx="8" fill="var(--panel2)" stroke="url(#gPT)" stroke-width="2.5"/>
+          <g transform="translate(68,120)" stroke="url(#gPT)" stroke-width="2" fill="none"><rect x="-11" y="-14" width="22" height="28" rx="2"/><line x1="-6" y1="-7" x2="6" y2="-7"/><line x1="-6" y1="-1" x2="6" y2="-1"/><line x1="-6" y1="5" x2="2" y2="5"/></g>
+          <text x="68" y="172" text-anchor="middle" class="nlabel" font-size="14" fill="#aab6c2">tu página</text></g>
+        <!-- nodo: S3 -->
+        <g><circle id="dn-s3" cx="216" cy="120" r="30" fill="var(--panel2)" stroke="url(#gPT)" stroke-width="2.5"/>
+          <g transform="translate(216,120)" stroke="url(#gPT)" stroke-width="2.4" fill="none"><ellipse cx="0" cy="-9" rx="15" ry="5"/><path d="M-15 -9 L-11 16 L11 16 L15 -9"/></g>
+          <text x="216" y="172" text-anchor="middle" font-size="14" fill="#aab6c2">Amazon S3</text></g>
+        <!-- nodo: CloudFront -->
+        <g><circle cx="384" cy="120" r="32" fill="var(--panel2)" stroke="url(#gAWS)" stroke-width="3" filter="url(#glow)"/>
+          <g transform="translate(384,120)" stroke="url(#gAWS)" stroke-width="2.2" fill="none"><circle cx="0" cy="0" r="15"/><ellipse cx="0" cy="0" rx="15" ry="6"/><ellipse cx="0" cy="0" rx="6" ry="15"/><line x1="-15" y1="0" x2="15" y2="0"/></g>
+          <text x="384" y="174" text-anchor="middle" font-size="14" fill="#c9a">CloudFront</text><text x="384" y="192" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#ff9900">39 regiones</text></g>
+      </svg>
+      <ul class="deploy-log" id="deploy-log">
+        <li>Empaquetando tu página</li>
+        <li>Subiendo a Amazon S3</li>
+        <li>Invalidando caché en CloudFront</li>
+        <li>Distribuyendo a 39 regiones</li>
+        <li>Servido por HTTPS al mundo 🌍</li>
+      </ul>
+    </div>
+    <div class="demo-result" id="demo-result" hidden>
+      <img id="demo-qr" class="demo-qr" alt="QR de tu sitio">
+      <p><b>¡Está vivo!</b> en <span id="demo-secs">–</span>s · escanéalo 👆</p>
+      <a id="demo-url" href="#" target="_blank" rel="noopener"></a>
+    </div>
+  </div>
 </section>
 
 <!-- 13 · QR EN VIVO -->
+<!-- PLAN B (importante): tener una URL YA desplegada de respaldo antes de la charla.
+     Si el deploy en vivo falla, este QR apunta al respaldo y el guion sigue igual:
+     "la magia de la nube es que esto ya lo dejé encendido antes — ábranlo igual". -->
 <section class="slide solo">
   <div>
     <span class="ey" style="justify-content:center"><span class="dot aws"></span>está vivo · ábranlo</span>
-    <div class="qrframe"><div class="in">[ QR del demo en vivo — se pega el día de la charla, apuntando a la URL de Amplify ]</div></div>
+    <div class="qrframe"><div class="in" style="background:#fff;padding:16px"><img src="assets/qr-demo.svg" alt="QR del demo en vivo" style="width:100%;height:100%;object-fit:contain"></div></div>
     <p class="sub" style="max-width:34ch;margin:26px auto 0">Esto que hace 60 segundos no existía, ahora está vivo — para todos ustedes. La próxima idea encendida puede ser la tuya.</p>
   </div>
+</section>
+
+<!-- 13b · DE TI A MILLONES (escala + enterprise) -->
+<section class="slide split">
+  <div class="col">
+    <span class="ey"><span class="dot aws"></span>el mismo interruptor</span>
+    <h2>De ti… <span class="grad-aws">a millones</span></h2>
+    <p class="sub" style="max-width:40ch">Lo que acabas de encender corre sobre la <b style="color:var(--text);font-weight:600">misma nube</b> que Rappi, Mercado Libre y bancos enteros. Empiezas tú solo y gratis; si mañana te abren un millón de personas, no te mudas de casa: <b style="color:var(--text);font-weight:600">AWS crece contigo</b>.</p>
+    <p class="note"><span class="h">// de</span> un dev solo <span class="h">→</span> una startup <span class="h">→</span> una empresa enorme</p>
+  </div>
+  <div class="viz"><svg viewBox="0 0 440 340" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="60" y1="290" x2="384" y2="66" stroke="var(--line)" stroke-width="3"/>
+    <line class="flowline" x1="60" y1="290" x2="384" y2="66" stroke="url(#gAWS)" stroke-width="3"/>
+    <!-- el mismo interruptor -->
+    <g transform="translate(60,290)">
+      <circle r="21" fill="var(--panel2)" stroke="url(#gAWS)" stroke-width="2.6" filter="url(#glow)"/>
+      <g stroke="url(#gAWS)" stroke-width="3" fill="none" stroke-linecap="round"><path d="M-7 -4 a10 10 0 1 0 14 0"/><line x1="0" y1="-13" x2="0" y2="1"/></g>
+    </g>
+    <text x="60" y="326" fill="var(--faint)" font-family="JetBrains Mono,monospace" font-size="12" text-anchor="middle">el mismo interruptor</text>
+    <!-- 1: tú -->
+    <g><g fill="url(#gPT)"><circle cx="122" cy="246" r="6"/></g><animate attributeName="opacity" values="0.25;1;0.25" dur="3.2s" begin="0s" repeatCount="indefinite"/></g>
+    <text x="122" y="274" fill="var(--muted)" font-family="Inter,sans-serif" font-size="13" text-anchor="middle">tú, gratis</text>
+    <!-- 2: startup -->
+    <g><g fill="url(#gPT)"><circle cx="188" cy="196" r="6"/><circle cx="204" cy="204" r="6"/><circle cx="206" cy="186" r="6"/></g><animate attributeName="opacity" values="0.25;1;0.25" dur="3.2s" begin="0.55s" repeatCount="indefinite"/></g>
+    <text x="200" y="230" fill="var(--muted)" font-family="Inter,sans-serif" font-size="13" text-anchor="middle">una startup</text>
+    <!-- 3: empresa -->
+    <g><g fill="url(#gPT)"><circle cx="262" cy="142" r="6"/><circle cx="278" cy="136" r="6"/><circle cx="292" cy="144" r="6"/><circle cx="268" cy="156" r="6"/><circle cx="286" cy="158" r="6"/><circle cx="276" cy="150" r="6"/></g><animate attributeName="opacity" values="0.25;1;0.25" dur="3.2s" begin="1.1s" repeatCount="indefinite"/></g>
+    <text x="278" y="184" fill="var(--muted)" font-family="Inter,sans-serif" font-size="13" text-anchor="middle">una empresa</text>
+    <!-- 4: millones -->
+    <g filter="url(#glow)"><g fill="url(#gAWS)"><circle cx="340" cy="52" r="5"/><circle cx="356" cy="52" r="5"/><circle cx="372" cy="52" r="5"/><circle cx="388" cy="52" r="5"/><circle cx="340" cy="68" r="5"/><circle cx="356" cy="68" r="5"/><circle cx="372" cy="68" r="5"/><circle cx="388" cy="68" r="5"/><circle cx="340" cy="84" r="5"/><circle cx="356" cy="84" r="5"/><circle cx="372" cy="84" r="5"/><circle cx="388" cy="84" r="5"/><circle cx="340" cy="100" r="5"/><circle cx="356" cy="100" r="5"/><circle cx="372" cy="100" r="5"/><circle cx="388" cy="100" r="5"/></g><animate attributeName="opacity" values="0.25;1;0.25" dur="3.2s" begin="1.65s" repeatCount="indefinite"/></g>
+    <text x="364" y="128" fill="#ff9900" font-family="Inter,sans-serif" font-weight="700" font-size="15" text-anchor="middle">millones</text>
+  </svg></div>
 </section>
 
 <!-- 14 · EMPIEZA HOY -->
@@ -470,38 +832,38 @@ h2{font-family:var(--display);font-weight:700;line-height:1.06;font-size:clamp(1
     <span class="ey"><span class="dot aws"></span>tu turno · esta semana</span>
     <h2><span class="grad-aws">Enciende</span> las tuyas</h2>
     <ul class="cta">
-      <li><span class="m">🎁</span><div>Cuenta nueva 2026: <b>6 meses gratis + hasta USD 200 en créditos</b></div></li>
-      <li><span class="m">⚡</span><div>El reto: crea tu cuenta y <b>enciende tu primera idea</b></div></li>
+      <li><span class="m">⚡</span><div>Escanea → <b>crea tu cuenta ahora</b>, aquí mismo</div></li>
+      <li><span class="m">🔥</span><div>El reto: <b>enciende tu primera idea</b> antes del lunes</div></li>
+      <li><span class="m">📣</span><div>Compártela en la comunidad → <b>iaopslatam.com</b></div></li>
       <li><span class="m">💡</span><div>Regla de oro: <b>apaga lo que no uses</b></div></li>
     </ul>
-    <p class="fine">*Las condiciones del free tier cambian; verifícalas al crear tu cuenta.</p>
+    <p class="fine">*La capa gratuita cambia sus condiciones; verifícalas al crear tu cuenta.</p>
   </div>
-  <div class="viz"><svg viewBox="0 0 340 340" fill="none">
-    <circle cx="170" cy="170" r="120" stroke="var(--line)" stroke-width="14"/>
-    <circle cx="170" cy="170" r="120" stroke="url(#gAWS)" stroke-width="14" stroke-linecap="round" stroke-dasharray="377 754" transform="rotate(-90 170 170)" filter="url(#glow)"/>
-    <text x="170" y="168" text-anchor="middle" fill="url(#gAWS)" font-family="Plus Jakarta Sans, sans-serif" font-weight="700" font-size="62">$200</text>
-    <text x="170" y="210" text-anchor="middle" fill="var(--muted)" font-family="Inter, sans-serif" font-size="20">en créditos</text>
-    <text x="170" y="300" text-anchor="middle" fill="var(--t)" font-family="JetBrains Mono, monospace" font-size="16">+ 6 meses gratis</text>
-  </svg></div>
+  <div class="viz"><div style="text-align:center">
+    <div class="qrframe" style="width:clamp(180px,26vw,250px)"><div class="in">[ QR → aws.amazon.com/free<br>crea tu cuenta ]</div></div>
+    <p style="margin:18px auto 0;font-family:var(--display);font-weight:700;color:#151D25;font-size:clamp(1.05rem,1.7vw,1.35rem)">Crea tu cuenta gratis</p>
+    <p style="margin:4px auto 0;font-family:var(--mono);color:#5b6b78;font-size:clamp(.8rem,1.2vw,.98rem)">hasta USD 200 en créditos · 6 meses gratis</p>
+  </div></div>
 </section>
 
 <!-- 15 · GRACIAS -->
-<section class="slide split">
-  <img class="uglogo" src="assets/logo/logo-dark.svg" alt="AWS User Groups">
-  <div class="cityband"></div>
-  <div class="col">
+<section class="slide left title">
+  <div class="gridmotif">
+    <img class="awsmark" src="assets/logo/logo-light.svg" alt="AWS User Groups">
+    <img class="hero" src="assets/pereira-badge.jpg" alt="AWS User Group Pereira" style="left:15%;top:15%;width:70%;height:58%">
+    <span class="tile" style="left:0;top:16.6667%;width:20%;height:16.6667%;background-image:url(assets/gradients/mesh-pmp.png)"></span>
+    <span class="tile" style="left:80%;top:66.6667%;width:20%;height:16.6667%;background-image:url(assets/gradients/mesh-tbp.png)"></span>
+  </div>
+  <div class="tcol" style="max-width:min(600px,53%)">
     <span class="ey"><span class="dot"></span>gracias, Pereira 🙌</span>
     <h2>¿Qué vas a<br><span class="grad-aws">encender</span>?</h2>
-    <p class="sub" style="max-width:34ch">Tienes ideas muertas en la cabeza. Esta semana, enciende una. Hoy algo que no existía quedó vivo — la próxima puede ser tuya.</p>
+    <p class="sub" style="max-width:38ch">Tienes ideas muertas en la cabeza. Esta semana, enciende una. Hoy algo que no existía quedó vivo — la próxima puede ser tuya.</p>
     <div class="contact">
       <span>LinkedIn <b>Alejandro Barrera</b> <i>/in/alejobarrera</i></span>
       <span>Web <i>alejandrobarrera.net</i></span>
       <span>Comunidad <i>iaopslatam.com</i></span>
     </div>
   </div>
-  <div class="viz"><div class="avring" style="border-radius:28px"><div class="in" style="border-radius:24px;flex-direction:column;gap:6px">
-    <span style="font-size:clamp(2rem,5vw,3.6rem)">IAOps</span>
-  </div></div></div>
   <div class="foot">
     <div class="lock"><span class="g">IAOps</span><small>la IA y la nube, trabajando juntas</small></div>
     <div class="disc">Charla de comunidad · opiniones propias · sin respaldo oficial de AWS.</div>
@@ -517,11 +879,94 @@ function go(n){i=Math.max(0,Math.min(slides.length-1,n));
   document.getElementById("bar").style.width=((i+1)/slides.length*100)+"%";
   document.getElementById("num").textContent=(i+1)+" / "+slides.length;
   document.querySelector(".hint").style.display=i===0?"":"none";}
+function inForm(t){return t&&(t.tagName==="INPUT"||t.tagName==="BUTTON"||t.tagName==="A"||(t.closest&&t.closest(".demo-form,.demo-result")));}
 document.addEventListener("keydown",function(e){
+  if(inForm(e.target))return;
   if(e.key==="ArrowRight"||e.key===" "||e.key==="PageDown")go(i+1);
   if(e.key==="ArrowLeft"||e.key==="PageUp")go(i-1);
   if(e.key==="Home")go(0);});
-document.addEventListener("click",function(e){if(e.clientX>innerWidth*0.25)go(i+1);else go(i-1);});
+document.addEventListener("click",function(e){
+  if(inForm(e.target)||(e.target.closest&&e.target.closest(".demo-console,.demo-steps,.demo-viz")))return;
+  if(e.clientX>innerWidth*0.25)go(i+1);else go(i-1);});
 go(0);
+
+/* --- demo en vivo (SSE con demo/server.py) --- */
+(function(){
+  var slide=document.getElementById("demoslide"); if(!slide)return;
+  var out=document.getElementById("demo-out"),cap=document.getElementById("demo-cap"),
+      go2=document.getElementById("demo-go"),inp=document.getElementById("demo-prompt"),
+      res=document.getElementById("demo-result"),urlEl=document.getElementById("demo-url"),
+      secsEl=document.getElementById("demo-secs"),
+      consoleEl=document.getElementById("demo-console"),deployEl=document.getElementById("demo-deploy"),
+      provEl=document.getElementById("demo-prov");
+  var steps={},order=["prov","ia","deploy","live"];
+  slide.querySelectorAll(".dstep").forEach(function(d){steps[d.dataset.step]=d;});
+  function num(d,v){d.querySelector(".di").textContent=v;}
+  slide.querySelectorAll(".chip-idea").forEach(function(c){c.addEventListener("click",function(){
+    slide.querySelectorAll(".chip-idea").forEach(function(x){x.classList.remove("sel");});
+    c.classList.add("sel");inp.value=c.dataset.idea;});});
+  function reset(){out.textContent="";res.hidden=true;deployEl.hidden=true;provEl.hidden=true;consoleEl.hidden=false;cap.textContent="la IA está escribiendo…";
+    order.forEach(function(k,ix){steps[k].classList.remove("active","done");num(steps[k],ix+1);});}
+  function mark(k){order.forEach(function(o){var d=steps[o];
+    if(o===k){d.classList.add("active");d.classList.remove("done");}
+    else if(order.indexOf(o)<order.indexOf(k)){d.classList.remove("active");d.classList.add("done");num(d,"✓");}});}
+  var es=null,deployT=0;
+  var logItems=deployEl.querySelectorAll(".deploy-log li");
+  function runDeployAnim(){
+    var s3=document.getElementById("dn-s3"),world=document.getElementById("dn-world");
+    if(s3)s3.classList.remove("lit");if(world)world.classList.remove("lit");
+    logItems.forEach(function(li){li.classList.remove("active","done");});
+    logItems.forEach(function(li,ix){var t=ix*1200;
+      setTimeout(function(){li.classList.add("active");
+        if(ix===1&&s3)s3.classList.add("lit");
+        if(ix===3&&world)world.classList.add("lit");},t);
+      setTimeout(function(){li.classList.remove("active");li.classList.add("done");},t+1000);});}
+  function showDeploy(){consoleEl.hidden=true;deployEl.hidden=false;deployT=Date.now();runDeployAnim();}
+  function hidePanels(){consoleEl.hidden=true;provEl.hidden=true;deployEl.hidden=true;res.hidden=true;}
+  function highlight(k){order.forEach(function(o,ix){steps[o].classList.remove("active","done");num(steps[o],ix+1);});steps[k].classList.add("active");}
+  function previewPhase(k){if(go2.disabled)return;highlight(k);hidePanels();
+    if(k==="prov"){provEl.hidden=false;runProvAnim();}
+    else if(k==="ia"){consoleEl.hidden=false;out.textContent="// aquí la IA escribe tu página, en vivo…\n// (dale «Encender» para verlo de verdad)";cap.textContent="la IA crea la página";}
+    else if(k==="deploy"){deployEl.hidden=false;runDeployAnim();}
+    else if(k==="live"){if(urlEl.textContent){res.hidden=false;}else{consoleEl.hidden=false;out.textContent="";cap.textContent="aquí queda la URL viva + el QR";}}}
+  slide.querySelectorAll(".dstep").forEach(function(d){d.style.cursor="pointer";d.title="clic para ver esta fase";
+    d.addEventListener("click",function(){previewPhase(d.dataset.step);});});
+  var provLog=provEl.querySelectorAll(".deploy-log li");
+  var PROV_STEP=2400;  // vista previa: 5 filas × 2,4 s; la corrida real la marca el servidor (PAUSE)
+  function runProvAnim(){var rows=provEl.querySelectorAll(".awsc-row");
+    rows.forEach(function(r){r.classList.remove("active","done");r.querySelector(".awsc-status").textContent="";});
+    rows.forEach(function(r,ix){var t=ix*PROV_STEP;
+      setTimeout(function(){r.classList.add("active");r.querySelector(".awsc-status").innerHTML='<span class="awsc-spin"></span> '+r.getAttribute("data-creating");},t);
+      setTimeout(function(){r.classList.remove("active");r.classList.add("done");r.querySelector(".awsc-status").textContent="✓ "+r.getAttribute("data-done");},t+PROV_STEP-350);});
+    return rows.length*PROV_STEP+300;}
+  var qrImg=document.getElementById("demo-qr");
+  function resetRows(){provEl.querySelectorAll(".awsc-row").forEach(function(r){r.classList.remove("active","done");r.querySelector(".awsc-status").textContent="";});}
+  function run(){if(es)es.close();reset();go2.disabled=true;
+    mark("prov");consoleEl.hidden=true;deployEl.hidden=true;provEl.hidden=false;resetRows();
+    if(qrImg){qrImg.removeAttribute("src");qrImg.style.display="none";}
+    es=new EventSource("/api/enciende?p="+encodeURIComponent(inp.value||"una idea"));
+    es.addEventListener("prov",function(e){var d=JSON.parse(e.data);var r=provEl.querySelector('.awsc-row[data-r="'+d.r+'"]');if(!r)return;var st=r.querySelector(".awsc-status");
+      if(d.status==="creating"){r.classList.remove("done");r.classList.add("active");st.innerHTML='<span class="awsc-spin"></span> '+r.getAttribute("data-creating");}
+      else{r.classList.remove("active");r.classList.add("done");st.textContent="✓ "+r.getAttribute("data-done");}});
+    es.addEventListener("step",function(e){var n=JSON.parse(e.data).n;mark(n);
+      if(n==="ia"){provEl.hidden=true;consoleEl.hidden=false;out.textContent="";cap.textContent="la IA está escribiendo…";}
+      if(n==="deploy")showDeploy();});
+    es.addEventListener("delta",function(e){out.textContent+=JSON.parse(e.data).t;out.scrollTop=out.scrollHeight;});
+    es.addEventListener("generated",function(){cap.textContent="listo · desplegando…";});
+    es.addEventListener("live",function(e){var d=JSON.parse(e.data);
+      var wait=Math.max(0,6300-(Date.now()-(deployT||Date.now())));
+      setTimeout(function(){deployEl.hidden=true;
+        ["deploy","live"].forEach(function(k){steps[k].classList.remove("active");steps[k].classList.add("done");num(steps[k],"✓");});
+        urlEl.textContent=d.url;urlEl.href=d.url;secsEl.textContent=d.secs;
+        if(d.qr&&qrImg){qrImg.src=d.qr;qrImg.style.display="block";}
+        res.hidden=false;go2.disabled=false;},wait);
+      es.close();});
+    es.addEventListener("failed",function(e){deployEl.hidden=true;provEl.hidden=true;consoleEl.hidden=false;
+      out.textContent="⚠ "+JSON.parse(e.data).error;cap.textContent="error — revisa el server";
+      order.forEach(function(k){steps[k].classList.remove("active");});go2.disabled=false;es.close();});
+    es.onerror=function(){if(!out.textContent)cap.textContent="¿servidor? corre  demo/presentar.sh";go2.disabled=false;es.close();};}
+  go2.addEventListener("click",run);
+  inp.addEventListener("keydown",function(e){if(e.key==="Enter")run();});
+})();
 </script>
 </body></html>
