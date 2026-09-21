@@ -946,7 +946,11 @@ go(0);
     if(qrImg){qrImg.removeAttribute("src");qrImg.style.display="none";}
     es=new EventSource("/api/enciende?p="+encodeURIComponent(inp.value||"una idea"));
     es.addEventListener("prov",function(e){var d=JSON.parse(e.data);var r=provEl.querySelector('.awsc-row[data-r="'+d.r+'"]');if(!r)return;var st=r.querySelector(".awsc-status");
-      if(d.status==="creating"){r.classList.remove("done");r.classList.add("active");st.innerHTML='<span class="awsc-spin"></span> '+r.getAttribute("data-creating");}
+      if(d.status==="creating"){r.classList.remove("done");r.classList.add("active");
+        // `detail` llega del servidor mientras ESPERA a que AWS confirme el recurso
+        // (p. ej. "propagando a 600+ puntos · 214s"): se ve el tiempo real.
+        var txt=d.detail?d.detail:r.getAttribute("data-creating");st.textContent="";
+        var sp=document.createElement("span");sp.className="awsc-spin";st.appendChild(sp);st.appendChild(document.createTextNode(" "+txt));}
       else{r.classList.remove("active");r.classList.add("done");st.textContent="✓ "+r.getAttribute("data-done");}});
     es.addEventListener("step",function(e){var n=JSON.parse(e.data).n;mark(n);
       if(n==="ia"){provEl.hidden=true;consoleEl.hidden=false;out.textContent="";cap.textContent="la IA está escribiendo…";}

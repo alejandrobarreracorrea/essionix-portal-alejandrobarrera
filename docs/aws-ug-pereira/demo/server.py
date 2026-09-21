@@ -4,7 +4,7 @@ verifica/aplica la infraestructura en AWS en vivo (bucket S3, política, CloudFr
 pre-creado por provision.sh, Bedrock), genera con Bedrock, despliega y sirve por HTTPS
 desde CloudFront. Cada paso se envía a la diapositiva por SSE.
 Correr: ./presentar.sh   →   http://localhost:8777/slides.html"""
-import os, json, re, time, urllib.parse, boto3, segno
+import os, json, re, time, urllib.parse, urllib.request, boto3, segno
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -46,48 +46,84 @@ class H(SimpleHTTPRequestHandler):
             bucket = C["BUCKET"]                      # fijo: lo creó provision.sh antes de la charla
             dist_id = C.get("DISTRIBUTION_ID", ""); cf_domain = C.get("CF_DOMAIN", "")
 
-            # ---- Fase 1: la infra en AWS, en vivo. Cada llamada es real e idempotente
-            # (volver a crear el bucket que ya es tuyo en us-east-1 responde 200; la
-            # política se reaplica; CloudFront se consulta de verdad). La distribución
-            # NO se crea aquí: tarda 5-15 min en propagarse y por eso la crea
-            # provision.sh antes. Cada fila queda >= PAUSE s en pantalla: en tarima,
-            # lo que pasa en 300 ms no se ve.
+            # ---- Fase 1: la infra en AWS, en vivo. Cada fila hace la llamada real y
+            # luego ESPERA a que AWS confirme que el recurso está listo (waiter/poll);
+            # mientras tanto la fila muestra el progreso (texto + segundos). Nada se
+            # marca "listo" por reloj: se marca cuando AWS lo dice. Cada fila queda
+            # >= PAUSE s en pantalla para que se alcance a ver.
             def fila(r, fn):
                 self.sse("prov", {"r": r, "status": "creating"})
-                t = time.time(); fn()
+                t = time.time()
+                def progreso(txt):
+                    self.sse("prov", {"r": r, "status": "creating", "detail": "%s · %ds" % (txt, int(time.time() - t))})
+                fn(progreso)
                 time.sleep(max(0, PAUSE - (time.time() - t)))
                 self.sse("prov", {"r": r, "status": "done"})
 
-            def crear_bucket():
+            def esperar(cond, progreso, txt, cada=2.0, maximo=None):
+                """Poll hasta que cond() sea True; informa progreso; maximo=None espera sin tope."""
+                t = time.time()
+                while not cond():
+                    if maximo is not None and time.time() - t > maximo: raise RuntimeError("tiempo agotado: " + txt)
+                    progreso(txt); time.sleep(cada)
+
+            def crear_bucket(progreso):
                 try: s3.create_bucket(Bucket=bucket)   # us-east-1: sin LocationConstraint
                 except s3.exceptions.BucketAlreadyOwnedByYou: pass
+                progreso("esperando al bucket")
+                s3.get_waiter("bucket_exists").wait(Bucket=bucket, WaiterConfig={"Delay": 2, "MaxAttempts": 30})
             fila("s3", crear_bucket)
 
-            def politica():
+            def politica(progreso):
                 s3.put_public_access_block(Bucket=bucket, PublicAccessBlockConfiguration={
                     "BlockPublicAcls": False, "IgnorePublicAcls": False,
                     "BlockPublicPolicy": False, "RestrictPublicBuckets": False})
                 s3.put_bucket_policy(Bucket=bucket, Policy=json.dumps({
                     "Version": "2012-10-17", "Statement": [{"Effect": "Allow", "Principal": "*",
                     "Action": "s3:GetObject", "Resource": "arn:aws:s3:::%s/*" % bucket}]}))
+                def publico():
+                    try: return s3.get_bucket_policy_status(Bucket=bucket)["PolicyStatus"]["IsPublic"]
+                    except Exception: return False
+                esperar(publico, progreso, "aplicando política", cada=1.0, maximo=60)
             fila("policy", politica)
 
-            cf_ok = {"v": False}
-            def cloudfront():
-                if not dist_id: return
-                try:
-                    d = SESSION.client("cloudfront").get_distribution(Id=dist_id)["Distribution"]
-                    cf_ok["v"] = d["Status"] == "Deployed" and d["DistributionConfig"]["Enabled"]
-                    if not cf_ok["v"]: print("[cloudfront] %s aún no está Deployed: la URL viva será la de S3" % dist_id)
-                except Exception as e:
-                    print("[cloudfront] no se pudo consultar:", e)   # la demo sigue por S3
+            # CloudFront es un prerrequisito lento (5-15 min en propagarse). Si ya existe
+            # (provision.sh) solo se espera a que esté Deployed; si no existe, se crea
+            # aquí y la animación espera lo que haga falta, mostrando el tiempo real.
+            cf = SESSION.client("cloudfront")
+            st = {"dist_id": dist_id, "domain": cf_domain}
+            def cloudfront(progreso):
+                if not st["dist_id"]:
+                    progreso("creando distribución")
+                    out = cf.create_distribution(DistributionConfig={
+                        "CallerReference": "encender-%d" % int(time.time()), "Comment": "demo encender tu idea",
+                        "Enabled": True, "DefaultRootObject": "index.html",
+                        "Origins": {"Quantity": 1, "Items": [{"Id": "s3site",
+                            "DomainName": "%s.s3-website-%s.amazonaws.com" % (bucket, REGION),
+                            "CustomOriginConfig": {"HTTPPort": 80, "HTTPSPort": 443, "OriginProtocolPolicy": "http-only",
+                                "OriginSslProtocols": {"Quantity": 1, "Items": ["TLSv1.2"]}}}]},
+                        "DefaultCacheBehavior": {"TargetOriginId": "s3site", "ViewerProtocolPolicy": "redirect-to-https",
+                            "AllowedMethods": {"Quantity": 2, "Items": ["GET", "HEAD"]}, "Compress": True,
+                            "CachePolicyId": "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"}})   # CachingDisabled
+                    st["dist_id"] = out["Distribution"]["Id"]; st["domain"] = out["Distribution"]["DomainName"]
+                    print("[cloudfront] creada %s (%s): pégala en config.env" % (st["dist_id"], st["domain"]))
+                def desplegada():
+                    d = cf.get_distribution(Id=st["dist_id"])["Distribution"]
+                    return d["Status"] == "Deployed" and d["DistributionConfig"]["Enabled"]
+                esperar(desplegada, progreso, "propagando a 600+ puntos", cada=5.0)
             fila("cloudfront", cloudfront)
 
-            def bedrock():   # se confirma el acceso al modelo antes de pedirle la página
+            def bedrock(progreso):   # se confirma el acceso al modelo antes de pedirle la página
+                progreso("verificando acceso al modelo")
                 SESSION.client("bedrock").list_inference_profiles(maxResults=1)
             fila("bedrock", bedrock)
 
-            fila("https", lambda: None)   # CloudFront (o el endpoint de S3) ya sirven por HTTPS
+            def https(progreso):     # se comprueba de verdad que CloudFront responde 200 por HTTPS
+                def responde():
+                    try: return urllib.request.urlopen("https://%s/" % st["domain"], timeout=8).status == 200
+                    except Exception: return False
+                esperar(responde, progreso, "probando https", cada=2.0, maximo=180)
+            fila("https", https)
 
             # ---- Fase 2: la IA crea la página (streaming) ----
             self.sse("step", {"n": "ia"})
@@ -111,13 +147,20 @@ class H(SimpleHTTPRequestHandler):
             self.sse("step", {"n": "deploy"})
             s3.put_object(Bucket=bucket, Key="index.html", Body=html.encode(),
                 ContentType="text/html; charset=utf-8", CacheControl="no-cache")
-            if cf_ok["v"] and cf_domain:
-                url = "https://%s/" % cf_domain
-            else:
-                url = "https://%s.s3.%s.amazonaws.com/index.html" % (bucket, REGION)
+            url = "https://%s/" % st["domain"]
+            # "¡Está vivo!" solo cuando CloudFront ya entrega ESTA página (no la anterior).
+            def sirve_la_nueva():
+                try:
+                    req = urllib.request.Request(url, headers={"Cache-Control": "no-cache"})
+                    return urllib.request.urlopen(req, timeout=8).read() == html.encode()
+                except Exception: return False
+            tw = time.time()
+            while not sirve_la_nueva():
+                if time.time() - tw > 120: raise RuntimeError("CloudFront no entregó la página nueva en 120 s")
+                time.sleep(2)
             qr = segno.make(url, error="h").svg_data_uri(scale=4, border=2, dark="#151D25", light="#ffffff")
 
-            self.sse("live", {"url": url, "qr": qr, "secs": round(time.time() - t0), "cdn": cf_ok["v"]})
+            self.sse("live", {"url": url, "qr": qr, "secs": round(time.time() - t0)})
         except Exception as e:
             self.sse("failed", {"error": str(e)})
 
