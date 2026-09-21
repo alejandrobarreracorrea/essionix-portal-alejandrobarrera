@@ -932,7 +932,7 @@ go(0);
   slide.querySelectorAll(".dstep").forEach(function(d){d.style.cursor="pointer";d.title="clic para ver esta fase";
     d.addEventListener("click",function(){previewPhase(d.dataset.step);});});
   var provLog=provEl.querySelectorAll(".deploy-log li");
-  var PROV_STEP=2400;  // vista previa: 5 filas × 2,4 s; la corrida real la marca el servidor (PAUSE)
+  var PROV_STEP=4000;  // vista previa: 5 filas × 4 s; la corrida real la marca el servidor (PAUSE)
   function runProvAnim(){var rows=provEl.querySelectorAll(".awsc-row");
     rows.forEach(function(r){r.classList.remove("active","done");r.querySelector(".awsc-status").textContent="";});
     rows.forEach(function(r,ix){var t=ix*PROV_STEP;

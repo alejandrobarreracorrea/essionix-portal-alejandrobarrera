@@ -9,7 +9,7 @@ from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)              # docs/aws-ug-pereira (la presentación)
-PAUSE = 2.2                                 # segundos mínimos por fila del panel "Aprovisionando"
+PAUSE = 4.0                                 # segundos mínimos por fila del panel "Aprovisionando" (5 filas ≈ 20 s)
 
 def cfg():
     d = {}
