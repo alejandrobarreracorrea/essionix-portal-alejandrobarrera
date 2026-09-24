@@ -256,7 +256,7 @@ h2{font-family:var(--display);font-weight:700;line-height:1.14;font-size:clamp(1
 .deploy-log li.done{opacity:1;color:var(--text)}
 .deploy-log li.done::before{content:"✓";color:#12a15a}
 #dn-s3,#dn-world{transition:filter .4s,stroke-width .4s}
-#dn-s3.lit{stroke:url(#gAWS);stroke-width:4;filter:url(#glow)}
+#dn-s3.lit{filter:url(#glow)}
 #dn-world.lit{filter:url(#glow)}
 .pv{opacity:.16;transition:opacity .45s}
 .pv.on{opacity:1}
@@ -784,13 +784,11 @@ h2{font-family:var(--display);font-weight:700;line-height:1.14;font-size:clamp(1
           <g transform="translate(68,120)" stroke="url(#gPT)" stroke-width="2" fill="none"><rect x="-11" y="-14" width="22" height="28" rx="2"/><line x1="-6" y1="-7" x2="6" y2="-7"/><line x1="-6" y1="-1" x2="6" y2="-1"/><line x1="-6" y1="5" x2="2" y2="5"/></g>
           <text x="68" y="172" text-anchor="middle" class="nlabel" font-size="14" fill="#aab6c2">tu página</text></g>
         <!-- nodo: S3 -->
-        <g id="dn-s3" class="dnode"><circle cx="216" cy="120" r="30" fill="var(--panel2)" stroke="url(#gPT)" stroke-width="2.5"/>
-          <image href="assets/aws/Arch_Amazon-S3_48.svg" x="198" y="102" width="36" height="36"/>
-          <text x="216" y="172" text-anchor="middle" font-size="14" fill="#aab6c2">Amazon S3</text></g>
+        <g id="dn-s3" class="dnode"><image href="assets/aws/Arch_Amazon-S3_48.svg" x="190" y="94" width="52" height="52"/>
+          <text x="216" y="174" text-anchor="middle" font-size="14" fill="#aab6c2">Amazon S3</text></g>
         <!-- nodo: CloudFront -->
-        <g id="dn-cf" class="dnode"><circle cx="384" cy="120" r="32" fill="var(--panel2)" stroke="url(#gAWS)" stroke-width="3" filter="url(#glow)"/>
-          <image href="assets/aws/Arch_Amazon-CloudFront_48.svg" x="365" y="101" width="38" height="38"/>
-          <text x="384" y="174" text-anchor="middle" font-size="14" fill="#c9a">CloudFront</text><text id="dn-pop" x="384" y="192" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#ff9900">600+ puntos</text></g>
+        <g id="dn-cf" class="dnode"><image href="assets/aws/Arch_Amazon-CloudFront_48.svg" x="358" y="92" width="52" height="52"/>
+          <text x="384" y="176" text-anchor="middle" font-size="14" fill="#c9a">CloudFront</text><text id="dn-pop" x="384" y="194" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#ff9900">600+ puntos</text></g>
       </svg>
       <ul class="deploy-log" id="deploy-log">
         <li data-n="pack">Empaquetando tu página</li>

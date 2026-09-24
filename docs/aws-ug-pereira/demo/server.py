@@ -128,8 +128,14 @@ class H(SimpleHTTPRequestHandler):
 
             # ---- Fase 2: la IA crea la página (streaming) ----
             self.sse("step", {"n": "ia"})
+            _M = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto",
+                  "septiembre","octubre","noviembre","diciembre"]
+            _n = time.localtime()
+            fecha = "%d de %s de %d, %02d:%02d" % (_n.tm_mday, _M[_n.tm_mon-1], _n.tm_year, _n.tm_hour, _n.tm_min)
+            sys_full = SYS + ("\n\n[Contexto en vivo] La fecha y hora actuales son: %s. "
+                              "Si muestras fecha, año o ©, usa ESTE año/fecha; nunca 2024 ni un año inventado." % fecha)
             body = {"anthropic_version": "bedrock-2023-05-31", "max_tokens": int(C.get("MAX_TOKENS", "8000")),
-                    "system": SYS, "messages": [{"role": "user", "content": prompt}]}
+                    "system": sys_full, "messages": [{"role": "user", "content": prompt}]}
             br = SESSION.client("bedrock-runtime")
             resp = br.invoke_model_with_response_stream(modelId=C["MODEL_ID"], body=json.dumps(body))
             parts = []
@@ -138,6 +144,12 @@ class H(SimpleHTTPRequestHandler):
                 if ch.get("type") == "content_block_delta":
                     piece = ch["delta"].get("text", ""); parts.append(piece); self.sse("delta", {"t": piece})
             html = re.sub(r"\s*```$", "", re.sub(r"^```(?:html)?\s*", "", "".join(parts).strip()))
+            # sello de "creado en vivo" con fecha Y hora exactas — garantizado en toda página
+            sello = ('<div style="position:fixed;left:50%;bottom:12px;transform:translateX(-50%);'
+                     'font:600 12px/1 system-ui,-apple-system,Segoe UI,sans-serif;padding:7px 15px;border-radius:999px;'
+                     'background:rgba(15,20,28,.85);color:#fff;z-index:2147483647;box-shadow:0 6px 20px rgba(0,0,0,.4);'
+                     'white-space:nowrap">⚡ Creado en vivo con IA en AWS · ' + fecha + '</div>')
+            html = html.replace("</body>", sello + "</body>", 1) if "</body>" in html else (html + sello)
             self.sse("generated", {"bytes": len(html)})
 
             # ---- Fase 3: desplegar. Igual que la fase 1: cada paso es real, se confirma
