@@ -1,7 +1,7 @@
 # Sesión 2 · Lab: la caja de herramientas + Linux real en EC2 — guía del docente
 
 **Enfoque:** el Linux real donde se practican los comandos es una **instancia EC2 (Amazon Linux)**
-lanzada por cada estudiante, conectada por **SSH** (con su llave .pem, usuario `ec2-user`).
+lanzada por cada estudiante, conectada por **SSH con MobaXterm** (llave `.ppk`, usuario `ec2-user`).
 Prerequisito: cuenta AWS activa (se pidió en la sesión 1).
 
 **Todos deben tener cuenta AWS activa** (prerequisito de la sesión 1). El lab corre **solo en EC2**:
@@ -20,16 +20,17 @@ Consola AWS → región **N. Virginia (us-east-1)** → servicio **EC2** → **L
 - Name: `mi-primer-servidor`
 - AMI: **Amazon Linux** (marca "Free tier eligible")
 - Type: **t2.micro** o **t3.micro** (Free tier)
-- Key pair: **Create new key pair** → tipo **.pem** → **descargar** (es tu llave para SSH)
+- Key pair: **Create new key pair** → formato **.ppk** (PuTTY, para MobaXterm) → **descargar** (es tu llave para SSH)
 - Network: ✓ **Allow SSH traffic from Anywhere (0.0.0.0/0)**
 - **Launch instance** → Instances → esperar **Running** (~1 min)
 
-## CONECTARSE (por SSH con la llave)
-En la terminal, donde quedó la llave descargada:
-- `chmod 400 tu-llave.pem`  (permisos correctos; en Windows, terminal con `ssh`)
-- `ssh -i tu-llave.pem ec2-user@<IP-pública>` → responder `yes` → entra `ec2-user@ip-...:~$`. Eso es Amazon Linux 100% real.
+## CONECTARSE (por SSH con MobaXterm)
+En **MobaXterm** (Windows):
+- **Session** → **SSH** → **Remote host:** `<IP-pública>` · ✓ **Specify username:** `ec2-user`
+- **Advanced SSH settings** → ✓ **Use private key** → selecciona tu `.ppk` → **OK** → entra `ec2-user@ip-...:~$`. Eso es Amazon Linux 100% real.
 
-> Gotchas de SSH: "Permission denied (publickey)" → revisar `chmod 400` y que el usuario sea `ec2-user` (Amazon Linux). "Connection timed out" → puerto 22 abierto en el security group.
+> Gotchas: "Access denied / publickey" → `.ppk` equivocada o usuario distinto de `ec2-user` (Amazon Linux). "Connection timed out" → puerto 22 abierto en el security group.
+> Si tu llave quedó en `.pem`, conviértela a `.ppk` con **MobaKeyGen / PuTTYgen** (Load .pem → Save private key → .ppk).
 
 ## LABS (todos DENTRO de la instancia)
 - Lab 1 ubicarse: `whoami` `pwd` `ls -la` `uname -a` `cd / && ls` `cd ~` `clear`
