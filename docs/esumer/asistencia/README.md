@@ -13,6 +13,7 @@ Se filtra por **Grupo** + **N° de clase** + **Marca temporal** (la hora delata 
 | 3 | 2026-09-15 | Linux/terminal en EC2 (SSH · Amazon Linux) | 30 | 13 | [RED-01/clase-03.md](RED-01/clase-03.md) |
 | 4 | 2026-09-17 | Repaso Linux + primer push a GitHub + intro redes | 37 | 6 | [RED-01/clase-04.md](RED-01/clase-04.md) |
 | 5 | 2026-09-22 | Redes de verdad: OSI/IP → VPC, Security Groups, balanceo + blindaje | 33 | 10 | [RED-01/clase-05.md](RED-01/clase-05.md) |
+| 6 | 2026-09-24 | Redes AWS (VPC/subredes/IGW/NAT/EIP) + montar servidor web (NGINX + index.html, LAB) | 32 | 11 | [RED-01/clase-06.md](RED-01/clase-06.md) |
 
 ## RED-02 (Mié/Vie)
 | Clase | Fecha | Tema | Pres. | Aus. | Registro |
