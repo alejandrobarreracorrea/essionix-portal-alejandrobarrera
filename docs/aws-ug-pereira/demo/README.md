@@ -7,7 +7,7 @@ Todo aislado en TU cuenta y desechable. El paso en vivo es un solo comando.
 ```
 tú (prompt en la terminal)
    → Bedrock InvokeModel (genera HTML completo)
-   → S3 (web estática)  → CloudFront (HTTPS)  → URL fija + QR
+   → S3 (bucket PRIVADO)  → CloudFront con OAC (HTTPS)  → URL fija + QR
 ```
 Todo lo lento (bucket, CloudFront ~10 min) queda **pre-provisionado**. En vivo solo:
 generar (Bedrock, ~seg) + subir 1 archivo (~seg) + invalidar caché (~seg).
@@ -18,7 +18,7 @@ generar (Bedrock, ~seg) + subir 1 archivo (~seg) + invalidar caché (~seg).
 2. `cp config.env.example config.env` y ajusta `PROFILE`, `BUCKET` (nombre único), `MODEL_ID`.
 3. **Habilitar acceso al modelo** en consola Bedrock → *Model access* (Claude o Nova).
    Verifica: `./check-bedrock.sh` (lista perfiles de inferencia y hace una invocación de prueba).
-4. **Provisionar infra**: `./provision.sh` → copia `DISTRIBUTION_ID` y `CF_DOMAIN` a `config.env`.
+4. **Provisionar infra**: `./provision.sh` → copia `DISTRIBUTION_ID` y `CF_DOMAIN` a `config.env`; luego `.venv/bin/python asegurar-oac.py` (bucket privado + OAC: directo a S3 = 403, por CloudFront = 200).
 5. **Generar el QR** apuntando a `https://$CF_DOMAIN` y pegarlo en el slide del QR.
 6. **Ensayo cronometrado**: corre `./enciende.sh "..."` 2-3 veces y anota el tiempo total.
 
