@@ -4,7 +4,7 @@ verifica/aplica la infraestructura en AWS en vivo (bucket S3, política, CloudFr
 pre-creado por provision.sh, Bedrock), genera con Bedrock, despliega y sirve por HTTPS
 desde CloudFront. Cada paso se envía a la diapositiva por SSE.
 Correr: ./presentar.sh   →   http://localhost:8777/slides.html"""
-import os, json, re, time, urllib.parse, urllib.request, urllib.error, boto3, segno
+import io, os, json, re, time, urllib.parse, urllib.request, urllib.error, boto3, segno
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -29,10 +29,22 @@ SESSION = boto3.Session(profile_name=C["PROFILE"], region_name=REGION)
 class H(SimpleHTTPRequestHandler):
     def __init__(self, *a, **k): super().__init__(*a, directory=ROOT, **k)
     def log_message(self, *a): pass
+    def end_headers(self):
+        # sin caché: cada recarga trae la última versión del deck, escenas y demo
+        if not self.path.startswith("/api/"): self.send_header("Cache-Control", "no-store")
+        super().end_headers()
 
     def do_GET(self):
         if self.path.startswith("/api/enciende"): return self.enciende()
+        if self.path.startswith("/api/qr"): return self.qr()
         return super().do_GET()
+
+    def qr(self):
+        """QR en SVG para un texto corto (p. ej. https://kahoot.it/?pin=1234567)."""
+        d = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query).get("d", [""])[0][:200]
+        buf = io.BytesIO(); segno.make(d or "https://kahoot.it", error="m").save(buf, kind="svg", scale=8, border=2, dark="#151D25", light="#ffffff"); svg = buf.getvalue()
+        self.send_response(200); self.send_header("Content-Type", "image/svg+xml"); self.send_header("Cache-Control", "no-store")
+        self.send_header("Content-Length", str(len(svg))); self.end_headers(); self.wfile.write(svg)
 
     def sse(self, event, data):
         self.wfile.write(("event: %s\ndata: %s\n\n" % (event, json.dumps(data))).encode()); self.wfile.flush()

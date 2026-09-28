@@ -96,6 +96,8 @@ h2{font-family:var(--display);font-weight:700;line-height:1.14;font-size:clamp(1
   box-shadow:0 0 70px -12px rgba(172,91,255,.6);display:flex}
 .avring .in{flex:1;border-radius:50%;background:var(--panel2);display:flex;align-items:center;justify-content:center;
   font-family:var(--display);font-weight:700;font-size:clamp(3rem,7vw,5.5rem);background-clip:padding-box}
+.avring .in.foto{overflow:hidden;background:#dfe3e8}
+.avring .in.foto img{width:100%;height:100%;object-fit:cover;object-position:50% 30%;border-radius:50%;display:block}
 .avring .in span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 
 @media(max-width:860px){
@@ -266,6 +268,15 @@ h2{font-family:var(--display);font-weight:700;line-height:1.14;font-size:clamp(1
 .avring,.qrframe{background:conic-gradient(from var(--ang),#AC5BFF,#41B3FF,#FF9900,#AC5BFF);animation:girar 6s linear infinite}
 @keyframes girar{to{--ang:360deg}}
 @media(prefers-reduced-motion:reduce){.avring,.qrframe{animation:none}}
+
+/* ---- rifa: PIN de Kahoot (tecla P en la diapositiva para escribirlo) ---- */
+.kpin{display:flex;gap:22px;align-items:center;margin-top:22px;padding:14px 20px 14px 14px;border:1px solid rgba(172,91,255,.45);border-radius:16px;background:rgba(172,91,255,.10);max-width:max-content}
+.kpin[hidden],.kpin-edit[hidden]{display:none}
+.kpin img{width:clamp(96px,11vw,150px);height:auto;border-radius:10px;background:#fff;padding:4px}
+.kpin small{display:block;font-family:var(--mono);font-size:clamp(.72rem,1vw,.85rem);color:var(--muted)}
+.kpin b{display:block;font-family:var(--mono);font-weight:700;font-size:clamp(2.2rem,4.6vw,3.8rem);letter-spacing:.06em;color:var(--aws);line-height:1.1;font-variant-numeric:tabular-nums}
+.kpin span{font-family:var(--mono);font-size:clamp(.72rem,1vw,.85rem);color:var(--faint)}
+.kpin-edit{margin-top:14px}.kpin-edit input{background:var(--panel2);border:1px solid var(--t);border-radius:10px;padding:10px 14px;color:#fff;font-family:var(--mono);font-size:1.1rem;width:18ch}
 </style></head>
 <body>
 <!-- shared gradient/glow defs -->
@@ -314,7 +325,7 @@ h2{font-family:var(--display);font-weight:700;line-height:1.14;font-size:clamp(1
     <h2>Soy Alejandro. Diseño<br>infraestructura en la nube.</h2>
     <p class="sub" style="max-width:39ch">Es mi primera charla. La primera vez que vi algo mío pasar de mi pantalla a estar <b style="color:var(--text);font-weight:600">vivo</b> para cualquiera, no lo podía creer. Hoy te quiero dar ese momento.</p>
   </div>
-  <div class="viz"><div class="avring"><div class="in"><span>AB</span></div></div></div>
+  <div class="viz"><div class="avring"><div class="in foto"><img src="assets/alejandro.jpg" alt="Alejandro Barrera"></div></div></div>
 </section>
 
 <!-- 4 · AGENDA -->
@@ -349,7 +360,7 @@ h2{font-family:var(--display);font-weight:700;line-height:1.14;font-size:clamp(1
     <div class="tag"><b>02</b>para encender · idea 2 de 5</div>
     <h2>La enciendes desde cualquier parte</h2>
     <div class="note"><span class="h">// como</span> un enchufe en cada país</div>
-    <p class="sub">Regiones: eliges dónde vive tu idea, y siempre hay una cerca. AWS tiene <b>39 en el mundo</b> — 2 en LATAM (São Paulo y México) y una <b>Local Zone en Bogotá</b>.</p>
+    <p class="sub"><b>39 regiones donde vivir, 600+ puntos desde donde llegar.</b> Eliges la región donde vive tu idea (2 en LATAM y una <b>Local Zone en Bogotá</b>) y CloudFront la entrega desde el punto más cercano a quien la abre.</p>
   </div>
   <div class="viz"><canvas data-escena="regiones" aria-hidden="true"></canvas></div>
 </section>
@@ -360,7 +371,7 @@ h2{font-family:var(--display);font-weight:700;line-height:1.14;font-size:clamp(1
     <div class="tag"><b>03</b>para encender · idea 3 de 5</div>
     <h2>Cada quien cuida su parte</h2>
     <div class="note"><span class="h">// como</span> la central eléctrica y tu interruptor</div>
-    <p class="sub">AWS pone y protege la central; tú cuidas tu interruptor y tus llaves. El error más caro de quien empieza vive en su mitad.</p>
+    <p class="sub">AWS pone y protege la central; tú cuidas tu interruptor y tus llaves. Ejemplo del demo: <b>tu bucket cerrado — solo CloudFront entra</b>. El error más caro de quien empieza vive en su mitad.</p>
   </div>
   <div class="viz"><canvas data-escena="responsabilidad" aria-hidden="true"></canvas></div>
 </section>
@@ -369,11 +380,11 @@ h2{font-family:var(--display);font-weight:700;line-height:1.14;font-size:clamp(1
 <section class="slide split light">
   <div class="col cbody">
     <div class="tag"><b>04</b>para encender · idea 4 de 5</div>
-    <h2>No pones la planta eléctrica</h2>
-    <div class="note"><span class="h">// solo</span> aprietas el botón</div>
-    <p class="sub">Serverless: tu idea se enciende sola cuando alguien la usa y se apaga cuando nadie la necesita. Hay computadores detrás, pero no son tu problema — no los pagas si están quietos.</p>
+    <h2>Cada botón es un comando</h2>
+    <div class="note"><span class="h">// como</span> cada interruptor de tu casa tiene un cable detrás</div>
+    <p class="sub">Cuando haces clic en la consola de AWS, por debajo sale una orden por internet: una <b>API</b>. Lo que hace un clic lo puede hacer un comando, un script… o una IA. Por eso en el demo vas a ver la terminal: son los cables detrás de los botones.</p>
   </div>
-  <div class="viz"><canvas data-escena="serverless" aria-hidden="true"></canvas></div>
+  <div class="viz"><canvas data-escena="comando" aria-hidden="true"></canvas></div>
 </section>
 
 <!-- 9 · CONCEPTO 5 -->
@@ -488,6 +499,26 @@ h2{font-family:var(--display);font-weight:700;line-height:1.14;font-size:clamp(1
   <div class="viz"><canvas data-escena="escala" aria-hidden="true"></canvas></div>
 </section>
 
+<!-- 15b · RIFA KAHOOT (créditos AWS) — quiz en kahoot/rifa-kahoot.xlsx, guía en kahoot/README.md -->
+<section class="slide split">
+  <div class="col">
+    <span class="ey"><span class="dot aws"></span>rifa · créditos de AWS</span>
+    <h2>¿Estabas <span class="grad-aws">prestando atención</span>?</h2>
+    <div class="flow">
+      <div class="step"><span class="s">01</span><p>Abre <b>kahoot.it</b> en tu celular</p></div>
+      <div class="step"><span class="s">02</span><p>Escribe el <b>PIN</b> que sale en pantalla y tu nombre</p></div>
+      <div class="step"><span class="s">03</span><p>9 preguntas de esta charla: <b>acierta y rápido</b>. El 1.er lugar gana <b>USD 50 en créditos de AWS</b></p></div>
+    </div>
+    <div class="kpin" id="kpin" data-pin="86241" hidden>
+      <img id="kpin-qr" alt="QR para entrar al Kahoot">
+      <div><small>PIN del juego</small><b id="kpin-num"></b><span>kahoot.it · o escanea el QR</span></div>
+    </div>
+    <div class="kpin-edit" id="kpin-edit" hidden><input id="kpin-in" inputmode="numeric" placeholder="PIN de Kahoot (Enter)" aria-label="PIN de Kahoot"></div>
+    <p class="fine">Créditos de AWS para la comunidad · un premio por Kahoot</p>
+  </div>
+  <div class="viz"><canvas data-escena="podio" aria-hidden="true"></canvas></div>
+</section>
+
 <!-- 15 · GRACIAS -->
 <section class="slide left title">
   <div class="gridmotif">
@@ -514,8 +545,8 @@ h2{font-family:var(--display);font-weight:700;line-height:1.14;font-size:clamp(1
 
 <div id="num"></div>
 <div class="hint">← → navegar · clic avanza</div>
-<script src="assets/escenas.js"></script>
-<script src="assets/demo.js" defer></script>
+<script src="assets/escenas.js?v=20260928c"></script>
+<script src="assets/demo.js?v=20260928b" defer></script>
 <script>
 var slides=document.querySelectorAll(".slide"),i=0;
 function go(n){i=Math.max(0,Math.min(slides.length-1,n));
@@ -533,6 +564,19 @@ document.addEventListener("keydown",function(e){
 document.addEventListener("click",function(e){
   if(inForm(e.target)||(e.target.closest&&e.target.closest(".demo-console,.demo-steps,.demo-viz")))return;
   if(e.clientX>innerWidth*0.25)go(i+1);else go(i-1);});
-go(0);
+var n0=parseInt((location.hash.match(/\d+/)||["1"])[0],10);go(n0>0?n0-1:0);   // #7 abre la diapositiva 7
+/* rifa: PIN de Kahoot. En la diapositiva de la rifa presiona P, escribe el PIN y Enter (también ?pin=1234567). */
+(function(){var box=document.getElementById("kpin");if(!box)return;var ed=document.getElementById("kpin-edit"),inp=document.getElementById("kpin-in"),
+  slide=box.closest(".slide");
+  function pintar(pin){pin=(pin||"").replace(/\D/g,"");if(!pin){box.hidden=true;return}
+    document.getElementById("kpin-num").textContent=pin.replace(/\B(?=(\d{3})+$)/g," ");
+    document.getElementById("kpin-qr").src="/api/qr?d="+encodeURIComponent("https://kahoot.it/?pin="+pin);box.hidden=false}
+  var q=(location.search.match(/[?&]pin=(\d+)/)||[])[1];if(q){try{localStorage.setItem("kahootPin",q)}catch(e){}}
+  var guardado="";try{guardado=localStorage.getItem("kahootPin")||""}catch(e){}pintar(q||guardado||box.dataset.pin);
+  document.addEventListener("keydown",function(e){if(!slide.classList.contains("on"))return;
+    if(e.target===inp){if(e.key==="Enter"){var v=inp.value.replace(/\D/g,"");try{v?localStorage.setItem("kahootPin",v):localStorage.removeItem("kahootPin")}catch(er){}pintar(v);ed.hidden=true;inp.blur()}
+      if(e.key==="Escape"){ed.hidden=true;inp.blur()}return}
+    if(e.key==="p"||e.key==="P"){e.preventDefault();ed.hidden=false;inp.value="";inp.focus()}});
+})();
 </script>
 </body></html>

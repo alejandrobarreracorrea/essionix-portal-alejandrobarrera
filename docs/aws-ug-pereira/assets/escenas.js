@@ -86,7 +86,8 @@ function fit(st){var cv=st.cv,d=st.d,box=cv.parentElement;
   var cw=Math.min(bw,mh*d.w/d.h),ch=cw*d.h/d.w;
   cv.style.width=cw+'px';cv.style.height=ch+'px';cv.width=Math.round(cw*DPR);cv.height=Math.round(ch*DPR);
   st.W=d.w;st.H=d.h;st.k=cv.width/d.w}
-function paint(st,now){var c=st.c,t=RM?(st.d.rest||30):(now-st.t0)/1000;
+var TOFF=parseFloat((location.search.match(/[?&]t=([\d.]+)/)||[])[1])||0;   // depuración: ?t=5 muestra cada escena en su segundo 5
+function paint(st,now){var c=st.c,t=RM?(st.d.rest||30):(now-st.t0)/1000+TOFF;
   c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,st.cv.width,st.cv.height);
   c.setTransform(st.k,0,0,st.k,0,0);KS=st.k;c.globalAlpha=1;c.globalCompositeOperation='source-over';c.shadowBlur=0;c.lineCap='round';c.lineJoin='round';
   st.S.W=st.W;st.S.H=st.H;st.d.draw(c,st.S,t)}
@@ -299,7 +300,12 @@ def('regiones',{w:560,h:330,rest:10,
     // contador
     tx(c,String(n),18,286,{s:46,w:800,f:'display',c:C.o});
     var nw=n>=10?58:32;tx(c,'regiones',18+nw+8,270,{s:15,w:700,c:C.ink});tx(c,'en el mundo',18+nw+8,287,{s:12.5,c:C.muted});
-    tx(c,'2 en LATAM (México · São Paulo) + Local Zone en Bogotá = menor latencia',280,322,{s:12.5,c:C.muted,a:'center',al:P(t,4.6,.6)});
+    // puntos de entrega de CloudFront: donde llega tu idea
+    var ek=P(t,5.4,1.6);if(ek>0){for(var q=0;q<d.dots.length;q++){if(hash(q*29+7)<.955)continue;var dp=d.dots[q],ph=hash(q*3+1);if(ph>ek)continue;
+        var tw=.55+.45*Math.sin(t*3+q);c.fillStyle=col(C.o,.85*tw);c.beginPath();c.moveTo(dp[0],dp[1]-3);c.lineTo(dp[0]+3,dp[1]);c.lineTo(dp[0],dp[1]+3);c.lineTo(dp[0]-3,dp[1]);c.closePath();c.fill()}}
+    var f1=P(t,4.6,.6)*(1-P(t,5.2,.3)),f2=P(t,5.5,.5);
+    tx(c,'2 en LATAM (México · São Paulo) + Local Zone en Bogotá = menor latencia',280,322,{s:12.5,c:C.muted,a:'center',al:f1});
+    tx(c,'◆ 600+ puntos de CloudFront: desde donde tu idea llega a cada persona',280,322,{s:12.5,w:600,c:C.oc,a:'center',al:f2});
   }});
 
 /* =====================================================================
@@ -346,7 +352,7 @@ def('responsabilidad',{w:380,h:360,rest:12,draw:function(c,S,t){
     else{var lk=E.back(P(t,8,.4));c.save();c.translate(100,313);c.scale(lk,lk);c.strokeStyle=C.g;c.lineWidth=1.8;c.beginPath();c.arc(0,-3,3.5,Math.PI,0);c.stroke();rr(c,-5,-3,10,8,1.5);c.fillStyle=C.g;c.fill();c.restore()}
     c.restore()}
   var tb=P(t,1.8,.6);tx(c,'Tú cuidas',196,236,{s:19,w:700,f:'display',al:tb});tx(c,'tus llaves',196,258,{s:19,w:700,f:'display',al:tb});
-  tx(c,'datos · claves · accesos',196,282,{s:13,c:C.muted,al:tb});
+  tx(c,'tu bucket cerrado · claves',196,282,{s:13,c:C.muted,al:tb});
   if(t>5.1&&t<8.1)tx(c,'aquí vive el error más caro',196,306,{s:12.5,w:700,c:'#d1381a',al:.55+.45*Math.sin(t*9)*.5+.25});
   if(fixed)tx(c,'llaves guardadas · a salvo',196,306,{s:12.5,w:700,c:C.g,al:P(t,8,.4)});
   // --- amenazas ---
@@ -362,42 +368,55 @@ def('responsabilidad',{w:380,h:360,rest:12,draw:function(c,S,t){
 }});
 
 /* =====================================================================
-   8 · SERVERLESS · llegan personas, nacen funciones, se apagan solas
+   8 · CADA BOTÓN ES UN COMANDO · el clic de la consola es una llamada a la API
    ===================================================================== */
-def('serverless',{w:400,h:320,rest:6.3,
-  init:function(S){var reqs=[],r=rng(5);function add(s,d){reqs.push({s:s,d:d,py:78+r()*120})}
-    add(2.2,1.2);add(4,1);add(4.25,1.1);add(4.5,1);for(var k=0;k<18;k++)add(5.2+k*.13,1.15+r()*.5);add(8,1);add(8.4,1);add(8.9,1.1);
-    var free=[];for(var i=0;i<12;i++)free.push(-9);S.reqs=reqs.filter(function(q){for(var i=0;i<12;i++)if(free[i]<q.s-.8){free[i]=q.s+q.d+.4;q.slot=i;return true}return false})},
-  draw:function(c,S,t){var PERIOD=12,lt=t%PERIOD,reqs=S.reqs;
-    function sc(i){return[158+(i%4)*46,88+Math.floor(i/4)*46]}
-    function conc(tt){if(tt<0)return 0;tt=tt%PERIOD;var n=0;for(var i=0;i<reqs.length;i++)if(tt>=reqs[i].s&&tt<reqs[i].s+reqs[i].d)n++;return n}
-    // ranuras vacías
-    for(var i=0;i<12;i++){var p=sc(i);c.setLineDash([3,4]);c.strokeStyle='#dfe4ea';c.lineWidth=1.2;rr(c,p[0]-18,p[1]-18,36,36,9);c.stroke()}c.setLineDash([]);
-    // carril de personas y respuestas
-    tx(c,'personas',34,62,{s:11,f:'mono',c:C.faint,a:'center'});tx(c,'respuestas',368,62,{s:11,f:'mono',c:C.faint,a:'center'});
-    var running=0;
-    reqs.forEach(function(q){var p=sc(q.slot),s=q.s,d=q.d;
-      var pa=P(lt,s-1,.3)*(1-P(lt,s+d+.3,.4));if(pa>0){c.globalAlpha=pa;c.fillStyle='#8795a4';circ(c,34,q.py-5,4.2);c.fill();c.beginPath();c.arc(34,q.py+7,7,Math.PI,0);c.fill();c.globalAlpha=1}
-      var ap=P(lt,s-.7,.7);if(ap>0&&ap<1){var e=E.io(ap),x=lerp(48,p[0],e),y=lerp(q.py,p[1],e);glow(c,'rgba(123,47,245,.6)',8);c.fillStyle=C.pd;circ(c,x,y,3.4);c.fill();noglow(c)}
-      if(lt>=s&&lt<s+d+.35){var on=lt<s+d,k=E.back(P(lt,s,.28)),fo=1-P(lt,s+d,.35);if(on)running++;
-        c.save();c.translate(p[0],p[1]);c.scale(k,k);c.globalAlpha=fo;glow(c,'rgba(255,153,0,.55)',12);
-        rr(c,-17,-17,34,34,9);c.fillStyle=lg(c,-17,-17,17,17,[[0,C.o],[1,C.r]]);c.fill();noglow(c);
-        tx(c,'fn',0,4.5,{s:13,w:700,f:'mono',c:'#fff',a:'center'});
-        if(on){var pr=P(lt,s,d);c.strokeStyle='rgba(255,255,255,.9)';c.lineWidth=2.2;c.beginPath();c.arc(0,0,21,-Math.PI/2,-Math.PI/2+pr*Math.PI*2);c.stroke()}
-        c.restore();c.globalAlpha=1}
-      var rp=P(lt,s+d,.55);if(rp>0&&rp<1){var e2=E.io(rp),x2=lerp(p[0],368,e2),y2=lerp(p[1],q.py,e2);c.fillStyle=C.g;circ(c,x2,y2,4);c.fill()}
-      var ca=P(lt,s+d+.5,.2)*(1-P(lt,s+d+1.3,.5));if(ca>0){c.globalAlpha=ca;c.fillStyle='rgba(18,161,90,.12)';circ(c,368,q.py,9);c.fill();c.strokeStyle=C.g;c.lineWidth=2;c.beginPath();c.moveTo(363.5,q.py);c.lineTo(366.5,q.py+3.5);c.lineTo(372.5,q.py-3.5);c.stroke();c.globalAlpha=1}});
-    // estado
-    if(running===0){c.fillStyle='#c3cbd5';circ(c,138,26,5);c.fill();tx(c,'nadie la usa → apagada · USD 0',150,31,{s:14,w:700,f:'display',c:C.muted})}
-    else{glow(c,'rgba(255,153,0,.8)',10);c.fillStyle=C.o;circ(c,138,26,5);c.fill();noglow(c);tx(c,running+(running===1?' función encendida':' funciones encendidas'),150,31,{s:14,w:700,f:'display',c:C.oc})}
-    // historial de concurrencia = lo que pagas
-    var X0=20,X1=380,YB=266,HH=34;c.strokeStyle='#e3e6ec';c.lineWidth=1.2;c.beginPath();c.moveTo(X0,YB);c.lineTo(X1,YB);c.stroke();
-    c.beginPath();c.moveTo(X0,YB);for(var j=0;j<=120;j++){var tt=t-10+j*10/120;c.lineTo(X0+(X1-X0)*j/120,YB-HH*Math.min(12,conc(tt))/12)}c.lineTo(X1,YB);c.closePath();
-    c.fillStyle='rgba(255,153,0,.28)';c.fill();c.strokeStyle=C.od;c.lineWidth=1.6;c.stroke();
-    tx(c,'lo que pagas, segundo a segundo',X0,YB-HH-6,{s:10.5,f:'mono',c:C.faint});
-    tx(c,'0 servidores que administrar',200,294,{s:16,w:700,f:'display',c:C.ink,a:'center'});
-    tx(c,'al terminar se apaga · pagas por milisegundo',200,313,{s:11.5,f:'mono',c:C.muted,a:'center'});
-  }});
+var CMDS=[
+  {t:1.9,d:1.7,s:'$ aws s3api create-bucket --bucket mi-cafeteria',o:'  HTTP 200 · bucket creado ✓',slot:0},
+  {t:5.6,d:.8,s:'$ aws s3api put-bucket-policy --bucket mi-cafeteria …',o:'  HTTP 204 · solo CloudFront puede leer ✓',slot:1},
+  {t:7.0,d:.8,s:'$ aws cloudfront create-distribution --origin …',o:'  Deployed · 600+ puntos ✓',slot:2},
+  {t:8.4,d:.8,s:'$ aws bedrock-runtime invoke-model --model-id …',o:'  HTTP 200 · la IA responde ✓',slot:3}];
+var SLOTS=[['Arch_Amazon-S3_48','S3'],['Arch_AWS-Identity-and-Access-Management_48','política'],['Arch_Amazon-CloudFront_48','CloudFront'],['Arch_Amazon-Bedrock_48','Bedrock']];
+def('comando',{w:400,h:330,rest:10.5,draw:function(c,S,t){
+  var L=12,lt=RM?10.5:t%L,out=1-P(lt,11.4,.6);c.globalAlpha=out;
+  // --- consola ---
+  var dim=1-.62*E.io(P(lt,5.1,.5));c.save();c.globalAlpha=out*dim;
+  rr(c,16,12,368,104,10);c.fillStyle='#f6f8fa';c.fill();c.strokeStyle='#d5dce4';c.lineWidth=1.2;c.stroke();
+  c.save();rr(c,16,12,368,104,10);c.clip();c.fillStyle='#232F3E';c.fillRect(16,12,368,24);c.restore();
+  tx(c,'aws',28,29,{s:12,w:800,f:'display',c:'#fff'});c.fillStyle=C.o;c.fillRect(28,31,22,2);
+  tx(c,'Consola de AWS · Amazon S3',62,28,{s:10.5,f:'mono',c:'#c9d2dc'});
+  tx(c,'Nombre del bucket',28,56,{s:11,c:C.muted});
+  rr(c,28,62,200,28,6);c.fillStyle='#fff';c.fill();c.strokeStyle='#c9d2dc';c.lineWidth=1.2;c.stroke();tx(c,'mi-cafeteria',38,80,{s:12.5,f:'mono',c:C.ink});
+  var press=lt>1.3&&lt<1.55;rr(c,244,62,124,28,6);c.fillStyle=press?C.od:C.o;c.fill();tx(c,'Crear bucket',306,80,{s:12.5,w:700,c:'#fff',a:'center'});
+  var rk=P(lt,1.3,.6);if(rk>0&&rk<1){c.strokeStyle=col(C.o,1-rk);c.lineWidth=2;circ(c,306,76,6+26*E.out(rk));c.stroke()}
+  c.restore();c.globalAlpha=out;
+  // cursor
+  if(lt<5){var ck=E.io(P(lt,.2,1.1)),cx=lerp(392,306,ck),cy=lerp(128,78,ck),sc=press?.85:1;c.save();c.translate(cx,cy);c.scale(sc,sc);
+    c.beginPath();c.moveTo(0,0);c.lineTo(0,17);c.lineTo(4.5,13);c.lineTo(8,20);c.lineTo(10.5,19);c.lineTo(7,12);c.lineTo(12.5,12);c.closePath();
+    c.fillStyle=C.ink;c.fill();c.strokeStyle='#fff';c.lineWidth=1.3;c.stroke();c.restore()}
+  var pill=P(lt,5.2,.4);if(pill>0){c.globalAlpha=out*pill;rr(c,110,50,180,30,15);c.fillStyle=C.ink;c.fill();tx(c,'ahora sin clic: un script',200,70,{s:12.5,w:700,c:'#fff',a:'center'});c.globalAlpha=out}
+  // --- el cable detrás del botón ---
+  var cable=P(lt,1.5,.5);c.strokeStyle='#d5dce4';c.lineWidth=2;c.setLineDash([4,4]);c.beginPath();c.moveTo(306,92);c.lineTo(306,146);c.stroke();c.setLineDash([]);
+  if(cable>0&&cable<1){var yy=lerp(92,146,E.io(cable));glow(c,'rgba(255,153,0,.8)',10);c.fillStyle=C.o;circ(c,306,yy,4);c.fill();noglow(c)}
+  tx(c,'lo que viaja por debajo:',300,134,{s:10.5,f:'mono',c:C.oc,a:'right',al:P(lt,1.5,.4)});
+  // --- terminal ---
+  rr(c,16,148,368,80,10);c.fillStyle='#0f161e';c.fill();
+  ['#ff5f57','#febc2e','#28c840'].forEach(function(cc,j){c.fillStyle=cc;circ(c,30+j*10,160,3);c.fill()});tx(c,'terminal · API de AWS',64,163,{s:10,f:'mono',c:C.dfaint});
+  var lines=[];CMDS.forEach(function(m){if(lt<m.t)return;var n=Math.floor(m.s.length*P(lt,m.t,m.d));lines.push({s:m.s.slice(0,n),k:'c',typing:n<m.s.length});
+    if(lt>m.t+m.d+.2)lines.push({s:m.o,k:'o'})});
+  var vis=lines.slice(-3);vis.forEach(function(l,j){var y=184+j*17;
+    if(l.k==='c'){tx(c,l.s.slice(0,1),28,y,{s:11,w:700,f:'mono',c:C.o});tx(c,l.s.slice(1),36,y,{s:11,f:'mono',c:'#e6edf3'})}else tx(c,l.s,28,y,{s:11,f:'mono',c:C.g2});
+    if(l.typing||(j===vis.length-1&&Math.floor(lt*2.2)%2===0&&!l.typing&&l.k==='o')){c.font='400 11px '+F.mono;var w=c.measureText(l.s).width;c.fillStyle=C.o;c.fillRect(30+w,y-9,6,11)}});
+  // --- tu cuenta de AWS ---
+  rr(c,16,240,368,66,10);c.fillStyle='rgba(124,60,237,.05)';c.fill();c.strokeStyle='rgba(123,47,245,.35)';c.lineWidth=1.2;c.stroke();
+  tx(c,'tu cuenta de AWS',28,258,{s:10.5,f:'mono',c:C.muted});tx(c,'lo que se crea →',28,276,{s:10.5,f:'mono',c:C.faint});
+  CMDS.forEach(function(m,i){var x=160+i*62,y=270,pk=P(lt,m.t+m.d,.5);
+    if(pk>0&&pk<1){var e=E.io(pk),px=lerp(200,x,e),py=lerp(228,y,e);glow(c,'rgba(255,153,0,.8)',10);c.fillStyle=C.o;circ(c,px,py,3.5);c.fill();noglow(c)}
+    var k=P(lt,m.t+m.d+.45,.4);c.setLineDash([3,4]);c.strokeStyle='#cfd7e1';c.lineWidth=1.2;rr(c,x-18,y-18,36,36,8);c.stroke();c.setLineDash([]);
+    if(k>0){var s=E.back(k);c.save();c.translate(x,y);c.scale(s,s);icon(c,SLOTS[i][0],0,0,34);c.restore();
+      if(k>=1){c.fillStyle=C.g;circ(c,x+15,y-15,6.5);c.fill();c.strokeStyle='#fff';c.lineWidth=1.8;c.beginPath();c.moveTo(x+12,y-15);c.lineTo(x+14.4,y-12.6);c.lineTo(x+18.4,y-17.4);c.stroke()}}
+    tx(c,SLOTS[i][1],x,y+30,{s:9.5,f:'mono',c:k>0?C.ink:C.faint,a:'center'})});
+  tx(c,'lo que hace un clic, lo hace un comando… o una IA',200,324,{s:13.5,w:700,f:'display',c:C.ink,a:'center',al:P(lt,9.6,.6)});
+  c.globalAlpha=1}});
 
 /* =====================================================================
    9 · BEDROCK · un prompt en español se vuelve una página
@@ -590,6 +609,42 @@ def('escala',{w:440,h:340,rest:8,
     tx(c,nf(people<1.5?1:people),18,44,{s:34,w:800,f:'display',c:'#fff'});
     tx(c,people<1.5?'persona':'personas',18,64,{s:13,f:'mono',c:C.dmuted});
   }});
+/* =====================================================================
+   RIFA · el podio de Kahoot se levanta y la moneda de créditos gira
+   ===================================================================== */
+def('podio',{w:400,h:360,rest:4,draw:function(c,S,t){
+  var base=318,B=[{x:52,w:96,h:112,n:'2',T:.5},{x:152,w:96,h:138,n:'1',T:.9},{x:252,w:96,h:82,n:'3',T:.2}];
+  // kahoot.it arriba
+  var ka=E.out(P(t,0,.6)),pu=.5+.5*Math.sin(t*2.4);
+  c.globalAlpha=ka;rr(c,110,12,180,40,20);c.fillStyle='rgba(172,91,255,.14)';c.fill();c.strokeStyle='rgba(172,91,255,'+(.5+.4*pu)+')';c.lineWidth=1.6;c.stroke();
+  tx(c,'kahoot.it',200,39,{s:20,w:700,f:'mono',c:'#fff',a:'center'});c.globalAlpha=1;
+  // luces del escenario
+  c.globalCompositeOperation='lighter';
+  [[110,.0],[200,1.3],[290,2.6]].forEach(function(L){var sw=Math.sin(t*.8+L[1])*30;c.fillStyle=lg(c,0,60,0,base,[[0,'rgba(172,91,255,.0)'],[1,'rgba(172,91,255,.16)']]);
+    c.beginPath();c.moveTo(L[0]-6,60);c.lineTo(L[0]+6,60);c.lineTo(L[0]+sw+60,base);c.lineTo(L[0]+sw-60,base);c.closePath();c.fill()});
+  c.globalCompositeOperation='source-over';
+  // podio
+  B.forEach(function(b){var k=E.back(P(t,b.T,.7)),h=b.h*k;if(h<=0)return;var y=base-h,gold=b.n==='1';
+    rr(c,b.x,y,b.w,h,[8,8,0,0]);c.fillStyle=gold?lg(c,0,y,0,base,[[0,'#ffb347'],[1,'#c26a12']]):lg(c,0,y,0,base,[[0,'#2c3b4a'],[1,'#1b2531']]);c.fill();
+    c.strokeStyle=gold?'rgba(255,200,120,.8)':'#3a4a5c';c.lineWidth=1.4;c.stroke();
+    tx(c,b.n,b.x+b.w/2,y+Math.min(52,h-8),{s:40,w:800,f:'display',c:gold?'#151D25':'#aab6c2',a:'center',al:P(t,b.T+.4,.3)});
+    // participante que salta encima
+    var jk=P(t,b.T+.6,.4);if(jk>0){var hop=Math.abs(Math.sin(t*3+b.x))*6*jk,px=b.x+b.w/2,py=y-14-hop;
+      c.fillStyle=gold?C.o:(b.n==='2'?C.t:C.p);circ(c,px,py-10,8);c.fill();c.beginPath();c.arc(px,py+9,12,Math.PI,0);c.fill()}});
+  c.fillStyle='#2e3a48';c.fillRect(30,base,340,4);
+  // moneda de créditos AWS sobre el primer puesto
+  var mk=E.back(P(t,1.6,.6));if(mk>0){var cx=200,cy=100+Math.sin(t*1.6)*4,r=30*mk,sq=Math.cos(t*2.2),w=Math.max(.08,Math.abs(sq));
+    c.fillStyle=rg(c,cx,cy,4,r+34,[[0,'rgba(255,190,90,.5)'],[1,'rgba(255,153,0,0)']]);circ(c,cx,cy,r+34);c.fill();
+    c.save();c.translate(cx,cy);c.scale(w,1);circ(c,0,0,r);c.fillStyle=lg(c,-r,-r,r,r,[[0,'#ffd27a'],[1,'#e07600']]);c.fill();
+    c.strokeStyle='#fff3d6';c.lineWidth=2;circ(c,0,0,r-5);c.stroke();
+    if(sq>0){tx(c,'aws',0,4,{s:15,w:800,f:'display',c:'#151D25',a:'center'});c.fillStyle='#151D25';c.fillRect(-11,8,22,2.4)}else tx(c,'$',0,9,{s:26,w:800,f:'display',c:'#151D25',a:'center'});
+    c.restore();tx(c,'USD 50',cx+44,cy-1,{s:17,w:800,f:'display',c:C.o,al:P(t,2,.4)});tx(c,'en créditos AWS',cx+44,cy+15,{s:11,w:700,f:'mono',c:C.o,al:P(t,2,.4)})}
+  // confeti suave
+  for(var i=0;i<40;i++){var sp=20+hash(i*7)*30,y2=((t*sp+hash(i*3)*400)%400)-20,x2=20+hash(i*11)*360+Math.sin(t+i)*8;if(t<1.8)break;
+    c.save();c.translate(x2,y2);c.rotate(t*2+i);c.fillStyle=[C.o,C.p,C.t,C.g2,'#fff'][i%5];c.globalAlpha=.75;c.fillRect(-3,-1.5,6,3);c.restore()}
+  c.globalAlpha=1;
+  tx(c,'el 1.er lugar gana',200,348,{s:12.5,w:700,f:'mono',c:C.dmuted,a:'center',al:P(t,2.2,.5)})}});
+
 /* utilidades compartidas con el demo en vivo (assets/demo.js) */
 window.Escenas.u={E:E,P:P,clamp:clamp,lerp:lerp,hash:hash,rng:rng,rg:rg,lg:lg,rr:rr,circ:circ,tx:tx,icon:icon,glow:glow,noglow:noglow,col:col,mix:mix,quad:quad,nf:nf,C:C,F:F,
   ll2v:ll2v,rot:rot,dot3:dot3,D2R:D2R,PER:PER,setK:function(k){KS=k},RM:RM,
