@@ -515,6 +515,46 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   </script>
 </section>
 
+<!-- 4b · ¿QUÉ ES NITRO? -->
+<section class="slide" id="scN">
+  <span class="k"><span class="act-chip">⚙️ NITRO</span> El administrador con ayudantes · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">¿Qué es la <span class="grad">arquitectura Nitro</span> de AWS?</h2>
+  <div class="scene"><canvas aria-label="Animación: un administrador agobiado con cuatro tareas; llegan tres tarjetas Nitro como ayudantes para red, discos y seguridad; el administrador queda liviano y las VM reciben casi toda la fuerza"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scN',1000,480,[
+    'En un servidor normal, el administrador (el <b>hipervisor</b>) hace <b>todo</b>: reparte apartamentos, maneja el <b>internet</b>, los <b>discos</b> y la <b>seguridad</b>. Se cansa y le quita fuerza al edificio.',
+    'AWS inventó <b>Nitro</b>: <b>tarjetas (chips) propias</b> que funcionan como <b>ayudantes</b>. Una maneja el <b>internet</b>, otra los <b>discos</b> y otra la <b>seguridad</b>.',
+    'El administrador queda <b>liviano</b>: solo reparte apartamentos. Casi toda la fuerza del servidor queda para <b>tu EC2</b> y las demás VM.',
+    '<b>Arquitectura Nitro</b> = la forma como AWS arma sus servidores: <b>hipervisor liviano + tarjetas Nitro + chip de seguridad</b>. Todas las EC2 modernas (como la t3) corren así.'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    var tasks=[['repartir apartamentos',C.ora],['internet (red)',C.blue],['discos',C.blue],['seguridad',C.blue]];
+    /* el servidor (caja) */c.save();c.fillStyle='#16324f';NetScene.rr(c,60,70,540,330,16);c.fill();c.strokeStyle='rgba(159,182,201,.35)';c.stroke();c.restore();V.tx(c,'servidor físico',80,96,13,C.mut,'left',700);
+    /* administrador */var calm=st>=2?1:0,shake=st<2?Math.sin(t*14)*2*(1-st*.5):0;NetScene.person(c,200+shake,270,34,st>=2?'#9ff0c8':'#ffd0d0',1);
+    V.tx(c,'el administrador',200,300,14,'#fff','center',800);V.tx(c,'(hipervisor)',200,318,12,C.mut,'center',600);
+    if(st<2){V.tx(c,st===0?'😵 ¡demasiadas tareas!':'😮 ¡llegan ayudantes!',200,150,14,'#ffb98a','center',800,1);}else V.tx(c,'😌 solo reparte',200,150,14,'#9ff0c8','center',800,1);
+    /* tareas: orbitan al administrador; desde el paso 1 se van a las tarjetas */
+    var cardY=[130,196,262],CX=770;
+    tasks.forEach(function(k,i){var an=t*.9+i*1.57,ox=240+Math.cos(an)*150,oy=235+Math.sin(an)*85,x=ox,y=oy;
+      if(i>0&&st>=1){var u=st===1?Math.max(0,Math.min(1,(t-1-i*.3)/.8)):1,e=E.io(u);x=ox+(CX-ox-20)*e;y=oy+(cardY[i-1]+26-oy)*e;}
+      else if(i===0&&st>=2){x=200+Math.cos(an)*70;y=200+Math.sin(an)*20;}
+      V.pill(c,x-60,y-12,k[0],k[1],'#fff',1);});
+    /* tarjetas Nitro (ayudantes) */
+    ['Tarjeta Nitro · internet','Tarjeta Nitro · discos','Chip Nitro · seguridad'].forEach(function(n,i){var a=st<1?0:(st===1?E.back(Math.max(0,Math.min(1,(t-.2-i*.25)/.5))):1);if(!(a>0))return;var x=660,y=cardY[i];
+      c.save();c.globalAlpha*=a;V.glow(c,C.grn,14);c.fillStyle='#1f6b4f';NetScene.rr(c,x,y,250,52,8);c.fill();c.restore();
+      c.save();c.globalAlpha*=a;c.fillStyle='#d4a53a';for(var p=0;p<10;p++)c.fillRect(x+14+p*22,y+46,10,6);c.fillStyle='#0b1a2b';NetScene.rr(c,x+14,y+12,34,28,4);c.fill();c.restore();
+      V.tx(c,n,x+60,y+32,13,'#fff','left',800,a);});
+    if(st>=1)V.tx(c,'ayudantes de hardware (chips de AWS)',785,120,12,'#9ff0c8','center',700,1);
+    /* barra: fuerza que queda para las VM */var f=st<2?.62:(st===2?.62+.33*E.out(Math.min(1,t/1.2)):.95);
+    V.tx(c,'fuerza del servidor que queda para las VM (tu EC2)',80,432,13,'#fff','left',700);c.save();c.fillStyle='rgba(255,255,255,.1)';NetScene.rr(c,80,444,520,16,8);c.fill();c.fillStyle=f>.9?C.grn:C.yel;NetScene.rr(c,80,444,520*f,16,8);c.fill();c.restore();
+    V.tx(c,f>.9?'casi toda ✓':'se pierde una parte',610,457,13,f>.9?'#9ff0c8':C.yel,'left',800);
+    if(st>=3){var a3=E.out(Math.min(1,t/.6));c.save();c.globalAlpha*=a3;c.fillStyle='rgba(8,24,42,.86)';NetScene.rr(c,620,300,340,110,12);c.fill();c.strokeStyle=C.grn;c.stroke();c.restore();
+      V.tx(c,'ARQUITECTURA NITRO =',790,328,14,'#9ff0c8','center',800,a3);V.tx(c,'hipervisor liviano',790,352,13,'#fff','center',700,a3);V.tx(c,'+ tarjetas Nitro + chip de seguridad',790,372,13,'#fff','center',700,a3);V.tx(c,'así corre tu t3.micro',790,396,12,'#ffb98a','center',700,a3);}
+  });
+  </script>
+</section>
+
 <!-- 5 · REUSO DE RECURSOS -->
 <section class="slide" id="scR">
   <span class="k"><span class="act-chip">♻️ REUSO</span> Un mismo hardware para muchos · clic o → para avanzar</span>
@@ -532,18 +572,29 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
     var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
     var A=[['web',12],['correo',18],['nómina',9],['inventario',15],['ventas',20],['reportes',11]];
     var dim=st>=3?0:1;
-    A.forEach(function(ap,i){var col=i%3,row=Math.floor(i/3),x=50+col*170,y=80+row*120,a=(st===0?E.back(Math.max(0,Math.min(1,(t-i*.1)/.5))):1)*dim;if(!(a>0))return;
-      var freed=st>=2;c.save();c.globalAlpha*=a;c.fillStyle='#0f2740';NetScene.rr(c,x,y,150,96,10);c.fill();c.strokeStyle=freed?C.grn:'rgba(159,182,201,.4)';c.lineWidth=freed?2.5:1.5;c.stroke();c.restore();
-      V.server(c,x+10,y+10,130,18,t,i,false,a);
-      if(st<1||(st===1&&t<.3)){V.tx(c,'app: '+ap[0],x+12,y+50,13,'#fff','left',700,a);var fu=st===0?Math.min(1,Math.max(0,(t-.6)/.8)):1;c.save();c.globalAlpha*=a;c.fillStyle='rgba(255,255,255,.1)';NetScene.rr(c,x+12,y+62,126,12,6);c.fill();c.fillStyle=C.yel;NetScene.rr(c,x+12,y+62,126*ap[1]/100*fu,12,6);c.fill();c.restore();V.tx(c,ap[1]+'% de uso',x+12,y+90,11,C.mut,'left',600,a);}
-      else if(!freed)V.tx(c,'vaciándose…',x+75,y+64,12,C.mut,'center',600,a);
-      else{V.tx(c,'♻ libre',x+75,y+58,15,'#9ff0c8','center',800,a);V.tx(c,'se reúsa',x+75,y+78,11,C.mut,'center',600,a);}});
-    if(st===0)V.tx(c,'uso promedio: 14% · 86% desperdiciado',275,344,15,C.yel,'center',700,Math.max(0,Math.min(1,(t-1.4)/.5)));
-    if(st>=1){var ab=(st===1?E.out(Math.min(1,t/.6)):1)*dim;c.save();c.globalAlpha*=ab;c.fillStyle='#0f2740';NetScene.rr(c,610,80,340,250,14);c.fill();c.strokeStyle=C.blue;c.lineWidth=2;c.stroke();c.restore();
-      V.tx(c,'1 servidor + hipervisor',780,110,15,'#fff','center',700,ab);
-      A.forEach(function(ap,i){var tx=626+(i%3)*106,ty=130+Math.floor(i/3)*70,fx=50+(i%3)*170+75,fy=80+Math.floor(i/3)*120+50,u=st===1?Math.max(0,Math.min(1,(t-.4-i*.18)/.7)):1,e=E.io(u);
-        V.vm(c,fx+(tx-fx)*e-(46*e),fy+(ty-fy)*e,96,58,ap[0],'VM',C.blue,ab,false);});
-      var fill=st===1?Math.min(1,Math.max(0,(t-1.6)/1)):1;c.save();c.globalAlpha*=ab;c.fillStyle='rgba(255,255,255,.1)';NetScene.rr(c,630,290,300,14,7);c.fill();c.fillStyle=C.grn;NetScene.rr(c,630,290,300*.85*fill,14,7);c.fill();c.restore();V.tx(c,Math.round(85*fill)+'% de uso',780,322,13,'#9ff0c8','center',700,ab);}
+    function fierro(x,y,w,d,h,a,free,hl){if(!(a>0))return;V.iso(c,x,y,w,d,h,free?'#6fae95':'#aab6c3',free?'#2f5f4c':'#56626f',free?'#3f7a61':'#7a8796',a);
+      var cs=.866,sn=.5;c.save();c.globalAlpha*=a;c.strokeStyle='rgba(20,30,40,.55)';c.lineWidth=1.5;
+      for(var k=0;k<5;k++){var fx=x+(w*.18+k*w*.13)*cs,fy=y-(w*.18+k*w*.13)*sn;c.beginPath();c.moveTo(fx,fy-h*.25);c.lineTo(fx,fy-h*.8);c.stroke();}
+      for(var q=0;q<3;q++){var on=!free&&Math.sin(t*(3+q)+x*.1+q)>-.2;c.fillStyle=on?(q===2?C.ora:C.grn):'rgba(20,30,40,.5)';var lx=x+(w*.84)*cs,ly=y-(w*.84)*sn-h*.3-q*9;c.beginPath();c.arc(lx,ly,2.6,0,7);c.fill();}c.restore();}
+    function cable(x,y,a,on){if(!(a>0))return;c.save();c.globalAlpha*=a;c.strokeStyle='#2a3440';c.lineWidth=3;c.beginPath();c.moveTo(x-20,y-10);c.quadraticCurveTo(x-40,y+12,x-58,y+14);c.stroke();
+      c.fillStyle='#d9dee4';NetScene.rr(c,x-72,y+6,16,14,3);c.fill();c.restore();V.tx(c,'⚡',x-64,y+2,14,on?C.yel:'#5f7890','center',700,a*(on?(.55+.45*Math.sin(t*6+x)):1));}
+    var head=st===0?Math.min(1,t/.6):1;
+    V.tx(c,st>=2?'Los fierros viejos quedan libres':'Servidores FÍSICOS: cajas de metal de verdad',st>=1?270:500,44,17,'#fff','center',800,head*dim);
+    V.tx(c,st>=1?'':'cada uno cuesta, ocupa espacio y gasta luz · aunque esté casi quieto',500,66,13,'#ffb98a','center',600,head*dim);
+    A.forEach(function(ap,i){var col=i%3,row=Math.floor(i/3),x=110+col*168,y=190+row*190,a=(st===0?E.back(Math.max(0,Math.min(1,(t-.3-i*.12)/.5))):1)*dim;if(!(a>0))return;
+      var freed=st>=2;cable(x,y,a,!freed);fierro(x,y,64,44,50,a,freed);
+      if(st===0||(st===1&&t<.4)){V.tx(c,'app: '+ap[0],x+30,y+26,13,'#fff','center',700,a);var fu=st===0?Math.min(1,Math.max(0,(t-1)/.8)):1;
+        c.save();c.globalAlpha*=a;c.fillStyle='rgba(255,255,255,.12)';NetScene.rr(c,x-12,y+34,84,8,4);c.fill();c.fillStyle=C.yel;NetScene.rr(c,x-12,y+34,84*ap[1]/100*fu,8,4);c.fill();c.restore();V.tx(c,ap[1]+'% de uso',x+30,y+56,11,C.mut,'center',600,a);}
+      else if(!freed)V.tx(c,'mudándose…',x+30,y+30,12,C.mut,'center',600,a);
+      else{V.tx(c,'♻ libre',x+30,y+30,14,'#9ff0c8','center',800,a);V.tx(c,'se reúsa o se apaga',x+30,y+48,11,C.mut,'center',600,a);}});
+    if(st===0)V.tx(c,'6 fierros · uso promedio 14% · 86% desperdiciado',300,470,15,C.yel,'center',700,Math.max(0,Math.min(1,(t-1.8)/.5)));
+    if(st>=1){var ab=(st===1?E.out(Math.min(1,t/.6)):1)*dim,BX=700,BY=380;V.tx(c,'1 servidor físico potente + hipervisor',790,86,15,'#fff','center',700,ab);
+      cable(BX,BY,ab,true);V.iso(c,BX,BY,150,120,110,'#aab6c3','#56626f','#7a8796',ab);
+      c.save();c.globalAlpha*=ab;V.glow(c,C.blue,12);c.fillStyle='rgba(15,158,213,.55)';var hy=BY-110;c.beginPath();c.moveTo(BX,hy);c.lineTo(BX+150*.866,hy-75);c.lineTo(BX+150*.866-120*.866,hy-75-60);c.lineTo(BX-120*.866,hy-60);c.closePath();c.fill();c.restore();
+      V.tx(c,'hipervisor + 6 VM (las 6 apps)',790,112,12,'#9fd8f0','center',700,ab);
+      A.forEach(function(ap,i){var gx=i%3,gy=Math.floor(i/3),tx2=BX-66+gx*44-gy*34+22,ty2=BY-150-gx*26-gy*20+8,fx=110+(i%3)*168+26,fy=190+Math.floor(i/3)*190-40,u=st===1?Math.max(0,Math.min(1,(t-.5-i*.18)/.7)):1,e=E.io(u);
+        var x=fx+(tx2-fx)*e,y=fy+(ty2-fy)*e;V.iso(c,x,y,20,18,24,'#9fd8f0','#1a5a80','#2476a3',ab);});
+      var fill=st===1?Math.min(1,Math.max(0,(t-1.8)/1)):1;c.save();c.globalAlpha*=ab;c.fillStyle='rgba(255,255,255,.12)';NetScene.rr(c,650,420,280,12,6);c.fill();c.fillStyle=C.grn;NetScene.rr(c,650,420,280*.85*fill,12,6);c.fill();c.restore();V.tx(c,Math.round(85*fill)+'% de uso · 1 solo cable de luz',790,452,13,'#9ff0c8','center',700,ab);}
     if(st>=3){var a3=E.out(Math.min(1,t/.5)),G=200;V.tx(c,'En AWS, esto pasa todos los días',500,G-60,20,'#fff','center',700,a3);
       var S1=[160,G+80],S2=[670,G+80];[S1,S2].forEach(function(p,i){V.server(c,p[0],p[1],170,26,t,i+7,false,a3);V.tx(c,'servidor '+(i+1),p[0]+85,p[1]+48,11,C.mut,'center',600,a3);});
       c.save();c.globalAlpha*=a3;c.strokeStyle='rgba(15,158,213,.6)';c.setLineDash([5,6]);c.beginPath();c.arc(500,G+93,44,0,7);c.stroke();c.restore();V.tx(c,'pool de recursos',500,G+98,12,'#9fd8f0','center',700,a3);
@@ -604,6 +655,45 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
     if(st>=3){var a5=E.out(Math.min(1,t/.6));V.tx(c,st>=3?'AWS Nitro':'',870,120,13,'#9ff0c8','right',800,a5);
       c.save();c.globalAlpha*=a5;c.fillStyle='rgba(229,72,77,.18)';NetScene.rr(c,160,20,240,26,13);c.fill();c.fillStyle='rgba(52,195,143,.18)';NetScene.rr(c,600,20,240,26,13);c.fill();c.restore();
       V.tx(c,'más lento · para practicar',280,38,12,'#ff9b9b','center',800,a5);V.tx(c,'rápido · data centers y la nube',720,38,12,'#9ff0c8','center',800,a5);}
+  });
+  </script>
+</section>
+
+<!-- 6b · ARM VS x86 -->
+<section class="slide" id="scX">
+  <span class="k"><span class="act-chip">🧠 PROCESADORES</span> Dos idiomas del cerebro del computador · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px"><span class="grad">x86 vs. ARM</span>: dos idiomas de procesador</h2>
+  <div class="scene"><canvas aria-label="Animación: dos procesadores, x86 y ARM, como dos idiomas; dónde se usa cada uno; un programa de un idioma no corre directo en el otro; en AWS se elige la AMI según la arquitectura"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scX',1000,480,[
+    'El <b>procesador (CPU)</b> es el <b>cerebro</b> del computador. Hay dos grandes familias, como dos <b>idiomas</b>: <b>x86</b> y <b>ARM</b>.',
+    '<b>x86</b> (Intel y AMD): lo tienen la mayoría de <b>PC con Windows</b> y los servidores de siempre. Su fuerte: casi todos los programas existen para x86.',
+    '<b>ARM</b>: lo tiene <b>tu celular</b> y los Mac con chip M. Gasta <b>menos energía</b>. AWS fabrica los suyos: <b>Graviton</b>, que en la nube suelen salir <b>más baratos</b>.',
+    'Son idiomas distintos: un programa para x86 <b>no corre directo</b> en ARM, hay que "traducirlo". Por eso al lanzar una EC2 eliges la <b>AMI de tu arquitectura</b>: <b>t3.micro = x86</b>, <b>t4g.micro = ARM</b> (la <b>g</b> es de Graviton).'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    function cpu(cx,cy,sz,col,label,sub,a){if(!(a>0))return;c.save();c.globalAlpha*=a;c.fillStyle='#d4a53a';for(var k=0;k<7;k++){var o=-sz/2+sz*(k+1)/8;c.fillRect(cx+o-3,cy-sz/2-10,6,10);c.fillRect(cx+o-3,cy+sz/2,6,10);c.fillRect(cx-sz/2-10,cy+o-3,10,6);c.fillRect(cx+sz/2,cy+o-3,10,6);}
+      V.glow(c,col,24);c.fillStyle='#0f2740';NetScene.rr(c,cx-sz/2,cy-sz/2,sz,sz,12);c.fill();c.shadowBlur=0;c.strokeStyle=col;c.lineWidth=3;c.stroke();c.restore();
+      V.tx(c,label,cx,cy+8,30,'#fff','center',800,a);V.tx(c,sub,cx,cy+30,11,C.mut,'center',600,a);}
+    var a0=st===0?E.back(Math.min(1,t/.7)):1;
+    var xL=st===3?250:280,xR=st===3?750:720;
+    cpu(xL,170,120,C.blue,'x86','Intel · AMD',a0);cpu(xR,170,120,C.grn,'ARM','Apple · AWS…',a0);
+    if(st===0){NetScene.bubble(c,xL,90,'habla “x86”','700 14px Poppins',C.blue,'#fff',Math.min(1,(t-.6)/.4));NetScene.bubble(c,xR,90,'habla “ARM”','700 14px Poppins',C.grn,'#fff',Math.min(1,(t-.9)/.4));
+      V.tx(c,'el procesador = el cerebro del computador',500,330,16,'#fff','center',700,Math.min(1,(t-1.2)/.5));}
+    if(st===1||st===2){var a1=st===1?E.out(Math.min(1,t/.6)):1;NetScene.laptop(c,xL-60,350,90,'#9fd8f0',a1);V.tx(c,'PC con Windows',xL-60,378,12,'#fff','center',700,a1);
+      V.iso(c,xL+60,366,40,30,44,'#aab6c3','#56626f','#7a8796',a1);V.tx(c,'servidores de siempre',xL+70,390,12,'#fff','center',700,a1);V.tx(c,'✓ casi todo programa existe para x86',xL,430,13,'#9fd8f0','center',700,a1);}
+    if(st===2){var a2=E.out(Math.min(1,t/.6));c.save();c.globalAlpha*=a2;c.fillStyle='#0b1a2b';NetScene.rr(c,xR-120,300,44,78,9);c.fill();c.strokeStyle='#cfe3f1';c.lineWidth=2;c.stroke();c.fillStyle='#9fd8f0';NetScene.rr(c,xR-115,308,34,56,4);c.fill();c.restore();V.tx(c,'tu celular',xR-98,396,12,'#fff','center',700,a2);
+      NetScene.laptop(c,xR,370,80,'#c7c7cc',a2);V.tx(c,'Mac (chip M)',xR,398,12,'#fff','center',700,a2);
+      c.save();c.globalAlpha*=a2;V.glow(c,C.ora,14);c.fillStyle='#3a2518';NetScene.rr(c,xR+70,318,80,56,8);c.fill();c.strokeStyle=C.ora;c.stroke();c.restore();V.tx(c,'Graviton',xR+110,346,13,'#fff','center',800,a2);V.tx(c,'chip de AWS',xR+110,362,10,'#ffb98a','center',600,a2);
+      V.tx(c,'⚡ gasta menos energía · 💵 más barato en la nube',xR,436,13,'#9ff0c8','center',700,a2);}
+    if(st===3){var a3=E.out(Math.min(1,t/.6));
+      var u=Math.max(0,Math.min(1,(t-.6)/1.2)),px=xL+(xR-xL)*E.io(u);c.save();c.globalAlpha*=a3;c.fillStyle='#0f2740';NetScene.rr(c,px-70,262,140,40,8);c.fill();c.strokeStyle=C.blue;c.lineWidth=2;c.stroke();c.restore();
+      V.tx(c,'programa para x86',px,287,12,'#fff','center',700,a3);if(u>=1)V.tx(c,'✗ no lo entiende',xR,326,16,'#ff9b9b','center',800,1);
+      var b=Math.max(0,Math.min(1,(t-2.2)/.5));c.save();c.globalAlpha*=b;c.fillStyle='rgba(8,24,42,.9)';NetScene.rr(c,250,350,500,110,12);c.fill();c.strokeStyle='rgba(159,182,201,.4)';c.stroke();c.restore();
+      V.tx(c,'Al lanzar tu EC2 → elige la AMI de tu arquitectura:',500,376,13,'#fff','center',700,b);
+      V.pill(c,290,394,'64 bits (x86) → t3.micro','rgba(15,158,213,.35)','#fff',b);V.pill(c,530,394,'64 bits (Arm) → t4g.micro','rgba(52,195,143,.35)','#fff',b);
+      V.tx(c,'la “g” de t4g = Graviton (ARM)',500,446,12,'#9ff0c8','center',700,b);}
   });
   </script>
 </section>
