@@ -669,7 +669,7 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   NetScene.make('scC2',1000,480,[
     'Recuerda: cada <b>máquina virtual</b> es un <b>apartamento completo</b>: trae su propio <b>sistema operativo</b> (su cocina, su baño). Por eso pesa <b>GB</b> y tarda <b>minutos</b> en arrancar.',
     '<b>Docker</b> reparte de otra forma: <b>contenedores</b>. Son como <b>habitaciones en un coliving</b>: todas <b>comparten la cocina</b> (el sistema operativo) y cada una trae solo sus cosas: <b>la app y lo que necesita</b>. Pesan <b>MB</b> y arrancan en <b>segundos</b>.',
-    '¿Y dónde vive Docker? <b>¡Dentro de tu EC2!</b> Hardware → hipervisor (Nitro) → <b>tu EC2</b> con Amazon Linux → <b>Docker</b> → varios contenedores. Se usan <b>juntos</b>, no compiten.',
+    '¿Y dónde vive Docker? <b>Dentro de tu EC2</b>, como cajas dentro de cajas: el <b>edificio</b> (hardware) → el <b>administrador</b> (hipervisor) → <b>tu apartamento</b> (tu EC2) → su <b>cocina</b> (Amazon Linux) → <b>Docker divide tu apartamento en habitaciones</b> → en cada habitación, <b>un contenedor con una app</b>.',
     'Un contenedor nace de una <b>imagen</b> (el molde, parecido a la AMI). Un solo comando descarga la imagen de NGINX y en segundos tienes un servidor web corriendo.',
     '<b>En resumen:</b> la <b>VM</b> virtualiza <b>el computador completo</b> (hipervisor). El <b>contenedor</b> empaqueta <b>solo la aplicación</b> (Docker). Las empresas usan los dos, y en AWS hay servicios para contenedores: <b>ECS</b> y <b>EKS</b>.'
   ],function(c,s){
@@ -688,11 +688,21 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
       for(var q=0;q<6;q++){var aq=st===1?E.back(Math.max(0,Math.min(1,(t-.6-q*.12)/.4))):0,x=548+q*65;if(!(aq>0))continue;bar(x,226,58,70,C.ora,'app '+(q+1),aq);}
       V.tx(c,'🐭 MB · ⚡ segundos',740,462,14,'#9ff0c8','center',800,A(1,.5,1.4));
       return;}
-    if(st===2||st===3){var a2=st===2?E.out(Math.min(1,t/.6)):1;V.tx(c,'Docker vive DENTRO de tu EC2',500,52,19,'#fff','center',800,a2);
-      bar(200,416,600,40,'#2b4f74','hardware · servidor del data center',a2);bar(200,370,600,40,C.dblue,'hipervisor · AWS Nitro',a2);
-      c.save();c.globalAlpha*=a2;V.glow(c,C.ora,18);c.strokeStyle=C.ora;c.lineWidth=3;NetScene.rr(c,200,110,600,252,12);c.stroke();c.restore();V.tx(c,'TU EC2',216,132,14,'#ffb98a','left',800,a2);
-      bar(212,316,576,38,'#5b6b7c','Amazon Linux (el sistema operativo de tu EC2)',A(2,.5,.4));bar(212,272,576,38,'#1D63ED','🐳 Docker',A(2,.5,.8));
-      var names=['nginx','tu app','base de datos'];for(var q=0;q<3;q++){var aq=st===2?E.back(Math.max(0,Math.min(1,(t-1.2-q*.25)/.4))):1;bar(232+q*190,160,160,100,C.ora,names[q],aq,'contenedor');}
+    if(st===2||st===3){var a2=st===2?1:1;V.tx(c,'Cajas dentro de cajas: Docker vive DENTRO de tu EC2',500,44,18,'#fff','center',800,1);
+      var L=[ /* y, h, x, w, col, texto, analogía */
+        [410,40,90,520,'#2b4f74','hardware · el fierro del data center','🏢 el edificio'],
+        [364,40,90,520,C.dblue,'hipervisor · AWS Nitro','🧑‍💼 el administrador'],
+        [110,246,90,520,null,'','🏠 TU apartamento = tu EC2'],
+        [308,40,104,492,'#5b6b7c','Amazon Linux (sistema operativo)','🍳 la cocina de tu apartamento'],
+        [262,40,104,492,'#1D63ED','🐳 Docker','🚪 divide tu apto en habitaciones'],
+        [132,120,104,492,null,'','📦 cada habitación = un contenedor']];
+      L.forEach(function(l,k){var a=st===2?E.out(Math.max(0,Math.min(1,(t-k*.55)/.5))):1;if(!(a>0))return;
+        if(k===2){c.save();c.globalAlpha*=a;V.glow(c,C.ora,16);c.strokeStyle=C.ora;c.lineWidth=3;NetScene.rr(c,l[2],l[0],l[3],l[1],12);c.stroke();c.restore();V.tx(c,'TU EC2',l[2]+14,l[0]+20,13,'#ffb98a','left',800,a);}
+        else if(k===5){var names=['nginx','tu app','base de datos'];for(var q=0;q<3;q++){var x=118+q*160,aq=st===2?E.back(Math.max(0,Math.min(1,(t-k*.55-q*.15)/.4))):1;bar(x,l[0],144,l[1]-6,C.ora,names[q],aq,'contenedor');}}
+        else bar(l[2],l[0],l[3],l[1],l[4],l[5],a);
+        var ly=k===2?l[0]+14:(k===5?l[0]+l[1]/2:l[0]+l[1]/2);c.save();c.globalAlpha*=a;c.strokeStyle='rgba(255,255,255,.3)';c.setLineDash([4,4]);c.beginPath();c.moveTo(k===2||k===5?l[2]+l[3]+6:l[2]+l[3]+4,ly);c.lineTo(640,ly);c.stroke();c.restore();
+        V.pill(c,646,ly-12,l[6],k===2||k===5?'rgba(233,113,50,.4)':'rgba(255,255,255,.1)','#fff',a);});
+      if(st===2)V.tx(c,'se usan juntos: la VM (tu EC2) por fuera, los contenedores por dentro',500,470,13,'#ffb98a','center',700,Math.max(0,Math.min(1,(t-3.4)/.5)));
       if(st===3){var a3=E.out(Math.min(1,t/.5));c.save();c.globalAlpha*=a3;c.fillStyle='rgba(8,24,42,.92)';NetScene.rr(c,150,140,700,230,14);c.fill();c.strokeStyle='rgba(159,182,201,.4)';c.stroke();c.restore();
         var cmd='$ sudo docker run -d -p 8080:80 nginx',n=Math.floor(cmd.length*Math.min(1,Math.max(0,(t-.4)/1.4)));V.tx(c,cmd.slice(0,n),180,190,17,'#e6edf3','left',700,a3,'"JetBrains Mono",monospace');
         if(t>1.9){V.tx(c,'Unable to find image nginx … Pulling from library/nginx',180,222,12,C.mut,'left',500,1,'"JetBrains Mono",monospace');}
