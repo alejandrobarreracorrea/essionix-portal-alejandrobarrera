@@ -281,7 +281,7 @@ ul.clean li:first-child { border-top:0; }
     <li><span class="t">¿Dónde está físicamente tu EC2?<small>Regiones, zonas de disponibilidad, data centers, racks y servidores</small></span><span class="m">sem. 5</span></li>
     <li><span class="t">¿Qué es un hipervisor y dónde se ubica?<small>Cómo reparte CPU y RAM, cómo aísla, y Nitro en AWS</small></span><span class="m">sem. 5</span></li>
     <li><span class="t">Reuso de recursos<small>Por qué existe la nube · tipo 1 vs. tipo 2 · AMI y snapshot</small></span><span class="m">sem. 5</span></li>
-    <li><span class="t">LAB: mira tu VM por dentro y clónala<small>systemd-detect-virt, lsblk… y tu web corriendo en una segunda EC2</small></span><span class="m">lab</span></li>
+    <li><span class="t">LAB: mira tu VM por dentro y clónala<small>lscpu, free, df, ip, metadatos de AWS… y tu web en una segunda EC2</small></span><span class="m">lab</span></li>
   </ul>
   <p class="sub" style="margin-top:14px">Ya construyeron la red y el servidor. Hoy entienden <b>sobre qué corre</b> todo eso — y aprenden a <b>clonarlo</b>. 🖥️</p>
 </section>
@@ -755,35 +755,67 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   </script>
 </section>
 
-<!-- 8 · LAB 1: ¿ESTOY EN UNA VM? -->
+<!-- 8 · LAB 1: ¿QUÉ FIERRO TE DIO EL HIPERVISOR? -->
 <section class="slide" id="labV">
-  <span class="k"><span class="act-chip">🧪 LAB 1</span> Tu máquina virtual por dentro</span>
-  <h2 style="font-size:clamp(1.3rem,2.8vw,2.1rem)">¿Tu EC2 sabe que es <span class="grad">una máquina virtual</span>?</h2>
-  <div class="grid2" style="align-items:start">
-    <div class="demo term" id="labVterm" style="min-height:300px"></div>
-    <ul class="clean">
-      <li>1 · Conéctate a tu EC2 con <b>MobaXterm</b> (llave .ppk)</li>
-      <li>2 · Corre los 5 comandos: ¿qué te responde a ti?</li>
-      <li>3 · Compara con un compañero: ¿su EC2 dice <b>xen</b> o <b>amazon</b>? (t2 corre en Xen; t3, en Nitro)</li>
-      <li>4 · Anota en tu bitácora: cuántas <b>vCPU</b>, cuánta <b>RAM</b> y cuánto <b>disco</b> te dio el hipervisor</li>
-    </ul>
-  </div>
-  <p class="sub" style="margin-top:12px">Checkpoint: ✅ al chat con lo que te respondió <b>systemd-detect-virt</b>.</p>
-  <style>#labVterm p{white-space:pre;min-height:1.4em}#labVterm p.hl b{color:#FFC928;font-weight:600;background:rgba(255,201,40,.14);border-radius:4px;padding:0 3px}#labVterm p.note{color:#9fb3c8;font-size:.85em}#labVterm .cur{display:inline-block;width:.6em;background:#39c8e8;animation:blk 1s steps(1) infinite}@keyframes blk{50%{opacity:0}}</style>
-  <script>
-  (function(){var sec=document.getElementById('labV'),box=document.getElementById('labVterm'),T=[];
-    var L=[['cmd','$ systemd-detect-virt'],['hl','<b>amazon</b>'],['note','  ↑ sí: estás dentro de una VM (en t2.micro dice xen)'],
-      ['cmd','$ cat /sys/devices/virtual/dmi/id/sys_vendor'],['hl','<b>Amazon EC2</b>'],
-      ['cmd','$ nproc'],['hl','<b>2</b>'],['note','  ↑ vCPU que el hipervisor te asignó'],
-      ['cmd','$ free -h | head -2'],['out','        total   used   free'],['hl','Mem:   <b>949Mi</b>   …'],
-      ['cmd','$ lsblk'],['hl','nvme0n1   <b>8G</b>   disk'],['note','  ↑ tu disco EBS: también es virtual']];
-    function esc(x){return x.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  <span class="k"><span class="act-chip">🧪 LAB 1</span> Tu máquina virtual por dentro · MobaXterm + tu EC2</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">¿Qué <span class="grad">fierro</span> te dio el hipervisor?</h2>
+  <style>.term.lab{max-height:52vh;overflow:auto;font-size:clamp(.72rem,1.05vw,.9rem)}.term.lab p{white-space:pre-wrap;word-break:break-all;min-height:1.35em}.term.lab p.hl b{color:#FFC928;font-weight:600;background:rgba(255,201,40,.14);border-radius:4px;padding:0 3px}.term.lab p.note{color:#9fb3c8;font-size:.85em}.term.lab .cur{display:inline-block;width:.6em;background:#39c8e8;animation:blk 1s steps(1) infinite}@keyframes blk{50%{opacity:0}}
+  .cmdlist{list-style:none;display:flex;flex-direction:column;gap:6px;font-size:clamp(.78rem,1.1vw,.95rem)}.cmdlist li{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}.cmdlist code{font-family:var(--mono);color:var(--a1);font-weight:600;font-size:.92em}</style>  <script>
+  window.typeTerm=window.typeTerm||function(sec,box,L){var T=[];function esc(x){return x.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
     function at(ms,fn){T.push(setTimeout(fn,ms));}
     sec.__enter=function(){T.forEach(clearTimeout);T=[];box.innerHTML='';var d=300;
       L.forEach(function(l){var el=document.createElement('p');if(l[0]!=='cmd')el.className=l[0];
-        if(l[0]==='cmd'){at(d,function(){box.appendChild(el);});for(var i=1;i<=l[1].length;i++)(function(k){at(d+k*55,function(){el.innerHTML=esc(l[1].slice(0,k))+'<span class="cur">&nbsp;</span>';});})(i);d+=l[1].length*55+400;at(d-10,function(){el.innerHTML=esc(l[1]);});}
-        else{at(d,function(){el.innerHTML=l[0]==='out'?esc(l[1]):l[1];el.style.opacity=0;box.appendChild(el);el.animate([{opacity:0},{opacity:1}],{duration:350,fill:'forwards'});});d+=l[0]==='note'?900:350;}});};
-  })();
+        if(l[0]==='cmd'){at(d,function(){box.appendChild(el);box.scrollTop=box.scrollHeight;});for(var i=1;i<=l[1].length;i++)(function(k){at(d+k*38,function(){el.innerHTML=esc(l[1].slice(0,k))+'<span class="cur">&nbsp;</span>';});})(i);d+=l[1].length*38+380;at(d-10,function(){el.innerHTML=esc(l[1]);});}
+        else{at(d,function(){el.innerHTML=l[0]==='out'?esc(l[1]):l[1];el.style.opacity=0;box.appendChild(el);box.scrollTop=box.scrollHeight;el.animate([{opacity:0},{opacity:1}],{duration:300,fill:'forwards'});});d+=l[0]==='note'?800:300;}});};};
+  </script>
+  <div class="grid2" style="align-items:start">
+    <div class="demo term lab" id="labVterm" style="min-height:320px"></div>
+    <ul class="cmdlist">
+      <li><code>systemd-detect-virt</code><span>¿soy una VM? (amazon / xen)</span></li>
+      <li><code>lscpu</code><span>arquitectura (<b>x86_64</b> o <b>aarch64</b>=ARM), vCPU, hipervisor</span></li>
+      <li><code>uname -m</code><span>idioma del procesador, corto</span></li>
+      <li><code>free -h</code><span>la RAM que te tocó</span></li>
+      <li><span><code>lsblk</code> · <code>df -h /</code></span><span>tu disco EBS y cuánto usas</span></li>
+      <li><code>ip -brief a</code><span>tu <b>tarjeta de red virtual</b> y tu IP privada</span></li>
+      <li><code>uptime</code><span>hace cuánto está encendida</span></li>
+    </ul>
+  </div>
+  <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: tu <b>arquitectura</b>, <b>vCPU</b>, <b>RAM</b> y <b>disco</b>. Compara con un compañero: ¿a alguien le salió <b>aarch64</b>?</p>
+  <script>
+  typeTerm(document.getElementById('labV'),document.getElementById('labVterm'),[
+    ['cmd','$ systemd-detect-virt'],['hl','<b>amazon</b>'],['note','  ↑ sí: estás en una máquina virtual (en t2 dice xen)'],
+    ['cmd','$ lscpu | grep -E "Architecture|^CPU\\(s\\)|Hypervisor"'],['hl','Architecture:      <b>x86_64</b>'],['hl','CPU(s):            <b>2</b>'],['hl','Hypervisor vendor: <b>KVM</b>'],['note','  ↑ idioma x86 · 2 vCPU · hipervisor KVM (Nitro)'],
+    ['cmd','$ free -h | head -2'],['out','        total   used   free'],['hl','Mem:   <b>949Mi</b>   …'],
+    ['cmd','$ df -h /'],['hl','/dev/nvme0n1p1  <b>8.0G</b>  1.9G  6.1G  24% /'],
+    ['cmd','$ ip -brief a'],['hl','enX0   UP   <b>10.0.1.123/28</b>'],['note','  ↑ tu tarjeta de red virtual (la da Nitro)'],
+    ['cmd','$ uptime'],['out',' 19:42:10 up 2 days, 3:14, 1 user, load average: 0.00']]);
+  </script>
+</section>
+
+<!-- 8b · LAB 1b: TU EC2 TE DICE DÓNDE VIVE (metadatos) -->
+<section class="slide" id="labW">
+  <span class="k"><span class="act-chip">🧪 LAB 1b</span> Pregúntale a tu EC2 dónde vive</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">Tu EC2 te dice <span class="grad">en qué data center vive</span></h2>
+  <div class="grid2" style="align-items:start">
+    <div class="demo term lab" id="labWterm" style="min-height:320px"></div>
+    <ul class="cmdlist">
+      <li><code>169.254.169.254</code><span>la "portería" de AWS: solo tu EC2 le puede preguntar (metadatos)</span></li>
+      <li><code>TOKEN=$(curl …)</code><span>pides un pase temporal (IMDSv2, seguro)</span></li>
+      <li><code>…/placement/availability-zone</code><span>tu <b>zona de disponibilidad</b></span></li>
+      <li><code>…/instance-type</code><span>tu tipo: t2/t3.micro</span></li>
+      <li><code>…/ami-id</code><span>la <b>AMI</b> (el kit) con la que nació</span></li>
+      <li><span><code>…/local-ipv4</code> · <code>public-ipv4</code></span><span>tu IP privada y la pública</span></li>
+    </ul>
+  </div>
+  <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: <b>tu zona de disponibilidad</b> y tu <b>ami-id</b>. ¿Todos quedaron en la misma AZ?</p>
+  <script>
+  typeTerm(document.getElementById('labW'),document.getElementById('labWterm'),[
+    ['cmd','$ TOKEN=$(curl -sX PUT http://169.254.169.254/latest/api/token -H "X-aws-ec2-metadata-token-ttl-seconds: 300")'],['note','  ↑ pediste un pase de 5 minutos'],
+    ['cmd','$ M="curl -sH X-aws-ec2-metadata-token:$TOKEN http://169.254.169.254/latest/meta-data"'],
+    ['cmd','$ $M/placement/availability-zone; echo'],['hl','<b>us-east-1a</b>'],['note','  ↑ región us-east-1 · zona "a": ¡tu data center!'],
+    ['cmd','$ $M/instance-type; echo'],['hl','<b>t3.micro</b>'],
+    ['cmd','$ $M/ami-id; echo'],['hl','<b>ami-0a1b2c3d4e5f67890</b>'],['note','  ↑ el kit con el que nació tu máquina'],
+    ['cmd','$ $M/local-ipv4; echo; $M/public-ipv4; echo'],['hl','<b>10.0.1.123</b>'],['hl','<b>54.210.33.17</b>']]);
   </script>
 </section>
 
@@ -840,7 +872,7 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   <span class="k">Para la próxima clase</span>
   <h2>Su misión</h2>
   <ul class="clean">
-    <li>1 · Pantallazo de tu terminal con <b>systemd-detect-virt</b>, <b>nproc</b> y <b>lsblk</b></li>
+    <li>1 · Pantallazo de tu terminal con <b>lscpu</b>, <b>free -h</b>, <b>df -h</b> y tu <b>zona de disponibilidad</b> (metadatos)</li>
     <li>2 · Pantallazo de tu página abierta en la <b>IP de la copia</b> (antes de terminarla) y de <b>mi-web-ami</b> en estado available</li>
     <li>3 · En tu bitácora: diferencia entre hipervisor <b>tipo 1</b> y <b>tipo 2</b>, y qué es una <b>AMI</b> (una frase cada una)</li>
   </ul>
