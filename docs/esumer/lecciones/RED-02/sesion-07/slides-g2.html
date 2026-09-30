@@ -411,7 +411,7 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
     'Cada <b>zona de disponibilidad</b> es uno o más <b>data centers</b> con energía, refrigeración y red <b>independientes</b>: si uno falla, los otros siguen.',
     'Adentro hay filas y filas de <b>racks</b>, armarios llenos de servidores. El aire frío entra por un pasillo y el caliente sale por el otro.',
     'Cada rack tiene decenas de <b>servidores físicos</b> apilados, con energía y red duplicadas.',
-    'Y en <b>uno</b> de esos servidores, repartido por el <b>hipervisor</b>, vive <b>tu EC2</b> junto a las de otros clientes. 🎯'
+    'Un servidor es como un <b>edificio</b>: abajo los <b>cimientos</b> (el hardware: CPU y RAM), en medio el <b>administrador</b> (el hipervisor) y arriba los <b>apartamentos</b> (las máquinas virtuales). Uno de ellos es <b>tu EC2</b>. 🎯'
   ],function(c,s){
     var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
     var CR=['Mundo','Región','Zona de disponibilidad','Data center','Rack','Servidor'];
@@ -444,14 +444,24 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
     function L4(){V.tx(c,'Un rack',500,84,20,'#fff','center',700);V.rack(c,430,96,140,370,14,t,5,1);
       c.save();c.strokeStyle=C.ora;c.lineWidth=2;c.beginPath();c.moveTo(575,225);c.lineTo(640,225);c.stroke();c.restore();V.tx(c,'este servidor',650,230,14,'#ffb98a','left',700);
       V.pill(c,190,140,'switch de red arriba','rgba(15,158,213,.2)','#fff');V.pill(c,190,180,'energía doble (A/B)','rgba(15,158,213,.2)','#fff');V.pill(c,190,220,'decenas de servidores','rgba(15,158,213,.2)','#fff');}
-    function L5(){V.tx(c,'Un servidor físico por dentro',500,84,20,'#fff','center',700);
-      c.save();c.fillStyle='#0b1a2b';NetScene.rr(c,140,376,720,74,12);c.fill();c.strokeStyle='rgba(159,182,201,.35)';c.stroke();c.restore();
-      for(var k=0;k<8;k++)V.chip(c,160+k*44,392,36,24,C.blue,'CPU');for(var q=0;q<6;q++)V.chip(c,520+q*40,392,32,24,C.ora,'RAM');V.chip(c,770,392,70,24,C.grn,'Nitro');
-      V.tx(c,'hardware real',500,442,12,C.mut,'center',600);
-      c.save();V.glow(c,C.blue,18);c.fillStyle='rgba(15,158,213,.35)';NetScene.rr(c,140,324,720,42,10);c.fill();c.restore();V.tx(c,'HIPERVISOR · AWS Nitro',500,351,15,'#fff','center',700);
-      var N=['cliente A','cliente B','tu EC2','cliente C','cliente D'],S=['m5.large','c6i.xlarge','t3.micro · 2 vCPU · 1 GB','r6g.large','t3.small'];
-      N.forEach(function(n,i){var a=st===5?E.back(Math.max(0,Math.min(1,(t-.9-i*.12)/.5))):1,x=150+i*142,mine=i===2;V.vm(c,x,176,130,120,n,mine?'t3.micro':S[i],mine?C.ora:C.blue,a,mine);if(mine)V.tx(c,'2 vCPU · 1 GB',x+65,280,11,'#ffb98a','center',700,a,'"JetBrains Mono",monospace');});
-      if(st===5)NetScene.bubble(c,435,166,'🎯 aquí vive tu EC2','700 14px Poppins',C.ora,'#fff',Math.max(0,Math.min(1,(t-1.8)/.4)));}
+    function L5(){V.tx(c,'El servidor es como un edificio',500,82,22,'#fff','center',800);
+      var ap=function(k){return st===5?Math.max(0,Math.min(1,(t-.7-k*.25)/.5)):1;};
+      /* estructura */c.save();c.fillStyle='#16324f';NetScene.rr(c,170,112,660,330,14);c.fill();c.strokeStyle='rgba(159,182,201,.35)';c.lineWidth=1.5;c.stroke();c.restore();
+      /* 3 · apartamentos = máquinas virtuales */var n=5,w=108,g=18,x0=500-(n*w+(n-1)*g)/2;
+      V.tx(c,'🏠 Apartamentos = máquinas virtuales',188,138,13,'#9fd8f0','left',700,ap(2));
+      for(var i=0;i<n;i++){var x=x0+i*(w+g),mine=i===2,a=ap(2)*(st===5?E.back(Math.max(0,Math.min(1,(t-1.2-i*.1)/.45))):1);if(!(a>0))continue;
+        c.save();c.globalAlpha*=a;if(mine)V.glow(c,C.ora,22);c.fillStyle=mine?'#5a3522':'#0f2740';NetScene.rr(c,x,150,w,108,10);c.fill();c.shadowBlur=0;c.strokeStyle=mine?C.ora:'rgba(15,158,213,.6)';c.lineWidth=mine?3:1.5;c.stroke();
+        c.fillStyle=mine?'rgba(255,201,40,.5)':'rgba(255,201,40,.18)';c.fillRect(x+12,162,w-24,40);c.restore();
+        NetScene.person(c,x+w/2,198,18,mine?C.ora:'#9fb6c9',a);V.tx(c,mine?'TÚ':'vecino',x+w/2,228,mine?16:13,mine?'#fff':C.mut,'center',800,a);V.tx(c,mine?'tu EC2':'otro cliente',x+w/2,247,11,mine?'#ffb98a':C.faint,'center',600,a);}
+      /* 2 · administrador = hipervisor */var ah=ap(1);c.save();c.globalAlpha*=ah;V.glow(c,C.blue,16+6*Math.sin(t*3));c.fillStyle='rgba(15,158,213,.35)';NetScene.rr(c,188,276,624,56,12);c.fill();c.restore();
+      NetScene.person(c,226,322,18,'#fff',ah);V.tx(c,'El administrador = el HIPERVISOR',262,300,15,'#fff','left',800,ah);V.tx(c,'reparte los recursos y cuida que nadie entre al apartamento de otro',262,320,12,'#cfe3f1','left',500,ah);
+      /* 1 · cimientos = hardware */var ac=ap(0);c.save();c.globalAlpha*=ac;c.fillStyle='#0b1a2b';NetScene.rr(c,188,346,624,80,12);c.fill();c.restore();
+      V.tx(c,'Cimientos = el HARDWARE real',204,368,13,'#fff','left',800,ac);
+      for(var k=0;k<6;k++)V.chip(c,204+k*50,380,42,26,C.blue,'CPU',ac);for(var q=0;q<6;q++)V.chip(c,516+q*48,380,40,26,C.ora,'RAM',ac);
+      V.tx(c,'procesador = el cerebro · memoria = la mesa de trabajo',500,440,11,C.mut,'center',600,ac);
+      /* recursos que suben a tu apartamento */if(st===5&&t>2.4){for(var f=0;f<3;f++){var from=f<2?[225+f*50,380]:[536,380],to=[500,258],u=((t-2.4)*.6+f*.33)%1;var px=from[0]+(to[0]-from[0])*u,py=from[1]+(to[1]-from[1])*u;
+        c.save();V.glow(c,f<2?C.blue:C.ora,12);c.fillStyle=f<2?C.blue:C.ora;c.beginPath();c.arc(px,py,5,0,7);c.fill();c.restore();}
+        V.tx(c,'↑ el administrador le entrega a tu apartamento 2 CPU y 1 GB de RAM',500,104,13,'#ffb98a','center',700,Math.min(1,(t-2.4)/.5));}}
     var LV=[L0,L1,L2,L3,L4,L5],k=st===0?1:E.io(Math.min(1,t/1.2));
     if(st>0&&k<1){var tp=TG[st-1],z=1+k*2.6;c.save();c.globalAlpha=1-k;c.translate(tp[0],tp[1]);c.scale(z,z);c.translate(-tp[0],-tp[1]);LV[st-1]();c.restore();}
     c.save();c.globalAlpha=k;var z2=.6+.4*k;c.translate(500,270);c.scale(z2,z2);c.translate(-500,-270);LV[st]();c.restore();
