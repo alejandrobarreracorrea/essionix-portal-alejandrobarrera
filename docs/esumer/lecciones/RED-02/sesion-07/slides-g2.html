@@ -565,23 +565,45 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
   <script>
   NetScene.make('scH',1000,480,[
-    '<b>Tipo 2 (alojado):</b> el hipervisor es un programa que instalas <b>encima de tu sistema operativo</b>. Ejemplo: <b>VirtualBox</b> en tu portátil.',
-    '<b>Tipo 1 (bare metal):</b> el hipervisor va <b>directo sobre el hardware</b>, sin un sistema operativo en medio. Ejemplos: VMware ESXi, Hyper-V, KVM.',
-    'AWS usa uno de tipo 1: <b>Nitro</b>, basado en KVM y con chips propios. Ahí corre <b>tu EC2</b>.',
-    'La diferencia: el tipo 2 tiene <b>una capa más</b> (el SO anfitrión) → ideal para practicar en tu PC. El tipo 1 va <b>directo al metal</b> → rendimiento y seguridad para centros de datos y la nube.'
+    '¿Qué es un <b>hipervisor</b>? Es el <b>administrador</b>: un programa que toma <b>un computador</b> y lo divide en <b>varios computadores virtuales</b> (máquinas virtuales). Hay dos formas de hacerlo.',
+    '<b>Tipo 2 = un cuarto alquilado dentro de tu casa.</b> Tu portátil (la casa) ya tiene dueño: <b>Windows o macOS</b>. <b>VirtualBox</b> es un programa que abres ahí y te presta un cuarto para una VM. Todo pasa <b>por el dueño</b>.',
+    '<b>Tipo 1 = un edificio hecho para alquilar.</b> No vive nadie en medio: el administrador está <b>directo sobre los cimientos</b> y reparte todo el edificio en apartamentos. Así funcionan los data centers (VMware ESXi, Hyper-V, KVM).',
+    '<b>AWS usa tipo 1:</b> su administrador se llama <b>Nitro</b>, y ahí vive <b>tu EC2</b>. El tipo 2 es más lento (hay un intermediario), pero perfecto para practicar en tu PC.'
   ],function(c,s){
     var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
-    function stack(cx,L,vms,k0,title,sub,side,hl){var y0=410,lh=34,gap=10,w=190,d=150;
-      V.tx(c,title,cx,52,20,'#fff','center',700,st>=k0?1:.2);V.tx(c,sub,cx,72,13,C.mut,'center',500,st>=k0?1:.2);
-      L.forEach(function(l,i){var a=st<k0?0:(st===k0?E.out(Math.max(0,Math.min(1,(t-i*.35)/.5))):1);if(!(a>0))return;var y=y0-i*(lh+gap)+(1-a)*-30;
-        V.iso(c,cx+(w-d)*.866/2,y,w*.5,d*.5+40,lh,l[1],l[2],l[3],a);V.tx(c,l[0],side<0?cx-120:cx+90,y-lh/2-10,13,'#fff',side<0?'right':'left',700,a);
-        c.save();c.globalAlpha*=a;c.strokeStyle='rgba(255,255,255,.25)';c.beginPath();c.moveTo(side<0?cx-115:cx+85,y-lh/2-14);c.lineTo(cx+(side<0?-60:60),y-lh/2-14);c.stroke();c.restore();});
-      var a2=st<k0?0:(st===k0?E.back(Math.max(0,Math.min(1,(t-L.length*.35)/.5))):1);if(!(a2>0))return;var ty=y0-L.length*(lh+gap);
-      vms.forEach(function(v,i){var mine=hl&&i===0,x=cx-40+(i-(vms.length-1)/2)*52+40;V.iso(c,x,ty-4,22,26,40,mine?'#E97132':'#9fd8f0',mine?'#8a3f1a':'#1a5a80',mine?'#b0552a':'#2476a3',a2);});
-      V.tx(c,hl?'tu EC2 y otras VMs':'máquinas virtuales',side<0?cx-120:cx+90,ty-40,13,hl?'#ffb98a':'#fff',side<0?'right':'left',700,a2);}
-    stack(330,[['Hardware · tu portátil','#2b4f74','#10263f','#173652'],['SO anfitrión (Windows/macOS)','#5b6b7c','#2e3945','#414d5a'],['VirtualBox (tipo 2)','#0F9ED5','#07567a','#0a73a3']],[0,1],0,'TIPO 2 · alojado','un programa sobre tu sistema operativo',-1,false);
-    stack(700,[['Hardware · centro de datos','#2b4f74','#10263f','#173652'],[st>=2?'AWS Nitro (tipo 1)':'Hipervisor tipo 1','#156082','#0a2f40','#0f4560']],[0,1,2],1,'TIPO 1 · bare metal','directo sobre el hardware',1,st>=2);
-    var a3=st<3?0:E.out(Math.min(1,t/.5));V.tx(c,'4 capas · más lento · para practicar en tu PC',330,462,14,'#ff9b9b','center',700,a3);V.tx(c,'3 capas · directo al metal · la nube',700,462,14,'#9ff0c8','center',700,a3);
+    function ap(k,d,dl){return st>k?1:(st<k?0:E.out(Math.max(0,Math.min(1,(t-(dl||0))/(d||.6)))));}
+    if(st===0){var a=E.out(Math.min(1,t/.6));
+      NetScene.laptop(c,210,300,150,'#9fd8f0',a);V.tx(c,'1 computador',210,340,15,'#fff','center',700,a);
+      var b=Math.max(0,Math.min(1,(t-.8)/.6));c.save();c.globalAlpha*=b;V.glow(c,C.blue,20);c.fillStyle='rgba(15,158,213,.35)';NetScene.rr(c,400,190,200,150,16);c.fill();c.restore();
+      NetScene.person(c,500,280,30,'#fff',b);V.tx(c,'HIPERVISOR',500,312,16,'#fff','center',800,b);V.tx(c,'el administrador',500,330,12,'#cfe3f1','center',600,b);
+      V.fiber(c,[300,265],[398,265],t,'rgba(15,158,213,.8)',b);
+      for(var k=0;k<3;k++){var d=Math.max(0,Math.min(1,(t-1.6-k*.3)/.5)),y=170+k*95;V.fiber(c,[602,265],[690,y+30],t,'rgba(233,113,50,.8)',d);
+        c.save();c.globalAlpha*=d;c.fillStyle='#0f2740';NetScene.rr(c,700,y,170,64,10);c.fill();c.strokeStyle=C.ora;c.lineWidth=2;c.stroke();c.restore();
+        V.tx(c,'computador virtual '+(k+1),785,y+38,13,'#fff','center',700,d);}
+      V.tx(c,'1 computador → varios computadores virtuales',500,450,16,'#ffb98a','center',700,Math.max(0,Math.min(1,(t-2.8)/.5)));return;}
+    /* ---------- TIPO 2: la casa ---------- */
+    var a1=ap(1,.7);V.tx(c,'TIPO 2 · cuarto alquilado en tu casa',280,58,17,'#fff','center',800,a1);
+    if(a1>0){c.save();c.globalAlpha*=a1;c.fillStyle='#1e4266';c.beginPath();c.moveTo(110,196);c.lineTo(280,92);c.lineTo(450,196);c.closePath();c.fill();c.fillStyle='#16324f';NetScene.rr(c,130,190,300,236,8);c.fill();c.restore();
+      c.save();c.globalAlpha*=a1;c.fillStyle='#0b1a2b';NetScene.rr(c,142,382,276,36,6);c.fill();c.restore();V.tx(c,'cimientos: tu portátil (hardware)',280,405,12,'#fff','center',700,a1);
+      var a2=ap(1,.6,.5);c.save();c.globalAlpha*=a2;c.fillStyle='#3a4755';NetScene.rr(c,142,318,276,56,6);c.fill();c.restore();
+      NetScene.person(c,178,366,15,'#cfd8e1',a2);NetScene.person(c,206,366,12,'#cfd8e1',a2);V.tx(c,'el dueño vive aquí:',232,340,12,'#fff','left',700,a2);V.tx(c,'Windows / macOS',232,358,13,'#fff','left',800,a2);
+      var a3=ap(1,.6,1.1);c.save();c.globalAlpha*=a3;c.fillStyle='rgba(15,158,213,.35)';NetScene.rr(c,236,206,182,104,8);c.fill();c.strokeStyle=C.blue;c.lineWidth=2;c.stroke();c.restore();
+      NetScene.person(c,258,262,13,'#fff',a3);V.tx(c,'VirtualBox',278,232,12,'#fff','left',800,a3);V.tx(c,'(administrador',278,248,10,'#cfe3f1','left',600,a3);V.tx(c,'de inquilino)',278,261,10,'#cfe3f1','left',600,a3);
+      c.save();c.globalAlpha*=a3;c.fillStyle='#0f2740';NetScene.rr(c,276,270,132,32,6);c.fill();c.strokeStyle=C.ora;c.stroke();c.restore();V.tx(c,'VM Ubuntu',342,291,12,'#fff','center',700,a3);
+      var a4=ap(1,.5,1.8);V.tx(c,'VM → VirtualBox → Windows → hardware',280,452,13,'#ffb98a','center',700,a4);
+      if(a4>0){var u=((t*.5)%1);var P=[[342,286],[300,250],[200,345],[280,400]],pt=NetScene.along(P,st===1?u:(t*.5)%1);c.save();V.glow(c,C.ora,10);c.fillStyle=C.ora;c.beginPath();c.arc(pt[0],pt[1],5,0,7);c.fill();c.restore();}}
+    /* ---------- TIPO 1: el edificio ---------- */
+    var b1=ap(2,.7);V.tx(c,'TIPO 1 · edificio hecho para alquilar',720,58,17,'#fff','center',800,b1);
+    if(b1>0){c.save();c.globalAlpha*=b1;c.fillStyle='#16324f';NetScene.rr(c,570,96,300,330,10);c.fill();c.restore();
+      c.save();c.globalAlpha*=b1;c.fillStyle='#0b1a2b';NetScene.rr(c,582,382,276,36,6);c.fill();c.restore();V.tx(c,'cimientos: servidor del data center',720,405,12,'#fff','center',700,b1);
+      var b2=ap(2,.6,.5);c.save();c.globalAlpha*=b2;V.glow(c,C.blue,14);c.fillStyle='rgba(15,158,213,.4)';NetScene.rr(c,582,322,276,52,6);c.fill();c.restore();
+      NetScene.person(c,610,366,15,'#fff',b2);V.tx(c,'el administrador (hipervisor)',632,344,12,'#fff','left',800,b2);V.tx(c,'directo sobre los cimientos',632,361,11,'#cfe3f1','left',600,b2);
+      for(var r=0;r<2;r++)for(var q=0;q<3;q++){var mine=st>=3&&r===1&&q===1,b3=ap(2,.4,1+(r*3+q)*.12),x=590+q*92,y=112+r*104;c.save();c.globalAlpha*=b3;if(mine)V.glow(c,C.ora,20);c.fillStyle=mine?'#5a3522':'#0f2740';NetScene.rr(c,x,y,80,92,8);c.fill();c.shadowBlur=0;c.strokeStyle=mine?C.ora:'rgba(15,158,213,.6)';c.lineWidth=mine?3:1.5;c.stroke();c.restore();
+        NetScene.person(c,x+40,y+62,15,mine?C.ora:'#9fb6c9',b3);V.tx(c,mine?'TÚ · tu EC2':'VM',x+40,y+84,mine?11:11,mine?'#ffb98a':C.mut,'center',700,b3);}
+      if(st>=2){var v=((t*.6)%1),pv=NetScene.along([[720,262],[720,350],[720,400]],v);c.save();V.glow(c,C.grn,10);c.fillStyle=C.grn;c.beginPath();c.arc(pv[0],pv[1],5,0,7);c.fill();c.restore();V.tx(c,'VM → administrador → hardware',720,452,13,'#9ff0c8','center',700,ap(2,.5,1.6));}}
+    if(st>=3){var a5=E.out(Math.min(1,t/.6));V.tx(c,st>=3?'AWS Nitro':'',870,120,13,'#9ff0c8','right',800,a5);
+      c.save();c.globalAlpha*=a5;c.fillStyle='rgba(229,72,77,.18)';NetScene.rr(c,160,20,240,26,13);c.fill();c.fillStyle='rgba(52,195,143,.18)';NetScene.rr(c,600,20,240,26,13);c.fill();c.restore();
+      V.tx(c,'más lento · para practicar',280,38,12,'#ff9b9b','center',800,a5);V.tx(c,'rápido · data centers y la nube',720,38,12,'#9ff0c8','center',800,a5);}
   });
   </script>
 </section>
