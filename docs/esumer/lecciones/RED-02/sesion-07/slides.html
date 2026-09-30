@@ -281,7 +281,7 @@ ul.clean li:first-child { border-top:0; }
     <li><span class="t">¿Dónde está físicamente tu EC2?<small>Regiones, zonas de disponibilidad, data centers, racks y servidores</small></span><span class="m">sem. 5</span></li>
     <li><span class="t">¿Qué es un hipervisor y dónde se ubica?<small>Cómo reparte CPU y RAM, cómo aísla, y Nitro en AWS</small></span><span class="m">sem. 5</span></li>
     <li><span class="t">Reuso de recursos<small>Por qué existe la nube · tipo 1 vs. tipo 2 · AMI y snapshot</small></span><span class="m">sem. 5</span></li>
-    <li><span class="t">LAB: mira tu VM por dentro y clónala<small>lscpu, free, df, ip, metadatos de AWS… y tu web en una segunda EC2</small></span><span class="m">lab</span></li>
+    <li><span class="t">LABs: tu VM por dentro, snapshot y AMI<small>comandos y metadatos · daña y recupera tu web · clónala en otra EC2</small></span><span class="m">lab</span></li>
   </ul>
   <p class="sub" style="margin-top:14px">Ya construyeron la red y el servidor. Hoy entienden <b>sobre qué corre</b> todo eso — y aprenden a <b>clonarlo</b>. 🖥️</p>
 </section>
@@ -819,20 +819,64 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   </script>
 </section>
 
+<!-- 9a · LAB 2: SNAPSHOT — TU SEGURO CONTRA DESASTRES -->
+<section class="slide" id="scG">
+  <span class="k"><span class="act-chip">🧪 LAB 2</span> Snapshot: tu seguro contra desastres · clic o → para el siguiente paso</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">Saca la foto, <span class="grad">daña tu web</span> y recupérala</h2>
+  <div class="scene"><canvas aria-label="Laboratorio animado: crear un snapshot del volumen, dañar la página a propósito, reemplazar el volumen raíz con el snapshot y comprobar que la web volvió"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scG',1000,480,[
+    '<b>LAB 2 · El seguro.</b> Vamos a hacer lo que hace una empresa antes de tocar un servidor: <b>sacar la foto del disco</b>. Después lo dañamos a propósito y lo recuperamos.',
+    '<b>Paso 1 · La foto.</b> EC2 → tu instancia → pestaña <b>Almacenamiento</b> → clic en el <b>ID del volumen</b> → <b>Acciones → Crear snapshot</b>. Descripción: <b>antes-del-desastre</b>.',
+    '<b>Paso 2 · Espera.</b> Menú <b>Elastic Block Store → Snapshots</b>: espera el estado <b>Completed</b> (1–3 min). Tu foto ya está guardada aparte, a salvo.',
+    '<b>Paso 3 · El desastre (a propósito).</b> En tu terminal: <b>echo "&lt;h1&gt;HACKEADO&lt;/h1&gt;" | sudo tee /usr/share/nginx/html/index.html</b> y recarga tu página. 😱',
+    '<b>Paso 4 · Restaura.</b> Tu instancia → <b>Acciones → Monitorear y solucionar problemas → Reemplazar volumen raíz</b> → elige el snapshot <b>antes-del-desastre</b> → marca <b>eliminar volumen reemplazado</b> → <b>Crear tarea</b>. La EC2 se reinicia sola.',
+    '<b>Paso 5 · ¡Volvió!</b> Espera 1–2 min y recarga tu IP pública: <b>tu web está como antes</b> ✓. Misma instancia, misma IP. Deja el snapshot por ahora: lo borramos en la limpieza del LAB 3.'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    function A(k,d,dl){return st>k?1:(st<k?0:E.out(Math.max(0,Math.min(1,(t-(dl||0))/(d||.6)))));}
+    function browser(x,y,state,a){if(!(a>0))return;c.save();c.globalAlpha*=a;c.fillStyle='#f4f8fb';NetScene.rr(c,x,y,230,150,10);c.fill();c.fillStyle='#d9e1ea';NetScene.rr(c,x,y,230,24,[10,10,0,0]);c.fill();
+      ['#ff5f57','#febc2e','#28c840'].forEach(function(cc,k){c.fillStyle=cc;c.beginPath();c.arc(x+14+k*12,y+12,4,0,7);c.fill();});c.restore();V.tx(c,'http://54.x.x.10',x+120,y+16,10,'#44546A','center',600,a,'"JetBrains Mono",monospace');
+      if(state==='hack'){c.save();c.globalAlpha*=a;c.fillStyle='#1a0000';c.fillRect(x+6,y+30,218,114);c.restore();V.tx(c,'HACKEADO',x+115,y+98,30,'#ff3b3b','center',900,a*(.7+.3*Math.sin(t*12)));}
+      else{c.save();c.globalAlpha*=a;c.fillStyle=state==='back'?'#1f7a50':'#156082';c.fillRect(x+6,y+30,218,40);c.fillStyle='#c9d6e2';c.fillRect(x+18,y+84,190,9);c.fillRect(x+18,y+102,150,8);c.fillRect(x+18,y+118,170,8);c.restore();V.tx(c,'Mi página ☕',x+115,y+56,15,'#fff','center',800,a);}}
+    function disk(x,y,col,label,a){if(!(a>0))return;c.save();c.globalAlpha*=a;V.glow(c,col,12);c.fillStyle=col;c.beginPath();c.ellipse(x,y-34,52,12,0,0,7);c.fill();c.fillRect(x-52,y-34,104,58);c.beginPath();c.ellipse(x,y+24,52,12,0,0,7);c.fill();c.restore();
+      c.save();c.globalAlpha*=a;c.fillStyle='rgba(255,255,255,.3)';c.beginPath();c.ellipse(x,y-34,52,12,0,0,7);c.fill();c.restore();V.tx(c,label,x,y+58,12,'#fff','center',700,a);}
+    /* tu EC2 */V.vm(c,60,70,230,64,'tu EC2','misma instancia, misma IP',C.blue,1,false);
+    var hacked=st===3||(st===4&&t<1.6),back=st>=5;
+    browser(60,160,hacked?'hack':(back?'back':'ok'),1);
+    var dcol=hacked?C.red:(back?C.grn:C.blue);disk(175,400,dcol,'volumen EBS (disco)',1);
+    if(st===0)V.tx(c,'antes de tocar un servidor… ¡foto!',620,250,20,'#ffb98a','center',800,E.out(Math.min(1,t/.6)));
+    /* snapshot */var a1=A(1,.6,.5);
+    if(st===1){var fl=Math.max(0,1-(t-.1)/.4);if(fl>0){c.save();c.globalAlpha=fl*.75;c.fillStyle='#fff';c.fillRect(100,320,160,140);c.restore();}
+      var u=Math.min(1,Math.max(0,(t-.3)/.8));if(u<1){var pt=NetScene.along([[230,400],[560,330]],E.io(u));NetScene.packet(c,pt[0],pt[1],C.ora,1);}}
+    if(a1>0){c.save();c.globalAlpha*=a1;c.fillStyle='#0d3a5c';NetScene.rr(c,560,270,300,120,12);c.fill();c.strokeStyle=C.blue;c.lineWidth=2;c.stroke();c.restore();
+      V.tx(c,'📸 snapshot',710,300,16,'#fff','center',800,a1);V.tx(c,'antes-del-desastre',710,324,14,'#9fd8f0','center',700,a1,'"JetBrains Mono",monospace');
+      var done=st>=2&&(st>2||t>1.6);V.tx(c,done?'✓ Completed':'⏳ Pending… '+Math.min(100,Math.round(t*55))+'%',710,352,13,done?'#9ff0c8':C.yel,'center',700,a1);
+      V.tx(c,'guardado aparte, a salvo',710,376,11,C.mut,'center',600,a1);}
+    if(st===3){var a3=E.out(Math.min(1,t/.5));c.save();c.globalAlpha*=a3;c.fillStyle='#0b1a2b';NetScene.rr(c,330,130,620,56,10);c.fill();c.restore();
+      V.tx(c,'$ echo "<h1>HACKEADO</h1>" | sudo tee /usr/share/nginx/html/index.html',640,164,12,'#ff9b9b','center',700,a3,'"JetBrains Mono",monospace');}
+    if(st===4){var u4=Math.min(1,Math.max(0,(t-.3)/1.2));var p4=NetScene.along([[560,330],[240,390]],E.io(u4));if(u4<1)NetScene.packet(c,p4[0],p4[1],C.grn,1);
+      V.tx(c,'Reemplazar volumen raíz ← snapshot',640,160,16,'#9ff0c8','center',800,E.out(Math.min(1,t/.5)));V.tx(c,t<1.6?'↻ reiniciando…':'✓ disco restaurado',640,186,13,C.mut,'center',600,1);}
+    if(st>=5){V.tx(c,'¡Volvió! ✓',640,170,30,'#9ff0c8','center',900,E.back(Math.min(1,t/.6)));V.tx(c,'el snapshot te devolvió el disco tal como estaba',640,200,14,'#fff','center',600,E.out(Math.min(1,t/.6)));}
+  });
+  </script>
+</section>
+
 <!-- 9 · LAB 2: CLONA TU SERVIDOR CON UNA AMI (escena) -->
 <section class="slide" id="scK">
-  <span class="k"><span class="act-chip">🧪 LAB 2</span> Clona tu servidor web · clic o → para el siguiente paso</span>
+  <span class="k"><span class="act-chip">🧪 LAB 3</span> Clona tu servidor web · clic o → para el siguiente paso</span>
   <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">Tu web en <span class="grad">una segunda EC2</span>, con tu propia AMI</h2>
   <div class="scene"><canvas aria-label="Laboratorio animado: foto de tu EC2, AMI disponible, lanzar una copia, abrir la misma página en otra IP y limpiar"></canvas></div>
   <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
   <script>
   NetScene.make('scK',1000,480,[
-    '<b>LAB 2 · Clona tu servidor web.</b> Antes, en tu EC2 corre <b>sudo systemctl enable nginx</b>: así NGINX arranca solo cuando se encienda la copia.',
+    '<b>LAB 3 · Clona tu servidor web.</b> Antes, en tu EC2 corre <b>sudo systemctl enable nginx</b>: así NGINX arranca solo cuando se encienda la copia.',
     '<b>Paso 1 · La foto.</b> EC2 → tu instancia → <b>Acciones → Imagen y plantillas → Crear imagen</b>. Nombre: <b>mi-web-ami</b>.',
     '<b>Paso 2 · Espera el molde.</b> En <b>AMIs</b> espera el estado <b>available</b> (3–5 min). En <b>Snapshots</b> verás la foto de tu disco que AWS creó por dentro.',
     '<b>Paso 3 · Lanza la copia.</b> Selecciona <b>mi-web-ami → Lanzar instancia desde AMI</b>: t2/t3.micro, tu key pair, subred <b>web</b> de pyme-vpc y el mismo Security Group.',
     '<b>Paso 4 · Compruébalo.</b> Abre <b>http://IP-pública-nueva</b>: ¡tu misma página, en otra máquina! Así escalan las empresas.',
-    '<b>Paso 5 · Limpieza (capa gratuita).</b> Termina la copia, haz <b>Deregister</b> a la AMI y borra su <b>snapshot</b>. Si los dejas, cobran unos centavos al mes.'
+    '<b>Paso 5 · Limpieza (capa gratuita).</b> Termina la copia, haz <b>Deregister</b> a la AMI y en <b>Snapshots</b> borra los dos: el de la AMI y el <b>antes-del-desastre</b> del LAB 2. Si los dejas, cobran unos centavos al mes.'
   ],function(c,s){
     var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
     function A(k,d,dl){return st>k?1:(st<k?0:E.out(Math.max(0,Math.min(1,(t-(dl||0))/(d||.6)))));}
@@ -861,7 +905,7 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   <h2>Antes de irte: <span class="grad">tu servidor sano</span></h2>
   <ul class="clean check">
     <li>La <b>copia terminada</b>: en EC2 solo queda tu instancia original</li>
-    <li><b>mi-web-ami</b> con <b>Deregister</b> y su <b>snapshot</b> borrado (EC2 → Snapshots)</li>
+    <li><b>mi-web-ami</b> con <b>Deregister</b> y los <b>2 snapshots</b> borrados (el de la AMI y <b>antes-del-desastre</b>)</li>
     <li><b>systemctl is-active nginx</b> → dice <b>active</b> en tu EC2 original</li>
     <li><b>curl -I localhost</b> → <b>200 OK</b> y tu página abre desde el navegador</li>
     <li>¿No lo vas a usar hoy más? <b>Stop</b> a la instancia — capa gratuita cuidada 💵</li>
@@ -873,7 +917,7 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   <h2>Su misión</h2>
   <ul class="clean">
     <li>1 · Pantallazo de tu terminal con <b>lscpu</b>, <b>free -h</b>, <b>df -h</b> y tu <b>zona de disponibilidad</b> (metadatos)</li>
-    <li>2 · Pantallazo de tu página abierta en la <b>IP de la copia</b> (antes de terminarla) y de <b>mi-web-ami</b> en estado available</li>
+    <li>2 · Pantallazo de tu página <b>HACKEADA</b> y luego <b>restaurada</b> con el snapshot, y de tu web abierta en la <b>IP de la copia</b> (AMI)</li>
     <li>3 · En tu bitácora: diferencia entre hipervisor <b>tipo 1</b> y <b>tipo 2</b>, y qué es una <b>AMI</b> (una frase cada una)</li>
   </ul>
   <p class="sub" style="margin-top:24px">Hoy abrieron la caja: <b>hardware → hipervisor → tu VM</b>. Y clonaron su servidor como lo hacen las empresas. 🖥️</p>
