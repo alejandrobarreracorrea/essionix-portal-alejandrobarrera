@@ -280,7 +280,7 @@ ul.clean li:first-child { border-top:0; }
   <ul class="rows">
     <li><span class="t">¿Dónde está físicamente tu EC2?<small>Regiones, zonas de disponibilidad, data centers, racks y servidores</small></span><span class="m">sem. 5</span></li>
     <li><span class="t">¿Qué es un hipervisor y dónde se ubica?<small>Cómo reparte CPU y RAM, cómo aísla, y Nitro en AWS</small></span><span class="m">sem. 5</span></li>
-    <li><span class="t">Reuso de recursos<small>Por qué existe la nube · tipo 1 vs. tipo 2 · AMI y snapshot</small></span><span class="m">sem. 5</span></li>
+    <li><span class="t">Reuso de recursos<small>Por qué existe la nube · tipo 1 vs. tipo 2 · VM vs. contenedor (Docker) · AMI y snapshot</small></span><span class="m">sem. 5</span></li>
     <li><span class="t">LABs: tu VM por dentro, snapshot y AMI<small>comandos y metadatos · daña y recupera tu web · clónala en otra EC2</small></span><span class="m">lab</span></li>
   </ul>
   <p class="sub" style="margin-top:14px">Ya construyeron la red y el servidor. Hoy entienden <b>sobre qué corre</b> todo eso — y aprenden a <b>clonarlo</b>. 🖥️</p>
@@ -655,6 +655,58 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
     if(st>=3){var a5=E.out(Math.min(1,t/.6));V.tx(c,st>=3?'AWS Nitro':'',870,120,13,'#9ff0c8','right',800,a5);
       c.save();c.globalAlpha*=a5;c.fillStyle='rgba(229,72,77,.18)';NetScene.rr(c,160,20,240,26,13);c.fill();c.fillStyle='rgba(52,195,143,.18)';NetScene.rr(c,600,20,240,26,13);c.fill();c.restore();
       V.tx(c,'más lento · para practicar',280,38,12,'#ff9b9b','center',800,a5);V.tx(c,'rápido · data centers y la nube',720,38,12,'#9ff0c8','center',800,a5);}
+  });
+  </script>
+</section>
+
+<!-- 6c · VM VS CONTENEDOR (DOCKER) -->
+<section class="slide" id="scC2">
+  <span class="k"><span class="act-chip">🐳 DOCKER</span> Otra forma de repartir, más liviana · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px"><span class="grad">Máquina virtual vs. contenedor</span> (Docker)</h2>
+  <div class="scene"><canvas aria-label="Animación: máquinas virtuales con su propio sistema operativo frente a contenedores Docker que comparten el sistema operativo; Docker corriendo dentro de tu EC2"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scC2',1000,480,[
+    'Recuerda: cada <b>máquina virtual</b> es un <b>apartamento completo</b>: trae su propio <b>sistema operativo</b> (su cocina, su baño). Por eso pesa <b>GB</b> y tarda <b>minutos</b> en arrancar.',
+    '<b>Docker</b> reparte de otra forma: <b>contenedores</b>. Son como <b>habitaciones en un coliving</b>: todas <b>comparten la cocina</b> (el sistema operativo) y cada una trae solo sus cosas: <b>la app y lo que necesita</b>. Pesan <b>MB</b> y arrancan en <b>segundos</b>.',
+    '¿Y dónde vive Docker? <b>¡Dentro de tu EC2!</b> Hardware → hipervisor (Nitro) → <b>tu EC2</b> con Amazon Linux → <b>Docker</b> → varios contenedores. Se usan <b>juntos</b>, no compiten.',
+    'Un contenedor nace de una <b>imagen</b> (el molde, parecido a la AMI). Un solo comando descarga la imagen de NGINX y en segundos tienes un servidor web corriendo.',
+    '<b>En resumen:</b> la <b>VM</b> virtualiza <b>el computador completo</b> (hipervisor). El <b>contenedor</b> empaqueta <b>solo la aplicación</b> (Docker). Las empresas usan los dos, y en AWS hay servicios para contenedores: <b>ECS</b> y <b>EKS</b>.'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    function A(k,d,dl){return st>k?1:(st<k?0:E.out(Math.max(0,Math.min(1,(t-(dl||0))/(d||.6)))));}
+    function bar(x,y,w,h,col,label,a,sub){if(!(a>0))return;c.save();c.globalAlpha*=a;c.fillStyle=col;NetScene.rr(c,x,y,w,h,8);c.fill();c.restore();V.tx(c,label,x+w/2,y+h/2+(sub?-1:5),13,'#fff','center',800,a);if(sub)V.tx(c,sub,x+w/2,y+h/2+14,10,'#e6eef5','center',600,a);}
+    if(st<=1){
+      /* VM (izquierda) */var a0=st===0?E.out(Math.min(1,t/.6)):1;V.tx(c,'MÁQUINAS VIRTUALES',260,52,17,'#fff','center',800,a0);V.tx(c,'apartamentos completos',260,72,12,C.mut,'center',600,a0);
+      bar(60,400,400,40,'#2b4f74','hardware (el fierro)',a0);bar(60,352,400,40,C.dblue,'hipervisor',a0);
+      for(var k=0;k<3;k++){var ak=st===0?E.back(Math.max(0,Math.min(1,(t-.4-k*.2)/.5))):1,x=60+k*136;if(!(ak>0))continue;
+        c.save();c.globalAlpha*=ak;c.fillStyle='#0f2740';NetScene.rr(c,x,110,128,232,10);c.fill();c.strokeStyle=C.blue;c.lineWidth=1.5;c.stroke();c.restore();
+        bar(x+8,120,112,44,C.ora,'app '+(k+1),ak);bar(x+8,172,112,160,'#5b6b7c','sistema',ak,'operativo completo');}
+      V.tx(c,'🐘 GB · ⏳ minutos',260,462,14,'#ffb98a','center',800,A(0,.5,1.2));
+      /* contenedores (derecha) */var a1=A(1,.6);V.tx(c,'CONTENEDORES (Docker)',740,52,17,'#fff','center',800,a1);V.tx(c,'habitaciones en un coliving',740,72,12,C.mut,'center',600,a1);
+      bar(540,400,400,40,'#2b4f74','hardware (el fierro)',a1);bar(540,352,400,40,'#5b6b7c','sistema operativo · COMPARTIDO',a1,'la cocina de todos');bar(540,304,400,40,'#1D63ED','🐳 Docker',a1);
+      for(var q=0;q<6;q++){var aq=st===1?E.back(Math.max(0,Math.min(1,(t-.6-q*.12)/.4))):0,x=548+q*65;if(!(aq>0))continue;bar(x,226,58,70,C.ora,'app '+(q+1),aq);}
+      V.tx(c,'🐭 MB · ⚡ segundos',740,462,14,'#9ff0c8','center',800,A(1,.5,1.4));
+      return;}
+    if(st===2||st===3){var a2=st===2?E.out(Math.min(1,t/.6)):1;V.tx(c,'Docker vive DENTRO de tu EC2',500,52,19,'#fff','center',800,a2);
+      bar(200,416,600,40,'#2b4f74','hardware · servidor del data center',a2);bar(200,370,600,40,C.dblue,'hipervisor · AWS Nitro',a2);
+      c.save();c.globalAlpha*=a2;V.glow(c,C.ora,18);c.strokeStyle=C.ora;c.lineWidth=3;NetScene.rr(c,200,110,600,252,12);c.stroke();c.restore();V.tx(c,'TU EC2',216,132,14,'#ffb98a','left',800,a2);
+      bar(212,316,576,38,'#5b6b7c','Amazon Linux (el sistema operativo de tu EC2)',A(2,.5,.4));bar(212,272,576,38,'#1D63ED','🐳 Docker',A(2,.5,.8));
+      var names=['nginx','tu app','base de datos'];for(var q=0;q<3;q++){var aq=st===2?E.back(Math.max(0,Math.min(1,(t-1.2-q*.25)/.4))):1;bar(232+q*190,160,160,100,C.ora,names[q],aq,'contenedor');}
+      if(st===3){var a3=E.out(Math.min(1,t/.5));c.save();c.globalAlpha*=a3;c.fillStyle='rgba(8,24,42,.92)';NetScene.rr(c,150,140,700,230,14);c.fill();c.strokeStyle='rgba(159,182,201,.4)';c.stroke();c.restore();
+        var cmd='$ sudo docker run -d -p 8080:80 nginx',n=Math.floor(cmd.length*Math.min(1,Math.max(0,(t-.4)/1.4)));V.tx(c,cmd.slice(0,n),180,190,17,'#e6edf3','left',700,a3,'"JetBrains Mono",monospace');
+        if(t>1.9){V.tx(c,'Unable to find image nginx … Pulling from library/nginx',180,222,12,C.mut,'left',500,1,'"JetBrains Mono",monospace');}
+        if(t>2.6){V.tx(c,'✓ contenedor corriendo · web en el puerto 8080',180,252,14,'#9ff0c8','left',800,1,'"JetBrains Mono",monospace');
+          V.pill(c,180,284,'imagen = el molde (como la AMI)','rgba(233,113,50,.35)','#fff',1);V.pill(c,470,284,'contenedor = lo que corre','rgba(29,99,237,.45)','#fff',1);
+          V.tx(c,'¡en segundos, no en minutos!',500,346,16,'#ffb98a','center',800,Math.min(1,(t-2.9)/.5));}}
+      return;}
+    var a4=E.out(Math.min(1,t/.6));V.tx(c,'¿Cuál es la diferencia?',500,60,24,'#fff','center',800,a4);
+    c.save();c.globalAlpha*=a4;c.fillStyle='rgba(15,158,213,.15)';NetScene.rr(c,70,90,410,330,16);c.fill();c.strokeStyle=C.blue;c.lineWidth=2;c.stroke();c.fillStyle='rgba(29,99,237,.18)';NetScene.rr(c,520,90,410,330,16);c.fill();c.strokeStyle='#1D63ED';c.stroke();c.restore();
+    V.tx(c,'🏠 MÁQUINA VIRTUAL',275,140,20,'#9fd8f0','center',800,a4);
+    ['virtualiza el computador completo','trae su propio sistema operativo','la maneja el hipervisor','GB · arranca en minutos','ej.: tu EC2'].forEach(function(l,i){V.tx(c,'• '+l,110,184+i*36,15,'#fff','left',600,a4);});
+    V.tx(c,'🐳 CONTENEDOR',725,140,20,'#8fb3ff','center',800,a4);
+    ['empaqueta solo la aplicación','comparte el sistema operativo','lo maneja Docker','MB · arranca en segundos','ej.: nginx dentro de tu EC2'].forEach(function(l,i){V.tx(c,'• '+l,560,184+i*36,15,'#fff','left',600,a4);});
+    V.tx(c,'se usan juntos · en AWS: ECS y EKS para contenedores',500,452,14,'#ffb98a','center',700,a4);
   });
   </script>
 </section>
