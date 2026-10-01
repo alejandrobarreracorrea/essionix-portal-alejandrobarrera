@@ -1,0 +1,1101 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- deck-meta: grupo=RED-01 sesion=8 clase=8 -->
+<title>Sesión {{SESION}} · Grupo {{G_NUM}} · Cloud, Redes y Ciberseguridad — Esumer</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#ffffff; --line:#dfe5ee; --text:#0E2841; --muted:#44546A; --faint:#8B98A9;
+  --a1:#156082; --a2:#0F9ED5; --naranja:#E97132; --grad:linear-gradient(100deg,#156082,#0F9ED5);
+  --display:"Poppins",sans-serif; --body:"Inter",sans-serif; --mono:"JetBrains Mono",monospace; }
+* { box-sizing:border-box; margin:0; padding:0; }
+html,body { height:100%; }
+body { background:var(--bg); color:var(--text); font-family:var(--body); overflow:hidden;
+  background-image:radial-gradient(55% 45% at 80% -12%, rgba(15,158,213,.10), transparent 70%); }
+.slide { position:absolute; inset:0; display:none; flex-direction:column; justify-content:center;
+  padding:6vh clamp(30px,8vw,120px); }
+.slide.on { display:flex; }
+.k { font-family:var(--mono); font-size:clamp(.7rem,1.1vw,.85rem); letter-spacing:.08em; text-transform:uppercase; color:var(--a1); margin-bottom:18px; }
+h1 { font-family:var(--display); font-size:clamp(2rem,5.2vw,4.2rem); letter-spacing:-.02em; line-height:1.06; max-width:22ch; }
+h2 { font-family:var(--display); font-size:clamp(1.5rem,3.6vw,2.8rem); letter-spacing:-.02em; line-height:1.1; margin-bottom:26px; max-width:26ch; }
+.grad { background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.sub { color:var(--muted); font-size:clamp(1rem,1.8vw,1.4rem); max-width:52ch; margin-top:20px; line-height:1.5; }
+.rows { list-style:none; max-width:900px; }
+.rows li { display:flex; justify-content:space-between; align-items:baseline; gap:24px; padding:clamp(10px,1.6vh,16px) 0; border-top:1px solid var(--line); }
+.rows .t { font-family:var(--display); font-weight:600; font-size:clamp(1rem,1.9vw,1.5rem); }
+.rows .t small { display:block; font-family:var(--body); font-weight:400; color:var(--muted); font-size:clamp(.8rem,1.3vw,1rem); margin-top:2px; }
+.rows .m { font-family:var(--mono); color:var(--a2); font-size:clamp(.8rem,1.4vw,1.05rem); white-space:nowrap; }
+.big { font-family:var(--display); font-size:clamp(3rem,9vw,7.5rem); font-weight:700; letter-spacing:-.03em; line-height:1; }
+.act-chip { display:inline-block; background:var(--naranja); color:#fff; font-family:var(--mono);
+  font-size:.68rem; padding:.35em 1em; border-radius:999px; margin-right:10px; letter-spacing:.05em; vertical-align:middle; }
+
+.stack { display:flex; flex-direction:column; gap:9px; max-width:940px; margin-top:6px; }
+.layer { display:flex; align-items:center; gap:18px; border:1px solid var(--line); border-left:5px solid var(--a2);
+  border-radius:12px; padding:clamp(6px,1.1vh,11px) 18px; opacity:0; transform:translateY(12px);
+  transition:opacity .35s ease, transform .35s ease; }
+.layer.on { opacity:1; transform:none; }
+.layer .ln { font-family:var(--mono); font-size:.85rem; color:var(--a1); }
+.layer b { font-family:var(--display); font-size:clamp(.95rem,1.7vw,1.25rem); }
+.layer p { color:var(--muted); font-size:clamp(.78rem,1.3vw,.98rem); line-height:1.35; margin-top:1px; }
+.layer .lt { margin-left:auto; font-family:var(--mono); font-size:.72rem; color:var(--a2); white-space:nowrap; }
+.layer.l1 { border-left-color:#44546A; } .layer.l2 { border-left-color:#156082; }
+.layer.l3 { border-left-color:#0F9ED5; } .layer.l4 { border-left-color:#1FB5C9; }
+.layer.l5 { border-left-color:var(--naranja); }
+.layer.l6 { border:0; border-left:5px solid var(--naranja); background:rgba(233,113,50,.06); }
+
+.casa .layer { border-left-width:5px; }
+.casa .lt { margin-left:auto; font-family:var(--mono); font-size:.68rem; color:var(--faint); white-space:nowrap; }
+.casa .l3 .lt, .casa .l4 .lt, .casa .l5 .lt { color:var(--c2, #0F9ED5); font-weight:600; }
+.casa .hoy { outline:3px solid var(--naranja); outline-offset:2px; background:rgba(233,113,50,.05); }
+.hoy-tag { font-family:var(--mono); font-size:.65rem; color:#fff; background:var(--naranja); border-radius:999px; padding:.25em .8em; margin-left:10px; }
+.toolgrid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; max-width:1000px; margin-top:8px; }
+.tool { display:flex; align-items:center; gap:14px; border:1px solid var(--line); border-radius:14px; padding:12px 16px; }
+.tool .o { font-size:clamp(1.4rem,2.6vw,2rem); }
+.tool .arrow { font-family:var(--mono); color:var(--faint); font-size:1.1rem; }
+.tool b { font-family:var(--display); font-size:clamp(.9rem,1.5vw,1.1rem); display:block; }
+.tool small { color:var(--muted); font-size:clamp(.72rem,1.2vw,.88rem); line-height:1.3; display:block; }
+.tool .tech { margin-left:auto; text-align:right; }
+.tool .tech b { color:var(--c1, #156082); }
+.dl { display:flex; align-items:center; gap:22px; margin-top:18px; flex-wrap:wrap; }
+.dlbtn { display:inline-flex; align-items:center; gap:10px; background:var(--naranja); color:#fff;
+  font-family:var(--display); font-weight:700; font-size:clamp(1rem,1.9vw,1.35rem); text-decoration:none;
+  padding:.7em 1.5em; border-radius:12px; box-shadow:0 6px 18px rgba(233,113,50,.28); transition:transform .15s ease; }
+.dlbtn:hover { transform:translateY(-2px); }
+.dlbtn small { display:block; font-family:var(--mono); font-weight:400; font-size:.62rem; opacity:.9; margin-top:1px; }
+.dlqr { display:flex; align-items:center; gap:12px; }
+.dlqr svg { width:clamp(84px,10vw,120px); height:auto; border-radius:8px; }
+.dlqr span { font-family:var(--mono); font-size:.72rem; color:var(--faint); max-width:14ch; line-height:1.4; }
+.sim { display:flex; align-items:center; gap:14px; border:1px solid var(--line); border-left:5px solid var(--naranja);
+  border-radius:12px; padding:10px 18px; margin-bottom:18px; max-width:820px; }
+.sim .o { font-size:1.7rem; }
+.sim p { color:var(--muted); font-size:clamp(.85rem,1.4vw,1rem); }
+.sim p b { color:var(--text, #0E2841); }
+.check li::before { content:"☐  "; font-family:var(--mono); color:var(--naranja); }
+
+/* ---- casa animada (mapa de fases) ---- */
+.casa-slide { justify-content:flex-start; padding-top:clamp(30px,5vh,60px); }
+.house { max-width:720px; margin:14px auto 0; width:100%; }
+.roof {
+  width:0; height:0; margin:0 auto;
+  border-left:clamp(180px,26vw,360px) solid transparent;
+  border-right:clamp(180px,26vw,360px) solid transparent;
+  border-bottom:clamp(52px,7vh,80px) solid var(--naranja);
+  position:relative; opacity:0;
+}
+.roof span {
+  position:absolute; top:clamp(30px,4vh,48px); left:50%; transform:translateX(-50%);
+  white-space:nowrap; color:#fff; font-family:var(--display); font-weight:600;
+  font-size:clamp(.72rem,1.25vw,1rem); text-shadow:0 1px 3px rgba(0,0,0,.25);
+}
+.floor {
+  display:flex; align-items:center; gap:14px; padding:clamp(9px,1.5vh,15px) 22px;
+  border:1px solid var(--line); border-top:0; background:#fff; position:relative;
+  opacity:0; transform:translateY(26px);
+}
+.floor.fA { background:linear-gradient(90deg, rgba(15,158,213,.08), #fff); }
+.floor.fB { background:linear-gradient(90deg, rgba(21,96,130,.07), #fff); }
+.floor.base { border-radius:0 0 6px 6px; border-bottom-width:6px; border-bottom-color:var(--navy); }
+.floor .fi { font-size:clamp(1.3rem,2.4vw,1.9rem); flex:none; }
+.floor b { font-family:var(--display); font-weight:600; font-size:clamp(.9rem,1.6vw,1.2rem); }
+.floor i { margin-left:auto; font-family:var(--mono); font-style:normal; font-size:clamp(.66rem,1.15vw,.85rem); color:var(--faint); letter-spacing:.03em; }
+.floor.hoy { border-color:var(--naranja); z-index:2; }
+.floor.hoy i { color:var(--naranja); font-weight:600; }
+.floor.fD i, .floor.fB i, .floor.fA i { color:var(--c2, #0F9ED5); font-weight:600; }
+.here {
+  position:absolute; left:calc(100% + 14px); top:50%; transform:translateY(-50%);
+  font-family:var(--mono); font-size:clamp(.68rem,1.15vw,.85rem); color:#fff;
+  background:var(--naranja); padding:.3em .9em; border-radius:999px; white-space:nowrap;
+  opacity:0; animation:hereIn .5s ease 2.4s forwards, herePulse 1.8s ease 2.9s infinite;
+}
+/* entrada: construir de abajo (fF) hacia arriba, y el techo al final */
+.slide.on .floor { animation:floorUp .5s cubic-bezier(.2,.7,.3,1) forwards; }
+.slide.on .floor.fF { animation-delay:.1s; }
+.slide.on .floor.fE { animation-delay:.45s; }
+.slide.on .floor.fD { animation-delay:.8s; }
+.slide.on .floor.fC { animation-delay:1.1s; }
+.slide.on .floor.fB { animation-delay:1.4s; }
+.slide.on .floor.fA { animation-delay:1.7s; }
+.slide.on .roof { animation:roofDrop .55s cubic-bezier(.2,.7,.3,1) 2s forwards; }
+.slide.on .floor.hoy { animation:floorUp .5s cubic-bezier(.2,.7,.3,1) forwards, hoyGlow 2s ease 2.6s infinite; }
+.slide.on .floor.fF.hoy { animation-delay:.1s, 2.6s; }
+.slide.on .floor.fE.hoy { animation-delay:.45s, 2.9s; }
+@keyframes floorUp { to { opacity:1; transform:none; } }
+@keyframes roofDrop { from { opacity:0; transform:translateY(-30px); } to { opacity:1; transform:none; } }
+@keyframes hoyGlow { 0%,100% { box-shadow:0 0 0 0 rgba(233,113,50,0); } 50% { box-shadow:0 0 0 4px rgba(233,113,50,.18); } }
+@keyframes hereIn { to { opacity:1; } }
+@keyframes herePulse { 0%,100% { transform:translateY(-50%) scale(1); } 50% { transform:translateY(-50%) scale(1.06); } }
+@media (prefers-reduced-motion: reduce) {
+  .floor, .roof, .here { opacity:1 !important; transform:none !important; animation:none !important; }
+}
+@media (max-width:640px) { .here { position:static; display:inline-block; margin-left:8px; transform:none; } }
+
+/* ---- caja de herramientas animada ---- */
+.tools-slide { justify-content:flex-start; padding-top:clamp(28px,5vh,56px); }
+.toolbox { max-width:840px; margin:16px auto 0; width:100%; position:relative; }
+.tbox { font-size:clamp(2.4rem,6vw,4rem); text-align:center; margin-bottom:14px; opacity:0; transform:scale(.5) rotate(-12deg); }
+.slide.on .tbox { animation:tboxPop .6s cubic-bezier(.2,1.4,.4,1) .1s forwards; }
+.trow { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:16px;
+  padding:clamp(8px,1.4vh,13px) 20px; border:1px solid var(--line); border-radius:12px; margin-bottom:10px;
+  opacity:0; transform:translateY(20px); background:#fff; }
+.trow .obra { font-family:var(--display); font-weight:500; font-size:clamp(.82rem,1.5vw,1.12rem); color:var(--muted); }
+.trow .tech { font-family:var(--display); font-weight:700; font-size:clamp(.95rem,1.8vw,1.3rem); color:var(--c1, #156082); text-align:right; }
+.trow .link { width:clamp(40px,6vw,78px); height:2px; background:linear-gradient(90deg,var(--line),var(--naranja)); position:relative; }
+.trow .link::after { content:"→"; position:absolute; right:-4px; top:-11px; color:var(--naranja); font-family:var(--mono); font-size:.9rem;
+  opacity:0; }
+.slide.on .trow { animation:trowIn .5s cubic-bezier(.2,.7,.3,1) forwards; }
+.slide.on .trow .link::after { animation:arrowShine .6s ease forwards; }
+.slide.on .tr1 { animation-delay:.5s; } .slide.on .tr1 .link::after { animation-delay:.9s; }
+.slide.on .tr2 { animation-delay:.75s; } .slide.on .tr2 .link::after { animation-delay:1.15s; }
+.slide.on .tr3 { animation-delay:1s; }  .slide.on .tr3 .link::after { animation-delay:1.4s; }
+.slide.on .tr4 { animation-delay:1.25s; } .slide.on .tr4 .link::after { animation-delay:1.65s; }
+.slide.on .tr5 { animation-delay:1.5s; } .slide.on .tr5 .link::after { animation-delay:1.9s; }
+@keyframes tboxPop { to { opacity:1; transform:none; } }
+@keyframes trowIn { to { opacity:1; transform:none; } }
+@keyframes arrowShine { 0% { opacity:0; transform:translateX(-8px); } 100% { opacity:1; transform:none; } }
+@media (prefers-reduced-motion: reduce) { .tbox,.trow,.trow .link::after { opacity:1 !important; transform:none !important; animation:none !important; } }
+
+/* ---- ¿qué es un SO? — stack animado ---- */
+.os-slide { justify-content:flex-start; padding-top:clamp(26px,4.5vh,52px); }
+.osstack { max-width:760px; margin:12px auto 0; width:100%; }
+.oslayer { display:flex; align-items:center; gap:16px; border:1px solid var(--line); border-radius:12px;
+  padding:clamp(9px,1.5vh,15px) 20px; background:#fff; opacity:0; transform:translateX(-24px); }
+.oslayer .oi { font-size:clamp(1.5rem,2.8vw,2.2rem); flex:none; }
+.oslayer b { font-family:var(--display); font-weight:600; font-size:clamp(.9rem,1.6vw,1.2rem); }
+.oslayer p { color:var(--muted); font-size:clamp(.75rem,1.3vw,.95rem); line-height:1.35; margin-top:1px; }
+.oslayer.mid { border-color:var(--naranja); background:linear-gradient(90deg,rgba(233,113,50,.07),#fff); }
+.osarrow { text-align:center; font-family:var(--mono); font-size:.7rem; color:var(--faint); padding:5px 0; opacity:0; }
+.slide.on .oslayer.top { animation:osIn .5s ease .2s forwards; }
+.slide.on .oslayer.mid { animation:osIn .5s ease .9s forwards, osGlow 2.2s ease 1.6s infinite; }
+.slide.on .oslayer.bot { animation:osIn .5s ease 1.5s forwards; }
+.slide.on .osarrow { animation:osFade .4s ease forwards; }
+.slide.on .osarrow:nth-of-type(2) { animation-delay:.7s; }
+.slide.on .osarrow:nth-of-type(4) { animation-delay:1.3s; }
+@keyframes osIn { to{opacity:1;transform:none} }
+@keyframes osFade { to{opacity:1} }
+@keyframes osGlow { 0%,100%{box-shadow:0 0 0 0 rgba(233,113,50,0)} 50%{box-shadow:0 0 0 4px rgba(233,113,50,.15)} }
+/* ---- grid de sistemas operativos ---- */
+.osgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:900px; margin-top:8px; }
+.oscard { border:1px solid var(--line); border-radius:14px; padding:14px 16px; text-align:left; background:#fff;
+  opacity:0; transform:translateY(18px); }
+.oscard .oe { font-size:clamp(1.6rem,3vw,2.2rem); display:block; margin-bottom:4px; }
+.oscard b { font-family:var(--display); font-size:clamp(.95rem,1.7vw,1.2rem); }
+.oscard small { display:block; color:var(--muted); font-size:clamp(.72rem,1.2vw,.86rem); line-height:1.3; margin-top:3px; }
+.oscard.hi { border-color:var(--naranja); border-width:2px; background:linear-gradient(160deg,rgba(233,113,50,.08),#fff); }
+.oscard.goal { border-style:dashed; border-color:var(--c1, #156082); }
+.slide.on .oscard { animation:osCard .45s ease forwards; }
+.slide.on .oscard:nth-child(1){animation-delay:.15s} .slide.on .oscard:nth-child(2){animation-delay:.3s}
+.slide.on .oscard:nth-child(3){animation-delay:.45s} .slide.on .oscard:nth-child(4){animation-delay:.6s}
+.slide.on .oscard:nth-child(5){animation-delay:.75s} .slide.on .oscard:nth-child(6){animation-delay:.9s}
+@keyframes osCard { to{opacity:1;transform:none} }
+@media (max-width:640px){ .osgrid { grid-template-columns:1fr 1fr; } }
+@media (prefers-reduced-motion: reduce) { .oslayer,.osarrow,.oscard { opacity:1 !important; transform:none !important; animation:none !important; } }
+.src { position:absolute; bottom:3vh; left:clamp(30px,8vw,120px); right:clamp(30px,8vw,120px); font-family:var(--mono); font-size:.68rem; color:var(--faint); }
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:clamp(16px,3vw,40px); max-width:1000px; }
+.chipset { display:flex; gap:10px; flex-wrap:wrap; margin-top:24px; }
+.chip { font-family:var(--mono); font-size:clamp(.75rem,1.2vw,.95rem); padding:.5em 1.1em; border:1px solid var(--line); border-radius:999px; color:var(--muted); }
+.chip.hi { color:var(--naranja); border-color:rgba(233,113,50,.45); font-weight:600; }
+.q { font-family:var(--display); font-size:clamp(1.4rem,3vw,2.3rem); border-left:3px solid; border-image:var(--grad) 1; padding-left:22px; margin:14px 0; max-width:30ch; line-height:1.25; }
+.cover { padding:0; }
+.cover-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.cover-txt { position:absolute; left:clamp(24px,6vw,90px); bottom:4.5vh; z-index:2; max-width:36ch; }
+.cover-k { font-family:var(--mono); font-size:clamp(.6rem,.95vw,.78rem); letter-spacing:.07em; text-transform:uppercase; color:#7fd8f5; }
+.cover-h { color:#fff; font-family:var(--display); font-size:clamp(1.15rem,2.3vw,1.9rem); line-height:1.15; margin:8px 0 8px; }
+.cover-s { color:#c9d4e6; font-size:clamp(.78rem,1.15vw,.95rem); line-height:1.5; }
+.cover-logo { position:absolute; right:clamp(30px,6vw,90px); bottom:8vh; width:clamp(140px,16vw,230px); z-index:2; }
+.inst-footer { position:fixed; bottom:2.2vh; left:clamp(30px,8vw,120px); z-index:9; }
+.inst-footer img { height:clamp(30px,4.6vh,44px); display:block; }
+.cover ~ style, .cover .inst-footer { display:none; }
+.bar { position:fixed; top:0; left:0; height:3px; background:var(--grad); width:0; transition:width .25s ease; z-index:10; }
+.num { position:fixed; bottom:3vh; right:clamp(30px,8vw,120px); font-family:var(--mono); font-size:.8rem; color:var(--faint); z-index:10; }
+.nav-hint { position:fixed; bottom:3vh; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:.68rem; color:var(--faint); z-index:10; }
+.chart { max-width:520px; }
+.chart-title { font-family:var(--mono); font-size:.78rem; color:var(--muted); letter-spacing:.04em; text-transform:uppercase; margin-bottom:14px; }
+.chart-bars { display:flex; align-items:flex-end; gap:clamp(14px,2.5vw,30px); height:clamp(180px,34vh,320px); border-bottom:1px solid var(--line); padding-bottom:2px; }
+.cbar { flex:1; height:var(--h); background:linear-gradient(180deg, rgba(21,96,130,.55), rgba(21,96,130,.12)); border-radius:8px 8px 0 0; position:relative; }
+.cbar.hi { background:var(--grad); }
+.cbar.dim { background:linear-gradient(180deg, rgba(233,113,50,.30), rgba(233,113,50,.06)); border:1px dashed rgba(233,113,50,.55); border-bottom:0; }
+.cv { position:absolute; top:-26px; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:clamp(.7rem,1.2vw,.9rem); color:var(--text); white-space:nowrap; }
+.cy { position:absolute; bottom:-26px; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:.72rem; color:var(--faint); }
+.chart-note { margin-top:34px; font-family:var(--mono); font-size:.68rem; color:var(--faint); }
+.qrs { display:flex; gap:clamp(20px,4vw,54px); margin-top:24px; }
+.qr { display:flex; flex-direction:column; gap:10px; align-items:flex-start; }
+.qr svg { width:clamp(90px,11vw,150px); height:auto; border-radius:10px; }
+.slide .grid2 .qr svg { width:clamp(160px,20vw,260px); }
+.qr.qr-ticket svg { width:clamp(150px,18vw,220px); }
+.qr span { font-family:var(--mono); font-size:.72rem; color:var(--faint); line-height:1.5; }
+.qr span b { color:var(--a1); font-weight:500; }
+.demo { background:#0E2841; border:0; border-radius:18px; padding:clamp(18px,3vh,30px); max-width:820px; margin-top:10px; }
+.demo p { font-family:var(--mono); color:#39c8e8; font-size:clamp(.85rem,1.5vw,1.1rem); padding:6px 0; }
+ul.clean { list-style:none; max-width:880px; }
+ul.clean li { padding:clamp(8px,1.4vh,14px) 0; border-top:1px solid var(--line); color:var(--muted); font-size:clamp(.95rem,1.7vw,1.3rem); }
+ul.clean li b { color:var(--text); }
+ul.clean li:first-child { border-top:0; }
+.tag9 { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:1000px; margin-top:10px; }
+.t9 { border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:clamp(.75rem,1.25vw,.95rem); color:var(--muted); }
+.t9 b { color:var(--a1); font-family:var(--mono); margin-right:6px; }
+
+/* ---- visualizaciones didácticas de redes ---- */
+.viz { width:100%; max-width:1010px; margin:2px auto 0; }
+.viz svg { width:100%; height:auto; display:block; overflow:visible; }
+.slide.on .viz { animation:vizIn .55s cubic-bezier(.2,.7,.3,1) .12s both; }
+@keyframes vizIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
+.vcap { text-align:center; color:var(--muted); font-size:clamp(.85rem,1.45vw,1.08rem); line-height:1.45;
+  margin:12px auto 0; max-width:64ch; }
+.vcap b { color:var(--text); }
+.vlbl { font-family:"JetBrains Mono",monospace; fill:#8B98A9; font-size:12.5px; letter-spacing:.02em; }
+.vname { font-family:"JetBrains Mono",monospace; fill:#fff; font-size:12.5px; }
+.vzone { font-family:"Poppins",sans-serif; font-weight:700; }
+.vnode { font-family:"Poppins",sans-serif; font-weight:600; }
+@media (prefers-reduced-motion:reduce){ .viz *{animation:none!important} }
+
+.vexp { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:1010px; margin:10px auto 0; }
+.vexp .c { border:1px solid var(--line); border-top:3px solid var(--a2); border-radius:12px; padding:7px 13px 9px; background:#fff; }
+.vexp .c h4 { font-family:"Poppins",sans-serif; font-weight:700; font-size:clamp(.86rem,1.4vw,1.08rem); color:var(--a1); margin-bottom:3px; }
+.vexp .c p { font-size:clamp(.7rem,1.08vw,.84rem); color:var(--muted); line-height:1.28; margin:2px 0; }
+.vexp .c p b { color:var(--text); }
+.vexp .c .ej b { color:var(--a1); }
+@media (max-width:760px){ .vexp { grid-template-columns:1fr; } }
+.kit .c{padding:10px 16px 12px} .kit .c h4{font-size:clamp(1rem,1.6vw,1.25rem)} .kit .c p{font-size:clamp(.82rem,1.3vw,1.02rem);margin:4px 0}
+.viz.sm svg{ width:auto; height:clamp(240px,36vh,360px); max-width:100%; margin:0 auto; }
+</style></head><body>
+<div class="bar" id="bar"></div>
+<div class="num" id="num"></div>
+<div class="inst-footer" id="instf"><img src="../../../assets/logos-medellin.png" alt="Alcaldía de Medellín · SAPIENCIA · Esumer"></div>
+<div class="nav-hint">← → o click para avanzar</div>
+
+<!-- 1 · PORTADA -->
+<section class="slide on cover">
+  <img class="cover-bg" src="../../../assets/portada.png" alt="">
+  <div class="cover-txt">
+    <span class="cover-k">Estud-IA · Ruta TI · 2026-2 · Sesión {{SESION}} · clase virtual · {{G_ID}}</span>
+    <h1 class="cover-h">Cerramos networking y abrimos la caja: ¿qué es realmente tu EC2?</h1>
+    <p class="cover-s">Terminamos la red de la empresa (Internet Gateway + tu EC2 nueva) y después abrimos la caja: data centers, hipervisor, Docker, snapshot y AMI.<br>Alejandro Barrera · Cloud Architect</p>
+  </div>
+  <img class="cover-logo" src="../../../assets/estudia-blanco.png" alt="Estud-IA">
+</section>
+
+<!-- 2 · PLAN -->
+<section class="slide">
+  <span class="k">El plan de hoy · clase {{SESION}}</span>
+  <h2>Objetivo de hoy: <span class="grad">cerrar la red y entender qué hay debajo de tu EC2</span>.</h2>
+  <ul class="rows">
+    <li><span class="t">Cerramos networking<small>Internet Gateway, ruta pública, IP pública y tu EC2 nueva con NGINX en pyme-vpc</small></span><span class="m">lab</span></li>
+    <li><span class="t">¿Dónde está físicamente tu EC2?<small>Regiones, zonas, data centers, racks y servidores</small></span><span class="m">sem. 5</span></li>
+    <li><span class="t">Hipervisor, Nitro y reuso de recursos<small>Tipo 1 vs. tipo 2 · VM vs. contenedor (Docker) · x86 vs. ARM</small></span><span class="m">sem. 5</span></li>
+    <li><span class="t">LABs: tu VM por dentro, snapshot y AMI<small>comandos y metadatos · daña y recupera tu web · clónala en otra EC2</small></span><span class="m">lab</span></li>
+  </ul>
+  <p class="sub" style="margin-top:14px">Primero <b>terminamos la red</b> de la empresa. Después entienden <b>sobre qué corre</b> todo eso — y aprenden a <b>respaldarlo y clonarlo</b>. 🖥️</p>
+</section>
+
+<!-- 3 · CIERRE DE NETWORKING: LAB VPC + IGW + EC2 (de RED-02 sesión 6) -->
+<section class="slide" id="scL">
+  <style>
+    .scene{width:min(100%,1080px,calc(58vh * var(--ar)));margin:6px auto 0}
+    .scene canvas{display:block;width:100%;border-radius:14px;background:#f7f9fc;border:1px solid var(--line)}
+    .scbar{display:flex;align-items:center;gap:16px;margin:8px auto 0;width:min(100%,1080px)}
+    .scbar .cap{flex:1;font-size:clamp(.86rem,1.4vw,1.06rem);color:var(--muted);line-height:1.45;min-height:3em}
+    .scbar .cap b{color:var(--text)}
+    .scbar .dots{display:flex;gap:6px}
+    .scbar .dots i{width:10px;height:10px;border-radius:50%;background:var(--line);display:block;transition:background .3s}
+    .scbar .dots i.on{background:var(--naranja)}
+    .scbar .shint{font-family:var(--mono);font-size:.7rem;color:var(--faint);white-space:nowrap}
+  </style>
+  <script>
+  window.NetScene=(function(){
+    var DPR=Math.min(window.devicePixelRatio||1,2);
+    var RM=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function cl(x){return x<0?0:x>1?1:x;}
+    var E={io:function(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;},out:function(t){return 1-Math.pow(1-t,3);},
+      back:function(t){if(t<=0)return 0;var a=1.70158,b=a+1;return 1+b*Math.pow(t-1,3)+a*Math.pow(t-1,2);}};
+    function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.quadraticCurveTo(x+w,y,x+w,y+r);c.lineTo(x+w,y+h-r);c.quadraticCurveTo(x+w,y+h,x+w-r,y+h);c.lineTo(x+r,y+h);c.quadraticCurveTo(x,y+h,x,y+h-r);c.lineTo(x,y+r);c.quadraticCurveTo(x,y,x+r,y);c.closePath();}
+    function txt(c,s,x,y,font,col,al,a){if(a===0)return;c.save();c.globalAlpha*=(a==null?1:a);c.font=font;c.fillStyle=col;c.textAlign=al||'left';c.textBaseline='alphabetic';c.fillText(s,x,y);c.restore();}
+    function house(c,x,y,w,body,roof,s){if(!(s>0))return;var h=w*.72;c.save();c.translate(x,y);c.scale(s,s);
+      c.fillStyle=body;c.fillRect(-w/2,-h,w,h);c.fillStyle=roof;c.beginPath();c.moveTo(-w/2-w*.14,-h+1);c.lineTo(0,-h-w*.58);c.lineTo(w/2+w*.14,-h+1);c.closePath();c.fill();
+      if(w>=14){c.fillStyle='rgba(255,255,255,.88)';c.fillRect(-w*.13,-h*.56,w*.26,h*.56);}c.restore();}
+    function rectProg(c,x,y,w,h,f,col,lw,dash,off){if(f<=0)return;c.save();c.strokeStyle=col;c.lineWidth=lw||2;c.setLineDash(dash||[9,6]);c.lineDashOffset=off||0;
+      var L=2*(w+h),d=f*L,pts=[[x,y],[x+w,y],[x+w,y+h],[x,y+h],[x,y]];c.beginPath();c.moveTo(x,y);
+      for(var k=0;k<4&&d>0;k++){var a=pts[k],b=pts[k+1],sl=Math.abs(b[0]-a[0])+Math.abs(b[1]-a[1]),u=Math.min(1,d/sl);c.lineTo(a[0]+(b[0]-a[0])*u,a[1]+(b[1]-a[1])*u);d-=sl;}
+      c.stroke();c.restore();}
+    function make(id,W,H,caps,draw){
+      var sec=document.getElementById(id),cv=sec.querySelector('canvas'),cap=sec.querySelector('.cap'),dots=sec.querySelector('.dots');
+      var ctx=cv.getContext('2d'),step=0,st=0,run=false;
+      sec.querySelector('.scene').style.setProperty('--ar',W/H);
+      function size(){var w=cv.parentElement.clientWidth||1000,h=w*H/W;cv.style.height=h+'px';cv.width=Math.round(w*DPR);cv.height=Math.round(h*DPR);}
+      function setCap(){cap.innerHTML=caps[step];if(cap.animate&&!RM)cap.animate([{opacity:0,transform:'translateY(6px)'},{opacity:1,transform:'none'}],{duration:380,easing:'ease-out'});
+        dots.innerHTML=caps.map(function(_,k){return '<i class="'+(k<=step?'on':'')+'"></i>';}).join('');}
+      function frame(now){if(!sec.classList.contains('on')){run=false;return;}var t=(now-st)/1000;
+        ctx.setTransform(cv.width/W,0,0,cv.width/W,0,0);ctx.clearRect(0,0,W,H);
+        draw(ctx,{step:step,t:t,now:now/1000,E:E,p:function(k,dur,del){if(step>k)return 1;if(step<k)return 0;if(RM)return 1;return cl((t-(del||0))/(dur||1));}});
+        requestAnimationFrame(frame);}
+      sec.__enter=function(){step=0;st=performance.now();size();setCap();if(!run){run=true;requestAnimationFrame(frame);}};
+      sec.__next=function(){if(step<caps.length-1){step++;st=performance.now();setCap();return true;}return false;};
+      window.addEventListener('resize',function(){if(sec.classList.contains('on'))size();});
+      cap.innerHTML=caps[0];dots.innerHTML=caps.map(function(_,k){return '<i class="'+(k===0?'on':'')+'"></i>';}).join('');
+    }
+    function person(c,x,y,sz,col,a){if(!(a>0))return;c.save();c.globalAlpha*=Math.min(1,a);c.fillStyle=col;c.beginPath();c.arc(x,y-sz*1.3,sz*.42,0,7);c.fill();rr(c,x-sz*.5,y-sz*.82,sz,sz*.82,sz*.3);c.fill();c.restore();}
+    function bubble(c,x,y,text,font,bg,fg,a){if(!(a>0))return;c.save();c.globalAlpha*=Math.min(1,a);c.font=font;var w=c.measureText(text).width+26,h=36;c.fillStyle=bg;rr(c,x-w/2,y-h,w,h,10);c.fill();c.beginPath();c.moveTo(x-8,y-1);c.lineTo(x,y+10);c.lineTo(x+8,y-1);c.fill();c.fillStyle=fg;c.textAlign='center';c.textBaseline='middle';c.fillText(text,x,y-h/2);c.restore();}
+    function laptop(c,x,y,w,col,a){if(!(a>0))return;c.save();c.globalAlpha*=Math.min(1,a);c.fillStyle='#0E2841';rr(c,x-w/2,y-w*.62,w,w*.62,4);c.fill();c.fillStyle=col;c.fillRect(x-w/2+4,y-w*.62+4,w-8,w*.62-8);c.fillStyle='#8B98A9';rr(c,x-w*.62,y,w*1.24,w*.08,3);c.fill();c.restore();}
+    function cloud(c,x,y,s,col,a){if(!(a>0))return;c.save();c.globalAlpha*=Math.min(1,a);c.fillStyle=col;[[-.5,.1,.42],[0,-.18,.55],[.5,.1,.42],[0,.22,.5]].forEach(function(k){c.beginPath();c.arc(x+k[0]*s,y+k[1]*s,k[2]*s,0,7);c.fill();});c.restore();}
+    function building(c,x,y,w,h,col,a){if(!(a>0))return;c.save();c.translate(x,y);c.scale(Math.max(a,0),Math.max(a,0));c.fillStyle=col;c.fillRect(-w/2,-h,w,h);c.fillStyle='rgba(255,255,255,.75)';for(var r=0;r<Math.floor(h/12);r++)for(var q=0;q<2;q++)c.fillRect(-w/2+w*(.18+q*.44),-h+5+r*12,w*.2,6);c.restore();}
+    function packet(c,x,y,col,a){if(!(a>0))return;c.save();c.globalAlpha*=Math.min(1,a);c.fillStyle=col;rr(c,x-14,y-10,28,20,3);c.fill();c.strokeStyle='rgba(255,255,255,.85)';c.lineWidth=1.5;c.beginPath();c.moveTo(x-12,y-8);c.lineTo(x,y+1);c.lineTo(x+12,y-8);c.stroke();c.restore();}
+    function along(pts,u){var L=0,seg=[];for(var i=0;i<pts.length-1;i++){var d=Math.hypot(pts[i+1][0]-pts[i][0],pts[i+1][1]-pts[i][1]);seg.push(d);L+=d;}var t=Math.max(0,Math.min(1,u))*L;for(var j=0;j<seg.length;j++){if(t<=seg[j]){var k=seg[j]?t/seg[j]:0;return [pts[j][0]+(pts[j+1][0]-pts[j][0])*k,pts[j][1]+(pts[j+1][1]-pts[j][1])*k];}t-=seg[j];}return pts[pts.length-1];}
+    return {make:make,E:E,rr:rr,txt:txt,house:house,rectProg:rectProg,person:person,bubble:bubble,laptop:laptop,cloud:cloud,building:building,packet:packet,along:along};
+  })();
+  </script>
+  <script>
+  /* Viz: piezas visuales comunes (escenario oscuro, isometría, servidores, VMs) para las escenas de la sesión 7 */
+  window.Viz=(function(){
+    var C={bg0:'#08182a',bg1:'#123356',navy:'#0E2841',blue:'#0F9ED5',dblue:'#156082',ora:'#E97132',txt:'#EAF3FA',mut:'#9fb6c9',faint:'#5f7890',grn:'#34c38f',red:'#e5484d',yel:'#FFC928'};
+var LAND=[
+ [[-168,65],[-140,70],[-110,72],[-85,70],[-78,62],[-65,60],[-55,51],[-67,45],[-70,42],[-75,37],[-81,31],[-80,25],[-83,29],[-90,30],[-97,27],[-97,21],[-91,19],[-87,21],[-88,16],[-83,10],[-79,9],[-77.5,8],[-80,7],[-85,11],[-92,14.5],[-105,20],[-110,24],[-112,30],[-117,33],[-121,36],[-124,40],[-125,48],[-133,56],[-148,60],[-165,61]],
+ [[-120,70],[-80,72],[-65,80],[-90,82],[-120,77]],
+ [[-50,60],[-42,60],[-20,70],[-20,80],[-60,82],[-70,76],[-55,68]],
+ [[-24,64],[-13,65],[-15,66.5],[-22,66.4]],
+ [[-84.9,21.9],[-80,23.1],[-74.2,20.2],[-77.5,19.9],[-82,21.5]],
+ [[-74.4,19.8],[-68.4,18.6],[-71,17.6],[-74.4,18.4]],
+ [[-77.5,8],[-72,12],[-62,10.5],[-51,4],[-50,0],[-35,-6],[-38,-13],[-40,-22],[-48,-26],[-53,-34],[-58,-38],[-65,-42],[-68,-52],[-72,-50],[-74,-40],[-71,-30],[-70,-18],[-76,-14],[-81,-5],[-80,0],[-77,4]],
+ [[-10,36],[-9,43],[-2,44],[-4.5,48],[2,51],[8,54],[10,58],[5,62],[15,69],[28,71],[40,67],[40,60],[30,55],[40,48],[28,45],[26,40],[20,40],[16,38],[12,44],[8,44],[3,43],[-2,37]],
+ [[-5,50],[1,51],[0,54],[-3,58],[-6,57],[-5,54],[-3,52]],
+ [[-17,15],[-17,21],[-13,28],[-6,35],[10,37],[20,32],[32,31],[35,28],[43,12],[51,12],[42,-2],[40,-15],[35,-24],[27,-34],[18,-34],[12,-18],[13,-6],[9,4],[-5,5],[-12,7]],
+ [[44,-25],[47,-25],[50,-15],[49,-12],[44,-17]],
+ [[26,40],[36,36],[35,31],[44,13],[55,17],[57,24],[62,25],[67,24],[73,20],[77,8],[80,15],[88,22],[92,22],[98,16],[100,6],[104,1],[106,10],[109,12],[108,20],[117,23],[122,31],[119,38],[122,40],[129,35],[130,43],[140,48],[142,54],[135,55],[155,59],[163,60],[180,66],[180,71],[140,73],[110,77],[80,73],[70,68],[55,68],[45,66],[40,67],[40,60],[30,55],[40,48],[48,42],[50,37],[40,40]],
+ [[130,31],[135,34],[140,36],[142,40],[141,45],[145,44],[140,41],[139,35],[132,33]],
+ [[120,18],[122,18],[126,7],[122,7],[120,13]],
+ [[95,5],[105,-6],[115,-8],[125,-9],[120,-2],[118,5],[110,2],[100,2]],
+ [[109,1],[117,7],[119,1],[116,-4],[110,-3]],
+ [[131,-1],[141,-2.5],[150,-10],[143,-9],[138,-8],[132,-4]],
+ [[114,-22],[122,-18],[130,-12],[137,-12],[142,-11],[146,-19],[153,-26],[151,-34],[146,-39],[138,-35],[132,-32],[115,-35],[113,-26]],
+ [[172,-34],[178,-38],[174,-41],[167,-46],[171,-44]]
+];
+function inPoly(lon,lat,poly){var ins=false;for(var i=0,j=poly.length-1;i<poly.length;j=i++){var xi=poly[i][0],yi=poly[i][1],xj=poly[j][0],yj=poly[j][1];
+  if(((yi>lat)!==(yj>lat))&&(lon<(xj-xi)*(lat-yi)/(yj-yi)+xi))ins=!ins}return ins}
+function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]))return true;return false}
+    var DOTS=null;
+    function dots(){if(DOTS)return DOTS;DOTS=[];for(var y=84;y<=412;y+=7)for(var x=64;x<=936;x+=7){var lon=-170+(x-60)/880*360,lat=78-(y-70)/350*134;if(isLand(lon,lat))DOTS.push([x,y]);}return DOTS;}
+    function mp(lon,lat){return [60+(lon+170)/360*880,70+(78-lat)/134*350];}
+    function bg(c,W,H){var g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,C.bg1);g.addColorStop(1,C.bg0);c.fillStyle=g;c.fillRect(0,0,W,H);
+      c.save();c.strokeStyle='rgba(255,255,255,.035)';c.lineWidth=1;for(var x=0;x<=W;x+=40){c.beginPath();c.moveTo(x,0);c.lineTo(x,H);c.stroke();}for(var y=0;y<=H;y+=40){c.beginPath();c.moveTo(0,y);c.lineTo(W,y);c.stroke();}c.restore();}
+    function tx(c,s,x,y,sz,col,al,w,a,f){if(a===0)return;c.save();c.globalAlpha*=(a==null?1:a);c.font=(w||600)+' '+sz+'px '+(f||'Poppins,sans-serif');c.fillStyle=col;c.textAlign=al||'left';c.textBaseline='alphabetic';c.fillText(s,x,y);c.restore();}
+    function rr(c,x,y,w,h,r){NetScene.rr(c,x,y,w,h,r);}
+    function glow(c,col,b){c.shadowColor=col;c.shadowBlur=b;}
+    function pill(c,x,y,s,bgc,fg,a){c.save();c.globalAlpha*=a==null?1:a;c.font='600 12px Poppins,sans-serif';var w=c.measureText(s).width+22;c.fillStyle=bgc;rr(c,x,y,w,24,12);c.fill();c.fillStyle=fg;c.textBaseline='middle';c.fillText(s,x+11,y+12.5);c.restore();return w;}
+    function crumbs(c,list,cur){var x=22;list.forEach(function(s,i){var w=pill(c,x,14,s,i<cur?'rgba(15,158,213,.28)':(i===cur?C.ora:'rgba(255,255,255,.06)'),i<=cur?'#fff':C.faint,1);x+=w+6;if(i<list.length-1)tx(c,'›',x-3,31,14,C.faint,'center',600,1);x+=6;});}
+    function pulse(c,x,y,r,t,col,a){for(var k=0;k<2;k++){var u=((t+k*.9)%1.8)/1.8;c.save();c.globalAlpha*=(a==null?1:a)*(1-u);c.strokeStyle=col;c.lineWidth=2;c.beginPath();c.arc(x,y,r+u*r*2.2,0,7);c.stroke();c.restore();}
+      c.save();c.globalAlpha*=a==null?1:a;glow(c,col,14);c.fillStyle=col;c.beginPath();c.arc(x,y,r,0,7);c.fill();c.restore();}
+    function iso(c,x,y,w,d,h,cT,cL,cR,a){var cs=.866,sn=.5,F=[x,y],R=[x+w*cs,y-w*sn],L=[x-d*cs,y-d*sn],B=[x+w*cs-d*cs,y-w*sn-d*sn];c.save();c.globalAlpha*=a==null?1:a;
+      function poly(ps,col){c.fillStyle=col;c.beginPath();c.moveTo(ps[0][0],ps[0][1]);for(var i=1;i<ps.length;i++)c.lineTo(ps[i][0],ps[i][1]);c.closePath();c.fill();}
+      poly([F,L,[L[0],L[1]-h],[F[0],F[1]-h]],cL);poly([F,R,[R[0],R[1]-h],[F[0],F[1]-h]],cR);poly([[F[0],F[1]-h],[R[0],R[1]-h],[B[0],B[1]-h],[L[0],L[1]-h]],cT);c.restore();}
+    function server(c,x,y,w,h,t,seed,hl,a){c.save();c.globalAlpha*=a==null?1:a;var g=c.createLinearGradient(x,y,x,y+h);g.addColorStop(0,hl?'#3a2a1f':'#1d3a58');g.addColorStop(1,hl?'#2a1d15':'#132a42');c.fillStyle=g;rr(c,x,y,w,h,3);c.fill();
+      c.strokeStyle=hl?C.ora:'rgba(159,182,201,.35)';c.lineWidth=hl?2:1;c.stroke();for(var k=0;k<6;k++){c.fillStyle='rgba(255,255,255,.07)';c.fillRect(x+w*.3+k*w*.1,y+h*.3,w*.06,h*.4);}
+      for(var q=0;q<3;q++){var on=Math.sin(t*(3+((seed*7+q*3)%5))+seed*1.7+q)>-.2;c.fillStyle=on?(q===2?C.ora:C.grn):'rgba(255,255,255,.12)';c.beginPath();c.arc(x+8+q*7,y+h/2,2,0,7);c.fill();}c.restore();}
+    function rack(c,x,y,w,h,n,t,hl,a){c.save();c.globalAlpha*=a==null?1:a;c.fillStyle='#0b1a2b';rr(c,x,y,w,h,6);c.fill();c.strokeStyle='rgba(159,182,201,.4)';c.lineWidth=1.5;c.stroke();c.restore();
+      var sh=(h-16)/n;for(var i=0;i<n;i++)server(c,x+6,y+8+i*sh,w-12,sh-3,t,i+x,hl===i,a);}
+    function vm(c,x,y,w,h,title,sub,col,a,on){if(!(a>0))return;c.save();c.globalAlpha*=a;if(on)glow(c,col,22);var g=c.createLinearGradient(x,y,x,y+h);g.addColorStop(0,'rgba(255,255,255,.12)');g.addColorStop(1,'rgba(255,255,255,.04)');c.fillStyle=g;rr(c,x,y,w,h,10);c.fill();c.shadowBlur=0;
+      c.strokeStyle=col;c.lineWidth=on?2.5:1.5;c.stroke();c.fillStyle=col;rr(c,x,y,w,6,3);c.fill();c.restore();tx(c,title,x+w/2,y+h/2+(sub?-2:5),14,'#fff','center',700,a);if(sub)tx(c,sub,x+w/2,y+h/2+16,11,C.mut,'center',500,a,'"JetBrains Mono",monospace');}
+    function building(c,x,y,s,t,a,hl){iso(c,x,y,90*s,60*s,70*s,hl?'#5a3a24':'#2b4f74',hl?'#3a2618':'#16324f',hl?'#4a3020':'#1e4266',a);
+      for(var r=0;r<3;r++)for(var q=0;q<4;q++){var on=Math.sin(t*1.3+r*1.7+q*2.3+x)>0;c.save();c.globalAlpha*=(a==null?1:a)*(on?.85:.25);c.fillStyle=hl?C.ora:C.blue;var px=x+(12+q*18)*s*.866,py=y-(12+q*18)*s*.5-(18+r*18)*s;c.fillRect(px,py,6*s,8*s);c.restore();}
+      for(var f=0;f<2;f++){var fx=x+(28+f*34)*s*.866-30*s*.866,fy=y-(28+f*34)*s*.5-30*s*.5-70*s;c.save();c.globalAlpha*=a==null?1:a;c.translate(fx,fy);c.scale(1,.5);c.rotate(t*4+f);c.strokeStyle='rgba(234,243,250,.7)';c.lineWidth=2;for(var b=0;b<3;b++){c.rotate(2.094);c.beginPath();c.moveTo(0,0);c.lineTo(9*s,0);c.stroke();}c.restore();}}
+    function fiber(c,A,B,t,col,a){c.save();c.globalAlpha*=a==null?1:a;c.strokeStyle=col;c.lineWidth=2;c.setLineDash([6,8]);c.lineDashOffset=-t*30;c.beginPath();c.moveTo(A[0],A[1]);c.lineTo(B[0],B[1]);c.stroke();c.restore();}
+    function chip(c,x,y,w,h,col,label,a){c.save();c.globalAlpha*=a==null?1:a;glow(c,col,10);c.fillStyle=col;rr(c,x,y,w,h,4);c.fill();c.restore();if(label)tx(c,label,x+w/2,y+h/2+4,10,'#fff','center',700,a);}
+    return {C:C,dots:dots,mp:mp,bg:bg,tx:tx,pill:pill,crumbs:crumbs,pulse:pulse,iso:iso,server:server,rack:rack,vm:vm,building:building,fiber:fiber,chip:chip,glow:glow};
+  })();
+  </script>
+
+
+  <span class="k"><span class="act-chip">🧪 CERRAMOS NETWORKING</span> Retomamos donde quedamos: Internet Gateway y tu EC2 nueva · clic o → para el siguiente paso</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">De cero a tu web: <span class="grad">VPC, subredes, gateway y tu EC2</span></h2>
+  <div class="scene"><canvas aria-label="Laboratorio animado: crear la VPC, las subredes, el Internet Gateway, la ruta pública, la IP pública automática, lanzar la EC2 y probar NGINX"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scL',1000,440,[
+    'Hoy construyes <b>la red de la empresa</b> en tu cuenta AWS, en 7 pasos. VPC, subredes, Internet Gateway y rutas <b>no cuestan nada</b>; la EC2 va en capa gratuita.',
+    '<b>Paso 1 · La urbanización.</b> Creas la VPC: tu terreno privado de 65.536 direcciones.',
+    '<b>Paso 2 · Las calles.</b> Creas las 4 subredes de tu diseño. Si la consola dice <b>59 · 27 · 11 · 11</b> IPs disponibles, tus cálculos estaban bien.',
+    '<b>Paso 3 · La puerta.</b> Creas el Internet Gateway y lo pegas a la VPC. Ojo: la puerta ya existe, <b>pero ninguna calle llega a ella</b>.',
+    '<b>Paso 4 · El camino a la puerta.</b> Una tabla de rutas con <b>0.0.0.0/0 → IGW</b> ("todo lo que no es de aquí, sale por la puerta"), asociada a <b>web</b>. Eso es lo que hace a una subred <b>pública</b>.',
+    '<b>Paso 5 · Placa pública.</b> Activas la IP pública automática en <b>web</b>: toda casa nueva ahí recibe también una dirección de internet.',
+    '<b>Paso 6 · Tu casa.</b> Lanzas la EC2 <b>dentro de la calle web</b>, con su Security Group: SSH solo para ti, puerto 80 para el mundo.',
+    '<b>Paso 7 · ¡A publicar!</b> Instalas NGINX y abres tu IP pública: la visita entra por el IGW, sigue la ruta y llega a tu casa → <b>200 OK</b>. 🎉'
+  ],function(c,s){
+    var H=NetScene,E=s.E,p=s.p,st=s.step,t=s.t;
+    function A(k,d,dl){return st===0?.25:(st>k?1:(st<k?0:E.out(p(k,d||.6,dl||0))));}
+    // ---- panel derecho: instrucciones de consola
+    var P=[
+      ['Lo que vas a construir',['1 · VPC pyme-vpc · 10.0.0.0/16','2 · 4 subredes (tu diseño)','3 · Internet Gateway','4 · Ruta 0.0.0.0/0 → IGW','5 · IP pública automática','6 · Tu EC2 en la subred web','7 · NGINX y prueba desde internet']],
+      ['Paso 1 · Crear la VPC',['Consola → VPC → Your VPCs','→ Create VPC → «VPC only»','Name tag:  pyme-vpc','IPv4 CIDR:  10.0.0.0/16','→ Create VPC ✓']],
+      ['Paso 2 · Crear 4 subredes',['VPC → Subnets → Create subnet','VPC ID:  pyme-vpc','Add new subnet para cada una:','ventas  10.0.1.0/26','admin   10.0.1.64/27','web     10.0.1.96/28','bd      10.0.1.112/28','→ Create ✓  (59 · 27 · 11 · 11)']],
+      ['Paso 3 · Internet Gateway',['VPC → Internet gateways','→ Create · Name:  pyme-igw','Actions → Attach to VPC','→ pyme-vpc ✓']],
+      ['Paso 4 · La ruta pública',['VPC → Route tables → Create','Name: rt-publica · VPC: pyme-vpc','Routes → Edit routes → Add route','Destination:  0.0.0.0/0','Target:  Internet Gateway → pyme-igw','Subnet associations → Edit → web ✓']],
+      ['Paso 5 · IP pública automática',['VPC → Subnets → web','Actions → Edit subnet settings','✓ Enable auto-assign public IPv4','→ Save ✓']],
+      ['Paso 6 · Lanzar tu EC2',['EC2 → Launch instance','Amazon Linux · t2/t3.micro','Key pair: tu llave (.ppk)','Network settings → Edit:','VPC: pyme-vpc · Subnet: web','Auto-assign public IP: Enable','SG: SSH 22 = My IP','    HTTP 80 = Anywhere','→ Launch instance ✓']],
+      ['Paso 7 · NGINX y prueba',['MobaXterm → IP pública · ec2-user · .ppk','$ sudo yum install -y nginx','$ sudo systemctl enable --now nginx','Navegador → http://IP-pública ✓','$ ip a → tu IP privada: 10.0.1.1xx','¿Por qué no la .96? ¡Es de AWS! 😉']]];
+    var R=610,pa=st===0?E.out(p(0,.5,.3)):E.out(p(st,.5,.3));
+    c.save();c.globalAlpha=pa;c.fillStyle='#0E2841';H.rr(c,R,20,372,404,14);c.fill();c.restore();
+    H.txt(c,P[st][0],R+20,54,'700 18px Poppins','#FFC928','left',pa);
+    P[st][1].forEach(function(l,i){var la=E.out(p(st,.35,.5+i*.12)),mono=/^(\$|ventas|admin|web |bd|Name|IPv4|Destination|Target|VPC ID|SG|    )/.test(l)||l.indexOf('10.0.')>=0;
+      H.txt(c,l,R+22,94+i*36,(mono?'500 14px "JetBrains Mono"':'500 15px Inter'),/✓/.test(l)?'#7fe0b0':(mono?'#9fe3ff':'#e8eef5'),'left',la);});
+    // ---- diagrama izquierdo
+    var GX=470;
+    H.cloud(c,GX,44,34,'#dbe8f4',st>=3||st===0?1:.35);H.txt(c,'Internet',GX,48,'700 13px Poppins','#156082','center',1);
+    // VPC
+    var v=A(1,.9);H.rectProg(c,30,96,560,330,st===0?1:(st>1?1:E.io(p(1,.9))),'#0E2841',2.5,[9,6],-s.now*15);
+    H.txt(c,'pyme-vpc · 10.0.0.0/16',46,124,'700 15px Poppins','#0E2841','left',v);
+    // subredes (rótulo dentro de cada calle)
+    var S=[['ventas','10.0.1.0/26',59,166,'#0F9ED5'],['admin','10.0.1.64/27',27,236,'#156082'],['web','10.0.1.96/28',11,306,'#E97132'],['bd','10.0.1.112/28',11,376,'#44546A']];
+    S.forEach(function(r,i){var a=A(2,.5,.2+i*.3);if(!(a>0))return;var pub=r[0]==='web'&&(st>=4);
+      c.save();c.globalAlpha=a;c.fillStyle=pub?'#fdf1ea':'#f1f5f9';H.rr(c,50,r[3]-32,310,48,8);c.fill();c.strokeStyle=r[4];c.lineWidth=pub?2.5:1.5;c.stroke();c.restore();
+      H.txt(c,r[0]+' · '+r[1],62,r[3]-16,'600 13px "JetBrains Mono"',r[4],'left',a);
+      H.txt(c,pub?'PÚBLICA':'privada',350,r[3]-16,'700 12px Poppins',pub?'#E97132':'#8B98A9','right',a);
+      var n=Math.min(r[2],13),from=(r[0]==='web'&&st>=6)?3:0;
+      for(var h=from;h<n;h++)H.house(c,70+h*22,r[3]+10,12,r[4],'#0E2841',st===2?E.back(p(2,.25,.4+i*.3+h*.02)):a);});
+    // IGW
+    var g=A(3,.5,.2);if(g>0){c.save();c.globalAlpha=g;c.fillStyle='#E97132';H.rr(c,GX-30,80,60,32,6);c.fill();c.restore();H.txt(c,'IGW',GX,101,'700 14px Poppins','#fff','center',g);
+      c.save();c.globalAlpha=g*.7;c.strokeStyle='#8B98A9';c.lineWidth=2;c.setLineDash([4,4]);c.beginPath();c.moveTo(GX,62);c.lineTo(GX,80);c.stroke();c.restore();
+      if(st===3){H.txt(c,'¿y el camino?',GX,140,'700 14px Poppins','#c74a4a','center',E.out(p(3,.4,1)));}}
+    // ruta: baja por la derecha y entra a la calle web
+    var rt=A(4,.9,.3);if(rt>0){var f=st===4?E.io(p(4,1.1,.3)):1,pts=[[GX,112],[GX,290],[360,290]],q=H.along(pts,f);
+      c.save();c.globalAlpha=Math.min(1,rt*1.5);c.strokeStyle='#E97132';c.lineWidth=4;c.beginPath();c.moveTo(GX,112);if(f<=.6)c.lineTo(q[0],q[1]);else{c.lineTo(GX,290);c.lineTo(q[0],q[1]);}c.stroke();c.restore();
+      c.save();c.globalAlpha=rt;c.fillStyle='#fff';H.rr(c,GX-85,170,170,42,8);c.fill();c.strokeStyle='#E97132';c.lineWidth=2;c.stroke();c.restore();
+      H.txt(c,'rt-publica',GX,187,'700 12px Poppins','#E97132','center',rt);H.txt(c,'0.0.0.0/0 → IGW',GX,204,'600 12px "JetBrains Mono"','#0E2841','center',rt);}
+    // IP pública automática
+    var ip=A(5,.5,.3);if(ip>0){H.txt(c,'🌐 IP pública automática en web',50,268,'600 12px Poppins','#E97132','left',ip);}
+    // EC2
+    var e=st===0?.25:(st>6?1:(st===6?E.back(p(6,.5,.4)):0));if(e>0){var ea=Math.min(1,Math.max(0,e));H.house(c,92,318,19,'#E97132','#b9541f',e);
+      c.save();c.globalAlpha=ea;c.fillStyle='#fff';H.rr(c,385,318,150,40,6);c.fill();c.strokeStyle='#E97132';c.lineWidth=1.5;c.stroke();c.restore();
+      H.txt(c,'tu EC2 · 10.0.1.100',460,334,'600 11px "JetBrains Mono"','#0E2841','center',ea);H.txt(c,'pública 3.85.x.x',460,350,'600 11px "JetBrains Mono"','#E97132','center',ea);
+      c.save();c.globalAlpha=ea*.6;c.strokeStyle='#E97132';c.setLineDash([3,3]);c.beginPath();c.moveTo(385,338);c.lineTo(106,312);c.stroke();c.restore();}
+    // tráfico final
+    if(st===7){if(t>.4){var u=((t-.4)%3)/3,pk=H.along([[GX,20],[GX,96],[GX,290],[360,290],[110,300]],u);H.packet(c,pk[0],pk[1],'#E97132',1);}
+      H.txt(c,'200 OK ✓',460,392,'700 20px Poppins','#1f7a50','center',E.out(p(7,.4,2.4)));}
+    if(st===0){H.txt(c,'así queda al final ↑',300,418,'600 13px Poppins','#8B98A9','center',1);}
+  });
+  </script>
+</section>
+
+<!-- 3 · ¿DÓNDE ESTÁ TU EC2? viaje con zoom: mundo → región → AZ → data center → rack → servidor -->
+<section class="slide" id="scD">
+  <span class="k"><span class="act-chip">🌎 DATA CENTERS</span> Del mapa a tu máquina · clic o → para hacer zoom</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">¿Dónde está <span class="grad">físicamente</span> tu EC2?</h2>
+  <div class="scene"><canvas aria-label="Animación con zoom: mapa de regiones de AWS, región us-east-1 con 6 zonas de disponibilidad, data centers, racks, un servidor y tu EC2"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → zoom</span></div>
+  <script>
+  NetScene.make('scD',1000,480,[
+    '<b>¿Dónde está tu EC2?</b> En un edificio real. AWS tiene <b>39 regiones</b> en el mundo; en Latinoamérica, <b>São Paulo</b> y <b>México</b>, y una <b>Local Zone en Bogotá</b>.',
+    '<b>Región</b> = una zona geográfica. Ej.: <b>us-east-1</b>, Norte de Virginia (Ashburn), la zona con más data centers del planeta. Tiene <b>6 zonas de disponibilidad (AZ)</b>, separadas por kilómetros y unidas por fibra.',
+    'Cada <b>zona de disponibilidad</b> es uno o más <b>data centers</b> con energía, refrigeración y red <b>independientes</b>: si uno falla, los otros siguen.',
+    'Adentro hay filas y filas de <b>racks</b>, armarios llenos de servidores. El aire frío entra por un pasillo y el caliente sale por el otro.',
+    'Cada rack tiene decenas de <b>servidores físicos</b> apilados, con energía y red duplicadas.',
+    'Un servidor es como un <b>edificio</b>: abajo los <b>cimientos</b> (el hardware: CPU y RAM), en medio el <b>administrador</b> (el hipervisor) y arriba los <b>apartamentos</b> (las máquinas virtuales). Uno de ellos es <b>tu EC2</b>. 🎯'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    var CR=['Mundo','Región','Zona de disponibilidad','Data center','Rack','Servidor'];
+    var TG=[V.mp(-77.5,39),[300,200],[485,285],[512,345],[500,225],[500,240]];
+    function L0(){var D=V.dots(),r=st===0?Math.min(1,t/1.4):1;c.fillStyle='rgba(159,182,201,.30)';for(var i=0;i<D.length;i++){if(D[i][0]>64+r*880)continue;c.fillRect(D[i][0]-1.3,D[i][1]-1.3,2.6,2.6);}
+      var R=[[-122,45.5,'Oregón'],[-73.6,45.5,''],[-6.3,53.3,'Irlanda'],[8.7,50.1,'Frankfurt'],[72.9,19,'Mumbai'],[103.8,1.35,'Singapur'],[139.7,35.7,'Tokio'],[151.2,-33.9,'Sídney'],[18.4,-33.9,''],[54.4,24.5,''],[-100.4,20.6,'México',1],[-46.6,-23.5,'São Paulo',1]];
+      R.forEach(function(g,i){var p=V.mp(g[0],g[1]),a=st===0?Math.max(0,Math.min(1,(t-.6-i*.07)/.4)):1;if(!(a>0))return;c.save();c.globalAlpha*=a;V.glow(c,g[3]?C.ora:C.blue,10);c.fillStyle=g[3]?C.ora:C.blue;c.beginPath();c.arc(p[0],p[1],5,0,7);c.fill();c.restore();
+        if(g[2])V.tx(c,g[2],p[0]+(g[3]?-9:9),p[1]+4,12,g[3]?'#ffb98a':C.mut,g[3]?'right':'left',600,a);});
+      var b=V.mp(-74.1,4.7),ab=st===0?Math.max(0,Math.min(1,(t-1.6)/.5)):1;V.pulse(c,b[0],b[1],4,t,C.ora,ab);V.tx(c,'Bogotá · Local Zone',b[0]-10,b[1]+18,12,'#ffb98a','right',700,ab);
+      var n=V.mp(-77.5,39),an=st===0?Math.max(0,Math.min(1,(t-1.2)/.5)):1;V.pulse(c,n[0],n[1],6,t,C.yel,an);V.tx(c,'Norte de Virginia · us-east-1',n[0]+12,n[1]-10,13,'#fff','left',700,an);
+      V.tx(c,'39',950,92,40,'#fff','right',800,1);V.tx(c,'regiones de AWS en el mundo',950,112,12,C.mut,'right',500,1);}
+    function L1(){V.tx(c,'us-east-1 · Norte de Virginia',500,84,20,'#fff','center',700);V.tx(c,'Ashburn: la zona con más data centers del planeta',500,104,13,C.mut,'center',500);
+      c.save();c.fillStyle='rgba(15,158,213,.06)';c.strokeStyle='rgba(15,158,213,.35)';c.setLineDash([8,8]);NetScene.rr(c,170,122,660,320,40);c.fill();c.stroke();c.restore();
+      var Z=[[300,200],[500,175],[700,205],[330,360],[520,390],[710,350]];[[0,1],[1,2],[0,3],[3,4],[4,5],[2,5],[1,4],[0,4],[2,4]].forEach(function(e){V.fiber(c,Z[e[0]],Z[e[1]],t,'rgba(15,158,213,.55)');});
+      Z.forEach(function(z,i){var a=st===1?Math.max(0,Math.min(1,(t-.9-i*.12)/.4)):1;c.save();c.globalAlpha*=a;c.fillStyle='rgba(21,96,130,.85)';c.strokeStyle=i===0?C.ora:C.blue;c.lineWidth=i===0?3:1.5;c.beginPath();c.arc(z[0],z[1],36,0,7);c.fill();c.stroke();c.restore();
+        V.building(c,z[0]-14,z[1]+18,.28,t,a,i===0);V.building(c,z[0]+8,z[1]+24,.22,t+1,a,i===0);V.tx(c,'AZ '+(i+1),z[0],z[1]+54,12,i===0?'#ffb98a':C.mut,'center',700,a);});
+      if(st===1)V.pulse(c,300,200,3,t,C.ora,.0);V.tx(c,'6 zonas de disponibilidad unidas por fibra de baja latencia',500,466,13,C.mut,'center',500);}
+    function L2(){V.tx(c,'Zona de disponibilidad · us-east-1a',500,84,20,'#fff','center',700);
+      c.save();c.strokeStyle='rgba(233,113,50,.5)';c.setLineDash([8,8]);NetScene.rr(c,130,110,740,300,24);c.stroke();c.restore();
+      V.fiber(c,[290,300],[485,285],t,'rgba(15,158,213,.55)');V.fiber(c,[485,285],[690,300],t,'rgba(15,158,213,.55)');
+      [[250,380,0],[455,370,1],[655,380,0]].forEach(function(b,i){var a=st===2?Math.max(0,Math.min(1,(t-.9-i*.2)/.5)):1;V.building(c,b[0],b[1],1.25,t+i,a,b[2]===1);});
+      var P=['⚡ energía propia','❄ refrigeración propia','🌐 red propia'];var x=205;P.forEach(function(s,i){var a=st===2?Math.max(0,Math.min(1,(t-1.6-i*.2)/.4)):1;x+=V.pill(c,x,430,s,'rgba(15,158,213,.2)','#fff',a)+14;});}
+    function L3(){V.tx(c,'Dentro del data center',500,84,20,'#fff','center',700);var items=[];for(var r=0;r<4;r++)for(var k=0;k<6;k++)items.push([k,r]);
+      items.sort(function(a,b){return (a[0]+a[1]*1.8)-(b[0]+b[1]*1.8);}).reverse();
+      items.forEach(function(q){var k=q[0],r=q[1],x=505+k*29.4-r*52,y=440-k*17-r*30,hl=(k===2&&r===1),a=st===3?Math.max(0,Math.min(1,(t-.8-(k+r)*.05)/.4)):1;
+        V.iso(c,x,y,24,16,70,hl?'#E97132':'#2b4f74',hl?'#7a3d1e':'#10263f',hl?'#9c4f28':'#173652',a);
+        for(var l=0;l<4;l++){c.save();c.globalAlpha*=a*(Math.sin(t*3+k+l*2+r)>0?.9:.25);c.fillStyle=l%2?C.grn:C.blue;c.fillRect(x+4,y-12-l*14,3,3);c.restore();}});
+      for(var r2=0;r2<3;r2++){var col=r2%2?'rgba(233,113,50,.7)':'rgba(15,158,213,.7)';var ox=505-r2*52-26,oy=440-r2*30-15;V.fiber(c,[ox-10,oy+6],[ox+150,oy-86],t*(r2%2?-1:1),col);}
+      V.tx(c,'pasillo frío',230,420,12,'#7fd3f7','left',700);V.tx(c,'pasillo caliente',230,440,12,'#ffb98a','left',700);}
+    function L4(){V.tx(c,'Un rack',500,84,20,'#fff','center',700);V.rack(c,430,96,140,370,14,t,5,1);
+      c.save();c.strokeStyle=C.ora;c.lineWidth=2;c.beginPath();c.moveTo(575,225);c.lineTo(640,225);c.stroke();c.restore();V.tx(c,'este servidor',650,230,14,'#ffb98a','left',700);
+      V.pill(c,190,140,'switch de red arriba','rgba(15,158,213,.2)','#fff');V.pill(c,190,180,'energía doble (A/B)','rgba(15,158,213,.2)','#fff');V.pill(c,190,220,'decenas de servidores','rgba(15,158,213,.2)','#fff');}
+    function L5(){V.tx(c,'El servidor es como un edificio',500,82,22,'#fff','center',800);
+      var ap=function(k){return st===5?Math.max(0,Math.min(1,(t-.7-k*.25)/.5)):1;};
+      /* estructura */c.save();c.fillStyle='#16324f';NetScene.rr(c,170,112,660,330,14);c.fill();c.strokeStyle='rgba(159,182,201,.35)';c.lineWidth=1.5;c.stroke();c.restore();
+      /* 3 · apartamentos = máquinas virtuales */var n=5,w=108,g=18,x0=500-(n*w+(n-1)*g)/2;
+      V.tx(c,'🏠 Apartamentos = máquinas virtuales',188,138,13,'#9fd8f0','left',700,ap(2));
+      for(var i=0;i<n;i++){var x=x0+i*(w+g),mine=i===2,a=ap(2)*(st===5?E.back(Math.max(0,Math.min(1,(t-1.2-i*.1)/.45))):1);if(!(a>0))continue;
+        c.save();c.globalAlpha*=a;if(mine)V.glow(c,C.ora,22);c.fillStyle=mine?'#5a3522':'#0f2740';NetScene.rr(c,x,150,w,108,10);c.fill();c.shadowBlur=0;c.strokeStyle=mine?C.ora:'rgba(15,158,213,.6)';c.lineWidth=mine?3:1.5;c.stroke();
+        c.fillStyle=mine?'rgba(255,201,40,.5)':'rgba(255,201,40,.18)';c.fillRect(x+12,162,w-24,40);c.restore();
+        NetScene.person(c,x+w/2,198,18,mine?C.ora:'#9fb6c9',a);V.tx(c,mine?'TÚ':'vecino',x+w/2,228,mine?16:13,mine?'#fff':C.mut,'center',800,a);V.tx(c,mine?'tu EC2':'otro cliente',x+w/2,247,11,mine?'#ffb98a':C.faint,'center',600,a);}
+      /* 2 · administrador = hipervisor */var ah=ap(1);c.save();c.globalAlpha*=ah;V.glow(c,C.blue,16+6*Math.sin(t*3));c.fillStyle='rgba(15,158,213,.35)';NetScene.rr(c,188,276,624,56,12);c.fill();c.restore();
+      NetScene.person(c,226,322,18,'#fff',ah);V.tx(c,'El administrador = el HIPERVISOR',262,300,15,'#fff','left',800,ah);V.tx(c,'reparte los recursos y cuida que nadie entre al apartamento de otro',262,320,12,'#cfe3f1','left',500,ah);
+      /* 1 · cimientos = hardware */var ac=ap(0);c.save();c.globalAlpha*=ac;c.fillStyle='#0b1a2b';NetScene.rr(c,188,346,624,80,12);c.fill();c.restore();
+      V.tx(c,'Cimientos = el HARDWARE real',204,368,13,'#fff','left',800,ac);
+      for(var k=0;k<6;k++)V.chip(c,204+k*50,380,42,26,C.blue,'CPU',ac);for(var q=0;q<6;q++)V.chip(c,516+q*48,380,40,26,C.ora,'RAM',ac);
+      V.tx(c,'procesador = el cerebro · memoria = la mesa de trabajo',500,440,11,C.mut,'center',600,ac);
+      /* recursos que suben a tu apartamento */if(st===5&&t>2.4){for(var f=0;f<3;f++){var from=f<2?[225+f*50,380]:[536,380],to=[500,258],u=((t-2.4)*.6+f*.33)%1;var px=from[0]+(to[0]-from[0])*u,py=from[1]+(to[1]-from[1])*u;
+        c.save();V.glow(c,f<2?C.blue:C.ora,12);c.fillStyle=f<2?C.blue:C.ora;c.beginPath();c.arc(px,py,5,0,7);c.fill();c.restore();}
+        V.tx(c,'↑ el administrador le entrega a tu apartamento 2 CPU y 1 GB de RAM',500,104,13,'#ffb98a','center',700,Math.min(1,(t-2.4)/.5));}}
+    var LV=[L0,L1,L2,L3,L4,L5],k=st===0?1:E.io(Math.min(1,t/1.2));
+    if(st>0&&k<1){var tp=TG[st-1],z=1+k*2.6;c.save();c.globalAlpha=1-k;c.translate(tp[0],tp[1]);c.scale(z,z);c.translate(-tp[0],-tp[1]);LV[st-1]();c.restore();}
+    c.save();c.globalAlpha=k;var z2=.6+.4*k;c.translate(500,270);c.scale(z2,z2);c.translate(-500,-270);LV[st]();c.restore();
+    V.crumbs(c,CR,st);
+  });
+  </script>
+</section>
+
+<!-- 4 · ¿QUÉ ES UN HIPERVISOR Y DÓNDE SE UBICA? -->
+<section class="slide" id="scP">
+  <span class="k"><span class="act-chip">🧠 HIPERVISOR</span> El que reparte y aísla · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">¿Qué es un <span class="grad">hipervisor</span> y dónde se ubica?</h2>
+  <div class="scene"><canvas aria-label="Animación: el hipervisor reparte núcleos de CPU y RAM de un servidor físico entre cuatro máquinas virtuales, las aísla y en AWS se apoya en tarjetas Nitro"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scP',1000,480,[
+    'Un servidor físico tiene recursos reales: <b>núcleos de CPU</b> y <b>RAM</b>. Aquí un ejemplo: 16 núcleos y 64 GB.',
+    'El <b>hipervisor</b> es el programa que <b>crea y administra máquinas virtuales</b>. Se ubica <b>entre el hardware y las VM</b>: nadie toca el hardware sin pasar por él.',
+    '<b>Reparte:</b> a cada VM le da <b>su porción</b> de CPU y RAM. Tu EC2 recibe 2 vCPU; otros clientes, otras porciones. A esa porción se le llama <b>vCPU</b> (CPU virtual).',
+    '<b>Aísla:</b> ninguna VM puede ver la memoria ni los datos de otra. Si un vecino intenta entrar a la tuya, el hipervisor lo bloquea.',
+    '<b>¿Dónde está en AWS?</b> En <b>cada servidor físico</b>: es <b>Nitro</b>, un hipervisor liviano apoyado en tarjetas propias que manejan la <b>red</b>, el <b>disco</b> y la <b>seguridad</b>.'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    var VM=[{n:'tu EC2',cpu:[0,1],ram:[0],col:C.ora,sub:'2 vCPU · 4 GB'},{n:'cliente B',cpu:[2,3,4,5],ram:[1,2,3,4],col:C.blue,sub:'4 vCPU · 16 GB'},{n:'cliente C',cpu:[6,7],ram:[5,6],col:'#8a5cf6',sub:'2 vCPU · 8 GB'},{n:'cliente D',cpu:[8,9,10,11,12,13,14,15],ram:[7,8,9,10,11,12,13,14],col:C.grn,sub:'8 vCPU · 32 GB'}];
+    function core(i){return [150+(i%8)*28,392+Math.floor(i/8)*28];}function ram(i){return [420+(i%8)*30,392+Math.floor(i/8)*28];}
+    function owner(kind,i){for(var q=0;q<4;q++)if(VM[q][kind].indexOf(i)>=0)return q;return -1;}
+    function slot(q,kind,j){var x=130+q*190;return kind==='cpu'?[x+12+(j%4)*22,188+Math.floor(j/4)*20]:[x+104+(j%4)*14,188+Math.floor(j/4)*20];}
+    var a0=st===0?E.out(Math.min(1,t/.7)):1;
+    c.save();c.globalAlpha*=a0;c.fillStyle='#0b1a2b';NetScene.rr(c,120,376,760,86,12);c.fill();c.strokeStyle='rgba(159,182,201,.35)';c.stroke();c.restore();
+    V.tx(c,'SERVIDOR FÍSICO · 16 núcleos · 64 GB RAM (ejemplo)',500,474,12,C.mut,'center',600,a0);
+    var fly=st===2?Math.min(1,t/2.2):(st>2?1:0);
+    for(var i=0;i<16;i++){var p=core(i),o=owner('cpu',i),done=fly>0&&o>=0;
+      c.save();c.globalAlpha*=a0*(done&&fly>=1?.35:1);c.fillStyle=done?VM[o].col:C.blue;NetScene.rr(c,p[0],p[1],22,22,4);c.fill();c.restore();
+      if(fly>0&&o>=0){var j=VM[o].cpu.indexOf(i),d=Math.max(0,Math.min(1,fly*1.6-(i/16)*.6)),sp=slot(o,'cpu',j),x=p[0]+(sp[0]-p[0])*E.io(d),y=p[1]+(sp[1]-p[1])*E.io(d);c.save();V.glow(c,VM[o].col,10);c.fillStyle=VM[o].col;NetScene.rr(c,x,y,16,16,3);c.fill();c.restore();}}
+    for(var r=0;r<16;r++){var q2=ram(r),o2=owner('ram',r),dn=fly>0&&o2>=0;
+      c.save();c.globalAlpha*=a0*(dn&&fly>=1?.35:1);c.fillStyle=r===15?'#5f7890':(dn?VM[o2].col:C.ora);NetScene.rr(c,q2[0],q2[1],24,22,4);c.fill();c.restore();
+      if(fly>0&&o2>=0){var j2=VM[o2].ram.indexOf(r),d2=Math.max(0,Math.min(1,fly*1.6-(r/16)*.6-.2)),s2=slot(o2,'ram',j2),x2=q2[0]+(s2[0]-q2[0])*E.io(d2),y2=q2[1]+(s2[1]-q2[1])*E.io(d2);c.save();V.glow(c,VM[o2].col,10);c.fillStyle=VM[o2].col;NetScene.rr(c,x2,y2,10,16,2);c.fill();c.restore();}}
+    V.tx(c,'CPU',150,386,10,C.mut,'left',700,a0);V.tx(c,'RAM',420,386,10,C.mut,'left',700,a0);
+    var nit=st>=4?1:.35;['red','disco','seguridad'].forEach(function(n,i){V.chip(c,690+(i%2)*88,392+Math.floor(i/2)*28,80,22,st>=4?C.grn:'#2f4a63',n,a0*nit);});V.tx(c,'tarjetas Nitro',730,386,10,st>=4?'#9ff0c8':C.mut,'left',700,a0);
+    var a1=st<1?0:(st===1?E.out(Math.min(1,t/.6)):1);
+    if(a1>0){c.save();c.globalAlpha*=a1;V.glow(c,C.blue,20+6*Math.sin(t*3));c.fillStyle='rgba(15,158,213,.38)';NetScene.rr(c,120,312,760,50,12);c.fill();c.restore();
+      V.tx(c,'HIPERVISOR · crea, reparte y aísla las máquinas virtuales',500,343,15,'#fff','center',700,a1);
+      if(st===1){V.tx(c,'↑ máquinas virtuales',900,300,12,'#9fd8f0','right',600,a1);V.tx(c,'↓ hardware',900,378,12,'#9fd8f0','right',600,a1);}}
+    VM.forEach(function(v,q){var a=st<1?0:(st===1?E.back(Math.max(0,Math.min(1,(t-.5-q*.12)/.5))):1);var x=130+q*190;V.vm(c,x,110,170,178,'',null,v.col,a,q===0&&st>=2);
+      V.tx(c,v.n,x+85,146,15,'#fff','center',700,a);V.tx(c,st>=2?v.sub:'esperando recursos…',x+85,168,11,st>=2?'#cfe3f1':C.faint,'center',600,a,'"JetBrains Mono",monospace');
+      V.tx(c,'vCPU',x+12,278,9,C.mut,'left',700,a);V.tx(c,'RAM',x+104,278,9,C.mut,'left',700,a);});
+    if(st>=3){var w=E.out(Math.min(1,t/.6));for(var q3=1;q3<4;q3++){var wx=130+q3*190-10;c.save();c.globalAlpha*=w;V.glow(c,C.grn,14);c.strokeStyle=C.grn;c.lineWidth=3;c.beginPath();c.moveTo(wx,104);c.lineTo(wx,294);c.stroke();c.restore();}
+      if(st===3){var u=Math.min(1,Math.max(0,(t-.6)/1.2)),px=410-u*80;if(u<1)NetScene.packet(c,px,200,C.red,1);else{NetScene.packet(c,332,200,C.red,.5);V.tx(c,'✗ bloqueado por el hipervisor',320,96,15,'#ff9b9b','center',800,1);}}}
+    if(st>=4){var a4=E.out(Math.min(1,t/.6));V.tx(c,'AWS Nitro: hipervisor liviano + tarjetas dedicadas',500,94,14,'#9ff0c8','center',700,a4);}
+  });
+  </script>
+</section>
+
+<!-- 4b · ¿QUÉ ES NITRO? -->
+<section class="slide" id="scN">
+  <span class="k"><span class="act-chip">⚙️ NITRO</span> El administrador con ayudantes · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">¿Qué es la <span class="grad">arquitectura Nitro</span> de AWS?</h2>
+  <div class="scene"><canvas aria-label="Animación: un administrador agobiado con cuatro tareas; llegan tres tarjetas Nitro como ayudantes para red, discos y seguridad; el administrador queda liviano y las VM reciben casi toda la fuerza"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scN',1000,480,[
+    'En un servidor normal, el administrador (el <b>hipervisor</b>) hace <b>todo</b>: reparte apartamentos, maneja el <b>internet</b>, los <b>discos</b> y la <b>seguridad</b>. Se cansa y le quita fuerza al edificio.',
+    'AWS inventó <b>Nitro</b>: <b>tarjetas (chips) propias</b> que funcionan como <b>ayudantes</b>. Una maneja el <b>internet</b>, otra los <b>discos</b> y otra la <b>seguridad</b>.',
+    'El administrador queda <b>liviano</b>: solo reparte apartamentos. Casi toda la fuerza del servidor queda para <b>tu EC2</b> y las demás VM.',
+    '<b>Arquitectura Nitro</b> = la forma como AWS arma sus servidores: <b>hipervisor liviano + tarjetas Nitro + chip de seguridad</b>. Todas las EC2 modernas (como la t3) corren así.'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    var tasks=[['repartir apartamentos',C.ora],['internet (red)',C.blue],['discos',C.blue],['seguridad',C.blue]];
+    /* el servidor (caja) */c.save();c.fillStyle='#16324f';NetScene.rr(c,60,70,540,330,16);c.fill();c.strokeStyle='rgba(159,182,201,.35)';c.stroke();c.restore();V.tx(c,'servidor físico',80,96,13,C.mut,'left',700);
+    /* administrador */var calm=st>=2?1:0,shake=st<2?Math.sin(t*14)*2*(1-st*.5):0;NetScene.person(c,200+shake,270,34,st>=2?'#9ff0c8':'#ffd0d0',1);
+    V.tx(c,'el administrador',200,300,14,'#fff','center',800);V.tx(c,'(hipervisor)',200,318,12,C.mut,'center',600);
+    if(st<2){V.tx(c,st===0?'😵 ¡demasiadas tareas!':'😮 ¡llegan ayudantes!',200,150,14,'#ffb98a','center',800,1);}else V.tx(c,'😌 solo reparte',200,150,14,'#9ff0c8','center',800,1);
+    /* tareas: orbitan al administrador; desde el paso 1 se van a las tarjetas */
+    var cardY=[130,196,262],CX=770;
+    tasks.forEach(function(k,i){var an=t*.9+i*1.57,ox=240+Math.cos(an)*150,oy=235+Math.sin(an)*85,x=ox,y=oy;
+      if(i>0&&st>=1){var u=st===1?Math.max(0,Math.min(1,(t-1-i*.3)/.8)):1,e=E.io(u);x=ox+(CX-ox-20)*e;y=oy+(cardY[i-1]+26-oy)*e;}
+      else if(i===0&&st>=2){x=200+Math.cos(an)*70;y=200+Math.sin(an)*20;}
+      V.pill(c,x-60,y-12,k[0],k[1],'#fff',1);});
+    /* tarjetas Nitro (ayudantes) */
+    ['Tarjeta Nitro · internet','Tarjeta Nitro · discos','Chip Nitro · seguridad'].forEach(function(n,i){var a=st<1?0:(st===1?E.back(Math.max(0,Math.min(1,(t-.2-i*.25)/.5))):1);if(!(a>0))return;var x=660,y=cardY[i];
+      c.save();c.globalAlpha*=a;V.glow(c,C.grn,14);c.fillStyle='#1f6b4f';NetScene.rr(c,x,y,250,52,8);c.fill();c.restore();
+      c.save();c.globalAlpha*=a;c.fillStyle='#d4a53a';for(var p=0;p<10;p++)c.fillRect(x+14+p*22,y+46,10,6);c.fillStyle='#0b1a2b';NetScene.rr(c,x+14,y+12,34,28,4);c.fill();c.restore();
+      V.tx(c,n,x+60,y+32,13,'#fff','left',800,a);});
+    if(st>=1)V.tx(c,'ayudantes de hardware (chips de AWS)',785,120,12,'#9ff0c8','center',700,1);
+    /* barra: fuerza que queda para las VM */var f=st<2?.62:(st===2?.62+.33*E.out(Math.min(1,t/1.2)):.95);
+    V.tx(c,'fuerza del servidor que queda para las VM (tu EC2)',80,432,13,'#fff','left',700);c.save();c.fillStyle='rgba(255,255,255,.1)';NetScene.rr(c,80,444,520,16,8);c.fill();c.fillStyle=f>.9?C.grn:C.yel;NetScene.rr(c,80,444,520*f,16,8);c.fill();c.restore();
+    V.tx(c,f>.9?'casi toda ✓':'se pierde una parte',610,457,13,f>.9?'#9ff0c8':C.yel,'left',800);
+    if(st>=3){var a3=E.out(Math.min(1,t/.6));c.save();c.globalAlpha*=a3;c.fillStyle='rgba(8,24,42,.86)';NetScene.rr(c,620,300,340,110,12);c.fill();c.strokeStyle=C.grn;c.stroke();c.restore();
+      V.tx(c,'ARQUITECTURA NITRO =',790,328,14,'#9ff0c8','center',800,a3);V.tx(c,'hipervisor liviano',790,352,13,'#fff','center',700,a3);V.tx(c,'+ tarjetas Nitro + chip de seguridad',790,372,13,'#fff','center',700,a3);V.tx(c,'así corre tu t3.micro',790,396,12,'#ffb98a','center',700,a3);}
+  });
+  </script>
+</section>
+
+<!-- 5 · REUSO DE RECURSOS -->
+<section class="slide" id="scR">
+  <span class="k"><span class="act-chip">♻️ REUSO</span> Un mismo hardware para muchos · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">El <span class="grad">reuso de recursos</span>: por qué existe la nube</h2>
+  <div class="scene"><canvas aria-label="Animación: seis servidores casi vacíos se consolidan como máquinas virtuales en uno solo; los recursos libres se reúsan; al apagar tu EC2 sus recursos pasan a otro cliente"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scR',1000,480,[
+    'Antes de la virtualización: <b>un servidor físico por aplicación</b>. Casi siempre estaban <b>desocupados</b> (menos del 20% de uso): luz, espacio y plata desperdiciados.',
+    'Con virtualización, cada aplicación se vuelve una <b>VM</b> y todas se mudan a <b>un solo servidor</b>, que ahora sí trabaja: <b>85%</b>.',
+    'Los 6 servidores viejos quedan <b>libres</b> y se <b>reúsan</b> para otras cargas u otros clientes. Eso es el <b>reuso de recursos</b>: el mismo hardware sirve a muchos.',
+    'En la nube pasa todo el tiempo: cuando haces <b>Stop</b> a tu EC2, sus vCPU y RAM vuelven al <b>pool</b> y AWS se los da a otro cliente. Al hacer <b>Start</b>, puede caer en <b>otro servidor</b>: por eso tu IP pública cambia.',
+    'Por eso en la nube <b>pagas solo lo que usas</b>: el hardware nunca se queda quieto esperándote.'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    var A=[['web',12],['correo',18],['nómina',9],['inventario',15],['ventas',20],['reportes',11]];
+    var dim=st>=3?0:1;
+    function fierro(x,y,w,d,h,a,free,hl){if(!(a>0))return;V.iso(c,x,y,w,d,h,free?'#6fae95':'#aab6c3',free?'#2f5f4c':'#56626f',free?'#3f7a61':'#7a8796',a);
+      var cs=.866,sn=.5;c.save();c.globalAlpha*=a;c.strokeStyle='rgba(20,30,40,.55)';c.lineWidth=1.5;
+      for(var k=0;k<5;k++){var fx=x+(w*.18+k*w*.13)*cs,fy=y-(w*.18+k*w*.13)*sn;c.beginPath();c.moveTo(fx,fy-h*.25);c.lineTo(fx,fy-h*.8);c.stroke();}
+      for(var q=0;q<3;q++){var on=!free&&Math.sin(t*(3+q)+x*.1+q)>-.2;c.fillStyle=on?(q===2?C.ora:C.grn):'rgba(20,30,40,.5)';var lx=x+(w*.84)*cs,ly=y-(w*.84)*sn-h*.3-q*9;c.beginPath();c.arc(lx,ly,2.6,0,7);c.fill();}c.restore();}
+    function cable(x,y,a,on){if(!(a>0))return;c.save();c.globalAlpha*=a;c.strokeStyle='#2a3440';c.lineWidth=3;c.beginPath();c.moveTo(x-20,y-10);c.quadraticCurveTo(x-40,y+12,x-58,y+14);c.stroke();
+      c.fillStyle='#d9dee4';NetScene.rr(c,x-72,y+6,16,14,3);c.fill();c.restore();V.tx(c,'⚡',x-64,y+2,14,on?C.yel:'#5f7890','center',700,a*(on?(.55+.45*Math.sin(t*6+x)):1));}
+    var head=st===0?Math.min(1,t/.6):1;
+    V.tx(c,st>=2?'Los fierros viejos quedan libres':'Servidores FÍSICOS: cajas de metal de verdad',st>=1?270:500,44,17,'#fff','center',800,head*dim);
+    V.tx(c,st>=1?'':'cada uno cuesta, ocupa espacio y gasta luz · aunque esté casi quieto',500,66,13,'#ffb98a','center',600,head*dim);
+    A.forEach(function(ap,i){var col=i%3,row=Math.floor(i/3),x=110+col*168,y=190+row*190,a=(st===0?E.back(Math.max(0,Math.min(1,(t-.3-i*.12)/.5))):1)*dim;if(!(a>0))return;
+      var freed=st>=2;cable(x,y,a,!freed);fierro(x,y,64,44,50,a,freed);
+      if(st===0||(st===1&&t<.4)){V.tx(c,'app: '+ap[0],x+30,y+26,13,'#fff','center',700,a);var fu=st===0?Math.min(1,Math.max(0,(t-1)/.8)):1;
+        c.save();c.globalAlpha*=a;c.fillStyle='rgba(255,255,255,.12)';NetScene.rr(c,x-12,y+34,84,8,4);c.fill();c.fillStyle=C.yel;NetScene.rr(c,x-12,y+34,84*ap[1]/100*fu,8,4);c.fill();c.restore();V.tx(c,ap[1]+'% de uso',x+30,y+56,11,C.mut,'center',600,a);}
+      else if(!freed)V.tx(c,'mudándose…',x+30,y+30,12,C.mut,'center',600,a);
+      else{V.tx(c,'♻ libre',x+30,y+30,14,'#9ff0c8','center',800,a);V.tx(c,'se reúsa o se apaga',x+30,y+48,11,C.mut,'center',600,a);}});
+    if(st===0)V.tx(c,'6 fierros · uso promedio 14% · 86% desperdiciado',300,470,15,C.yel,'center',700,Math.max(0,Math.min(1,(t-1.8)/.5)));
+    if(st>=1){var ab=(st===1?E.out(Math.min(1,t/.6)):1)*dim,BX=700,BY=380;V.tx(c,'1 servidor físico potente + hipervisor',790,86,15,'#fff','center',700,ab);
+      cable(BX,BY,ab,true);V.iso(c,BX,BY,150,120,110,'#aab6c3','#56626f','#7a8796',ab);
+      c.save();c.globalAlpha*=ab;V.glow(c,C.blue,12);c.fillStyle='rgba(15,158,213,.55)';var hy=BY-110;c.beginPath();c.moveTo(BX,hy);c.lineTo(BX+150*.866,hy-75);c.lineTo(BX+150*.866-120*.866,hy-75-60);c.lineTo(BX-120*.866,hy-60);c.closePath();c.fill();c.restore();
+      V.tx(c,'hipervisor + 6 VM (las 6 apps)',790,112,12,'#9fd8f0','center',700,ab);
+      A.forEach(function(ap,i){var gx=i%3,gy=Math.floor(i/3),tx2=BX-66+gx*44-gy*34+22,ty2=BY-150-gx*26-gy*20+8,fx=110+(i%3)*168+26,fy=190+Math.floor(i/3)*190-40,u=st===1?Math.max(0,Math.min(1,(t-.5-i*.18)/.7)):1,e=E.io(u);
+        var x=fx+(tx2-fx)*e,y=fy+(ty2-fy)*e;V.iso(c,x,y,20,18,24,'#9fd8f0','#1a5a80','#2476a3',ab);});
+      var fill=st===1?Math.min(1,Math.max(0,(t-1.8)/1)):1;c.save();c.globalAlpha*=ab;c.fillStyle='rgba(255,255,255,.12)';NetScene.rr(c,650,420,280,12,6);c.fill();c.fillStyle=C.grn;NetScene.rr(c,650,420,280*.85*fill,12,6);c.fill();c.restore();V.tx(c,Math.round(85*fill)+'% de uso · 1 solo cable de luz',790,452,13,'#9ff0c8','center',700,ab);}
+    if(st>=3){var a3=E.out(Math.min(1,t/.5)),G=200;V.tx(c,'En AWS, esto pasa todos los días',500,G-60,20,'#fff','center',700,a3);
+      var S1=[160,G+80],S2=[670,G+80];[S1,S2].forEach(function(p,i){V.server(c,p[0],p[1],170,26,t,i+7,false,a3);V.tx(c,'servidor '+(i+1),p[0]+85,p[1]+48,11,C.mut,'center',600,a3);});
+      c.save();c.globalAlpha*=a3;c.strokeStyle='rgba(15,158,213,.6)';c.setLineDash([5,6]);c.beginPath();c.arc(500,G+93,44,0,7);c.stroke();c.restore();V.tx(c,'pool de recursos',500,G+98,12,'#9fd8f0','center',700,a3);
+      var T=st===3?t:9,ph1=Math.min(1,Math.max(0,(T-.6)/1)),ph2=Math.min(1,Math.max(0,(T-2)/1)),ph3=Math.min(1,Math.max(0,(T-3.3)/1));
+      if(ph1<1)V.vm(c,S1[0]+35+(450-S1[0]-35)*E.io(ph1),S1[1]-70+(G+68-S1[1]+70)*E.io(ph1),100,50,'tu EC2','stop',C.ora,a3*(1-ph1),true);
+      if(ph1>=1&&ph3<=0)V.tx(c,'Stop: tus recursos vuelven al pool',500,G+170,14,'#ffb98a','center',700,a3);if(ph3>0)V.tx(c,'Start: vuelves en otro servidor',500,G+170,14,'#ffb98a','center',700,a3*ph3);
+      if(ph2>0)V.vm(c,450+(S1[0]+35-450)*E.io(ph2),G+68+(S1[1]-70-G-68)*E.io(ph2),100,50,'otro cliente','',C.blue,a3*ph2,false);
+      if(ph3>0){V.vm(c,S2[0]+35,S2[1]-70,100,50,'tu EC2','start',C.ora,a3*ph3,true);V.tx(c,'IP pública nueva ✱',S2[0]+85,S2[1]-80,12,'#ffb98a','center',700,a3*ph3);}}
+    if(st>=4){var a4=E.out(Math.min(1,t/.6));c.save();c.globalAlpha*=a4;c.fillStyle='rgba(8,24,42,.72)';c.fillRect(0,0,1000,480);c.restore();V.tx(c,'Pagas solo lo que usas',500,230,40,'#fff','center',800,a4);V.tx(c,'porque el hardware se reúsa entre miles de clientes',500,266,16,'#9fd8f0','center',600,a4);}
+  });
+  </script>
+</section>
+
+<!-- 6 · TIPO 2 VS TIPO 1 (iso) -->
+<section class="slide" id="scH">
+  <span class="k"><span class="act-chip">🧱 TIPOS</span> Dos formas de virtualizar · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">Hipervisor <span class="grad">tipo 2 vs. tipo 1</span></h2>
+  <div class="scene"><canvas aria-label="Animación: pilas de capas en 3D; tipo 2 con sistema operativo anfitrión y VirtualBox; tipo 1 directo sobre el hardware, como AWS Nitro"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scH',1000,480,[
+    '¿Qué es un <b>hipervisor</b>? Es el <b>administrador</b>: un programa que toma <b>un computador</b> y lo divide en <b>varios computadores virtuales</b> (máquinas virtuales). Hay dos formas de hacerlo.',
+    '<b>Tipo 2 = un cuarto alquilado dentro de tu casa.</b> Tu portátil (la casa) ya tiene dueño: <b>Windows o macOS</b>. <b>VirtualBox</b> es un programa que abres ahí y te presta un cuarto para una VM. Todo pasa <b>por el dueño</b>.',
+    '<b>Tipo 1 = un edificio hecho para alquilar.</b> No vive nadie en medio: el administrador está <b>directo sobre los cimientos</b> y reparte todo el edificio en apartamentos. Así funcionan los data centers (VMware ESXi, Hyper-V, KVM).',
+    '<b>AWS usa tipo 1:</b> su administrador se llama <b>Nitro</b>, y ahí vive <b>tu EC2</b>. El tipo 2 es más lento (hay un intermediario), pero perfecto para practicar en tu PC.'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    function ap(k,d,dl){return st>k?1:(st<k?0:E.out(Math.max(0,Math.min(1,(t-(dl||0))/(d||.6)))));}
+    if(st===0){var a=E.out(Math.min(1,t/.6));
+      NetScene.laptop(c,210,300,150,'#9fd8f0',a);V.tx(c,'1 computador',210,340,15,'#fff','center',700,a);
+      var b=Math.max(0,Math.min(1,(t-.8)/.6));c.save();c.globalAlpha*=b;V.glow(c,C.blue,20);c.fillStyle='rgba(15,158,213,.35)';NetScene.rr(c,400,190,200,150,16);c.fill();c.restore();
+      NetScene.person(c,500,280,30,'#fff',b);V.tx(c,'HIPERVISOR',500,312,16,'#fff','center',800,b);V.tx(c,'el administrador',500,330,12,'#cfe3f1','center',600,b);
+      V.fiber(c,[300,265],[398,265],t,'rgba(15,158,213,.8)',b);
+      for(var k=0;k<3;k++){var d=Math.max(0,Math.min(1,(t-1.6-k*.3)/.5)),y=170+k*95;V.fiber(c,[602,265],[690,y+30],t,'rgba(233,113,50,.8)',d);
+        c.save();c.globalAlpha*=d;c.fillStyle='#0f2740';NetScene.rr(c,700,y,170,64,10);c.fill();c.strokeStyle=C.ora;c.lineWidth=2;c.stroke();c.restore();
+        V.tx(c,'computador virtual '+(k+1),785,y+38,13,'#fff','center',700,d);}
+      V.tx(c,'1 computador → varios computadores virtuales',500,450,16,'#ffb98a','center',700,Math.max(0,Math.min(1,(t-2.8)/.5)));return;}
+    /* ---------- TIPO 2: la casa ---------- */
+    var a1=ap(1,.7);V.tx(c,'TIPO 2 · cuarto alquilado en tu casa',280,58,17,'#fff','center',800,a1);
+    if(a1>0){c.save();c.globalAlpha*=a1;c.fillStyle='#1e4266';c.beginPath();c.moveTo(110,196);c.lineTo(280,92);c.lineTo(450,196);c.closePath();c.fill();c.fillStyle='#16324f';NetScene.rr(c,130,190,300,236,8);c.fill();c.restore();
+      c.save();c.globalAlpha*=a1;c.fillStyle='#0b1a2b';NetScene.rr(c,142,382,276,36,6);c.fill();c.restore();V.tx(c,'cimientos: tu portátil (hardware)',280,405,12,'#fff','center',700,a1);
+      var a2=ap(1,.6,.5);c.save();c.globalAlpha*=a2;c.fillStyle='#3a4755';NetScene.rr(c,142,318,276,56,6);c.fill();c.restore();
+      NetScene.person(c,178,366,15,'#cfd8e1',a2);NetScene.person(c,206,366,12,'#cfd8e1',a2);V.tx(c,'el dueño vive aquí:',232,340,12,'#fff','left',700,a2);V.tx(c,'Windows / macOS',232,358,13,'#fff','left',800,a2);
+      var a3=ap(1,.6,1.1);c.save();c.globalAlpha*=a3;c.fillStyle='rgba(15,158,213,.35)';NetScene.rr(c,236,206,182,104,8);c.fill();c.strokeStyle=C.blue;c.lineWidth=2;c.stroke();c.restore();
+      NetScene.person(c,258,262,13,'#fff',a3);V.tx(c,'VirtualBox',278,232,12,'#fff','left',800,a3);V.tx(c,'(administrador',278,248,10,'#cfe3f1','left',600,a3);V.tx(c,'de inquilino)',278,261,10,'#cfe3f1','left',600,a3);
+      c.save();c.globalAlpha*=a3;c.fillStyle='#0f2740';NetScene.rr(c,276,270,132,32,6);c.fill();c.strokeStyle=C.ora;c.stroke();c.restore();V.tx(c,'VM Ubuntu',342,291,12,'#fff','center',700,a3);
+      var a4=ap(1,.5,1.8);V.tx(c,'VM → VirtualBox → Windows → hardware',280,452,13,'#ffb98a','center',700,a4);
+      if(a4>0){var u=((t*.5)%1);var P=[[342,286],[300,250],[200,345],[280,400]],pt=NetScene.along(P,st===1?u:(t*.5)%1);c.save();V.glow(c,C.ora,10);c.fillStyle=C.ora;c.beginPath();c.arc(pt[0],pt[1],5,0,7);c.fill();c.restore();}}
+    /* ---------- TIPO 1: el edificio ---------- */
+    var b1=ap(2,.7);V.tx(c,'TIPO 1 · edificio hecho para alquilar',720,58,17,'#fff','center',800,b1);
+    if(b1>0){c.save();c.globalAlpha*=b1;c.fillStyle='#16324f';NetScene.rr(c,570,96,300,330,10);c.fill();c.restore();
+      c.save();c.globalAlpha*=b1;c.fillStyle='#0b1a2b';NetScene.rr(c,582,382,276,36,6);c.fill();c.restore();V.tx(c,'cimientos: servidor del data center',720,405,12,'#fff','center',700,b1);
+      var b2=ap(2,.6,.5);c.save();c.globalAlpha*=b2;V.glow(c,C.blue,14);c.fillStyle='rgba(15,158,213,.4)';NetScene.rr(c,582,322,276,52,6);c.fill();c.restore();
+      NetScene.person(c,610,366,15,'#fff',b2);V.tx(c,'el administrador (hipervisor)',632,344,12,'#fff','left',800,b2);V.tx(c,'directo sobre los cimientos',632,361,11,'#cfe3f1','left',600,b2);
+      for(var r=0;r<2;r++)for(var q=0;q<3;q++){var mine=st>=3&&r===1&&q===1,b3=ap(2,.4,1+(r*3+q)*.12),x=590+q*92,y=112+r*104;c.save();c.globalAlpha*=b3;if(mine)V.glow(c,C.ora,20);c.fillStyle=mine?'#5a3522':'#0f2740';NetScene.rr(c,x,y,80,92,8);c.fill();c.shadowBlur=0;c.strokeStyle=mine?C.ora:'rgba(15,158,213,.6)';c.lineWidth=mine?3:1.5;c.stroke();c.restore();
+        NetScene.person(c,x+40,y+62,15,mine?C.ora:'#9fb6c9',b3);V.tx(c,mine?'TÚ · tu EC2':'VM',x+40,y+84,mine?11:11,mine?'#ffb98a':C.mut,'center',700,b3);}
+      if(st>=2){var v=((t*.6)%1),pv=NetScene.along([[720,262],[720,350],[720,400]],v);c.save();V.glow(c,C.grn,10);c.fillStyle=C.grn;c.beginPath();c.arc(pv[0],pv[1],5,0,7);c.fill();c.restore();V.tx(c,'VM → administrador → hardware',720,452,13,'#9ff0c8','center',700,ap(2,.5,1.6));}}
+    if(st>=3){var a5=E.out(Math.min(1,t/.6));V.tx(c,st>=3?'AWS Nitro':'',870,120,13,'#9ff0c8','right',800,a5);
+      c.save();c.globalAlpha*=a5;c.fillStyle='rgba(229,72,77,.18)';NetScene.rr(c,160,20,240,26,13);c.fill();c.fillStyle='rgba(52,195,143,.18)';NetScene.rr(c,600,20,240,26,13);c.fill();c.restore();
+      V.tx(c,'más lento · para practicar',280,38,12,'#ff9b9b','center',800,a5);V.tx(c,'rápido · data centers y la nube',720,38,12,'#9ff0c8','center',800,a5);}
+  });
+  </script>
+</section>
+
+<!-- 6c · VM VS CONTENEDOR (DOCKER) -->
+<section class="slide" id="scC2">
+  <span class="k"><span class="act-chip">🐳 DOCKER</span> Otra forma de repartir, más liviana · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px"><span class="grad">Máquina virtual vs. contenedor</span> (Docker)</h2>
+  <div class="scene"><canvas aria-label="Animación: máquinas virtuales con su propio sistema operativo frente a contenedores Docker que comparten el sistema operativo; Docker corriendo dentro de tu EC2"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scC2',1000,480,[
+    'Recuerda: cada <b>máquina virtual</b> es un <b>apartamento completo</b>: trae su propio <b>sistema operativo</b> (su cocina, su baño). Por eso pesa <b>GB</b> y tarda <b>minutos</b> en arrancar.',
+    '<b>Docker</b> reparte de otra forma: <b>contenedores</b>. Son como <b>habitaciones en un coliving</b>: todas <b>comparten la cocina</b> (el sistema operativo) y cada una trae solo sus cosas: <b>la app y lo que necesita</b>. Pesan <b>MB</b> y arrancan en <b>segundos</b>.',
+    '¿Y dónde vive Docker? <b>Dentro de tu EC2</b>, como cajas dentro de cajas: el <b>edificio</b> (hardware) → el <b>administrador</b> (hipervisor) → <b>tu apartamento</b> (tu EC2) → su <b>cocina</b> (Amazon Linux) → <b>Docker divide tu apartamento en habitaciones</b> → en cada habitación, <b>un contenedor con una app</b>.',
+    'Un contenedor nace de una <b>imagen</b> (el molde, parecido a la AMI). Un solo comando descarga la imagen de NGINX y en segundos tienes un servidor web corriendo.',
+    '<b>En resumen:</b> la <b>VM</b> virtualiza <b>el computador completo</b> (hipervisor). El <b>contenedor</b> empaqueta <b>solo la aplicación</b> (Docker). Las empresas usan los dos, y en AWS hay servicios para contenedores: <b>ECS</b> y <b>EKS</b>.'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    function A(k,d,dl){return st>k?1:(st<k?0:E.out(Math.max(0,Math.min(1,(t-(dl||0))/(d||.6)))));}
+    function bar(x,y,w,h,col,label,a,sub){if(!(a>0))return;c.save();c.globalAlpha*=a;c.fillStyle=col;NetScene.rr(c,x,y,w,h,8);c.fill();c.restore();V.tx(c,label,x+w/2,y+h/2+(sub?-1:5),13,'#fff','center',800,a);if(sub)V.tx(c,sub,x+w/2,y+h/2+14,10,'#e6eef5','center',600,a);}
+    if(st<=1){
+      /* VM (izquierda) */var a0=st===0?E.out(Math.min(1,t/.6)):1;V.tx(c,'MÁQUINAS VIRTUALES',260,52,17,'#fff','center',800,a0);V.tx(c,'apartamentos completos',260,72,12,C.mut,'center',600,a0);
+      bar(60,400,400,40,'#2b4f74','hardware (el fierro)',a0);bar(60,352,400,40,C.dblue,'hipervisor',a0);
+      for(var k=0;k<3;k++){var ak=st===0?E.back(Math.max(0,Math.min(1,(t-.4-k*.2)/.5))):1,x=60+k*136;if(!(ak>0))continue;
+        c.save();c.globalAlpha*=ak;c.fillStyle='#0f2740';NetScene.rr(c,x,110,128,232,10);c.fill();c.strokeStyle=C.blue;c.lineWidth=1.5;c.stroke();c.restore();
+        bar(x+8,120,112,44,C.ora,'app '+(k+1),ak);bar(x+8,172,112,160,'#5b6b7c','sistema',ak,'operativo completo');}
+      V.tx(c,'🐘 GB · ⏳ minutos',260,462,14,'#ffb98a','center',800,A(0,.5,1.2));
+      /* contenedores (derecha) */var a1=A(1,.6);V.tx(c,'CONTENEDORES (Docker)',740,52,17,'#fff','center',800,a1);V.tx(c,'habitaciones en un coliving',740,72,12,C.mut,'center',600,a1);
+      bar(540,400,400,40,'#2b4f74','hardware (el fierro)',a1);bar(540,352,400,40,'#5b6b7c','sistema operativo · COMPARTIDO',a1,'la cocina de todos');bar(540,304,400,40,'#1D63ED','🐳 Docker',a1);
+      for(var q=0;q<6;q++){var aq=st===1?E.back(Math.max(0,Math.min(1,(t-.6-q*.12)/.4))):0,x=548+q*65;if(!(aq>0))continue;bar(x,226,58,70,C.ora,'app '+(q+1),aq);}
+      V.tx(c,'🐭 MB · ⚡ segundos',740,462,14,'#9ff0c8','center',800,A(1,.5,1.4));
+      return;}
+    if(st===2||st===3){var a2=st===2?1:1;V.tx(c,'Cajas dentro de cajas: Docker vive DENTRO de tu EC2',500,44,18,'#fff','center',800,1);
+      var L=[ /* y, h, x, w, col, texto, analogía */
+        [410,40,90,520,'#2b4f74','hardware · el fierro del data center','🏢 el edificio'],
+        [364,40,90,520,C.dblue,'hipervisor · AWS Nitro','🧑‍💼 el administrador'],
+        [110,246,90,520,null,'','🏠 TU apartamento = tu EC2'],
+        [308,40,104,492,'#5b6b7c','Amazon Linux (sistema operativo)','🍳 la cocina de tu apartamento'],
+        [262,40,104,492,'#1D63ED','🐳 Docker','🚪 divide tu apto en habitaciones'],
+        [132,120,104,492,null,'','📦 cada habitación = un contenedor']];
+      L.forEach(function(l,k){var a=st===2?E.out(Math.max(0,Math.min(1,(t-k*.55)/.5))):1;if(!(a>0))return;
+        if(k===2){c.save();c.globalAlpha*=a;V.glow(c,C.ora,16);c.strokeStyle=C.ora;c.lineWidth=3;NetScene.rr(c,l[2],l[0],l[3],l[1],12);c.stroke();c.restore();V.tx(c,'TU EC2',l[2]+14,l[0]+20,13,'#ffb98a','left',800,a);}
+        else if(k===5){var names=['nginx','tu app','base de datos'];for(var q=0;q<3;q++){var x=118+q*160,aq=st===2?E.back(Math.max(0,Math.min(1,(t-k*.55-q*.15)/.4))):1;bar(x,l[0],144,l[1]-6,C.ora,names[q],aq,'contenedor');}}
+        else bar(l[2],l[0],l[3],l[1],l[4],l[5],a);
+        var ly=k===2?l[0]+14:(k===5?l[0]+l[1]/2:l[0]+l[1]/2);c.save();c.globalAlpha*=a;c.strokeStyle='rgba(255,255,255,.3)';c.setLineDash([4,4]);c.beginPath();c.moveTo(k===2||k===5?l[2]+l[3]+6:l[2]+l[3]+4,ly);c.lineTo(640,ly);c.stroke();c.restore();
+        V.pill(c,646,ly-12,l[6],k===2||k===5?'rgba(233,113,50,.4)':'rgba(255,255,255,.1)','#fff',a);});
+      if(st===2)V.tx(c,'se usan juntos: la VM (tu EC2) por fuera, los contenedores por dentro',500,470,13,'#ffb98a','center',700,Math.max(0,Math.min(1,(t-3.4)/.5)));
+      if(st===3){var a3=E.out(Math.min(1,t/.5));c.save();c.globalAlpha*=a3;c.fillStyle='rgba(8,24,42,.92)';NetScene.rr(c,150,140,700,230,14);c.fill();c.strokeStyle='rgba(159,182,201,.4)';c.stroke();c.restore();
+        var cmd='$ sudo docker run -d -p 8080:80 nginx',n=Math.floor(cmd.length*Math.min(1,Math.max(0,(t-.4)/1.4)));V.tx(c,cmd.slice(0,n),180,190,17,'#e6edf3','left',700,a3,'"JetBrains Mono",monospace');
+        if(t>1.9){V.tx(c,'Unable to find image nginx … Pulling from library/nginx',180,222,12,C.mut,'left',500,1,'"JetBrains Mono",monospace');}
+        if(t>2.6){V.tx(c,'✓ contenedor corriendo · web en el puerto 8080',180,252,14,'#9ff0c8','left',800,1,'"JetBrains Mono",monospace');
+          V.pill(c,180,284,'imagen = el molde (como la AMI)','rgba(233,113,50,.35)','#fff',1);V.pill(c,470,284,'contenedor = lo que corre','rgba(29,99,237,.45)','#fff',1);
+          V.tx(c,'¡en segundos, no en minutos!',500,346,16,'#ffb98a','center',800,Math.min(1,(t-2.9)/.5));}}
+      return;}
+    var a4=E.out(Math.min(1,t/.6));V.tx(c,'¿Cuál es la diferencia?',500,60,24,'#fff','center',800,a4);
+    c.save();c.globalAlpha*=a4;c.fillStyle='rgba(15,158,213,.15)';NetScene.rr(c,70,90,410,330,16);c.fill();c.strokeStyle=C.blue;c.lineWidth=2;c.stroke();c.fillStyle='rgba(29,99,237,.18)';NetScene.rr(c,520,90,410,330,16);c.fill();c.strokeStyle='#1D63ED';c.stroke();c.restore();
+    V.tx(c,'🏠 MÁQUINA VIRTUAL',275,140,20,'#9fd8f0','center',800,a4);
+    ['virtualiza el computador completo','trae su propio sistema operativo','la maneja el hipervisor','GB · arranca en minutos','ej.: tu EC2'].forEach(function(l,i){V.tx(c,'• '+l,110,184+i*36,15,'#fff','left',600,a4);});
+    V.tx(c,'🐳 CONTENEDOR',725,140,20,'#8fb3ff','center',800,a4);
+    ['empaqueta solo la aplicación','comparte el sistema operativo','lo maneja Docker','MB · arranca en segundos','ej.: nginx dentro de tu EC2'].forEach(function(l,i){V.tx(c,'• '+l,560,184+i*36,15,'#fff','left',600,a4);});
+    V.tx(c,'se usan juntos · en AWS: ECS y EKS para contenedores',500,452,14,'#ffb98a','center',700,a4);
+  });
+  </script>
+</section>
+
+<!-- 6b · ARM VS x86 -->
+<section class="slide" id="scX">
+  <span class="k"><span class="act-chip">🧠 PROCESADORES</span> Dos idiomas del cerebro del computador · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px"><span class="grad">x86 vs. ARM</span>: dos idiomas de procesador</h2>
+  <div class="scene"><canvas aria-label="Animación: dos procesadores, x86 y ARM, como dos idiomas; dónde se usa cada uno; un programa de un idioma no corre directo en el otro; en AWS se elige la AMI según la arquitectura"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scX',1000,480,[
+    'El <b>procesador (CPU)</b> es el <b>cerebro</b> del computador. Hay dos grandes familias, como dos <b>idiomas</b>: <b>x86</b> y <b>ARM</b>.',
+    '<b>x86</b> (Intel y AMD): lo tienen la mayoría de <b>PC con Windows</b> y los servidores de siempre. Su fuerte: casi todos los programas existen para x86.',
+    '<b>ARM</b>: lo tiene <b>tu celular</b> y los Mac con chip M. Gasta <b>menos energía</b>. AWS fabrica los suyos: <b>Graviton</b>, que en la nube suelen salir <b>más baratos</b>.',
+    'Son idiomas distintos: un programa para x86 <b>no corre directo</b> en ARM, hay que "traducirlo". Por eso al lanzar una EC2 eliges la <b>AMI de tu arquitectura</b>: <b>t3.micro = x86</b>, <b>t4g.micro = ARM</b> (la <b>g</b> es de Graviton).'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    function cpu(cx,cy,sz,col,label,sub,a){if(!(a>0))return;c.save();c.globalAlpha*=a;c.fillStyle='#d4a53a';for(var k=0;k<7;k++){var o=-sz/2+sz*(k+1)/8;c.fillRect(cx+o-3,cy-sz/2-10,6,10);c.fillRect(cx+o-3,cy+sz/2,6,10);c.fillRect(cx-sz/2-10,cy+o-3,10,6);c.fillRect(cx+sz/2,cy+o-3,10,6);}
+      V.glow(c,col,24);c.fillStyle='#0f2740';NetScene.rr(c,cx-sz/2,cy-sz/2,sz,sz,12);c.fill();c.shadowBlur=0;c.strokeStyle=col;c.lineWidth=3;c.stroke();c.restore();
+      V.tx(c,label,cx,cy+8,30,'#fff','center',800,a);V.tx(c,sub,cx,cy+30,11,C.mut,'center',600,a);}
+    var a0=st===0?E.back(Math.min(1,t/.7)):1;
+    var xL=st===3?250:280,xR=st===3?750:720;
+    cpu(xL,170,120,C.blue,'x86','Intel · AMD',a0);cpu(xR,170,120,C.grn,'ARM','Apple · AWS…',a0);
+    if(st===0){NetScene.bubble(c,xL,90,'habla “x86”','700 14px Poppins',C.blue,'#fff',Math.min(1,(t-.6)/.4));NetScene.bubble(c,xR,90,'habla “ARM”','700 14px Poppins',C.grn,'#fff',Math.min(1,(t-.9)/.4));
+      V.tx(c,'el procesador = el cerebro del computador',500,330,16,'#fff','center',700,Math.min(1,(t-1.2)/.5));}
+    if(st===1||st===2){var a1=st===1?E.out(Math.min(1,t/.6)):1;NetScene.laptop(c,xL-60,350,90,'#9fd8f0',a1);V.tx(c,'PC con Windows',xL-60,378,12,'#fff','center',700,a1);
+      V.iso(c,xL+60,366,40,30,44,'#aab6c3','#56626f','#7a8796',a1);V.tx(c,'servidores de siempre',xL+70,390,12,'#fff','center',700,a1);V.tx(c,'✓ casi todo programa existe para x86',xL,430,13,'#9fd8f0','center',700,a1);}
+    if(st===2){var a2=E.out(Math.min(1,t/.6));c.save();c.globalAlpha*=a2;c.fillStyle='#0b1a2b';NetScene.rr(c,xR-120,300,44,78,9);c.fill();c.strokeStyle='#cfe3f1';c.lineWidth=2;c.stroke();c.fillStyle='#9fd8f0';NetScene.rr(c,xR-115,308,34,56,4);c.fill();c.restore();V.tx(c,'tu celular',xR-98,396,12,'#fff','center',700,a2);
+      NetScene.laptop(c,xR,370,80,'#c7c7cc',a2);V.tx(c,'Mac (chip M)',xR,398,12,'#fff','center',700,a2);
+      c.save();c.globalAlpha*=a2;V.glow(c,C.ora,14);c.fillStyle='#3a2518';NetScene.rr(c,xR+70,318,80,56,8);c.fill();c.strokeStyle=C.ora;c.stroke();c.restore();V.tx(c,'Graviton',xR+110,346,13,'#fff','center',800,a2);V.tx(c,'chip de AWS',xR+110,362,10,'#ffb98a','center',600,a2);
+      V.tx(c,'⚡ gasta menos energía · 💵 más barato en la nube',xR,436,13,'#9ff0c8','center',700,a2);}
+    if(st===3){var a3=E.out(Math.min(1,t/.6));
+      var u=Math.max(0,Math.min(1,(t-.6)/1.2)),px=xL+(xR-xL)*E.io(u);c.save();c.globalAlpha*=a3;c.fillStyle='#0f2740';NetScene.rr(c,px-70,262,140,40,8);c.fill();c.strokeStyle=C.blue;c.lineWidth=2;c.stroke();c.restore();
+      V.tx(c,'programa para x86',px,287,12,'#fff','center',700,a3);if(u>=1)V.tx(c,'✗ no lo entiende',xR,326,16,'#ff9b9b','center',800,1);
+      var b=Math.max(0,Math.min(1,(t-2.2)/.5));c.save();c.globalAlpha*=b;c.fillStyle='rgba(8,24,42,.9)';NetScene.rr(c,250,350,500,110,12);c.fill();c.strokeStyle='rgba(159,182,201,.4)';c.stroke();c.restore();
+      V.tx(c,'Al lanzar tu EC2 → elige la AMI de tu arquitectura:',500,376,13,'#fff','center',700,b);
+      V.pill(c,290,394,'64 bits (x86) → t3.micro','rgba(15,158,213,.35)','#fff',b);V.pill(c,530,394,'64 bits (Arm) → t4g.micro','rgba(52,195,143,.35)','#fff',b);
+      V.tx(c,'la “g” de t4g = Graviton (ARM)',500,446,12,'#9ff0c8','center',700,b);}
+  });
+  </script>
+</section>
+
+<!-- 7 · AMI Y SNAPSHOT -->
+<section class="slide" id="scM">
+  <span class="k"><span class="act-chip">📸 AMI y SNAPSHOT</span> La fotocopia y el kit · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px"><span class="grad">Snapshot</span> vs. <span class="grad">AMI</span>: la fotocopia y la caja del kit</h2>
+  <div class="scene"><canvas aria-label="Animación: una AMI como plano que crea tres EC2 idénticas; un snapshot como foto del disco que permite restaurarlo tras un desastre"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scM',1000,480,[
+    'Tu EC2 es un computador, y su <b>disco</b> es como un <b>cuaderno</b> donde está escrito todo: Linux, NGINX y tu página web.',
+    '<b>SNAPSHOT = una fotocopia del cuaderno</b> 📸. Copia <b>solo el disco</b>, tal como estaba en ese momento, y AWS la guarda aparte.',
+    '¿Para qué sirve? Si dañas el cuaderno (borras algo, te hackean…), <b>lo reemplazas con la fotocopia</b> y recuperas todo. Sirve para <b>recuperar datos</b>.',
+    '<b>AMI = la caja de un kit armable</b> 📦. Adentro trae la <b>fotocopia (snapshot)</b> + un <b>manual de instrucciones</b>: tipo de procesador, qué disco va dónde, de qué tamaño…',
+    'Con la caja armas <b>computadores completos</b>, todos iguales. Así lanzaste tu EC2: con la AMI de Amazon Linux.',
+    '<b>La diferencia:</b> el <b>snapshot</b> es la copia de <b>un disco</b> (para recuperar). La <b>AMI</b> es <b>snapshot + instrucciones</b> (para crear máquinas enteras).'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    function A(k,d,dl){return st>k?1:(st<k?0:E.out(Math.max(0,Math.min(1,(t-(dl||0))/(d||.6)))));}
+    function notebook(x,y,sc,col,a,broken,label){if(!(a>0))return;c.save();c.globalAlpha*=a;c.translate(x,y);c.scale(sc,sc);
+      c.fillStyle=broken?'#5a2a2a':col;NetScene.rr(c,-60,-78,120,156,8);c.fill();c.fillStyle='#f4f8fb';NetScene.rr(c,-50,-70,104,140,5);c.fill();
+      c.fillStyle='#b8c4d0';for(var r=0;r<4;r++)c.fillRect(-40,-50+r*24,84,3);c.fillStyle='#0E2841';c.font='700 12px Poppins';c.textAlign='left';['Linux','NGINX','tu web'].forEach(function(w,k){c.fillText(broken&&k===2?'✗✗✗':w,-40,-55+k*24);});
+      c.fillStyle='#8a97a5';for(var k=0;k<7;k++){c.beginPath();c.arc(-60,-66+k*22,4,0,7);c.fill();}
+      if(broken){c.strokeStyle=C.red;c.lineWidth=4;c.beginPath();c.moveTo(-45,-60);c.lineTo(50,60);c.moveTo(50,-60);c.lineTo(-45,60);c.stroke();}
+      c.restore();if(label)V.tx(c,label,x,y+78*sc+22,13,'#fff','center',700,a);}
+    function copyMark(x,y,sc,a){V.tx(c,'📸 copia 30 sep 7:40 p. m.',x,y-78*sc-10,12,'#9fd8f0','center',700,a);}
+    function box(x,y,a,open,k){k=k||1;if(!(a>0))return;V.iso(c,x-100*k,y,130*k,110*k,90*k,'#E97132','#8a3f1a','#b0552a',a);V.tx(c,'AMI',x-20*k,y-38*k,26*k,'#fff','center',900,a);if(k>=1)V.tx(c,'kit para armar EC2',x-20,y-16,11,'#ffe0cc','center',700,a);}
+    var showSnapSide=st<=2;
+    /* izquierda: el cuaderno original = disco de tu EC2 */
+    if(showSnapSide){var a0=st===0?E.out(Math.min(1,t/.6)):1;
+      V.vm(c,70,70,220,64,'tu EC2','un computador',C.blue,a0,false);c.save();c.globalAlpha*=a0;c.strokeStyle='rgba(159,182,201,.5)';c.setLineDash([4,5]);c.beginPath();c.moveTo(180,134);c.lineTo(180,170);c.stroke();c.restore();
+      notebook(180,270,1,'#0F9ED5',a0,st===2&&t>.4,'disco = el cuaderno');
+      /* snapshot = fotocopia */var a1=A(1,.6,.5);
+      if(st===1){var fl=Math.max(0,1-(t-.1)/.4);if(fl>0){c.save();c.globalAlpha=fl*.7;c.fillStyle='#fff';c.fillRect(100,170,170,210);c.restore();}}
+      if(a1>0){var mx=st===1?180+(500-180)*E.io(Math.min(1,Math.max(0,(t-.4)/.8))):500;notebook(mx,270,1,'#6a7c8f',a1,false,'SNAPSHOT = la fotocopia');copyMark(mx,270,1,a1);
+        V.tx(c,'solo el disco · guardada aparte',500,410,12,C.mut,'center',600,a1);}
+      if(st===2&&t>.9){var u=Math.min(1,(t-.9)/.9),px=500+(760-500)*E.io(u);notebook(px,270,1,'#34c38f',u,false,u>=1?'✓ recuperado':'');
+        if(u>=1)V.tx(c,'la fotocopia te devuelve todo',760,410,13,'#9ff0c8','center',700,1);}}
+    /* AMI = caja kit */
+    if(st>=3&&st<5){var a3=st===3?E.out(Math.min(1,t/.6)):1,bx=250,by=320;
+      if(st===3){notebook(120,260,.7,'#6a7c8f',a3*Math.max(0,1-(t-.6)/.8),false,'');
+        c.save();c.globalAlpha*=a3*Math.max(0,1-(t-1.2)/.8);c.fillStyle='#f4f8fb';NetScene.rr(c,330,190,110,130,6);c.fill();c.restore();}
+      box(bx,by,a3,true);
+      var inside=A(3,.5,1.6);V.tx(c,'adentro trae:',bx-20,by+34,13,'#fff','center',700,inside);
+      V.pill(c,bx-160,by+46,'📸 snapshot (el disco)','rgba(15,158,213,.35)','#fff',inside);V.pill(c,bx-160,by+76,'📘 manual: x86 · 8 GB · disco raíz','rgba(233,113,50,.35)','#fff',inside);
+      if(st>=4){for(var k=0;k<3;k++){var a4=st===4?E.back(Math.max(0,Math.min(1,(t-.3-k*.3)/.5))):1,x=520+k*150;
+          if(st===4){var u4=Math.min(1,Math.max(0,(t-.1-k*.3)/.5));if(u4<1){var pt=NetScene.along([[bx+40,by-80],[x+60,170]],E.io(u4));NetScene.packet(c,pt[0],pt[1],C.ora,1);}}
+          V.vm(c,x,110,120,80,'EC2 #'+(k+1),'completa',C.blue,a4,false);V.server(c,x+10,200,100,14,t,k,false,a4);}
+        V.tx(c,'computadores completos, todos iguales',745,250,14,'#9fd8f0','center',700,A(4,.5,1.2));}}
+    /* la diferencia */
+    if(st>=5){var a5=E.out(Math.min(1,t/.6));c.save();c.globalAlpha*=a5;c.fillStyle='#0b1f35';c.fillRect(0,0,1000,480);c.restore();
+      V.tx(c,'¿Cuál es la diferencia?',500,70,24,'#fff','center',800,a5);
+      c.save();c.globalAlpha*=a5;c.fillStyle='rgba(15,158,213,.15)';NetScene.rr(c,70,100,410,330,16);c.fill();c.strokeStyle=C.blue;c.lineWidth=2;c.stroke();c.fillStyle='rgba(233,113,50,.15)';NetScene.rr(c,520,100,410,330,16);c.fill();c.strokeStyle=C.ora;c.stroke();c.restore();
+      notebook(275,210,.6,'#6a7c8f',a5,false,'');V.tx(c,'📸 SNAPSHOT',275,300,20,'#9fd8f0','center',800,a5);V.tx(c,'= copia de UN disco',275,328,15,'#fff','center',700,a5);V.tx(c,'sirve para: recuperar datos',275,360,14,'#cfe3f1','center',600,a5);V.tx(c,'"volver a como estaba"',275,386,13,C.mut,'center',500,a5);
+      box(752,250,a5,false,.55);V.tx(c,'📦 AMI',725,300,20,'#ffb98a','center',800,a5);V.tx(c,'= snapshot + instrucciones',725,328,15,'#fff','center',700,a5);V.tx(c,'sirve para: crear máquinas enteras',725,360,14,'#ffe0cc','center',600,a5);V.tx(c,'"sacar copias iguales"',725,386,13,C.mut,'center',500,a5);}
+  });
+  </script>
+</section>
+
+<!-- 8 · LAB 1: ¿QUÉ FIERRO TE DIO EL HIPERVISOR? -->
+<section class="slide" id="labV">
+  <span class="k"><span class="act-chip">🧪 LAB 1</span> Tu máquina virtual por dentro · MobaXterm + tu EC2</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">¿Qué <span class="grad">fierro</span> te dio el hipervisor?</h2>
+  <style>.term.lab{max-height:52vh;overflow:auto;font-size:clamp(.72rem,1.05vw,.9rem)}.term.lab p{white-space:pre-wrap;word-break:break-all;min-height:1.35em}.term.lab p.hl b{color:#FFC928;font-weight:600;background:rgba(255,201,40,.14);border-radius:4px;padding:0 3px}.term.lab p.note{color:#9fb3c8;font-size:.85em}.term.lab .cur{display:inline-block;width:.6em;background:#39c8e8;animation:blk 1s steps(1) infinite}@keyframes blk{50%{opacity:0}}
+  .cmdlist{list-style:none;display:flex;flex-direction:column;gap:6px;font-size:clamp(.78rem,1.1vw,.95rem)}.cmdlist li{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}.cmdlist code{font-family:var(--mono);color:var(--a1);font-weight:600;font-size:.92em}</style>  <script>
+  window.typeTerm=window.typeTerm||function(sec,box,L){var T=[];function esc(x){return x.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+    function at(ms,fn){T.push(setTimeout(fn,ms));}
+    sec.__enter=function(){T.forEach(clearTimeout);T=[];box.innerHTML='';var d=300;
+      L.forEach(function(l){var el=document.createElement('p');if(l[0]!=='cmd')el.className=l[0];
+        if(l[0]==='cmd'){at(d,function(){box.appendChild(el);box.scrollTop=box.scrollHeight;});for(var i=1;i<=l[1].length;i++)(function(k){at(d+k*38,function(){el.innerHTML=esc(l[1].slice(0,k))+'<span class="cur">&nbsp;</span>';});})(i);d+=l[1].length*38+380;at(d-10,function(){el.innerHTML=esc(l[1]);});}
+        else{at(d,function(){el.innerHTML=l[0]==='out'?esc(l[1]):l[1];el.style.opacity=0;box.appendChild(el);box.scrollTop=box.scrollHeight;el.animate([{opacity:0},{opacity:1}],{duration:300,fill:'forwards'});});d+=l[0]==='note'?800:300;}});};};
+  </script>
+  <div class="grid2" style="align-items:start">
+    <div class="demo term lab" id="labVterm" style="min-height:320px"></div>
+    <ul class="cmdlist">
+      <li><code>systemd-detect-virt</code><span>¿soy una VM? (amazon / xen)</span></li>
+      <li><code>lscpu</code><span>arquitectura (<b>x86_64</b> o <b>aarch64</b>=ARM), vCPU, hipervisor</span></li>
+      <li><code>uname -m</code><span>idioma del procesador, corto</span></li>
+      <li><code>free -h</code><span>la RAM que te tocó</span></li>
+      <li><span><code>lsblk</code> · <code>df -h /</code></span><span>tu disco EBS y cuánto usas</span></li>
+      <li><code>ip -brief a</code><span>tu <b>tarjeta de red virtual</b> y tu IP privada</span></li>
+      <li><code>uptime</code><span>hace cuánto está encendida</span></li>
+    </ul>
+  </div>
+  <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: tu <b>arquitectura</b>, <b>vCPU</b>, <b>RAM</b> y <b>disco</b>. Compara con un compañero: ¿a alguien le salió <b>aarch64</b>?</p>
+  <script>
+  typeTerm(document.getElementById('labV'),document.getElementById('labVterm'),[
+    ['cmd','$ systemd-detect-virt'],['hl','<b>amazon</b>'],['note','  ↑ sí: estás en una máquina virtual (en t2 dice xen)'],
+    ['cmd','$ lscpu | grep -E "Architecture|^CPU\\(s\\)|Hypervisor"'],['hl','Architecture:      <b>x86_64</b>'],['hl','CPU(s):            <b>2</b>'],['hl','Hypervisor vendor: <b>KVM</b>'],['note','  ↑ idioma x86 · 2 vCPU · hipervisor KVM (Nitro)'],
+    ['cmd','$ free -h | head -2'],['out','        total   used   free'],['hl','Mem:   <b>949Mi</b>   …'],
+    ['cmd','$ df -h /'],['hl','/dev/nvme0n1p1  <b>8.0G</b>  1.9G  6.1G  24% /'],
+    ['cmd','$ ip -brief a'],['hl','enX0   UP   <b>10.0.1.123/28</b>'],['note','  ↑ tu tarjeta de red virtual (la da Nitro)'],
+    ['cmd','$ uptime'],['out',' 19:42:10 up 2 days, 3:14, 1 user, load average: 0.00']]);
+  </script>
+</section>
+
+<!-- 8b · LAB 1b: TU EC2 TE DICE DÓNDE VIVE (metadatos) -->
+<section class="slide" id="labW">
+  <span class="k"><span class="act-chip">🧪 LAB 1b</span> Pregúntale a tu EC2 dónde vive</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">Tu EC2 te dice <span class="grad">en qué data center vive</span></h2>
+  <div class="grid2" style="align-items:start">
+    <div class="demo term lab" id="labWterm" style="min-height:320px"></div>
+    <ul class="cmdlist">
+      <li><code>169.254.169.254</code><span>la "portería" de AWS: solo tu EC2 le puede preguntar (metadatos)</span></li>
+      <li><code>TOKEN=$(curl …)</code><span>pides un pase temporal (IMDSv2, seguro)</span></li>
+      <li><code>…/placement/availability-zone</code><span>tu <b>zona de disponibilidad</b></span></li>
+      <li><code>…/instance-type</code><span>tu tipo: t2/t3.micro</span></li>
+      <li><code>…/ami-id</code><span>la <b>AMI</b> (el kit) con la que nació</span></li>
+      <li><span><code>…/local-ipv4</code> · <code>public-ipv4</code></span><span>tu IP privada y la pública</span></li>
+    </ul>
+  </div>
+  <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: <b>tu zona de disponibilidad</b> y tu <b>ami-id</b>. ¿Todos quedaron en la misma AZ?</p>
+  <script>
+  typeTerm(document.getElementById('labW'),document.getElementById('labWterm'),[
+    ['cmd','$ TOKEN=$(curl -sX PUT http://169.254.169.254/latest/api/token -H "X-aws-ec2-metadata-token-ttl-seconds: 300")'],['note','  ↑ pediste un pase de 5 minutos'],
+    ['cmd','$ M="curl -sH X-aws-ec2-metadata-token:$TOKEN http://169.254.169.254/latest/meta-data"'],
+    ['cmd','$ $M/placement/availability-zone; echo'],['hl','<b>us-east-1a</b>'],['note','  ↑ región us-east-1 · zona "a": ¡tu data center!'],
+    ['cmd','$ $M/instance-type; echo'],['hl','<b>t3.micro</b>'],
+    ['cmd','$ $M/ami-id; echo'],['hl','<b>ami-0a1b2c3d4e5f67890</b>'],['note','  ↑ el kit con el que nació tu máquina'],
+    ['cmd','$ $M/local-ipv4; echo; $M/public-ipv4; echo'],['hl','<b>10.0.1.123</b>'],['hl','<b>54.210.33.17</b>']]);
+  </script>
+</section>
+
+<!-- 9a · LAB 2: SNAPSHOT — TU SEGURO CONTRA DESASTRES -->
+<section class="slide" id="scG">
+  <span class="k"><span class="act-chip">🧪 LAB 2</span> Snapshot: tu seguro contra desastres · clic o → para el siguiente paso</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">Saca la foto, <span class="grad">daña tu web</span> y recupérala</h2>
+  <div class="scene"><canvas aria-label="Laboratorio animado: crear un snapshot del volumen, dañar la página a propósito, reemplazar el volumen raíz con el snapshot y comprobar que la web volvió"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scG',1000,480,[
+    '<b>LAB 2 · El seguro.</b> Vamos a hacer lo que hace una empresa antes de tocar un servidor: <b>sacar la foto del disco</b>. Después lo dañamos a propósito y lo recuperamos.',
+    '<b>Paso 1 · La foto.</b> EC2 → tu instancia → pestaña <b>Almacenamiento</b> → clic en el <b>ID del volumen</b> → <b>Acciones → Crear snapshot</b>. Descripción: <b>antes-del-desastre</b>.',
+    '<b>Paso 2 · Espera.</b> Menú <b>Elastic Block Store → Snapshots</b>: espera el estado <b>Completed</b> (1–3 min). Tu foto ya está guardada aparte, a salvo.',
+    '<b>Paso 3 · El desastre (a propósito).</b> En tu terminal: <b>echo "&lt;h1&gt;HACKEADO&lt;/h1&gt;" | sudo tee /usr/share/nginx/html/index.html</b> y recarga tu página. 😱',
+    '<b>Paso 4 · Restaura.</b> Tu instancia → <b>Acciones → Monitorear y solucionar problemas → Reemplazar volumen raíz</b> → elige el snapshot <b>antes-del-desastre</b> → marca <b>eliminar volumen reemplazado</b> → <b>Crear tarea</b>. La EC2 se reinicia sola.',
+    '<b>Paso 5 · ¡Volvió!</b> Espera 1–2 min y recarga tu IP pública: <b>tu web está como antes</b> ✓. Misma instancia, misma IP. Deja el snapshot por ahora: lo borramos en la limpieza del LAB 3.'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    function A(k,d,dl){return st>k?1:(st<k?0:E.out(Math.max(0,Math.min(1,(t-(dl||0))/(d||.6)))));}
+    function browser(x,y,state,a){if(!(a>0))return;c.save();c.globalAlpha*=a;c.fillStyle='#f4f8fb';NetScene.rr(c,x,y,230,150,10);c.fill();c.fillStyle='#d9e1ea';NetScene.rr(c,x,y,230,24,[10,10,0,0]);c.fill();
+      ['#ff5f57','#febc2e','#28c840'].forEach(function(cc,k){c.fillStyle=cc;c.beginPath();c.arc(x+14+k*12,y+12,4,0,7);c.fill();});c.restore();V.tx(c,'http://54.x.x.10',x+120,y+16,10,'#44546A','center',600,a,'"JetBrains Mono",monospace');
+      if(state==='hack'){c.save();c.globalAlpha*=a;c.fillStyle='#1a0000';c.fillRect(x+6,y+30,218,114);c.restore();V.tx(c,'HACKEADO',x+115,y+98,30,'#ff3b3b','center',900,a*(.7+.3*Math.sin(t*12)));}
+      else{c.save();c.globalAlpha*=a;c.fillStyle=state==='back'?'#1f7a50':'#156082';c.fillRect(x+6,y+30,218,40);c.fillStyle='#c9d6e2';c.fillRect(x+18,y+84,190,9);c.fillRect(x+18,y+102,150,8);c.fillRect(x+18,y+118,170,8);c.restore();V.tx(c,'Mi página ☕',x+115,y+56,15,'#fff','center',800,a);}}
+    function disk(x,y,col,label,a){if(!(a>0))return;c.save();c.globalAlpha*=a;V.glow(c,col,12);c.fillStyle=col;c.beginPath();c.ellipse(x,y-34,52,12,0,0,7);c.fill();c.fillRect(x-52,y-34,104,58);c.beginPath();c.ellipse(x,y+24,52,12,0,0,7);c.fill();c.restore();
+      c.save();c.globalAlpha*=a;c.fillStyle='rgba(255,255,255,.3)';c.beginPath();c.ellipse(x,y-34,52,12,0,0,7);c.fill();c.restore();V.tx(c,label,x,y+58,12,'#fff','center',700,a);}
+    /* tu EC2 */V.vm(c,60,70,230,64,'tu EC2','misma instancia, misma IP',C.blue,1,false);
+    var hacked=st===3||(st===4&&t<1.6),back=st>=5;
+    browser(60,160,hacked?'hack':(back?'back':'ok'),1);
+    var dcol=hacked?C.red:(back?C.grn:C.blue);disk(175,400,dcol,'volumen EBS (disco)',1);
+    if(st===0)V.tx(c,'antes de tocar un servidor… ¡foto!',620,250,20,'#ffb98a','center',800,E.out(Math.min(1,t/.6)));
+    /* snapshot */var a1=A(1,.6,.5);
+    if(st===1){var fl=Math.max(0,1-(t-.1)/.4);if(fl>0){c.save();c.globalAlpha=fl*.75;c.fillStyle='#fff';c.fillRect(100,320,160,140);c.restore();}
+      var u=Math.min(1,Math.max(0,(t-.3)/.8));if(u<1){var pt=NetScene.along([[230,400],[560,330]],E.io(u));NetScene.packet(c,pt[0],pt[1],C.ora,1);}}
+    if(a1>0){c.save();c.globalAlpha*=a1;c.fillStyle='#0d3a5c';NetScene.rr(c,560,270,300,120,12);c.fill();c.strokeStyle=C.blue;c.lineWidth=2;c.stroke();c.restore();
+      V.tx(c,'📸 snapshot',710,300,16,'#fff','center',800,a1);V.tx(c,'antes-del-desastre',710,324,14,'#9fd8f0','center',700,a1,'"JetBrains Mono",monospace');
+      var done=st>=2&&(st>2||t>1.6);V.tx(c,done?'✓ Completed':'⏳ Pending… '+Math.min(100,Math.round(t*55))+'%',710,352,13,done?'#9ff0c8':C.yel,'center',700,a1);
+      V.tx(c,'guardado aparte, a salvo',710,376,11,C.mut,'center',600,a1);}
+    if(st===3){var a3=E.out(Math.min(1,t/.5));c.save();c.globalAlpha*=a3;c.fillStyle='#0b1a2b';NetScene.rr(c,330,130,620,56,10);c.fill();c.restore();
+      V.tx(c,'$ echo "<h1>HACKEADO</h1>" | sudo tee /usr/share/nginx/html/index.html',640,164,12,'#ff9b9b','center',700,a3,'"JetBrains Mono",monospace');}
+    if(st===4){var u4=Math.min(1,Math.max(0,(t-.3)/1.2));var p4=NetScene.along([[560,330],[240,390]],E.io(u4));if(u4<1)NetScene.packet(c,p4[0],p4[1],C.grn,1);
+      V.tx(c,'Reemplazar volumen raíz ← snapshot',640,160,16,'#9ff0c8','center',800,E.out(Math.min(1,t/.5)));V.tx(c,t<1.6?'↻ reiniciando…':'✓ disco restaurado',640,186,13,C.mut,'center',600,1);}
+    if(st>=5){V.tx(c,'¡Volvió! ✓',640,170,30,'#9ff0c8','center',900,E.back(Math.min(1,t/.6)));V.tx(c,'el snapshot te devolvió el disco tal como estaba',640,200,14,'#fff','center',600,E.out(Math.min(1,t/.6)));}
+  });
+  </script>
+</section>
+
+<!-- 9 · LAB 2: CLONA TU SERVIDOR CON UNA AMI (escena) -->
+<section class="slide" id="scK">
+  <span class="k"><span class="act-chip">🧪 LAB 3</span> Clona tu servidor web · clic o → para el siguiente paso</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">Tu web en <span class="grad">una segunda EC2</span>, con tu propia AMI</h2>
+  <div class="scene"><canvas aria-label="Laboratorio animado: foto de tu EC2, AMI disponible, lanzar una copia, abrir la misma página en otra IP y limpiar"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scK',1000,480,[
+    '<b>LAB 3 · Clona tu servidor web.</b> Antes, en tu EC2 corre <b>sudo systemctl enable nginx</b>: así NGINX arranca solo cuando se encienda la copia.',
+    '<b>Paso 1 · La foto.</b> EC2 → tu instancia → <b>Acciones → Imagen y plantillas → Crear imagen</b>. Nombre: <b>mi-web-ami</b>.',
+    '<b>Paso 2 · Espera el molde.</b> En <b>AMIs</b> espera el estado <b>available</b> (3–5 min). En <b>Snapshots</b> verás la foto de tu disco que AWS creó por dentro.',
+    '<b>Paso 3 · Lanza la copia.</b> Selecciona <b>mi-web-ami → Lanzar instancia desde AMI</b>: t2/t3.micro, tu key pair, subred <b>web</b> de pyme-vpc y el mismo Security Group.',
+    '<b>Paso 4 · Compruébalo.</b> Abre <b>http://IP-pública-nueva</b>: ¡tu misma página, en otra máquina! Así escalan las empresas.',
+    '<b>Paso 5 · Limpieza (capa gratuita).</b> Termina la copia, haz <b>Deregister</b> a la AMI y en <b>Snapshots</b> borra los dos: el de la AMI y el <b>antes-del-desastre</b> del LAB 2. Si los dejas, cobran unos centavos al mes.'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    function A(k,d,dl){return st>k?1:(st<k?0:E.out(Math.max(0,Math.min(1,(t-(dl||0))/(d||.6)))));}
+    function page(x,y,col,a){if(!(a>0))return;c.save();c.globalAlpha*=a;c.fillStyle='#f4f8fb';NetScene.rr(c,x,y,120,78,8);c.fill();c.fillStyle=col;NetScene.rr(c,x,y,120,16,[8,8,0,0]);c.fill();c.fillStyle='#c9d6e2';c.fillRect(x+12,y+28,96,8);c.fillRect(x+12,y+44,70,6);c.fillRect(x+12,y+56,84,6);c.restore();}
+    V.vm(c,90,190,180,120,'tu EC2 · web','IP 54.x.x.10',C.blue,1,st<5);V.server(c,100,322,160,16,t,1,false,1);page(120,92,C.blue,1);
+    if(st===0)V.tx(c,'$ sudo systemctl enable nginx',180,410,14,'#9ff0c8','center',700,A(0,.5,.3),'"JetBrains Mono",monospace');
+    if(st===1){var fl=Math.max(0,1-(t-.1)/.45);if(fl>0){c.save();c.globalAlpha=fl*.8;c.fillStyle='#fff';c.fillRect(60,70,240,300);c.restore();}V.tx(c,'📸 Crear imagen',180,62,16,'#ffb98a','center',700,1);}
+    var am=A(1,.6,.4),gone=st>=5?E.out(Math.max(0,Math.min(1,(t-.3)/.6))):0;
+    if(am>0){c.save();c.globalAlpha*=am*(1-gone*.8);c.translate(500,240);c.scale(am,am);c.fillStyle='#0d3a5c';NetScene.rr(c,-105,-60,210,120,14);c.fill();c.strokeStyle=C.blue;c.lineWidth=2;c.stroke();c.restore();
+      V.tx(c,'mi-web-ami',500,236,20,'#fff','center',800,am*(1-gone*.8));var avail=st>=2&&(st>2||t>1.8);V.tx(c,avail?'✓ available':'⏳ pending…',500,262,13,avail?'#9ff0c8':C.yel,'center',700,am*(1-gone*.8));
+      if(gone>0)V.tx(c,'deregister ✗ · snapshot borrado',500,326,14,'#ff9b9b','center',700,gone);
+      if(st===1){var u=Math.min(1,Math.max(0,(t-.2)/.7));if(u<1){var pt=NetScene.along([[275,250],[395,250]],E.io(u));NetScene.packet(c,pt[0],pt[1],C.ora,1);}}}
+    var nh=A(3,.6,.3),term=st>=5?E.out(Math.min(1,t/.6)):0;
+    if(nh>0){if(st===3){var u3=Math.min(1,Math.max(0,(t-.1)/.6));if(u3<1){var p3=NetScene.along([[605,250],[730,250]],E.io(u3));NetScene.packet(c,p3[0],p3[1],C.ora,1);}}
+      V.vm(c,730,190,180,120,term>0?'copia terminada':'la copia',term>0?'':'IP 3.x.x.77 (nueva)',term>0?'#5f7890':C.grn,nh*(1-term*.6),st===4);V.server(c,740,322,160,16,t,4,false,nh*(1-term*.6));}
+    var pg=A(4,.5,.2);if(pg>0&&st<5){page(760,92,C.grn,pg);V.tx(c,'200 OK ✓ · misma web, otra máquina',820,410,15,'#9ff0c8','center',700,pg);}
+    if(st>=5)V.tx(c,'queda solo tu EC2 original ✓',180,410,15,'#9ff0c8','center',700,E.out(Math.max(0,Math.min(1,(t-.6)/.5))));
+  });
+  </script>
+</section>
+
+
+<!-- 12 · DEJA TODO SANO -->
+<section class="slide">
+  <span class="k"><span class="act-chip">✅ CIERRE DEL LAB</span> Deja la casa en orden</span>
+  <h2>Antes de irte: <span class="grad">tu servidor sano</span></h2>
+  <ul class="clean check">
+    <li>La <b>copia terminada</b>: en EC2 solo queda tu instancia original</li>
+    <li><b>mi-web-ami</b> con <b>Deregister</b> y los <b>2 snapshots</b> borrados (el de la AMI y <b>antes-del-desastre</b>)</li>
+    <li><b>systemctl is-active nginx</b> → dice <b>active</b> en tu EC2 original</li>
+    <li><b>curl -I localhost</b> → <b>200 OK</b> y tu página abre desde el navegador</li>
+    <li>¿No lo vas a usar hoy más? <b>Stop</b> a la instancia — capa gratuita cuidada 💵</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <span class="k">Para la próxima clase</span>
+  <h2>Su misión</h2>
+  <ul class="clean">
+    <li>0 · Pantallazo de <b>pyme-vpc</b> con el Internet Gateway y tu página abierta en la IP pública de la <b>EC2 nueva</b></li>
+    <li>1 · Pantallazo de tu terminal con <b>lscpu</b>, <b>free -h</b>, <b>df -h</b> y tu <b>zona de disponibilidad</b> (metadatos)</li>
+    <li>2 · Pantallazo de tu página <b>HACKEADA</b> y luego <b>restaurada</b> con el snapshot, y de tu web abierta en la <b>IP de la copia</b> (AMI)</li>
+    <li>3 · En tu bitácora: diferencia entre hipervisor <b>tipo 1</b> y <b>tipo 2</b>, y qué es una <b>AMI</b> (una frase cada una)</li>
+  </ul>
+  <p class="sub" style="margin-top:24px">Hoy abrieron la caja: <b>hardware → hipervisor → tu VM</b>. Y clonaron su servidor como lo hacen las empresas. 🖥️</p>
+  <div class="qrs">
+    <div class="qr qr-ticket">{{QR_TICKET}}
+
+<span>🎟️ Ticket de salida<br><b>tu asistencia de hoy</b><br>escanea al cierre</span></div>
+    <div class="qr"><svg xmlns="http://www.w3.org/2000/svg" width="132" height="132" class="segno"><g transform="scale(4)"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#0a0a0e" d="M2 2.5h7m1 0h1m2 0h1m2 0h1m1 0h5m1 0h7m-29 1h1m5 0h1m1 0h2m2 0h3m3 0h1m3 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m4 0h1m1 0h1m1 0h2m1 0h1m3 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h1m2 0h5m4 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m2 0h1m2 0h1m1 0h3m2 0h1m2 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m2 0h1m1 0h4m3 0h2m2 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h2m7 0h3m-20 1h1m1 0h2m1 0h3m1 0h2m1 0h1m1 0h1m1 0h2m4 0h1m2 0h1m1 0h2m-29 1h1m1 0h1m2 0h1m3 0h3m2 0h1m1 0h4m1 0h4m3 0h1m-29 1h1m5 0h6m1 0h2m3 0h1m1 0h5m1 0h2m-26 1h1m2 0h1m2 0h6m1 0h2m1 0h1m1 0h1m1 0h3m3 0h1m-29 1h3m2 0h3m3 0h1m1 0h3m1 0h1m1 0h1m5 0h2m-23 1h1m3 0h5m1 0h3m2 0h1m2 0h2m2 0h3m-28 1h1m2 0h1m1 0h1m1 0h2m1 0h3m5 0h2m2 0h2m1 0h3m-27 1h1m1 0h2m3 0h1m1 0h1m2 0h1m1 0h1m6 0h2m2 0h1m-27 1h3m2 0h4m3 0h3m2 0h4m2 0h2m1 0h1m-27 1h1m2 0h1m2 0h3m1 0h2m2 0h1m1 0h1m2 0h1m2 0h1m1 0h3m-28 1h1m3 0h1m1 0h1m2 0h1m2 0h4m1 0h1m4 0h2m2 0h1m-23 1h2m1 0h1m1 0h3m3 0h1m1 0h1m4 0h1m3 0h1m-26 1h1m1 0h2m1 0h1m2 0h2m2 0h1m1 0h3m1 0h8m-19 1h1m1 0h3m3 0h3m1 0h1m3 0h5m-29 1h7m1 0h3m3 0h1m1 0h1m1 0h3m1 0h1m1 0h2m1 0h1m-28 1h1m5 0h1m1 0h1m2 0h1m1 0h1m4 0h1m1 0h1m3 0h2m1 0h2m-29 1h1m1 0h3m1 0h1m3 0h1m1 0h1m2 0h1m1 0h1m2 0h5m1 0h3m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h1m2 0h5m1 0h3m2 0h2m2 0h1m-29 1h1m1 0h3m1 0h1m1 0h3m1 0h1m3 0h1m6 0h1m2 0h1m1 0h1m-29 1h1m5 0h1m3 0h2m1 0h4m3 0h4m1 0h1m1 0h1m-28 1h7m1 0h1m2 0h1m2 0h2m2 0h5m2 0h1m1 0h1"/></g></svg>
+
+<span>LinkedIn<br><b>/in/alejobarrera</b></span></div>
+    <div class="qr"><svg xmlns="http://www.w3.org/2000/svg" width="132" height="132" class="segno"><g transform="scale(4)"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#0a0a0e" d="M2 2.5h7m6 0h1m8 0h7m-29 1h1m5 0h1m4 0h3m1 0h1m3 0h1m2 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m2 0h2m2 0h4m1 0h1m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m3 0h1m2 0h2m3 0h1m3 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m3 0h1m1 0h1m3 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m1 0h2m1 0h2m3 0h1m2 0h2m1 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-20 1h1m1 0h1m2 0h2m1 0h1m2 0h1m-20 1h1m2 0h1m1 0h1m1 0h1m3 0h1m5 0h1m1 0h2m1 0h2m1 0h1m-25 1h1m1 0h2m2 0h1m1 0h1m2 0h1m1 0h1m1 0h2m2 0h8m-29 1h4m1 0h2m4 0h1m1 0h2m6 0h1m4 0h1m1 0h1m-29 1h1m3 0h2m2 0h2m7 0h1m1 0h3m3 0h1m1 0h2m-29 1h3m1 0h1m1 0h2m1 0h2m1 0h1m4 0h1m2 0h1m2 0h1m1 0h1m2 0h1m-28 1h2m4 0h1m4 0h4m2 0h1m3 0h1m1 0h1m1 0h1m1 0h1m-28 1h2m1 0h3m1 0h2m3 0h1m1 0h1m1 0h1m2 0h3m1 0h1m3 0h1m-29 1h5m2 0h3m2 0h1m1 0h1m2 0h1m3 0h1m1 0h1m1 0h1m-26 1h1m1 0h2m2 0h3m1 0h2m3 0h1m2 0h4m5 0h2m-29 1h1m1 0h2m4 0h2m2 0h3m1 0h1m1 0h1m3 0h5m1 0h1m-23 1h1m1 0h2m4 0h1m1 0h2m5 0h3m2 0h1m-27 1h4m2 0h2m1 0h1m2 0h1m2 0h4m2 0h1m1 0h1m1 0h2m-29 1h5m1 0h2m2 0h1m4 0h3m2 0h5m2 0h2m-21 1h3m1 0h2m1 0h6m3 0h1m1 0h1m1 0h1m-29 1h7m2 0h2m2 0h1m1 0h2m1 0h3m1 0h1m1 0h1m3 0h1m-29 1h1m5 0h1m2 0h1m2 0h1m2 0h1m3 0h2m3 0h2m1 0h1m-28 1h1m1 0h3m1 0h1m1 0h4m1 0h1m2 0h1m2 0h6m-25 1h1m1 0h3m1 0h1m2 0h2m1 0h1m4 0h2m4 0h1m1 0h3m-28 1h1m1 0h3m1 0h1m3 0h2m1 0h1m1 0h1m2 0h4m4 0h3m-29 1h1m5 0h1m1 0h2m4 0h4m2 0h4m1 0h1m1 0h2m-29 1h7m3 0h1m1 0h2m3 0h1m1 0h3m2 0h1m2 0h1"/></g></svg>
+
+<span>Web<br><b>alejandrobarrera.net</b></span></div>
+    <div class="qr"><svg xmlns="http://www.w3.org/2000/svg" width="116" height="116" class="segno"><g transform="scale(4)"><path fill="#fff" d="M0 0h29v29h-29z"/><path class="qrline" stroke="#0a0a0e" d="M2 2.5h7m2 0h2m3 0h1m3 0h7m-25 1h1m5 0h1m1 0h1m2 0h2m1 0h1m1 0h1m1 0h1m5 0h1m-25 1h1m1 0h3m1 0h1m1 0h1m3 0h1m1 0h2m2 0h1m1 0h3m1 0h1m-25 1h1m1 0h3m1 0h1m1 0h1m3 0h3m1 0h1m1 0h1m1 0h3m1 0h1m-25 1h1m1 0h3m1 0h1m4 0h1m1 0h1m2 0h1m1 0h1m1 0h3m1 0h1m-25 1h1m5 0h1m2 0h2m2 0h2m3 0h1m5 0h1m-25 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-17 1h1m2 0h2m3 0h1m-17 1h1m5 0h1m1 0h1m1 0h1m2 0h6m2 0h3m-24 1h1m4 0h1m1 0h1m3 0h1m2 0h2m3 0h5m-20 1h1m1 0h6m1 0h1m1 0h2m1 0h2m1 0h1m1 0h2m-25 1h1m2 0h1m3 0h5m2 0h1m2 0h2m1 0h2m2 0h1m-25 1h2m4 0h3m3 0h1m2 0h2m1 0h2m4 0h1m-25 1h1m2 0h3m2 0h1m4 0h1m1 0h2m2 0h1m3 0h1m-24 1h1m2 0h2m1 0h3m2 0h5m1 0h1m1 0h3m1 0h2m-25 1h1m1 0h2m3 0h1m1 0h1m1 0h1m5 0h1m1 0h1m1 0h2m1 0h1m-25 1h1m2 0h1m1 0h2m3 0h2m1 0h2m1 0h5m1 0h1m-15 1h1m1 0h1m1 0h2m2 0h1m3 0h1m-21 1h7m3 0h2m1 0h1m2 0h1m1 0h1m1 0h1m3 0h1m-25 1h1m5 0h1m3 0h1m1 0h1m1 0h3m3 0h1m-21 1h1m1 0h3m1 0h1m2 0h1m2 0h1m2 0h6m1 0h3m-25 1h1m1 0h3m1 0h1m3 0h1m3 0h2m1 0h2m4 0h2m-25 1h1m1 0h3m1 0h1m2 0h1m1 0h2m2 0h1m1 0h1m3 0h2m1 0h1m-25 1h1m5 0h1m4 0h1m3 0h2m1 0h3m3 0h1m-25 1h7m1 0h1m1 0h1m1 0h3m1 0h3m2 0h1m2 0h1"/></g></svg>
+
+<span>Comunidad<br><b>iaopslatam.com</b></span></div>
+</section>
+
+
+<script>
+var slides = document.querySelectorAll(".slide"), i = 0;
+function go(n) {
+  i = Math.max(0, Math.min(slides.length - 1, n));
+  slides.forEach(function(s, k){ s.classList.toggle("on", k === i); });
+  document.getElementById("bar").style.width = ((i + 1) / slides.length * 100) + "%";
+  document.getElementById("num").textContent = (i + 1) + " / " + slides.length;
+  document.querySelector(".nav-hint").style.display = i === 0 ? "" : "none";
+  document.getElementById("instf").style.display = i === 0 ? "none" : "";
+  if (slides[i].__enter) slides[i].__enter();
+}
+function fwd() {
+  if (slides[i].__next && slides[i].__next()) return;
+  var hid = slides[i].querySelector(".layer:not(.on)");
+  if (hid) { hid.classList.add("on"); return; }
+  go(i + 1);
+}
+document.addEventListener("keydown", function(e){
+  if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") fwd();
+  if (e.key === "ArrowLeft" || e.key === "PageUp") go(i - 1);
+  if (e.key === "Home") go(0);
+});
+
+document.addEventListener("click", function(e){ if (e.clientX > innerWidth * 0.25) { fwd(); } else { go(i - 1); } });
+go(0);
+</script></body></html>
