@@ -14,6 +14,7 @@ Se filtra por **Grupo** + **N° de clase** + **Marca temporal** (la hora delata 
 | 4 | 2026-09-17 | Repaso Linux + primer push a GitHub + intro redes | 37 | 6 | [RED-01/clase-04.md](RED-01/clase-04.md) |
 | 5 | 2026-09-22 | Redes de verdad: OSI/IP → VPC, Security Groups, balanceo + blindaje | 33 | 10 | [RED-01/clase-05.md](RED-01/clase-05.md) |
 | 6 | 2026-09-24 | Redes AWS (VPC/subredes/IGW/NAT/EIP) + montar servidor web (NGINX + index.html, LAB) | 32 | 11 | [RED-01/clase-06.md](RED-01/clase-06.md) |
+| 7 | 2026-09-29 | Red empresarial: IPv4, RFC 1918, /16–/28, subnetting, LAB VPC + subredes + IGW + EC2 | 33 | 10 | [RED-01/clase-07.md](RED-01/clase-07.md) |
 
 ## RED-02 (Mié/Vie)
 | Clase | Fecha | Tema | Pres. | Aus. | Registro |
@@ -23,8 +24,10 @@ Se filtra por **Grupo** + **N° de clase** + **Marca temporal** (la hora delata 
 | 4 | 2026-09-18 | Teoría de redes + redes en AWS + blindar EC2 | 20 | 4 | [RED-02/clase-04.md](RED-02/clase-04.md) |
 | 5 | 2026-09-23 | Redes AWS a fondo (VPC/subredes/IGW/NAT/EIP) + montar servidor web (NGINX + index.html, LAB) | 19 | 5 | [RED-02/clase-05.md](RED-02/clase-05.md) |
 | 6 | 2026-09-25 | Red empresarial: IPv4, RFC 1918, /16–/28, subnetting, LAB VPC + subredes + IGW + EC2 | 17 | 7 | [RED-02/clase-06.md](RED-02/clase-06.md) |
+| 7 | 2026-09-30 | Virtualización: data centers, hipervisor/Nitro, Docker, x86/ARM, snapshot y AMI (LABs) | 19 | 5 | [RED-02/clase-07.md](RED-02/clase-07.md) |
 
 ## Convenciones
 - Presentes por **# de roster**; ausentes por # + nombre. **Sin correos** (repo público).
 - La clase 1 de RED-01 se registró por transcript de Google Meet; de la clase 2 en adelante, por el **ticket de salida** (Google Form con QR prellenado por grupo+clase).
+- **Desde la clase 7 se usa el listado actualizado al 2026-09-29** (RED-01 = 43: sale José E. Flórez, entra Juan Camilo Fernández; RED-02 = 24: salen Pablo Grajales y Jairo Gutiérrez, entran Beatriz Rivera #23 y Jeison Hernández #24); cambia la numeración.
 - Roster oficial: RED-01 = 43 · RED-02 = **24 activos** (lista actualizada 2026-09-24: 25 listados, Pablo Grajales **Retirado**). Cambios vs. roster viejo: **Beatriz Rivera** (#24) y **Alexander Villada** (#2) SÍ están matriculados; entran **Emmanuel Pérez** (#10) y **Jeison Hernández** (#25); "Jairo Andrés Gutiérrez" ya no figura (verificar). El roster completo con # está en `RED-02/clase-05.md`.
