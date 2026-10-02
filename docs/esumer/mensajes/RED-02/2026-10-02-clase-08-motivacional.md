@@ -7,7 +7,7 @@ Cuando crearon su VPC, ese botón *"Crear VPC"* mandó un mensaje secreto a AWS�
 
 Y después damos el gran salto: toda la red + el servidor que armaron a clics (¡35 clics!) lo vamos a escribir como *código con Terraform* y lo lanzamos con *un solo comando*. Lo creamos, lo cambiamos y lo borramos en segundos. 🤯
 
-Así trabajan los equipos cloud de verdad: hoy pasan de albañiles a *arquitectos* 📐🚀
+Así trabajan los equipos cloud de verdad, y es una de las habilidades más pedidas en las ofertas de empleo 💼🚀
 
 📅 *HOY* · 💻 Virtual
 🔗 https://meet.google.com/dzm-ohyv-wez
