@@ -3,7 +3,7 @@
 #  Lo mismo que construimos a clics (VPC + 4 subredes + Internet Gateway
 #  + ruta pública + Security Group + EC2 con NGINX), ahora como CÓDIGO.
 #
-#  Uso (en AWS CloudShell):
+#  Uso (en PowerShell de tu PC, con aws configure hecho):
 #    terraform init
 #    terraform plan  -var "mi_ip=TU.IP.DE.CASA/32" -var "llave=NOMBRE-DE-TU-KEY-PAIR"
 #    terraform apply -var "mi_ip=TU.IP.DE.CASA/32" -var "llave=NOMBRE-DE-TU-KEY-PAIR"
@@ -130,12 +130,13 @@ resource "aws_instance" "web" {
   vpc_security_group_ids = [aws_security_group.web.id]
   key_name               = var.llave
 
-  user_data = <<-SCRIPT
-    #!/bin/bash
-    dnf install -y nginx
-    echo "<h1>Hola desde Terraform 🚀</h1><p>Esta red y este servidor nacieron de un archivo de código.</p>" > /usr/share/nginx/html/index.html
-    systemctl enable --now nginx
-  SCRIPT
+  # Una línea por comando (join): funciona igual si el archivo tiene saltos de línea de Windows
+  user_data = join("\n", [
+    "#!/bin/bash",
+    "dnf install -y nginx",
+    "echo '<h1>Hola desde Terraform &#128640;</h1><p>Esta red y este servidor nacieron de un archivo de codigo.</p>' > /usr/share/nginx/html/index.html",
+    "systemctl enable --now nginx",
+  ])
 
   tags = { Name = "web-tf" }
 }
