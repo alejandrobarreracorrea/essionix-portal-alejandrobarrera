@@ -1,0 +1,671 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- deck-meta: grupo=RED-02 sesion=8 clase=8 -->
+<title>Sesión {{SESION}} · Grupo {{G_NUM}} · Cloud, Redes y Ciberseguridad — Esumer</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#ffffff; --line:#dfe5ee; --text:#0E2841; --muted:#44546A; --faint:#8B98A9;
+  --a1:#156082; --a2:#0F9ED5; --naranja:#E97132; --grad:linear-gradient(100deg,#156082,#0F9ED5);
+  --display:"Poppins",sans-serif; --body:"Inter",sans-serif; --mono:"JetBrains Mono",monospace; }
+* { box-sizing:border-box; margin:0; padding:0; }
+html,body { height:100%; }
+body { background:var(--bg); color:var(--text); font-family:var(--body); overflow:hidden;
+  background-image:radial-gradient(55% 45% at 80% -12%, rgba(15,158,213,.10), transparent 70%); }
+.slide { position:absolute; inset:0; display:none; flex-direction:column; justify-content:center;
+  padding:6vh clamp(30px,8vw,120px); }
+.slide.on { display:flex; }
+.k { font-family:var(--mono); font-size:clamp(.7rem,1.1vw,.85rem); letter-spacing:.08em; text-transform:uppercase; color:var(--a1); margin-bottom:18px; }
+h1 { font-family:var(--display); font-size:clamp(2rem,5.2vw,4.2rem); letter-spacing:-.02em; line-height:1.06; max-width:22ch; }
+h2 { font-family:var(--display); font-size:clamp(1.5rem,3.6vw,2.8rem); letter-spacing:-.02em; line-height:1.1; margin-bottom:26px; max-width:26ch; }
+.grad { background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.sub { color:var(--muted); font-size:clamp(1rem,1.8vw,1.4rem); max-width:52ch; margin-top:20px; line-height:1.5; }
+.rows { list-style:none; max-width:900px; }
+.rows li { display:flex; justify-content:space-between; align-items:baseline; gap:24px; padding:clamp(10px,1.6vh,16px) 0; border-top:1px solid var(--line); }
+.rows .t { font-family:var(--display); font-weight:600; font-size:clamp(1rem,1.9vw,1.5rem); }
+.rows .t small { display:block; font-family:var(--body); font-weight:400; color:var(--muted); font-size:clamp(.8rem,1.3vw,1rem); margin-top:2px; }
+.rows .m { font-family:var(--mono); color:var(--a2); font-size:clamp(.8rem,1.4vw,1.05rem); white-space:nowrap; }
+.big { font-family:var(--display); font-size:clamp(3rem,9vw,7.5rem); font-weight:700; letter-spacing:-.03em; line-height:1; }
+.act-chip { display:inline-block; background:var(--naranja); color:#fff; font-family:var(--mono);
+  font-size:.68rem; padding:.35em 1em; border-radius:999px; margin-right:10px; letter-spacing:.05em; vertical-align:middle; }
+
+.stack { display:flex; flex-direction:column; gap:9px; max-width:940px; margin-top:6px; }
+.layer { display:flex; align-items:center; gap:18px; border:1px solid var(--line); border-left:5px solid var(--a2);
+  border-radius:12px; padding:clamp(6px,1.1vh,11px) 18px; opacity:0; transform:translateY(12px);
+  transition:opacity .35s ease, transform .35s ease; }
+.layer.on { opacity:1; transform:none; }
+.layer .ln { font-family:var(--mono); font-size:.85rem; color:var(--a1); }
+.layer b { font-family:var(--display); font-size:clamp(.95rem,1.7vw,1.25rem); }
+.layer p { color:var(--muted); font-size:clamp(.78rem,1.3vw,.98rem); line-height:1.35; margin-top:1px; }
+.layer .lt { margin-left:auto; font-family:var(--mono); font-size:.72rem; color:var(--a2); white-space:nowrap; }
+.layer.l1 { border-left-color:#44546A; } .layer.l2 { border-left-color:#156082; }
+.layer.l3 { border-left-color:#0F9ED5; } .layer.l4 { border-left-color:#1FB5C9; }
+.layer.l5 { border-left-color:var(--naranja); }
+.layer.l6 { border:0; border-left:5px solid var(--naranja); background:rgba(233,113,50,.06); }
+
+.casa .layer { border-left-width:5px; }
+.casa .lt { margin-left:auto; font-family:var(--mono); font-size:.68rem; color:var(--faint); white-space:nowrap; }
+.casa .l3 .lt, .casa .l4 .lt, .casa .l5 .lt { color:var(--c2, #0F9ED5); font-weight:600; }
+.casa .hoy { outline:3px solid var(--naranja); outline-offset:2px; background:rgba(233,113,50,.05); }
+.hoy-tag { font-family:var(--mono); font-size:.65rem; color:#fff; background:var(--naranja); border-radius:999px; padding:.25em .8em; margin-left:10px; }
+.toolgrid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; max-width:1000px; margin-top:8px; }
+.tool { display:flex; align-items:center; gap:14px; border:1px solid var(--line); border-radius:14px; padding:12px 16px; }
+.tool .o { font-size:clamp(1.4rem,2.6vw,2rem); }
+.tool .arrow { font-family:var(--mono); color:var(--faint); font-size:1.1rem; }
+.tool b { font-family:var(--display); font-size:clamp(.9rem,1.5vw,1.1rem); display:block; }
+.tool small { color:var(--muted); font-size:clamp(.72rem,1.2vw,.88rem); line-height:1.3; display:block; }
+.tool .tech { margin-left:auto; text-align:right; }
+.tool .tech b { color:var(--c1, #156082); }
+.dl { display:flex; align-items:center; gap:22px; margin-top:18px; flex-wrap:wrap; }
+.dlbtn { display:inline-flex; align-items:center; gap:10px; background:var(--naranja); color:#fff;
+  font-family:var(--display); font-weight:700; font-size:clamp(1rem,1.9vw,1.35rem); text-decoration:none;
+  padding:.7em 1.5em; border-radius:12px; box-shadow:0 6px 18px rgba(233,113,50,.28); transition:transform .15s ease; }
+.dlbtn:hover { transform:translateY(-2px); }
+.dlbtn small { display:block; font-family:var(--mono); font-weight:400; font-size:.62rem; opacity:.9; margin-top:1px; }
+.dlqr { display:flex; align-items:center; gap:12px; }
+.dlqr svg { width:clamp(84px,10vw,120px); height:auto; border-radius:8px; }
+.dlqr span { font-family:var(--mono); font-size:.72rem; color:var(--faint); max-width:14ch; line-height:1.4; }
+.sim { display:flex; align-items:center; gap:14px; border:1px solid var(--line); border-left:5px solid var(--naranja);
+  border-radius:12px; padding:10px 18px; margin-bottom:18px; max-width:820px; }
+.sim .o { font-size:1.7rem; }
+.sim p { color:var(--muted); font-size:clamp(.85rem,1.4vw,1rem); }
+.sim p b { color:var(--text, #0E2841); }
+.check li::before { content:"☐  "; font-family:var(--mono); color:var(--naranja); }
+
+/* ---- casa animada (mapa de fases) ---- */
+.casa-slide { justify-content:flex-start; padding-top:clamp(30px,5vh,60px); }
+.house { max-width:720px; margin:14px auto 0; width:100%; }
+.roof {
+  width:0; height:0; margin:0 auto;
+  border-left:clamp(180px,26vw,360px) solid transparent;
+  border-right:clamp(180px,26vw,360px) solid transparent;
+  border-bottom:clamp(52px,7vh,80px) solid var(--naranja);
+  position:relative; opacity:0;
+}
+.roof span {
+  position:absolute; top:clamp(30px,4vh,48px); left:50%; transform:translateX(-50%);
+  white-space:nowrap; color:#fff; font-family:var(--display); font-weight:600;
+  font-size:clamp(.72rem,1.25vw,1rem); text-shadow:0 1px 3px rgba(0,0,0,.25);
+}
+.floor {
+  display:flex; align-items:center; gap:14px; padding:clamp(9px,1.5vh,15px) 22px;
+  border:1px solid var(--line); border-top:0; background:#fff; position:relative;
+  opacity:0; transform:translateY(26px);
+}
+.floor.fA { background:linear-gradient(90deg, rgba(15,158,213,.08), #fff); }
+.floor.fB { background:linear-gradient(90deg, rgba(21,96,130,.07), #fff); }
+.floor.base { border-radius:0 0 6px 6px; border-bottom-width:6px; border-bottom-color:var(--navy); }
+.floor .fi { font-size:clamp(1.3rem,2.4vw,1.9rem); flex:none; }
+.floor b { font-family:var(--display); font-weight:600; font-size:clamp(.9rem,1.6vw,1.2rem); }
+.floor i { margin-left:auto; font-family:var(--mono); font-style:normal; font-size:clamp(.66rem,1.15vw,.85rem); color:var(--faint); letter-spacing:.03em; }
+.floor.hoy { border-color:var(--naranja); z-index:2; }
+.floor.hoy i { color:var(--naranja); font-weight:600; }
+.floor.fD i, .floor.fB i, .floor.fA i { color:var(--c2, #0F9ED5); font-weight:600; }
+.here {
+  position:absolute; left:calc(100% + 14px); top:50%; transform:translateY(-50%);
+  font-family:var(--mono); font-size:clamp(.68rem,1.15vw,.85rem); color:#fff;
+  background:var(--naranja); padding:.3em .9em; border-radius:999px; white-space:nowrap;
+  opacity:0; animation:hereIn .5s ease 2.4s forwards, herePulse 1.8s ease 2.9s infinite;
+}
+/* entrada: construir de abajo (fF) hacia arriba, y el techo al final */
+.slide.on .floor { animation:floorUp .5s cubic-bezier(.2,.7,.3,1) forwards; }
+.slide.on .floor.fF { animation-delay:.1s; }
+.slide.on .floor.fE { animation-delay:.45s; }
+.slide.on .floor.fD { animation-delay:.8s; }
+.slide.on .floor.fC { animation-delay:1.1s; }
+.slide.on .floor.fB { animation-delay:1.4s; }
+.slide.on .floor.fA { animation-delay:1.7s; }
+.slide.on .roof { animation:roofDrop .55s cubic-bezier(.2,.7,.3,1) 2s forwards; }
+.slide.on .floor.hoy { animation:floorUp .5s cubic-bezier(.2,.7,.3,1) forwards, hoyGlow 2s ease 2.6s infinite; }
+.slide.on .floor.fF.hoy { animation-delay:.1s, 2.6s; }
+.slide.on .floor.fE.hoy { animation-delay:.45s, 2.9s; }
+@keyframes floorUp { to { opacity:1; transform:none; } }
+@keyframes roofDrop { from { opacity:0; transform:translateY(-30px); } to { opacity:1; transform:none; } }
+@keyframes hoyGlow { 0%,100% { box-shadow:0 0 0 0 rgba(233,113,50,0); } 50% { box-shadow:0 0 0 4px rgba(233,113,50,.18); } }
+@keyframes hereIn { to { opacity:1; } }
+@keyframes herePulse { 0%,100% { transform:translateY(-50%) scale(1); } 50% { transform:translateY(-50%) scale(1.06); } }
+@media (prefers-reduced-motion: reduce) {
+  .floor, .roof, .here { opacity:1 !important; transform:none !important; animation:none !important; }
+}
+@media (max-width:640px) { .here { position:static; display:inline-block; margin-left:8px; transform:none; } }
+
+/* ---- caja de herramientas animada ---- */
+.tools-slide { justify-content:flex-start; padding-top:clamp(28px,5vh,56px); }
+.toolbox { max-width:840px; margin:16px auto 0; width:100%; position:relative; }
+.tbox { font-size:clamp(2.4rem,6vw,4rem); text-align:center; margin-bottom:14px; opacity:0; transform:scale(.5) rotate(-12deg); }
+.slide.on .tbox { animation:tboxPop .6s cubic-bezier(.2,1.4,.4,1) .1s forwards; }
+.trow { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:16px;
+  padding:clamp(8px,1.4vh,13px) 20px; border:1px solid var(--line); border-radius:12px; margin-bottom:10px;
+  opacity:0; transform:translateY(20px); background:#fff; }
+.trow .obra { font-family:var(--display); font-weight:500; font-size:clamp(.82rem,1.5vw,1.12rem); color:var(--muted); }
+.trow .tech { font-family:var(--display); font-weight:700; font-size:clamp(.95rem,1.8vw,1.3rem); color:var(--c1, #156082); text-align:right; }
+.trow .link { width:clamp(40px,6vw,78px); height:2px; background:linear-gradient(90deg,var(--line),var(--naranja)); position:relative; }
+.trow .link::after { content:"→"; position:absolute; right:-4px; top:-11px; color:var(--naranja); font-family:var(--mono); font-size:.9rem;
+  opacity:0; }
+.slide.on .trow { animation:trowIn .5s cubic-bezier(.2,.7,.3,1) forwards; }
+.slide.on .trow .link::after { animation:arrowShine .6s ease forwards; }
+.slide.on .tr1 { animation-delay:.5s; } .slide.on .tr1 .link::after { animation-delay:.9s; }
+.slide.on .tr2 { animation-delay:.75s; } .slide.on .tr2 .link::after { animation-delay:1.15s; }
+.slide.on .tr3 { animation-delay:1s; }  .slide.on .tr3 .link::after { animation-delay:1.4s; }
+.slide.on .tr4 { animation-delay:1.25s; } .slide.on .tr4 .link::after { animation-delay:1.65s; }
+.slide.on .tr5 { animation-delay:1.5s; } .slide.on .tr5 .link::after { animation-delay:1.9s; }
+@keyframes tboxPop { to { opacity:1; transform:none; } }
+@keyframes trowIn { to { opacity:1; transform:none; } }
+@keyframes arrowShine { 0% { opacity:0; transform:translateX(-8px); } 100% { opacity:1; transform:none; } }
+@media (prefers-reduced-motion: reduce) { .tbox,.trow,.trow .link::after { opacity:1 !important; transform:none !important; animation:none !important; } }
+
+/* ---- ¿qué es un SO? — stack animado ---- */
+.os-slide { justify-content:flex-start; padding-top:clamp(26px,4.5vh,52px); }
+.osstack { max-width:760px; margin:12px auto 0; width:100%; }
+.oslayer { display:flex; align-items:center; gap:16px; border:1px solid var(--line); border-radius:12px;
+  padding:clamp(9px,1.5vh,15px) 20px; background:#fff; opacity:0; transform:translateX(-24px); }
+.oslayer .oi { font-size:clamp(1.5rem,2.8vw,2.2rem); flex:none; }
+.oslayer b { font-family:var(--display); font-weight:600; font-size:clamp(.9rem,1.6vw,1.2rem); }
+.oslayer p { color:var(--muted); font-size:clamp(.75rem,1.3vw,.95rem); line-height:1.35; margin-top:1px; }
+.oslayer.mid { border-color:var(--naranja); background:linear-gradient(90deg,rgba(233,113,50,.07),#fff); }
+.osarrow { text-align:center; font-family:var(--mono); font-size:.7rem; color:var(--faint); padding:5px 0; opacity:0; }
+.slide.on .oslayer.top { animation:osIn .5s ease .2s forwards; }
+.slide.on .oslayer.mid { animation:osIn .5s ease .9s forwards, osGlow 2.2s ease 1.6s infinite; }
+.slide.on .oslayer.bot { animation:osIn .5s ease 1.5s forwards; }
+.slide.on .osarrow { animation:osFade .4s ease forwards; }
+.slide.on .osarrow:nth-of-type(2) { animation-delay:.7s; }
+.slide.on .osarrow:nth-of-type(4) { animation-delay:1.3s; }
+@keyframes osIn { to{opacity:1;transform:none} }
+@keyframes osFade { to{opacity:1} }
+@keyframes osGlow { 0%,100%{box-shadow:0 0 0 0 rgba(233,113,50,0)} 50%{box-shadow:0 0 0 4px rgba(233,113,50,.15)} }
+/* ---- grid de sistemas operativos ---- */
+.osgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:900px; margin-top:8px; }
+.oscard { border:1px solid var(--line); border-radius:14px; padding:14px 16px; text-align:left; background:#fff;
+  opacity:0; transform:translateY(18px); }
+.oscard .oe { font-size:clamp(1.6rem,3vw,2.2rem); display:block; margin-bottom:4px; }
+.oscard b { font-family:var(--display); font-size:clamp(.95rem,1.7vw,1.2rem); }
+.oscard small { display:block; color:var(--muted); font-size:clamp(.72rem,1.2vw,.86rem); line-height:1.3; margin-top:3px; }
+.oscard.hi { border-color:var(--naranja); border-width:2px; background:linear-gradient(160deg,rgba(233,113,50,.08),#fff); }
+.oscard.goal { border-style:dashed; border-color:var(--c1, #156082); }
+.slide.on .oscard { animation:osCard .45s ease forwards; }
+.slide.on .oscard:nth-child(1){animation-delay:.15s} .slide.on .oscard:nth-child(2){animation-delay:.3s}
+.slide.on .oscard:nth-child(3){animation-delay:.45s} .slide.on .oscard:nth-child(4){animation-delay:.6s}
+.slide.on .oscard:nth-child(5){animation-delay:.75s} .slide.on .oscard:nth-child(6){animation-delay:.9s}
+@keyframes osCard { to{opacity:1;transform:none} }
+@media (max-width:640px){ .osgrid { grid-template-columns:1fr 1fr; } }
+@media (prefers-reduced-motion: reduce) { .oslayer,.osarrow,.oscard { opacity:1 !important; transform:none !important; animation:none !important; } }
+.src { position:absolute; bottom:3vh; left:clamp(30px,8vw,120px); right:clamp(30px,8vw,120px); font-family:var(--mono); font-size:.68rem; color:var(--faint); }
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:clamp(16px,3vw,40px); max-width:1000px; }
+.chipset { display:flex; gap:10px; flex-wrap:wrap; margin-top:24px; }
+.chip { font-family:var(--mono); font-size:clamp(.75rem,1.2vw,.95rem); padding:.5em 1.1em; border:1px solid var(--line); border-radius:999px; color:var(--muted); }
+.chip.hi { color:var(--naranja); border-color:rgba(233,113,50,.45); font-weight:600; }
+.q { font-family:var(--display); font-size:clamp(1.4rem,3vw,2.3rem); border-left:3px solid; border-image:var(--grad) 1; padding-left:22px; margin:14px 0; max-width:30ch; line-height:1.25; }
+.cover { padding:0; }
+.cover-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.cover-txt { position:absolute; left:clamp(24px,6vw,90px); bottom:4.5vh; z-index:2; max-width:36ch; }
+.cover-k { font-family:var(--mono); font-size:clamp(.6rem,.95vw,.78rem); letter-spacing:.07em; text-transform:uppercase; color:#7fd8f5; }
+.cover-h { color:#fff; font-family:var(--display); font-size:clamp(1.15rem,2.3vw,1.9rem); line-height:1.15; margin:8px 0 8px; }
+.cover-s { color:#c9d4e6; font-size:clamp(.78rem,1.15vw,.95rem); line-height:1.5; }
+.cover-logo { position:absolute; right:clamp(30px,6vw,90px); bottom:8vh; width:clamp(140px,16vw,230px); z-index:2; }
+.inst-footer { position:fixed; bottom:2.2vh; left:clamp(30px,8vw,120px); z-index:9; }
+.inst-footer img { height:clamp(30px,4.6vh,44px); display:block; }
+.cover ~ style, .cover .inst-footer { display:none; }
+.bar { position:fixed; top:0; left:0; height:3px; background:var(--grad); width:0; transition:width .25s ease; z-index:10; }
+.num { position:fixed; bottom:3vh; right:clamp(30px,8vw,120px); font-family:var(--mono); font-size:.8rem; color:var(--faint); z-index:10; }
+.nav-hint { position:fixed; bottom:3vh; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:.68rem; color:var(--faint); z-index:10; }
+.chart { max-width:520px; }
+.chart-title { font-family:var(--mono); font-size:.78rem; color:var(--muted); letter-spacing:.04em; text-transform:uppercase; margin-bottom:14px; }
+.chart-bars { display:flex; align-items:flex-end; gap:clamp(14px,2.5vw,30px); height:clamp(180px,34vh,320px); border-bottom:1px solid var(--line); padding-bottom:2px; }
+.cbar { flex:1; height:var(--h); background:linear-gradient(180deg, rgba(21,96,130,.55), rgba(21,96,130,.12)); border-radius:8px 8px 0 0; position:relative; }
+.cbar.hi { background:var(--grad); }
+.cbar.dim { background:linear-gradient(180deg, rgba(233,113,50,.30), rgba(233,113,50,.06)); border:1px dashed rgba(233,113,50,.55); border-bottom:0; }
+.cv { position:absolute; top:-26px; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:clamp(.7rem,1.2vw,.9rem); color:var(--text); white-space:nowrap; }
+.cy { position:absolute; bottom:-26px; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:.72rem; color:var(--faint); }
+.chart-note { margin-top:34px; font-family:var(--mono); font-size:.68rem; color:var(--faint); }
+.qrs { display:flex; gap:clamp(20px,4vw,54px); margin-top:24px; }
+.qr { display:flex; flex-direction:column; gap:10px; align-items:flex-start; }
+.qr svg { width:clamp(90px,11vw,150px); height:auto; border-radius:10px; }
+.slide .grid2 .qr svg { width:clamp(160px,20vw,260px); }
+.qr.qr-ticket svg { width:clamp(150px,18vw,220px); }
+.qr span { font-family:var(--mono); font-size:.72rem; color:var(--faint); line-height:1.5; }
+.qr span b { color:var(--a1); font-weight:500; }
+.demo { background:#0E2841; border:0; border-radius:18px; padding:clamp(18px,3vh,30px); max-width:820px; margin-top:10px; }
+.demo p { font-family:var(--mono); color:#39c8e8; font-size:clamp(.85rem,1.5vw,1.1rem); padding:6px 0; }
+ul.clean { list-style:none; max-width:880px; }
+ul.clean li { padding:clamp(8px,1.4vh,14px) 0; border-top:1px solid var(--line); color:var(--muted); font-size:clamp(.95rem,1.7vw,1.3rem); }
+ul.clean li b { color:var(--text); }
+ul.clean li:first-child { border-top:0; }
+.tag9 { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:1000px; margin-top:10px; }
+.t9 { border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:clamp(.75rem,1.25vw,.95rem); color:var(--muted); }
+.t9 b { color:var(--a1); font-family:var(--mono); margin-right:6px; }
+
+/* ---- visualizaciones didácticas de redes ---- */
+.viz { width:100%; max-width:1010px; margin:2px auto 0; }
+.viz svg { width:100%; height:auto; display:block; overflow:visible; }
+.slide.on .viz { animation:vizIn .55s cubic-bezier(.2,.7,.3,1) .12s both; }
+@keyframes vizIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
+.vcap { text-align:center; color:var(--muted); font-size:clamp(.85rem,1.45vw,1.08rem); line-height:1.45;
+  margin:12px auto 0; max-width:64ch; }
+.vcap b { color:var(--text); }
+.vlbl { font-family:"JetBrains Mono",monospace; fill:#8B98A9; font-size:12.5px; letter-spacing:.02em; }
+.vname { font-family:"JetBrains Mono",monospace; fill:#fff; font-size:12.5px; }
+.vzone { font-family:"Poppins",sans-serif; font-weight:700; }
+.vnode { font-family:"Poppins",sans-serif; font-weight:600; }
+@media (prefers-reduced-motion:reduce){ .viz *{animation:none!important} }
+
+.vexp { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:1010px; margin:10px auto 0; }
+.vexp .c { border:1px solid var(--line); border-top:3px solid var(--a2); border-radius:12px; padding:7px 13px 9px; background:#fff; }
+.vexp .c h4 { font-family:"Poppins",sans-serif; font-weight:700; font-size:clamp(.86rem,1.4vw,1.08rem); color:var(--a1); margin-bottom:3px; }
+.vexp .c p { font-size:clamp(.7rem,1.08vw,.84rem); color:var(--muted); line-height:1.28; margin:2px 0; }
+.vexp .c p b { color:var(--text); }
+.vexp .c .ej b { color:var(--a1); }
+@media (max-width:760px){ .vexp { grid-template-columns:1fr; } }
+.kit .c{padding:10px 16px 12px} .kit .c h4{font-size:clamp(1rem,1.6vw,1.25rem)} .kit .c p{font-size:clamp(.82rem,1.3vw,1.02rem);margin:4px 0}
+.viz.sm svg{ width:auto; height:clamp(240px,36vh,360px); max-width:100%; margin:0 auto; }
+</style></head><body>
+<div class="bar" id="bar"></div>
+<div class="num" id="num"></div>
+<div class="inst-footer" id="instf"><img src="../../../assets/logos-medellin.png" alt="Alcaldía de Medellín · SAPIENCIA · Esumer"></div>
+<div class="nav-hint">← → o click para avanzar</div>
+
+<!-- 1 · PORTADA -->
+<section class="slide on cover">
+  <img class="cover-bg" src="../../../assets/portada.png" alt="">
+  <div class="cover-txt">
+    <span class="cover-k">Estud-IA · Ruta TI · 2026-2 · Sesión {{SESION}} · clase virtual · {{G_ID}}</span>
+    <h1 class="cover-h">Redes virtuales y acceso remoto: cómo llegas a tu servidor</h1>
+    <p class="cover-s">Cómo se conecta una máquina virtual a la red, cómo te deja entrar SSH con llaves, cómo subir archivos a tu servidor y qué puertas abrir (y cuáles no).<br>Alejandro Barrera · Cloud Architect</p>
+  </div>
+  <img class="cover-logo" src="../../../assets/estudia-blanco.png" alt="Estud-IA">
+</section>
+
+<!-- 2 · PLAN -->
+<section class="slide">
+  <span class="k">El plan de hoy · clase {{SESION}}</span>
+  <h2>Objetivo de hoy: <span class="grad">llegar a tu servidor de forma segura</span>.</h2>
+  <ul class="rows">
+    <li><span class="t">Redes virtuales<small>Modos NAT, bridge y host-only… y su equivalente en AWS</small></span><span class="m">sem. 5</span></li>
+    <li><span class="t">SSH: llaves vs. contraseñas<small>Por qué tu .ppk vale oro y cómo viaja todo cifrado</small></span><span class="m">sem. 5</span></li>
+    <li><span class="t">Transferir archivos<small>SFTP con MobaXterm: sube una foto a tu web</small></span><span class="m">sem. 5</span></li>
+    <li><span class="t">Exponer servicios sin miedo<small>Qué puertas abrir · LAB de conectividad · reto</small></span><span class="m">lab</span></li>
+  </ul>
+  <p class="sub" style="margin-top:14px">Ya saben <b>qué es</b> su EC2. Hoy aprenden <b>cómo se conecta</b>, <b>cómo entran</b> y <b>cómo le llevan cosas</b>. 🔐</p>
+</section>
+
+<!-- 3 · MODOS DE RED DE UNA VM -->
+<section class="slide" id="scN">
+  <style>
+    .scene{width:min(100%,1080px,calc(58vh * var(--ar)));margin:6px auto 0}
+    .scene canvas{display:block;width:100%;border-radius:14px;background:#f7f9fc;border:1px solid var(--line)}
+    .scbar{display:flex;align-items:center;gap:16px;margin:8px auto 0;width:min(100%,1080px)}
+    .scbar .cap{flex:1;font-size:clamp(.86rem,1.4vw,1.06rem);color:var(--muted);line-height:1.45;min-height:3em}
+    .scbar .cap b{color:var(--text)}
+    .scbar .dots{display:flex;gap:6px}
+    .scbar .dots i{width:10px;height:10px;border-radius:50%;background:var(--line);display:block;transition:background .3s}
+    .scbar .dots i.on{background:var(--naranja)}
+    .scbar .shint{font-family:var(--mono);font-size:.7rem;color:var(--faint);white-space:nowrap}
+  </style>
+  <script>
+  window.NetScene=(function(){
+    var DPR=Math.min(window.devicePixelRatio||1,2);
+    var RM=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function cl(x){return x<0?0:x>1?1:x;}
+    var E={io:function(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;},out:function(t){return 1-Math.pow(1-t,3);},
+      back:function(t){if(t<=0)return 0;var a=1.70158,b=a+1;return 1+b*Math.pow(t-1,3)+a*Math.pow(t-1,2);}};
+    function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.quadraticCurveTo(x+w,y,x+w,y+r);c.lineTo(x+w,y+h-r);c.quadraticCurveTo(x+w,y+h,x+w-r,y+h);c.lineTo(x+r,y+h);c.quadraticCurveTo(x,y+h,x,y+h-r);c.lineTo(x,y+r);c.quadraticCurveTo(x,y,x+r,y);c.closePath();}
+    function txt(c,s,x,y,font,col,al,a){if(a===0)return;c.save();c.globalAlpha*=(a==null?1:a);c.font=font;c.fillStyle=col;c.textAlign=al||'left';c.textBaseline='alphabetic';c.fillText(s,x,y);c.restore();}
+    function house(c,x,y,w,body,roof,s){if(!(s>0))return;var h=w*.72;c.save();c.translate(x,y);c.scale(s,s);
+      c.fillStyle=body;c.fillRect(-w/2,-h,w,h);c.fillStyle=roof;c.beginPath();c.moveTo(-w/2-w*.14,-h+1);c.lineTo(0,-h-w*.58);c.lineTo(w/2+w*.14,-h+1);c.closePath();c.fill();
+      if(w>=14){c.fillStyle='rgba(255,255,255,.88)';c.fillRect(-w*.13,-h*.56,w*.26,h*.56);}c.restore();}
+    function rectProg(c,x,y,w,h,f,col,lw,dash,off){if(f<=0)return;c.save();c.strokeStyle=col;c.lineWidth=lw||2;c.setLineDash(dash||[9,6]);c.lineDashOffset=off||0;
+      var L=2*(w+h),d=f*L,pts=[[x,y],[x+w,y],[x+w,y+h],[x,y+h],[x,y]];c.beginPath();c.moveTo(x,y);
+      for(var k=0;k<4&&d>0;k++){var a=pts[k],b=pts[k+1],sl=Math.abs(b[0]-a[0])+Math.abs(b[1]-a[1]),u=Math.min(1,d/sl);c.lineTo(a[0]+(b[0]-a[0])*u,a[1]+(b[1]-a[1])*u);d-=sl;}
+      c.stroke();c.restore();}
+    function make(id,W,H,caps,draw){
+      var sec=document.getElementById(id),cv=sec.querySelector('canvas'),cap=sec.querySelector('.cap'),dots=sec.querySelector('.dots');
+      var ctx=cv.getContext('2d'),step=0,st=0,run=false;
+      sec.querySelector('.scene').style.setProperty('--ar',W/H);
+      function size(){var w=cv.parentElement.clientWidth||1000,h=w*H/W;cv.style.height=h+'px';cv.width=Math.round(w*DPR);cv.height=Math.round(h*DPR);}
+      function setCap(){cap.innerHTML=caps[step];if(cap.animate&&!RM)cap.animate([{opacity:0,transform:'translateY(6px)'},{opacity:1,transform:'none'}],{duration:380,easing:'ease-out'});
+        dots.innerHTML=caps.map(function(_,k){return '<i class="'+(k<=step?'on':'')+'"></i>';}).join('');}
+      function frame(now){if(!sec.classList.contains('on')){run=false;return;}var t=(now-st)/1000;
+        ctx.setTransform(cv.width/W,0,0,cv.width/W,0,0);ctx.clearRect(0,0,W,H);
+        draw(ctx,{step:step,t:t,now:now/1000,E:E,p:function(k,dur,del){if(step>k)return 1;if(step<k)return 0;if(RM)return 1;return cl((t-(del||0))/(dur||1));}});
+        requestAnimationFrame(frame);}
+      sec.__enter=function(){step=0;st=performance.now();size();setCap();if(!run){run=true;requestAnimationFrame(frame);}};
+      sec.__next=function(){if(step<caps.length-1){step++;st=performance.now();setCap();return true;}return false;};
+      window.addEventListener('resize',function(){if(sec.classList.contains('on'))size();});
+      cap.innerHTML=caps[0];dots.innerHTML=caps.map(function(_,k){return '<i class="'+(k===0?'on':'')+'"></i>';}).join('');
+    }
+    function person(c,x,y,sz,col,a){if(!(a>0))return;c.save();c.globalAlpha*=Math.min(1,a);c.fillStyle=col;c.beginPath();c.arc(x,y-sz*1.3,sz*.42,0,7);c.fill();rr(c,x-sz*.5,y-sz*.82,sz,sz*.82,sz*.3);c.fill();c.restore();}
+    function bubble(c,x,y,text,font,bg,fg,a){if(!(a>0))return;c.save();c.globalAlpha*=Math.min(1,a);c.font=font;var w=c.measureText(text).width+26,h=36;c.fillStyle=bg;rr(c,x-w/2,y-h,w,h,10);c.fill();c.beginPath();c.moveTo(x-8,y-1);c.lineTo(x,y+10);c.lineTo(x+8,y-1);c.fill();c.fillStyle=fg;c.textAlign='center';c.textBaseline='middle';c.fillText(text,x,y-h/2);c.restore();}
+    function laptop(c,x,y,w,col,a){if(!(a>0))return;c.save();c.globalAlpha*=Math.min(1,a);c.fillStyle='#0E2841';rr(c,x-w/2,y-w*.62,w,w*.62,4);c.fill();c.fillStyle=col;c.fillRect(x-w/2+4,y-w*.62+4,w-8,w*.62-8);c.fillStyle='#8B98A9';rr(c,x-w*.62,y,w*1.24,w*.08,3);c.fill();c.restore();}
+    function cloud(c,x,y,s,col,a){if(!(a>0))return;c.save();c.globalAlpha*=Math.min(1,a);c.fillStyle=col;[[-.5,.1,.42],[0,-.18,.55],[.5,.1,.42],[0,.22,.5]].forEach(function(k){c.beginPath();c.arc(x+k[0]*s,y+k[1]*s,k[2]*s,0,7);c.fill();});c.restore();}
+    function building(c,x,y,w,h,col,a){if(!(a>0))return;c.save();c.translate(x,y);c.scale(Math.max(a,0),Math.max(a,0));c.fillStyle=col;c.fillRect(-w/2,-h,w,h);c.fillStyle='rgba(255,255,255,.75)';for(var r=0;r<Math.floor(h/12);r++)for(var q=0;q<2;q++)c.fillRect(-w/2+w*(.18+q*.44),-h+5+r*12,w*.2,6);c.restore();}
+    function packet(c,x,y,col,a){if(!(a>0))return;c.save();c.globalAlpha*=Math.min(1,a);c.fillStyle=col;rr(c,x-14,y-10,28,20,3);c.fill();c.strokeStyle='rgba(255,255,255,.85)';c.lineWidth=1.5;c.beginPath();c.moveTo(x-12,y-8);c.lineTo(x,y+1);c.lineTo(x+12,y-8);c.stroke();c.restore();}
+    function along(pts,u){var L=0,seg=[];for(var i=0;i<pts.length-1;i++){var d=Math.hypot(pts[i+1][0]-pts[i][0],pts[i+1][1]-pts[i][1]);seg.push(d);L+=d;}var t=Math.max(0,Math.min(1,u))*L;for(var j=0;j<seg.length;j++){if(t<=seg[j]){var k=seg[j]?t/seg[j]:0;return [pts[j][0]+(pts[j+1][0]-pts[j][0])*k,pts[j][1]+(pts[j+1][1]-pts[j][1])*k];}t-=seg[j];}return pts[pts.length-1];}
+    return {make:make,E:E,rr:rr,txt:txt,house:house,rectProg:rectProg,person:person,bubble:bubble,laptop:laptop,cloud:cloud,building:building,packet:packet,along:along};
+  })();
+  </script>
+  <script>
+  /* Viz: piezas visuales comunes (escenario oscuro, isometría, servidores, VMs) para las escenas de la sesión 7 */
+  window.Viz=(function(){
+    var C={bg0:'#08182a',bg1:'#123356',navy:'#0E2841',blue:'#0F9ED5',dblue:'#156082',ora:'#E97132',txt:'#EAF3FA',mut:'#9fb6c9',faint:'#5f7890',grn:'#34c38f',red:'#e5484d',yel:'#FFC928'};
+var LAND=[
+ [[-168,65],[-140,70],[-110,72],[-85,70],[-78,62],[-65,60],[-55,51],[-67,45],[-70,42],[-75,37],[-81,31],[-80,25],[-83,29],[-90,30],[-97,27],[-97,21],[-91,19],[-87,21],[-88,16],[-83,10],[-79,9],[-77.5,8],[-80,7],[-85,11],[-92,14.5],[-105,20],[-110,24],[-112,30],[-117,33],[-121,36],[-124,40],[-125,48],[-133,56],[-148,60],[-165,61]],
+ [[-120,70],[-80,72],[-65,80],[-90,82],[-120,77]],
+ [[-50,60],[-42,60],[-20,70],[-20,80],[-60,82],[-70,76],[-55,68]],
+ [[-24,64],[-13,65],[-15,66.5],[-22,66.4]],
+ [[-84.9,21.9],[-80,23.1],[-74.2,20.2],[-77.5,19.9],[-82,21.5]],
+ [[-74.4,19.8],[-68.4,18.6],[-71,17.6],[-74.4,18.4]],
+ [[-77.5,8],[-72,12],[-62,10.5],[-51,4],[-50,0],[-35,-6],[-38,-13],[-40,-22],[-48,-26],[-53,-34],[-58,-38],[-65,-42],[-68,-52],[-72,-50],[-74,-40],[-71,-30],[-70,-18],[-76,-14],[-81,-5],[-80,0],[-77,4]],
+ [[-10,36],[-9,43],[-2,44],[-4.5,48],[2,51],[8,54],[10,58],[5,62],[15,69],[28,71],[40,67],[40,60],[30,55],[40,48],[28,45],[26,40],[20,40],[16,38],[12,44],[8,44],[3,43],[-2,37]],
+ [[-5,50],[1,51],[0,54],[-3,58],[-6,57],[-5,54],[-3,52]],
+ [[-17,15],[-17,21],[-13,28],[-6,35],[10,37],[20,32],[32,31],[35,28],[43,12],[51,12],[42,-2],[40,-15],[35,-24],[27,-34],[18,-34],[12,-18],[13,-6],[9,4],[-5,5],[-12,7]],
+ [[44,-25],[47,-25],[50,-15],[49,-12],[44,-17]],
+ [[26,40],[36,36],[35,31],[44,13],[55,17],[57,24],[62,25],[67,24],[73,20],[77,8],[80,15],[88,22],[92,22],[98,16],[100,6],[104,1],[106,10],[109,12],[108,20],[117,23],[122,31],[119,38],[122,40],[129,35],[130,43],[140,48],[142,54],[135,55],[155,59],[163,60],[180,66],[180,71],[140,73],[110,77],[80,73],[70,68],[55,68],[45,66],[40,67],[40,60],[30,55],[40,48],[48,42],[50,37],[40,40]],
+ [[130,31],[135,34],[140,36],[142,40],[141,45],[145,44],[140,41],[139,35],[132,33]],
+ [[120,18],[122,18],[126,7],[122,7],[120,13]],
+ [[95,5],[105,-6],[115,-8],[125,-9],[120,-2],[118,5],[110,2],[100,2]],
+ [[109,1],[117,7],[119,1],[116,-4],[110,-3]],
+ [[131,-1],[141,-2.5],[150,-10],[143,-9],[138,-8],[132,-4]],
+ [[114,-22],[122,-18],[130,-12],[137,-12],[142,-11],[146,-19],[153,-26],[151,-34],[146,-39],[138,-35],[132,-32],[115,-35],[113,-26]],
+ [[172,-34],[178,-38],[174,-41],[167,-46],[171,-44]]
+];
+function inPoly(lon,lat,poly){var ins=false;for(var i=0,j=poly.length-1;i<poly.length;j=i++){var xi=poly[i][0],yi=poly[i][1],xj=poly[j][0],yj=poly[j][1];
+  if(((yi>lat)!==(yj>lat))&&(lon<(xj-xi)*(lat-yi)/(yj-yi)+xi))ins=!ins}return ins}
+function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]))return true;return false}
+    var DOTS=null;
+    function dots(){if(DOTS)return DOTS;DOTS=[];for(var y=84;y<=412;y+=7)for(var x=64;x<=936;x+=7){var lon=-170+(x-60)/880*360,lat=78-(y-70)/350*134;if(isLand(lon,lat))DOTS.push([x,y]);}return DOTS;}
+    function mp(lon,lat){return [60+(lon+170)/360*880,70+(78-lat)/134*350];}
+    function bg(c,W,H){var g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,C.bg1);g.addColorStop(1,C.bg0);c.fillStyle=g;c.fillRect(0,0,W,H);
+      c.save();c.strokeStyle='rgba(255,255,255,.035)';c.lineWidth=1;for(var x=0;x<=W;x+=40){c.beginPath();c.moveTo(x,0);c.lineTo(x,H);c.stroke();}for(var y=0;y<=H;y+=40){c.beginPath();c.moveTo(0,y);c.lineTo(W,y);c.stroke();}c.restore();}
+    function tx(c,s,x,y,sz,col,al,w,a,f){if(a===0)return;c.save();c.globalAlpha*=(a==null?1:a);c.font=(w||600)+' '+sz+'px '+(f||'Poppins,sans-serif');c.fillStyle=col;c.textAlign=al||'left';c.textBaseline='alphabetic';c.fillText(s,x,y);c.restore();}
+    function rr(c,x,y,w,h,r){NetScene.rr(c,x,y,w,h,r);}
+    function glow(c,col,b){c.shadowColor=col;c.shadowBlur=b;}
+    function pill(c,x,y,s,bgc,fg,a){c.save();c.globalAlpha*=a==null?1:a;c.font='600 12px Poppins,sans-serif';var w=c.measureText(s).width+22;c.fillStyle=bgc;rr(c,x,y,w,24,12);c.fill();c.fillStyle=fg;c.textBaseline='middle';c.fillText(s,x+11,y+12.5);c.restore();return w;}
+    function crumbs(c,list,cur){var x=22;list.forEach(function(s,i){var w=pill(c,x,14,s,i<cur?'rgba(15,158,213,.28)':(i===cur?C.ora:'rgba(255,255,255,.06)'),i<=cur?'#fff':C.faint,1);x+=w+6;if(i<list.length-1)tx(c,'›',x-3,31,14,C.faint,'center',600,1);x+=6;});}
+    function pulse(c,x,y,r,t,col,a){for(var k=0;k<2;k++){var u=((t+k*.9)%1.8)/1.8;c.save();c.globalAlpha*=(a==null?1:a)*(1-u);c.strokeStyle=col;c.lineWidth=2;c.beginPath();c.arc(x,y,r+u*r*2.2,0,7);c.stroke();c.restore();}
+      c.save();c.globalAlpha*=a==null?1:a;glow(c,col,14);c.fillStyle=col;c.beginPath();c.arc(x,y,r,0,7);c.fill();c.restore();}
+    function iso(c,x,y,w,d,h,cT,cL,cR,a){var cs=.866,sn=.5,F=[x,y],R=[x+w*cs,y-w*sn],L=[x-d*cs,y-d*sn],B=[x+w*cs-d*cs,y-w*sn-d*sn];c.save();c.globalAlpha*=a==null?1:a;
+      function poly(ps,col){c.fillStyle=col;c.beginPath();c.moveTo(ps[0][0],ps[0][1]);for(var i=1;i<ps.length;i++)c.lineTo(ps[i][0],ps[i][1]);c.closePath();c.fill();}
+      poly([F,L,[L[0],L[1]-h],[F[0],F[1]-h]],cL);poly([F,R,[R[0],R[1]-h],[F[0],F[1]-h]],cR);poly([[F[0],F[1]-h],[R[0],R[1]-h],[B[0],B[1]-h],[L[0],L[1]-h]],cT);c.restore();}
+    function server(c,x,y,w,h,t,seed,hl,a){c.save();c.globalAlpha*=a==null?1:a;var g=c.createLinearGradient(x,y,x,y+h);g.addColorStop(0,hl?'#3a2a1f':'#1d3a58');g.addColorStop(1,hl?'#2a1d15':'#132a42');c.fillStyle=g;rr(c,x,y,w,h,3);c.fill();
+      c.strokeStyle=hl?C.ora:'rgba(159,182,201,.35)';c.lineWidth=hl?2:1;c.stroke();for(var k=0;k<6;k++){c.fillStyle='rgba(255,255,255,.07)';c.fillRect(x+w*.3+k*w*.1,y+h*.3,w*.06,h*.4);}
+      for(var q=0;q<3;q++){var on=Math.sin(t*(3+((seed*7+q*3)%5))+seed*1.7+q)>-.2;c.fillStyle=on?(q===2?C.ora:C.grn):'rgba(255,255,255,.12)';c.beginPath();c.arc(x+8+q*7,y+h/2,2,0,7);c.fill();}c.restore();}
+    function rack(c,x,y,w,h,n,t,hl,a){c.save();c.globalAlpha*=a==null?1:a;c.fillStyle='#0b1a2b';rr(c,x,y,w,h,6);c.fill();c.strokeStyle='rgba(159,182,201,.4)';c.lineWidth=1.5;c.stroke();c.restore();
+      var sh=(h-16)/n;for(var i=0;i<n;i++)server(c,x+6,y+8+i*sh,w-12,sh-3,t,i+x,hl===i,a);}
+    function vm(c,x,y,w,h,title,sub,col,a,on){if(!(a>0))return;c.save();c.globalAlpha*=a;if(on)glow(c,col,22);var g=c.createLinearGradient(x,y,x,y+h);g.addColorStop(0,'rgba(255,255,255,.12)');g.addColorStop(1,'rgba(255,255,255,.04)');c.fillStyle=g;rr(c,x,y,w,h,10);c.fill();c.shadowBlur=0;
+      c.strokeStyle=col;c.lineWidth=on?2.5:1.5;c.stroke();c.fillStyle=col;rr(c,x,y,w,6,3);c.fill();c.restore();tx(c,title,x+w/2,y+h/2+(sub?-2:5),14,'#fff','center',700,a);if(sub)tx(c,sub,x+w/2,y+h/2+16,11,C.mut,'center',500,a,'"JetBrains Mono",monospace');}
+    function building(c,x,y,s,t,a,hl){iso(c,x,y,90*s,60*s,70*s,hl?'#5a3a24':'#2b4f74',hl?'#3a2618':'#16324f',hl?'#4a3020':'#1e4266',a);
+      for(var r=0;r<3;r++)for(var q=0;q<4;q++){var on=Math.sin(t*1.3+r*1.7+q*2.3+x)>0;c.save();c.globalAlpha*=(a==null?1:a)*(on?.85:.25);c.fillStyle=hl?C.ora:C.blue;var px=x+(12+q*18)*s*.866,py=y-(12+q*18)*s*.5-(18+r*18)*s;c.fillRect(px,py,6*s,8*s);c.restore();}
+      for(var f=0;f<2;f++){var fx=x+(28+f*34)*s*.866-30*s*.866,fy=y-(28+f*34)*s*.5-30*s*.5-70*s;c.save();c.globalAlpha*=a==null?1:a;c.translate(fx,fy);c.scale(1,.5);c.rotate(t*4+f);c.strokeStyle='rgba(234,243,250,.7)';c.lineWidth=2;for(var b=0;b<3;b++){c.rotate(2.094);c.beginPath();c.moveTo(0,0);c.lineTo(9*s,0);c.stroke();}c.restore();}}
+    function fiber(c,A,B,t,col,a){c.save();c.globalAlpha*=a==null?1:a;c.strokeStyle=col;c.lineWidth=2;c.setLineDash([6,8]);c.lineDashOffset=-t*30;c.beginPath();c.moveTo(A[0],A[1]);c.lineTo(B[0],B[1]);c.stroke();c.restore();}
+    function chip(c,x,y,w,h,col,label,a){c.save();c.globalAlpha*=a==null?1:a;glow(c,col,10);c.fillStyle=col;rr(c,x,y,w,h,4);c.fill();c.restore();if(label)tx(c,label,x+w/2,y+h/2+4,10,'#fff','center',700,a);}
+    return {C:C,dots:dots,mp:mp,bg:bg,tx:tx,pill:pill,crumbs:crumbs,pulse:pulse,iso:iso,server:server,rack:rack,vm:vm,building:building,fiber:fiber,chip:chip,glow:glow};
+  })();
+  </script>
+
+
+  <span class="k"><span class="act-chip">🌐 REDES VIRTUALES</span> ¿Cómo sale una VM a internet? · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">Los 3 modos de red de una <span class="grad">máquina virtual</span></h2>
+  <div class="scene"><canvas aria-label="Animación: una VM dentro de tu portátil se conecta en modo NAT, bridge y host-only, y su equivalente en AWS"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scN',1000,480,[
+    'Tienes una <b>VM</b> en tu portátil (VirtualBox, tipo 2): un cuarto dentro de tu casa. ¿Cómo sale a internet? Hay <b>3 formas</b> de conectarla.',
+    '<b>NAT:</b> la VM sale a internet <b>usando la puerta de tu casa</b> (la IP de tu portátil). Puede navegar, pero <b>nadie de afuera la ve</b>: si alguien la busca, se estrella en el router.',
+    '<b>Bridge (puente):</b> la VM recibe <b>su propia IP del router</b>, como si fuera otro aparato del Wi-Fi. Tu celular la puede visitar directo.',
+    '<b>Host-only (solo anfitrión):</b> la VM <b>solo habla con tu portátil</b>. No tiene salida a internet: perfecta para laboratorios aislados.',
+    '<b>En AWS es lo mismo con otros nombres:</b> lo que construyeron en <b>pyme-vpc</b> ya usa estos tres modos.'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    if(st>=4){var a=E.out(Math.min(1,t/.6));V.tx(c,'Los mismos 3 modos, en AWS',500,56,22,'#fff','center',800,a);
+      [['BRIDGE','IP propia, visible desde afuera','subred PÚBLICA + Internet Gateway','tu EC2 web (IP pública)',C.grn],
+       ['NAT','sale, pero nadie la ve','subred PRIVADA + NAT Gateway','servidores internos que se actualizan',C.blue],
+       ['HOST-ONLY','solo habla adentro','subred AISLADA (sin ruta afuera)','la base de datos (bd)','#8a5cf6']].forEach(function(k,i){
+        var x=60+i*300,ai=E.back(Math.max(0,Math.min(1,(t-.2-i*.25)/.5)));c.save();c.globalAlpha*=ai;c.fillStyle='#0f2740';NetScene.rr(c,x,90,280,330,14);c.fill();c.strokeStyle=k[4];c.lineWidth=2.5;c.stroke();c.fillStyle=k[4];NetScene.rr(c,x,90,280,8,4);c.fill();c.restore();
+        V.tx(c,k[0],x+140,140,22,'#fff','center',800,ai);V.tx(c,k[1],x+140,166,13,C.mut,'center',600,ai);
+        V.tx(c,'≈ en AWS',x+140,222,13,k[4],'center',800,ai);
+        var w=k[2].split(' + ');w.forEach(function(l,j){V.tx(c,(j?'+ ':'')+l,x+140,252+j*24,15,'#fff','center',800,ai);});
+        V.tx(c,'ej.: '+k[3],x+140,370,12,'#ffb98a','center',700,ai);});
+      V.tx(c,'web = pública · bd = aislada: ¡ya lo hicieron en el LAB de la VPC!',500,458,14,'#9ff0c8','center',700,Math.max(0,Math.min(1,(t-1)/.5)));return;}
+    var NET=[880,110],RT=[640,220],HOUSE={x:120,y:170,w:330,h:230},VM=[240,300],LAP=[380,330],PH=[640,400];
+    /* internet */NetScene.cloud(c,NET[0],NET[1],48,'#2b4f74',1);V.tx(c,'Internet',NET[0],NET[1]+6,14,'#fff','center',800,1);
+    /* router */c.save();c.fillStyle='#16324f';NetScene.rr(c,RT[0]-50,RT[1]-26,100,52,10);c.fill();c.strokeStyle='rgba(159,182,201,.5)';c.stroke();c.restore();V.tx(c,'router',RT[0],RT[1]+5,13,'#fff','center',800,1);V.tx(c,'(tu Wi-Fi)',RT[0],RT[1]+44,11,C.mut,'center',600,1);
+    /* casa / portátil */c.save();c.fillStyle='rgba(15,158,213,.08)';c.strokeStyle='rgba(15,158,213,.5)';c.lineWidth=1.5;NetScene.rr(c,HOUSE.x,HOUSE.y,HOUSE.w,HOUSE.h,14);c.fill();c.stroke();c.restore();V.tx(c,'🏠 tu portátil',HOUSE.x+14,HOUSE.y+24,13,'#9fd8f0','left',800,1);
+    NetScene.laptop(c,LAP[0],LAP[1],70,'#9fd8f0',1);V.tx(c,'Windows',LAP[0],LAP[1]+28,11,C.mut,'center',600,1);
+    var vmcol=st===1?C.blue:st===2?C.grn:st===3?'#8a5cf6':C.ora;V.vm(c,VM[0]-70,VM[1]-60,140,96,'VM Ubuntu',st===1?'10.0.2.15':st===2?'192.168.1.50':st===3?'192.168.56.10':'(VirtualBox)',vmcol,1,true);
+    c.save();c.strokeStyle='rgba(159,182,201,.35)';c.lineWidth=2;c.beginPath();c.moveTo(LAP[0]+40,LAP[1]-20);c.lineTo(RT[0]-50,RT[1]);c.stroke();c.beginPath();c.moveTo(RT[0]+50,RT[1]-10);c.lineTo(NET[0]-40,NET[1]+20);c.stroke();c.restore();
+    function run(path,col,dur,off){var u=((t+(off||0))%dur)/dur,p=NetScene.along(path,u);c.save();V.glow(c,col,12);c.fillStyle=col;c.beginPath();c.arc(p[0],p[1],6,0,7);c.fill();c.restore();}
+    function blocked(x,y,txt){V.tx(c,'✗',x,y,30,C.red,'center',900,.6+.4*Math.sin(t*6));if(txt)V.tx(c,txt,x,y+24,12,'#ff9b9b','center',800,1);}
+    if(st===0){V.tx(c,'¿cómo conecto esta VM?',VM[0],VM[1]-78,14,'#ffb98a','center',800,.7+.3*Math.sin(t*3));}
+    if(st===1){run([[VM[0]+70,VM[1]],[LAP[0],LAP[1]-30],[RT[0]-50,RT[1]],[NET[0]-40,NET[1]+20]],C.grn,2.4);
+      if(t>1){var u=Math.min(1,((t-1)%3)/1.6),p=NetScene.along([[NET[0]-40,NET[1]+20],[RT[0]+50,RT[1]-10]],u);if(u<1){c.save();c.fillStyle=C.red;c.beginPath();c.arc(p[0],p[1],6,0,7);c.fill();c.restore();}else blocked(RT[0]+150,RT[1]+6,'nadie de afuera la ve');}
+      V.tx(c,'✓ navega por la puerta de tu casa',VM[0],HOUSE.y+HOUSE.h+28,13,'#9ff0c8','center',800,1);}
+    if(st===2){c.save();c.strokeStyle=C.grn;c.setLineDash([6,6]);c.lineDashOffset=-t*30;c.lineWidth=2.5;c.beginPath();c.moveTo(VM[0]+70,VM[1]-40);c.lineTo(RT[0]-50,RT[1]-10);c.stroke();c.restore();
+      c.save();c.fillStyle='#0b1a2b';NetScene.rr(c,PH[0]-20,PH[1]-34,40,68,8);c.fill();c.strokeStyle='#cfe3f1';c.lineWidth=2;c.stroke();c.restore();V.tx(c,'tu celular',PH[0],PH[1]+52,12,'#fff','center',700,1);
+      run([[PH[0],PH[1]-34],[RT[0],RT[1]+26],[RT[0]-50,RT[1]-10],[VM[0]+70,VM[1]-40]],C.grn,2.6);V.tx(c,'✓ el celular la visita directo',VM[0],HOUSE.y+HOUSE.h+28,13,'#9ff0c8','center',800,1);}
+    if(st===3){run([[VM[0]+70,VM[1]],[LAP[0]-30,LAP[1]-20]],'#b79bff',1.2);var u3=(t%2.4)/2.4,p3=NetScene.along([[VM[0]+70,VM[1]-20],[HOUSE.x+HOUSE.w+8,VM[1]-40]],Math.min(1,u3*1.6));c.save();c.fillStyle=C.red;c.beginPath();c.arc(p3[0],p3[1],6,0,7);c.fill();c.restore();
+      if(u3>.62)blocked(HOUSE.x+HOUSE.w+24,VM[1]-36,'sin internet');V.tx(c,'✓ solo habla con tu portátil',VM[0],HOUSE.y+HOUSE.h+28,13,'#c9b6ff','center',800,1);}
+    if(st>=1&&st<=3)V.pill(c,22,16,['','NAT','BRIDGE','HOST-ONLY'][st],vmcol,'#fff',1);
+  });
+  </script>
+</section>
+
+<!-- 4 · SSH: LLAVES VS CONTRASEÑAS -->
+<section class="slide" id="scS">
+  <span class="k"><span class="act-chip">🔐 SSH</span> Cómo entras a tu servidor · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">SSH: <span class="grad">llaves vs. contraseñas</span></h2>
+  <div class="scene"><canvas aria-label="Animación: un robot prueba contraseñas; el par de llaves, candado en el servidor y llave en tu PC; túnel cifrado por el puerto 22"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scS',1000,480,[
+    '<b>SSH</b> es el <b>control remoto</b> de tu servidor: desde tu PC escribes comandos y se ejecutan allá. Entra por el <b>puerto 22</b>. Pero ¿cómo sabe el servidor que eres tú?',
+    'Con <b>contraseña</b> hay un problema: en internet hay <b>robots</b> probando claves todo el día (123456, admin, password…). Si tu clave es débil, entran.',
+    'Por eso AWS usa un <b>par de llaves</b>: el <b>candado</b> (llave pública) queda en el servidor y la <b>llave</b> (privada: tu <b>.ppk</b>) solo la tienes tú. Se descargó una sola vez.',
+    'Al conectarte, MobaXterm muestra tu llave, el candado abre y se arma un <b>túnel cifrado</b>: lo que viaja por ahí no lo puede leer nadie.',
+    '<b>Reglas de oro:</b> la llave <b>nunca se comparte</b> ni se sube a GitHub · si la pierdes no hay copia · el puerto 22 abierto <b>solo para tu IP</b>. El robot rebota.'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    var PC=[180,270],SV=[870,270],LX=690;
+    NetScene.laptop(c,PC[0],PC[1]+30,130,'#9fd8f0',1);V.tx(c,'tu PC · MobaXterm',PC[0],PC[1]+70,13,'#fff','center',800,1);
+    V.iso(c,SV[0]-60,SV[1]+60,110,80,110,'#aab6c3','#56626f','#7a8796',1);V.tx(c,'tu EC2',SV[0]-10,SV[1]+96,13,'#fff','center',800,1);
+    c.save();c.fillStyle='#e5484d';NetScene.rr(c,LX-20,SV[1]-20,40,16,4);c.fill();c.restore();V.tx(c,'puerto 22',LX,SV[1]-26,11,'#ffb98a','center',800,1);
+    if(st===0){var u=(t%2)/2,p=NetScene.along([[PC[0]+70,PC[1]],[LX-20,SV[1]-12]],u);c.save();V.glow(c,C.blue,10);c.fillStyle=C.blue;NetScene.rr(c,p[0]-30,p[1]-12,60,24,6);c.fill();c.restore();V.tx(c,'$ ls',p[0],p[1]+4,11,'#fff','center',800,1,'"JetBrains Mono",monospace');
+      V.tx(c,'¿cómo sabe el servidor que eres tú?',500,130,18,'#ffb98a','center',800,1);}
+    if(st===1){NetScene.person(c,500,150,28,'#c9d1d9',1);V.tx(c,'🤖 robot de internet',500,186,13,'#ff9b9b','center',800,1);
+      var P=['123456','admin','password','qwerty','pereira2026'],k=Math.floor(t/.7)%P.length,u1=(t%.7)/.7,pp=NetScene.along([[540,170],[LX-20,SV[1]-12]],u1);
+      c.save();c.fillStyle=C.red;NetScene.rr(c,pp[0]-44,pp[1]-12,88,24,6);c.fill();c.restore();V.tx(c,P[k],pp[0],pp[1]+4,11,'#fff','center',800,1,'"JetBrains Mono",monospace');
+      V.tx(c,'miles de intentos por hora',500,430,15,'#ff9b9b','center',800,1);}
+    if(st>=2){var a2=st===2?E.back(Math.min(1,t/.6)):1;
+      c.save();c.globalAlpha*=a2;c.translate(LX,SV[1]-70);c.fillStyle='#E97132';NetScene.rr(c,-22,-6,44,36,6);c.fill();c.strokeStyle='#E97132';c.lineWidth=6;c.beginPath();c.arc(0,-6,14,Math.PI,0);c.stroke();c.restore();
+      V.tx(c,'🔒 llave pública (candado)',LX,SV[1]-126,12,'#ffb98a','center',800,a2);V.tx(c,'~/.ssh/authorized_keys',LX,SV[1]-110,10,C.mut,'center',600,a2,'"JetBrains Mono",monospace');
+      var kx=st===3?PC[0]+70+(LX-90-PC[0]-70)*E.io(Math.min(1,t/1.2)):PC[0]+40;c.save();c.globalAlpha*=a2;c.translate(kx,PC[1]-90);c.fillStyle=C.yel;c.beginPath();c.arc(0,0,13,0,7);c.fill();c.fillRect(10,-4,38,8);c.fillRect(38,4,6,10);c.fillRect(28,4,6,8);c.fillStyle='#08182a';c.beginPath();c.arc(0,0,5,0,7);c.fill();c.restore();
+      V.tx(c,'🗝 llave privada: tu .ppk',PC[0]+40,PC[1]-120,12,C.yel,'center',800,a2);V.tx(c,'solo tú la tienes',PC[0]+40,PC[1]-104,10,C.mut,'center',600,a2);}
+    if(st>=3){var a3=E.out(Math.max(0,Math.min(1,(t-(st===3?1.2:0))/.5)));c.save();c.globalAlpha*=a3;c.strokeStyle=C.grn;c.lineWidth=3;V.glow(c,C.grn,12);NetScene.rr(c,PC[0]+80,PC[1]-24,LX-PC[0]-110,40,20);c.stroke();c.restore();
+      for(var q=0;q<3;q++){var u3=((t*.4)+q/3)%1,x=PC[0]+100+u3*(LX-PC[0]-150);V.tx(c,['a8F#k2','Zq9!vX','7mP@rT'][q],x,PC[1]+1,12,'#9ff0c8','center',800,a3,'"JetBrains Mono",monospace');}
+      V.tx(c,'túnel cifrado · puerto 22 ✓',500,PC[1]+50,15,'#9ff0c8','center',800,a3);}
+    if(st>=4){var a4=E.out(Math.min(1,t/.5));NetScene.person(c,500,130,22,'#c9d1d9',a4);var u4=Math.min(1,(t%2.2)/1.2),p4=NetScene.along([[500,150],[LX-30,SV[1]-30]],u4);if(u4<1){c.save();c.fillStyle=C.red;c.beginPath();c.arc(p4[0],p4[1],6,0,7);c.fill();c.restore();}else V.tx(c,'✗ rebota: no tiene la llave',LX-110,SV[1]-50,13,'#ff9b9b','center',800,1);
+      ['nunca compartas tu .ppk / .pem','nunca la subas a GitHub','si la pierdes, no hay copia','puerto 22 solo para tu IP'].forEach(function(r,i){V.pill(c,40+i*235,420,'✓ '+r,'rgba(52,195,143,.25)','#fff',a4);});}
+  });
+  </script>
+</section>
+
+<!-- 5 · TRANSFERIR ARCHIVOS -->
+<section class="slide" id="scF">
+  <span class="k"><span class="act-chip">📦 ARCHIVOS</span> Llevar cosas a tu servidor · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">SSH es el control remoto; <span class="grad">SFTP es el camión</span></h2>
+  <div class="scene"><canvas aria-label="Animación: una foto viaja por SFTP desde tu PC a tu EC2, se mueve a la carpeta de NGINX y aparece en tu página"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scF',1000,480,[
+    'Con <b>SSH</b> mandas <b>comandos</b>. Para llevar <b>archivos</b> (una foto, un PDF) usas <b>SFTP</b>: un camión que viaja por <b>el mismo túnel seguro</b> del puerto 22.',
+    'En <b>MobaXterm</b>, el panel de la izquierda es SFTP: <b>arrastras la foto</b> desde tu PC y llega a tu carpeta del servidor: <b>/home/ec2-user</b>.',
+    'Pero tu web vive en <b>/usr/share/nginx/html</b>, que es de <b>root</b>. Por eso la mueves con <b>sudo mv</b>.',
+    'Agregas la foto a tu <b>index.html</b> con una etiqueta <b>&lt;img&gt;</b>, recargas… ¡y tu web ya tiene foto! 📸'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    NetScene.laptop(c,160,300,150,'#9fd8f0',1);V.tx(c,'tu PC',160,340,13,'#fff','center',800,1);
+    function photo(x,y,a){if(!(a>0))return;c.save();c.globalAlpha*=a;c.fillStyle='#f4f8fb';NetScene.rr(c,x-26,y-20,52,40,4);c.fill();c.fillStyle='#E97132';c.beginPath();c.arc(x-8,y-6,6,0,7);c.fill();c.fillStyle='#156082';c.beginPath();c.moveTo(x-22,y+16);c.lineTo(x-4,y-2);c.lineTo(x+8,y+8);c.lineTo(x+16,y);c.lineTo(x+22,y+16);c.closePath();c.fill();c.restore();V.tx(c,'foto.jpg',x,y+34,11,'#fff','center',700,a,'"JetBrains Mono",monospace');}
+    /* servidor con carpetas */c.save();c.fillStyle='#0f2740';NetScene.rr(c,560,90,400,320,14);c.fill();c.strokeStyle=C.blue;c.lineWidth=2;c.stroke();c.restore();V.tx(c,'tu EC2',580,116,14,'#9fd8f0','left',800,1);
+    function folder(x,y,name,hl){c.save();c.fillStyle=hl?'#E97132':'#d4a53a';NetScene.rr(c,x,y,40,8,3);c.fill();NetScene.rr(c,x,y+6,170,46,6);c.fill();c.restore();V.tx(c,name,x+85,y+36,12,'#08182a','center',800,1,'"JetBrains Mono",monospace');}
+    folder(590,140,'/home/ec2-user',st===1);folder(590,260,'/usr/share/nginx/html',st>=2);
+    c.save();c.strokeStyle='rgba(52,195,143,.6)';c.lineWidth=3;NetScene.rr(c,240,224,320,32,16);c.stroke();c.restore();V.tx(c,'túnel seguro · puerto 22',400,214,12,'#9ff0c8','center',700,1);
+    if(st===0){var u=(t%2.4)/2.4;photo(260+u*290,240,1);V.tx(c,'SFTP = el camión de archivos',400,150,18,'#ffb98a','center',800,1);}
+    if(st===1){var u1=Math.min(1,t/1.4);photo(250+(680-250)*E.io(u1),240-(240-176)*E.io(u1)*(u1>.7?1:0),1);if(u1>=1)V.tx(c,'✓ llegó a tu carpeta',870,176,12,'#9ff0c8','left',700,1);
+      c.save();c.fillStyle='rgba(255,255,255,.08)';NetScene.rr(c,40,100,150,120,8);c.fill();c.restore();V.tx(c,'panel SFTP',115,124,12,'#9fd8f0','center',800,1);V.tx(c,'(MobaXterm)',115,142,11,C.mut,'center',600,1);V.tx(c,'↖ arrastra aquí',115,196,12,'#ffb98a','center',800,1);}
+    if(st===2){var u2=Math.min(1,t/1.2);photo(680,176+(296-176)*E.io(u2),1);V.tx(c,'$ sudo mv ~/foto.jpg /usr/share/nginx/html/',760,440,13,'#e6edf3','center',700,Math.min(1,t/.4),'"JetBrains Mono",monospace');}
+    if(st===3){photo(860,296,1);var a=E.out(Math.min(1,t/.6));c.save();c.globalAlpha*=a;c.fillStyle='#f4f8fb';NetScene.rr(c,250,90,270,190,10);c.fill();c.fillStyle='#156082';c.fillRect(256,116,258,30);c.restore();V.tx(c,'Mi página ☕',385,137,14,'#fff','center',800,a);
+      if(t>.8){c.save();c.globalAlpha=Math.min(1,(t-.8)/.5);c.fillStyle='#E97132';c.beginPath();c.arc(330,190,14,0,7);c.fill();c.fillStyle='#156082';c.beginPath();c.moveTo(270,268);c.lineTo(320,210);c.lineTo(370,246);c.lineTo(410,220);c.lineTo(500,268);c.closePath();c.fill();c.restore();}
+      V.tx(c,'<img src="foto.jpg">',385,312,14,'#ffb98a','center',800,a,'"JetBrains Mono",monospace');}
+  });
+  </script>
+</section>
+
+<!-- 6 · LAB 1: CONECTIVIDAD -->
+<section class="slide" id="labC">
+  <span class="k"><span class="act-chip">🧪 LAB 1</span> ¿Qué puertas tiene abiertas tu servidor?</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">Revisa <span class="grad">quién entra y por dónde</span></h2>
+  <style>.term.lab{max-height:52vh;overflow:auto;font-size:clamp(.72rem,1.05vw,.9rem)}.term.lab p{white-space:pre-wrap;word-break:break-all;min-height:1.35em}.term.lab p.hl b{color:#FFC928;font-weight:600;background:rgba(255,201,40,.14);border-radius:4px;padding:0 3px}.term.lab p.note{color:#9fb3c8;font-size:.85em}.term.lab .cur{display:inline-block;width:.6em;background:#39c8e8;animation:blk 1s steps(1) infinite}@keyframes blk{50%{opacity:0}}
+  .cmdlist{list-style:none;display:flex;flex-direction:column;gap:6px;font-size:clamp(.78rem,1.1vw,.95rem)}.cmdlist li{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}.cmdlist code{font-family:var(--mono);color:var(--a1);font-weight:600;font-size:.92em}</style>
+  <script>
+  window.typeTerm=window.typeTerm||function(sec,box,L){var T=[];function esc(x){return x.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+    function at(ms,fn){T.push(setTimeout(fn,ms));}
+    sec.__enter=function(){T.forEach(clearTimeout);T=[];box.innerHTML='';var d=300;
+      L.forEach(function(l){var el=document.createElement('p');if(l[0]!=='cmd')el.className=l[0];
+        if(l[0]==='cmd'){at(d,function(){box.appendChild(el);box.scrollTop=box.scrollHeight;});for(var i=1;i<=l[1].length;i++)(function(k){at(d+k*38,function(){el.innerHTML=esc(l[1].slice(0,k))+'<span class="cur">&nbsp;</span>';});})(i);d+=l[1].length*38+380;at(d-10,function(){el.innerHTML=esc(l[1]);});}
+        else{at(d,function(){el.innerHTML=l[0]==='out'?esc(l[1]):l[1];el.style.opacity=0;box.appendChild(el);box.scrollTop=box.scrollHeight;el.animate([{opacity:0},{opacity:1}],{duration:300,fill:'forwards'});});d+=l[0]==='note'?800:300;}});};};
+  </script>
+  <div class="grid2" style="align-items:start">
+    <div class="demo term lab" id="labCterm" style="min-height:320px"></div>
+    <ul class="cmdlist">
+      <li><code>sudo ss -tlnp</code><span>las <b>puertas abiertas</b> (puertos que escuchan) y qué programa las usa</span></li>
+      <li><code>echo $SSH_CLIENT</code><span>desde qué IP y puerto entraste</span></li>
+      <li><code>last -i | head</code><span>quién se ha conectado y desde dónde</span></li>
+      <li><code>curl -I localhost</code><span>¿tu web responde por dentro?</span></li>
+      <li><span>En tu PC (PowerShell): <code>Test-NetConnection IP -Port 80</code></span><span>¿se llega desde afuera? prueba 80, 22 y 3306</span></li>
+    </ul>
+  </div>
+  <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: ¿qué puertos tiene abiertos tu servidor? ¿El 3306 llegó? (no debería 😉)</p>
+  <script>
+  typeTerm(document.getElementById('labC'),document.getElementById('labCterm'),[
+    ['cmd','$ sudo ss -tlnp'],['hl','LISTEN  0.0.0.0:<b>22</b>   users:(("<b>sshd</b>"…))'],['hl','LISTEN  0.0.0.0:<b>80</b>   users:(("<b>nginx</b>"…))'],['note','  ↑ dos puertas abiertas: SSH y tu web'],
+    ['cmd','$ echo $SSH_CLIENT'],['hl','<b>181.53.20.14</b> 52344 22'],['note','  ↑ tu IP de casa · tu puerto · entraste por el 22'],
+    ['cmd','$ last -i | head -3'],['out','ec2-user pts/0  181.53.20.14  Fri Oct  2 18:41   still logged in'],
+    ['cmd','$ curl -I localhost'],['hl','HTTP/1.1 <b>200 OK</b>'],
+    ['cmd','PS> Test-NetConnection 54.x.x.10 -Port 80'],['hl','TcpTestSucceeded : <b>True</b>'],
+    ['cmd','PS> Test-NetConnection 54.x.x.10 -Port 3306'],['hl','TcpTestSucceeded : <b>False</b>'],['note','  ↑ el Security Group no la deja pasar ✓']]);
+  </script>
+</section>
+
+<!-- 7 · LAB 2: SUBE UNA FOTO A TU WEB -->
+<section class="slide" id="labF">
+  <span class="k"><span class="act-chip">🧪 LAB 2</span> SFTP con MobaXterm</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">Sube <span class="grad">una foto a tu web</span></h2>
+  <div class="grid2" style="align-items:start">
+    <div class="demo term lab" id="labFterm" style="min-height:320px"></div>
+    <ul class="cmdlist">
+      <li><span>1 · En MobaXterm, panel <b>SFTP</b> (izquierda)</span><span>arrastra una foto tuya → queda en <code>/home/ec2-user</code></span></li>
+      <li><code>ls -lh ~</code><span>comprueba que llegó y cuánto pesa</span></li>
+      <li><code>sudo mv ~/foto.jpg /usr/share/nginx/html/</code><span>la llevas a la carpeta de la web</span></li>
+      <li><code>sudo nano …/index.html</code><span>agrega <code>&lt;img src="foto.jpg" width="400"&gt;</code></span></li>
+      <li><code>curl -I localhost/foto.jpg</code><span>¿NGINX la entrega? (200 OK, image/jpeg)</span></li>
+      <li><span>Sin MobaXterm (PowerShell):</span><span><code>scp -i llave.pem foto.jpg ec2-user@IP:~</code></span></li>
+    </ul>
+  </div>
+  <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: el link de tu web <b>con tu foto</b>. Usa nombres sin espacios ni tildes: <b>foto.jpg</b>, no <b>Mi Foto (1).JPG</b>.</p>
+  <script>
+  typeTerm(document.getElementById('labF'),document.getElementById('labFterm'),[
+    ['note','  (arrastraste foto.jpg al panel SFTP de MobaXterm)'],
+    ['cmd','$ ls -lh ~'],['hl','-rw-r--r--. 1 ec2-user ec2-user <b>240K</b> Oct  2 19:05 <b>foto.jpg</b>'],
+    ['cmd','$ sudo mv ~/foto.jpg /usr/share/nginx/html/'],
+    ['cmd','$ sudo nano /usr/share/nginx/html/index.html'],['note','  ↑ agrega: <img src="foto.jpg" width="400">  ·  Ctrl+O, Enter, Ctrl+X'],
+    ['cmd','$ curl -I localhost/foto.jpg'],['hl','HTTP/1.1 <b>200 OK</b>'],['hl','Content-Type: <b>image/jpeg</b>'],['note','  ↑ recarga tu IP pública: ¡tu web ya tiene foto! 📸']]);
+  </script>
+</section>
+
+<!-- 8 · BUENAS PRÁCTICAS DE EXPOSICIÓN -->
+<section class="slide">
+  <span class="k"><span class="act-chip">🛡️ EXPONER SIN MIEDO</span> Cada puerto abierto es una puerta</span>
+  <h2>Abre <span class="grad">solo lo necesario</span></h2>
+  <ul class="clean check">
+    <li><b>80 / 443</b> (web) → abiertos a todos: es lo que quieres mostrar</li>
+    <li><b>22</b> (SSH) → <b>solo tu IP</b> ("Mi IP" en el Security Group). Nunca <b>0.0.0.0/0</b></li>
+    <li><b>3306, 5432</b> (bases de datos) → <b>nunca</b> a internet: solo desde adentro de la VPC</li>
+    <li>Llaves en vez de contraseñas · la <b>.ppk/.pem</b> no se comparte ni se sube a GitHub</li>
+    <li>Revisa seguido: <b>sudo ss -tlnp</b> (qué escucha) y <b>last -i</b> (quién entró)</li>
+  </ul>
+  <p class="sub" style="margin-top:14px">Regla de la casa: <b>cada puerta abierta es una puerta que alguien va a tocar</b>. 🚪</p>
+</section>
+
+<!-- 9 · RETO -->
+<section class="slide">
+  <span class="k"><span class="act-chip">🏁 RETO</span> Detective de tu propio servidor</span>
+  <h2>¿Tu servidor está <span class="grad">bien cerrado</span>?</h2>
+  <ul class="clean">
+    <li>1 · En la consola, revisa tu <b>Security Group</b>: ¿el 22 dice <b>Mi IP</b> o <b>0.0.0.0/0</b>? Si es 0.0.0.0/0, corrígelo</li>
+    <li>2 · Corre <b>sudo ss -tlnp</b>: ¿hay alguna puerta abierta que no reconozcas?</li>
+    <li>3 · Corre <b>sudo journalctl -u sshd | grep "Invalid user" | tail</b>: ¿ya te tocaron la puerta los robots? 🤖</li>
+  </ul>
+  <p class="sub" style="margin-top:20px">Spoiler: casi todos los servidores con el 22 abierto al mundo reciben intentos de robots <b>en las primeras horas</b>.</p>
+</section>
+
+<!-- 10 · DEJA TODO SANO -->
+<section class="slide">
+  <span class="k"><span class="act-chip">✅ CIERRE</span> Deja la casa en orden</span>
+  <h2>Antes de irte: <span class="grad">tu servidor sano y cerrado</span></h2>
+  <ul class="clean check">
+    <li>Security Group: <b>80</b> abierto · <b>22</b> solo <b>Mi IP</b> · nada más</li>
+    <li>Tu web abre en la IP pública <b>con tu foto</b></li>
+    <li><b>systemctl is-active nginx</b> → <b>active</b></li>
+    <li>Tu <b>.ppk</b> guardada en un lugar seguro (no en el escritorio ni en GitHub)</li>
+    <li>¿No lo vas a usar más hoy? <b>Stop</b> a la instancia — capa gratuita cuidada 💵</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <span class="k">Para la próxima clase</span>
+  <h2>Su misión</h2>
+  <ul class="clean">
+    <li>1 · Pantallazo de <b>sudo ss -tlnp</b> y del <b>Security Group</b> con el 22 en "Mi IP"</li>
+    <li>2 · El link de tu web <b>con tu foto</b> subida por SFTP</li>
+    <li>3 · En tu bitácora: los modos <b>NAT, bridge y host-only</b> y su equivalente en AWS (una frase cada uno)</li>
+  </ul>
+  <p class="sub" style="margin-top:24px">Hoy aprendieron a <b>entrar</b> a su servidor de forma segura, a <b>llevarle cosas</b> y a <b>cerrar las puertas</b> que sobran. 🔐</p>
+  <div class="qrs">
+    <div class="qr qr-ticket">{{QR_TICKET}}
+
+<span>🎟️ Ticket de salida<br><b>tu asistencia de hoy</b><br>escanea al cierre</span></div>
+    <div class="qr"><svg xmlns="http://www.w3.org/2000/svg" width="132" height="132" class="segno"><g transform="scale(4)"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#0a0a0e" d="M2 2.5h7m1 0h1m2 0h1m2 0h1m1 0h5m1 0h7m-29 1h1m5 0h1m1 0h2m2 0h3m3 0h1m3 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m4 0h1m1 0h1m1 0h2m1 0h1m3 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h1m2 0h5m4 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m2 0h1m2 0h1m1 0h3m2 0h1m2 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m2 0h1m1 0h4m3 0h2m2 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h2m7 0h3m-20 1h1m1 0h2m1 0h3m1 0h2m1 0h1m1 0h1m1 0h2m4 0h1m2 0h1m1 0h2m-29 1h1m1 0h1m2 0h1m3 0h3m2 0h1m1 0h4m1 0h4m3 0h1m-29 1h1m5 0h6m1 0h2m3 0h1m1 0h5m1 0h2m-26 1h1m2 0h1m2 0h6m1 0h2m1 0h1m1 0h1m1 0h3m3 0h1m-29 1h3m2 0h3m3 0h1m1 0h3m1 0h1m1 0h1m5 0h2m-23 1h1m3 0h5m1 0h3m2 0h1m2 0h2m2 0h3m-28 1h1m2 0h1m1 0h1m1 0h2m1 0h3m5 0h2m2 0h2m1 0h3m-27 1h1m1 0h2m3 0h1m1 0h1m2 0h1m1 0h1m6 0h2m2 0h1m-27 1h3m2 0h4m3 0h3m2 0h4m2 0h2m1 0h1m-27 1h1m2 0h1m2 0h3m1 0h2m2 0h1m1 0h1m2 0h1m2 0h1m1 0h3m-28 1h1m3 0h1m1 0h1m2 0h1m2 0h4m1 0h1m4 0h2m2 0h1m-23 1h2m1 0h1m1 0h3m3 0h1m1 0h1m4 0h1m3 0h1m-26 1h1m1 0h2m1 0h1m2 0h2m2 0h1m1 0h3m1 0h8m-19 1h1m1 0h3m3 0h3m1 0h1m3 0h5m-29 1h7m1 0h3m3 0h1m1 0h1m1 0h3m1 0h1m1 0h2m1 0h1m-28 1h1m5 0h1m1 0h1m2 0h1m1 0h1m4 0h1m1 0h1m3 0h2m1 0h2m-29 1h1m1 0h3m1 0h1m3 0h1m1 0h1m2 0h1m1 0h1m2 0h5m1 0h3m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h1m2 0h5m1 0h3m2 0h2m2 0h1m-29 1h1m1 0h3m1 0h1m1 0h3m1 0h1m3 0h1m6 0h1m2 0h1m1 0h1m-29 1h1m5 0h1m3 0h2m1 0h4m3 0h4m1 0h1m1 0h1m-28 1h7m1 0h1m2 0h1m2 0h2m2 0h5m2 0h1m1 0h1"/></g></svg>
+
+<span>LinkedIn<br><b>/in/alejobarrera</b></span></div>
+    <div class="qr"><svg xmlns="http://www.w3.org/2000/svg" width="132" height="132" class="segno"><g transform="scale(4)"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#0a0a0e" d="M2 2.5h7m6 0h1m8 0h7m-29 1h1m5 0h1m4 0h3m1 0h1m3 0h1m2 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m2 0h2m2 0h4m1 0h1m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m3 0h1m2 0h2m3 0h1m3 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m3 0h1m1 0h1m3 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m1 0h2m1 0h2m3 0h1m2 0h2m1 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-20 1h1m1 0h1m2 0h2m1 0h1m2 0h1m-20 1h1m2 0h1m1 0h1m1 0h1m3 0h1m5 0h1m1 0h2m1 0h2m1 0h1m-25 1h1m1 0h2m2 0h1m1 0h1m2 0h1m1 0h1m1 0h2m2 0h8m-29 1h4m1 0h2m4 0h1m1 0h2m6 0h1m4 0h1m1 0h1m-29 1h1m3 0h2m2 0h2m7 0h1m1 0h3m3 0h1m1 0h2m-29 1h3m1 0h1m1 0h2m1 0h2m1 0h1m4 0h1m2 0h1m2 0h1m1 0h1m2 0h1m-28 1h2m4 0h1m4 0h4m2 0h1m3 0h1m1 0h1m1 0h1m1 0h1m-28 1h2m1 0h3m1 0h2m3 0h1m1 0h1m1 0h1m2 0h3m1 0h1m3 0h1m-29 1h5m2 0h3m2 0h1m1 0h1m2 0h1m3 0h1m1 0h1m1 0h1m-26 1h1m1 0h2m2 0h3m1 0h2m3 0h1m2 0h4m5 0h2m-29 1h1m1 0h2m4 0h2m2 0h3m1 0h1m1 0h1m3 0h5m1 0h1m-23 1h1m1 0h2m4 0h1m1 0h2m5 0h3m2 0h1m-27 1h4m2 0h2m1 0h1m2 0h1m2 0h4m2 0h1m1 0h1m1 0h2m-29 1h5m1 0h2m2 0h1m4 0h3m2 0h5m2 0h2m-21 1h3m1 0h2m1 0h6m3 0h1m1 0h1m1 0h1m-29 1h7m2 0h2m2 0h1m1 0h2m1 0h3m1 0h1m1 0h1m3 0h1m-29 1h1m5 0h1m2 0h1m2 0h1m2 0h1m3 0h2m3 0h2m1 0h1m-28 1h1m1 0h3m1 0h1m1 0h4m1 0h1m2 0h1m2 0h6m-25 1h1m1 0h3m1 0h1m2 0h2m1 0h1m4 0h2m4 0h1m1 0h3m-28 1h1m1 0h3m1 0h1m3 0h2m1 0h1m1 0h1m2 0h4m4 0h3m-29 1h1m5 0h1m1 0h2m4 0h4m2 0h4m1 0h1m1 0h2m-29 1h7m3 0h1m1 0h2m3 0h1m1 0h3m2 0h1m2 0h1"/></g></svg>
+
+<span>Web<br><b>alejandrobarrera.net</b></span></div>
+    <div class="qr"><svg xmlns="http://www.w3.org/2000/svg" width="116" height="116" class="segno"><g transform="scale(4)"><path fill="#fff" d="M0 0h29v29h-29z"/><path class="qrline" stroke="#0a0a0e" d="M2 2.5h7m2 0h2m3 0h1m3 0h7m-25 1h1m5 0h1m1 0h1m2 0h2m1 0h1m1 0h1m1 0h1m5 0h1m-25 1h1m1 0h3m1 0h1m1 0h1m3 0h1m1 0h2m2 0h1m1 0h3m1 0h1m-25 1h1m1 0h3m1 0h1m1 0h1m3 0h3m1 0h1m1 0h1m1 0h3m1 0h1m-25 1h1m1 0h3m1 0h1m4 0h1m1 0h1m2 0h1m1 0h1m1 0h3m1 0h1m-25 1h1m5 0h1m2 0h2m2 0h2m3 0h1m5 0h1m-25 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-17 1h1m2 0h2m3 0h1m-17 1h1m5 0h1m1 0h1m1 0h1m2 0h6m2 0h3m-24 1h1m4 0h1m1 0h1m3 0h1m2 0h2m3 0h5m-20 1h1m1 0h6m1 0h1m1 0h2m1 0h2m1 0h1m1 0h2m-25 1h1m2 0h1m3 0h5m2 0h1m2 0h2m1 0h2m2 0h1m-25 1h2m4 0h3m3 0h1m2 0h2m1 0h2m4 0h1m-25 1h1m2 0h3m2 0h1m4 0h1m1 0h2m2 0h1m3 0h1m-24 1h1m2 0h2m1 0h3m2 0h5m1 0h1m1 0h3m1 0h2m-25 1h1m1 0h2m3 0h1m1 0h1m1 0h1m5 0h1m1 0h1m1 0h2m1 0h1m-25 1h1m2 0h1m1 0h2m3 0h2m1 0h2m1 0h5m1 0h1m-15 1h1m1 0h1m1 0h2m2 0h1m3 0h1m-21 1h7m3 0h2m1 0h1m2 0h1m1 0h1m1 0h1m3 0h1m-25 1h1m5 0h1m3 0h1m1 0h1m1 0h3m3 0h1m-21 1h1m1 0h3m1 0h1m2 0h1m2 0h1m2 0h6m1 0h3m-25 1h1m1 0h3m1 0h1m3 0h1m3 0h2m1 0h2m4 0h2m-25 1h1m1 0h3m1 0h1m2 0h1m1 0h2m2 0h1m1 0h1m3 0h2m1 0h1m-25 1h1m5 0h1m4 0h1m3 0h2m1 0h3m3 0h1m-25 1h7m1 0h1m1 0h1m1 0h3m1 0h3m2 0h1m2 0h1"/></g></svg>
+
+<span>Comunidad<br><b>iaopslatam.com</b></span></div>
+</section>
+
+
+<script>
+var slides = document.querySelectorAll(".slide"), i = 0;
+function go(n) {
+  i = Math.max(0, Math.min(slides.length - 1, n));
+  slides.forEach(function(s, k){ s.classList.toggle("on", k === i); });
+  document.getElementById("bar").style.width = ((i + 1) / slides.length * 100) + "%";
+  document.getElementById("num").textContent = (i + 1) + " / " + slides.length;
+  document.querySelector(".nav-hint").style.display = i === 0 ? "" : "none";
+  document.getElementById("instf").style.display = i === 0 ? "none" : "";
+  if (slides[i].__enter) slides[i].__enter();
+}
+function fwd() {
+  if (slides[i].__next && slides[i].__next()) return;
+  var hid = slides[i].querySelector(".layer:not(.on)");
+  if (hid) { hid.classList.add("on"); return; }
+  go(i + 1);
+}
+document.addEventListener("keydown", function(e){
+  if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") fwd();
+  if (e.key === "ArrowLeft" || e.key === "PageUp") go(i - 1);
+  if (e.key === "Home") go(0);
+});
+
+document.addEventListener("click", function(e){ if (e.clientX > innerWidth * 0.25) { fwd(); } else { go(i - 1); } });
+go(0);
+</script></body></html>
