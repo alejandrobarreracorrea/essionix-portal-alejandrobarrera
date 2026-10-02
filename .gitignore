@@ -12,3 +12,6 @@ crash.log
 terraform/build/
 terraform/bootstrap/.terraform/
 terraform/bootstrap/.terraform.lock.hcl
+
+# Python
+__pycache__/
