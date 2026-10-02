@@ -705,33 +705,88 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
 <section class="slide" id="scC">
   <span class="k"><span class="act-chip">⚙️ CICLO</span> init · plan · apply · state · destroy · clic o → para avanzar</span>
   <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">¿Cómo trabaja <span class="grad">Terraform</span>?</h2>
-  <div class="scene"><canvas aria-label="Animación del ciclo de Terraform: escribir el código, init descarga el provider, plan compara, apply llama a la API, el state recuerda y destroy borra"></canvas></div>
+  <div class="scene"><canvas aria-label="Ciclo de Terraform: a la izquierda el comando en PowerShell y su salida; a la derecha lo que pasa dentro de Terraform: mapa de dependencias, descarga del provider, comparación del plan, llamadas a la API, el state y el destroy en orden inverso"></canvas></div>
   <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
   <script>
   NetScene.make('scC',1000,480,[
-    '<b>1 · Escribes el plano</b> en un archivo <b>.tf</b> con un lenguaje sencillo (HCL): bloques que dicen <i>qué recurso quieres y cómo es</i>.',
-    '<b>2 · terraform init</b> descarga el <b>provider</b> de AWS: el <b>traductor</b> que convierte tu plano en llamadas a la API de AWS (hay providers para Azure, Google, Oracle…).',
-    '<b>3 · terraform plan</b> compara el plano con lo que ya existe y te muestra la lista: <b>+</b> crear, <b>~</b> cambiar, <b>−</b> borrar. <b>Todavía no toca nada</b>: es el presupuesto antes de la obra.',
-    '<b>4 · terraform apply</b> hace las llamadas a la API <b>en el orden correcto</b> (primero la VPC, luego las subredes…) y <b>en paralelo</b> cuando puede. Tú solo dices <b>yes</b>.',
-    '<b>5 · El state</b> (terraform.tfstate) es la <b>memoria</b> de Terraform: qué creó y con qué ID. Gracias a él, la próxima vez sabe <b>qué ya existe</b>.',
-    '<b>6 · terraform destroy</b> borra <b>todo lo que creó</b>, en orden inverso. Cero recursos olvidados, cero sorpresas en la factura.'
+    '<b>1 · Escribes el plano</b> (main.tf). Terraform lo <b>lee</b> y arma un <b>mapa de dependencias</b>: como la subred usa <b>aws_vpc.pyme.id</b>, sabe que <b>primero va la VPC</b>. Nadie le dice el orden: lo deduce.',
+    '<b>2 · terraform init</b> va al <b>Registry</b> de HashiCorp y descarga el <b>provider</b> de AWS: un programa (.exe) que traduce tu plano a llamadas a la API. Lo guarda en <b>.terraform</b> y anota la versión exacta en el <b>.lock.hcl</b>.',
+    '<b>3 · terraform plan</b> compara <b>lo que quieres</b> (el código) con <b>lo que ya existe</b> (su memoria + lo que consulta en AWS). La diferencia es el plan: <b>+</b> crear, <b>~</b> cambiar, <b>−</b> borrar. <b>Solo lee: no crea nada.</b>',
+    '<b>4 · terraform apply</b> recorre el mapa y llama a la API <b>en orden</b>: primero CreateVpc, luego subredes, puerta y portero <b>en paralelo</b>, al final la EC2. Cada respuesta trae un <b>ID real</b>.',
+    '<b>5 · El state</b> (terraform.tfstate) es la <b>memoria</b>: une cada nombre del código con su <b>ID real</b> en AWS. Así el próximo plan sabe qué ya existe. Tiene datos sensibles: <b>nunca a GitHub</b>.',
+    '<b>6 · terraform destroy</b> recorre el mapa <b>al revés</b>: primero la EC2, al final la VPC. Llama a los Delete… y vacía el state. Cero recursos olvidados, cero sorpresas en la factura.'
   ],function(c,s){
-    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
-    var N=[['código .tf','📄',[120,150]],['init','📥',[330,150]],['plan','🔍',[540,150]],['apply','🚀',[750,150]],['state','🧠',[750,420]],['destroy','🧹',[330,420]]];
-    N.forEach(function(n,i){var on=i<=st,cur=i===st,a=on?1:.25;c.save();c.globalAlpha*=a;if(cur)V.glow(c,C.ora,18);c.fillStyle=cur?'#3a2518':'#0f2740';NetScene.rr(c,n[2][0]-80,n[2][1]-40,160,80,14);c.fill();c.shadowBlur=0;c.strokeStyle=cur?C.ora:(on?C.blue:'#2f4a63');c.lineWidth=cur?3:2;c.stroke();c.restore();
-      V.tx(c,n[1]+' '+n[0],n[2][0],n[2][1]+6,16,'#fff','center',800,a);});
-    [[0,1],[1,2],[2,3],[3,4],[4,2]].forEach(function(e,i){var A=N[e[0]][2],B=N[e[1]][2],on=st>=e[1]||(e[0]===4&&st>=4);c.save();c.globalAlpha*=on?.8:.2;c.strokeStyle=C.blue;c.lineWidth=2;c.setLineDash([6,6]);c.lineDashOffset=-t*20;c.beginPath();
-      if(i===4){c.moveTo(A[0]-80,A[1]);c.quadraticCurveTo(560,420,B[0],B[1]+40);}else{c.moveTo(A[0]+(B[0]>A[0]?80:0),A[1]+(B[1]>A[1]?40:0));c.lineTo(B[0]-(B[0]>A[0]?80:0),B[1]-(B[1]>A[1]?40:0));}c.stroke();c.restore();});
-    var box=[60,228,880,92];function panel(){c.save();c.fillStyle='rgba(8,24,42,.92)';NetScene.rr(c,box[0],box[1],box[2],box[3],10);c.fill();c.strokeStyle='rgba(159,182,201,.35)';c.stroke();c.restore();}
-    if(st===0){panel();['resource "aws_vpc" "pyme" {','  cidr_block = "10.0.0.0/16"','}'].forEach(function(l,i){V.tx(c,l,90,272+i*22,14,i===1?'#ffb98a':'#9fd8f0','left',700,Math.min(1,(t-i*.3)/.4),'"JetBrains Mono",monospace');});}
-    if(st===1){panel();V.tx(c,'PS> terraform init',90,272,14,'#e6edf3','left',700,1,'"JetBrains Mono",monospace');var u=Math.min(1,t/1.6);c.save();c.fillStyle='rgba(255,255,255,.1)';NetScene.rr(c,90,284,500,12,6);c.fill();c.fillStyle=C.grn;NetScene.rr(c,90,284,500*u,12,6);c.fill();c.restore();
-      V.tx(c,u<1?'Installing hashicorp/aws v6.x…':'✓ Terraform has been successfully initialized!',90,318,13,u<1?'#cfe3f1':'#9ff0c8','left',700,1,'"JetBrains Mono",monospace');V.tx(c,'provider = traductor plano → API',780,300,14,'#ffb98a','center',800,1);}
-    if(st===2){panel();[['+ aws_vpc.pyme','#34c38f'],['+ aws_subnet.area["web"]','#34c38f'],['+ aws_instance.web','#34c38f']].forEach(function(k,i){V.tx(c,k[0],90,270+i*20,13,k[1],'left',700,Math.min(1,(t-i*.25)/.3),'"JetBrains Mono",monospace');});
-      V.tx(c,'Plan: 10 to add, 0 to change, 0 to destroy.',540,290,14,'#fff','left',800,Math.min(1,(t-.9)/.4),'"JetBrains Mono",monospace');V.tx(c,'(todavía no se creó nada)',540,312,12,'#ffb98a','left',700,Math.min(1,(t-1.2)/.4));}
-    if(st===3){panel();var R=['vpc','subredes ×4','igw','rutas','sg','ec2'];R.forEach(function(r,i){var d=Math.max(0,Math.min(1,(t-.2-i*.45)/.4));c.save();c.globalAlpha*=.3+.7*d;c.fillStyle=d>=1?'rgba(52,195,143,.3)':'rgba(255,255,255,.06)';NetScene.rr(c,90+i*140,262,124,40,8);c.fill();c.restore();V.tx(c,(d>=1?'✓ ':'… ')+r,152+i*140,287,13,d>=1?'#9ff0c8':'#cfe3f1','center',800,1);});
-      V.tx(c,'Apply complete! Resources: 10 added.',90,322,13,'#9ff0c8','left',800,Math.max(0,Math.min(1,(t-3)/.4)),'"JetBrains Mono",monospace');}
-    if(st===4){panel();V.tx(c,'terraform.tfstate',90,268,13,'#ffb98a','left',800,1,'"JetBrains Mono",monospace');['aws_vpc.pyme       → vpc-0a1b2c3d4e5f','aws_instance.web   → i-0f9e8d7c6b5a','… (los 10 recursos con su ID real)'].forEach(function(l,i){V.tx(c,l,90,290+i*18,12,'#e6edf3','left',600,Math.min(1,(t-i*.3)/.4),'"JetBrains Mono",monospace');});V.tx(c,'la memoria: plan la usa para comparar',740,300,14,'#9fd8f0','center',800,1);}
-    if(st===5){panel();V.tx(c,'PS> terraform destroy  →  yes',90,272,14,'#e6edf3','left',700,1,'"JetBrains Mono",monospace');['ec2','sg','rutas','igw','subredes','vpc'].forEach(function(r,i){var d=Math.max(0,Math.min(1,(t-.4-i*.35)/.3));V.tx(c,'− '+r,90+i*120,306,13,d>=1?'#ff9b9b':'#5f7890','left',800,1);});V.tx(c,'Destroy complete! Resources: 10 destroyed.',540,272,13,'#ff9b9b','left',800,Math.max(0,Math.min(1,(t-2.6)/.4)),'"JetBrains Mono",monospace');}
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t,M='"JetBrains Mono",monospace';V.bg(c,1000,480);
+    function f(d,u){return Math.max(0,Math.min(1,(t-d)/(u||.4)));}
+    V.crumbs(c,['📄 código .tf','📥 init','🔍 plan','🚀 apply','🧠 state','🧹 destroy'],st);
+    /* --- izquierda: lo que ves en PowerShell --- */
+    c.save();c.fillStyle='#012456';NetScene.rr(c,20,58,380,402,10);c.fill();c.fillStyle='#202020';NetScene.rr(c,20,58,380,26,10);c.fill();c.fillRect(20,72,380,12);c.restore();
+    V.tx(c,st===0?'📝 main.tf (tu editor)':'>_ PowerShell · C:\\Users\\tú\\pyme-tf',32,76,11,'#fff','left',700);
+    V.tx(c,'LO QUE VES',388,76,9,'#9fb3c8','right',800);
+    function term(L){var T=.2;L.forEach(function(l,i){var cmd=l[1]==='cmd',t0=T;T+=cmd?Math.max(.6,l[0].length*.03)+.2:(l[2]||.22);if(t<t0)return;
+      var tx=cmd?'PS> '+l[0].slice(0,Math.ceil(l[0].length*Math.min(1,(t-t0)/Math.max(.6,l[0].length*.03)))):l[0];
+      V.tx(c,tx,32,108+i*17,10.5,cmd?'#ffffff':(l[1]||'#c8d3e6'),'left',cmd?700:500,1,M);});}
+    /* --- derecha: dentro de Terraform --- */
+    c.save();c.fillStyle='rgba(8,24,42,.85)';NetScene.rr(c,414,58,566,402,10);c.fill();c.strokeStyle='rgba(233,113,50,.6)';c.lineWidth=1.5;c.stroke();c.restore();
+    V.tx(c,'🔍 DENTRO DE TERRAFORM',430,80,12,'#ffb98a','left',800);
+    /* mapa de dependencias */
+    var G={vpc:[630,130,'aws_vpc.pyme'],sub:[500,212,'aws_subnet.area ×4'],igw:[630,212,'internet_gateway'],sg:[760,212,'security_group'],rt:[565,294,'route_table'],ec2:[730,294,'aws_instance.web'],as:[565,372,'rt_association']};
+    var ED=[['vpc','sub'],['vpc','igw'],['vpc','sg'],['igw','rt'],['rt','as'],['sub','as'],['sub','ec2'],['sg','ec2']];
+    function graph(state,lab){ED.forEach(function(e){var A=G[e[0]],B=G[e[1]],a=Math.min(state(e[0]).a,state(e[1]).a);c.save();c.globalAlpha*=.25+.6*a;c.strokeStyle='#5fa8d3';c.lineWidth=1.5;c.beginPath();c.moveTo(A[0],A[1]+15);c.lineTo(B[0],B[1]-15);c.stroke();c.restore();});
+      Object.keys(G).forEach(function(k){var n=G[k],q=state(k);c.save();c.globalAlpha*=q.a;c.fillStyle=q.bg||'#0f2740';NetScene.rr(c,n[0]-62,n[1]-15,124,30,8);c.fill();c.strokeStyle=q.col||'#5fa8d3';c.lineWidth=q.hl?2.5:1.5;c.stroke();c.restore();
+        V.tx(c,(q.mark||'')+n[2],n[0],n[1]+4,10,'#fff','center',700,q.a,M);if(lab&&q.id)V.tx(c,q.id,n[0],n[1]+26,9,'#9ff0c8','center',600,q.a,M);});}
+    function api(title,col){c.save();c.fillStyle='rgba(255,153,0,.12)';NetScene.rr(c,838,104,134,290,10);c.fill();c.strokeStyle='#ff9900';c.lineWidth=1.5;c.stroke();c.restore();V.tx(c,'☁️ API de AWS',905,124,11,'#ffb98a','center',800);V.tx(c,'pedidos recibidos:',905,140,8.5,'#9fb3c8','center',600);if(title)V.tx(c,title,905,384,9,col||'#cfe3f1','center',700);}
+    function fly(k,name,t0,idx,col,done){var u=(t-t0)/.7;if(u<0)return;var n=G[k],dst=[846,158+idx*30];
+      if(u<1){var p=NetScene.along([[n[0]+62,n[1]],[n[0]+80,n[1]],[dst[0]-10,dst[1]]],E.io(u));c.save();c.font='700 9px "JetBrains Mono",monospace';var w=c.measureText(name).width+12;c.fillStyle=col;NetScene.rr(c,p[0]-4,p[1]-9,w,18,9);c.fill();c.restore();V.tx(c,name,p[0]+2,p[1]+4,9,'#0e2841','left',700,1,'"JetBrains Mono",monospace');}
+      else V.tx(c,name,dst[0],dst[1]+4,8.5,done,'left',700,Math.min(1,(u-1)*3+.3),'"JetBrains Mono",monospace');}
+    if(st===0){
+      [['resource "aws_vpc" "pyme" {','#9fd8f0'],['  cidr_block = "10.0.0.0/16"','#ffb98a'],['}','#9fd8f0'],['',''],['resource "aws_subnet" "area" {','#9fd8f0'],['  vpc_id = aws_vpc.pyme.id','#FFC928'],['  …','#9fd8f0'],['}','#9fd8f0'],['',''],['resource "aws_instance" "web" {','#9fd8f0'],['  subnet_id = aws_subnet…id','#FFC928'],['  vpc_security_group_ids = [','#FFC928'],['    aws_security_group.web.id ]','#FFC928'],['}','#9fd8f0']].forEach(function(l,i){V.tx(c,l[0],32,108+i*18,10.5,l[1],'left',600,f(i*.08),M);});
+      V.tx(c,'↑ estas referencias son las flechas del mapa',32,372,10.5,'#FFC928','left',700,f(1.4),M);
+      V.tx(c,'1. lee todos los .tf  →  2. arma el mapa (quién necesita a quién)',430,104,11,'#cfe3f1','left',600,f(.3));
+      var order=['vpc','sub','igw','sg','rt','ec2','as'];graph(function(k){return {a:f(.6+order.indexOf(k)*.25,.4)};});
+      V.tx(c,'la VPC arriba: todo depende de ella',630,440,12,'#9ff0c8','center',800,f(2.6));return;}
+    if(st===1){
+      term([['terraform init','cmd'],['Initializing provider plugins...'],['- Finding hashicorp/aws versions matching "~> 6.0"'],['- Installing hashicorp/aws v6.x.x...','',.9],['- Installed hashicorp/aws v6.x.x (signed by HashiCorp)','#9ff0c8'],['',''],['Terraform has been successfully initialized!','#9ff0c8']]);
+      c.save();c.fillStyle='#1d3a58';NetScene.rr(c,440,108,200,76,10);c.fill();c.strokeStyle='#8c4fff';c.lineWidth=2;c.stroke();c.restore();V.tx(c,'🌐 registry.terraform.io',540,136,11.5,'#fff','center',800);V.tx(c,'la “tienda” de providers',540,156,10,'#c9b6ff','center',600);V.tx(c,'aws · azurerm · google · oci…',540,172,9.5,'#9fb3c8','center',600,1,M);
+      var u=f(.9,1.3);if(u>0&&u<1){var p=NetScene.along([[640,150],[720,150],[720,240]],E.io(u));V.pill(c,p[0]-56,p[1]-12,'📦 hashicorp/aws 6.x','rgba(140,79,255,.9)','#fff',1);}
+      c.save();c.fillStyle='#0b1a2b';NetScene.rr(c,600,196,360,236,10);c.fill();c.strokeStyle='rgba(159,182,201,.4)';c.stroke();c.restore();V.tx(c,'💻 tu PC',616,218,11,'#9fd8f0','left',800);
+      [['📁 pyme-tf',0,1],['📄 main.tf',1,1],['📁 .terraform\\providers\\…',1,f(2.2)],['⚙️ terraform-provider-aws.exe',2,f(2.4)],['🔒 .terraform.lock.hcl',1,f(2.8)]].forEach(function(r,i){V.tx(c,r[0],620+r[1]*18,244+i*32,11,r[2]<1&&r[2]>0?'#FFC928':'#e6edf3','left',600,r[2],M);});
+      V.tx(c,'↑ el traductor: el que habla con la API',676,358,9.5,'#ffb98a','left',700,f(2.6));V.tx(c,'↑ versión exacta, igual para todo el equipo',658,390,9.5,'#ffb98a','left',700,f(3));
+      V.tx(c,'init no toca AWS: solo prepara la carpeta',430,452,11.5,'#9ff0c8','left',800,f(3.2));return;}
+    if(st===2){
+      term([['terraform plan','cmd'],['  # aws_vpc.pyme will be created','#9fb3c8',.3],['  + resource "aws_vpc" "pyme" {','#34c38f'],['      + cidr_block = "10.0.0.0/16"','#34c38f'],['  + aws_subnet.area["ventas"] … ["bd"]','#34c38f'],['  + aws_internet_gateway.puerta','#34c38f'],['  + aws_route_table.publica','#34c38f'],['  + aws_security_group.web','#34c38f'],['  + aws_instance.web','#34c38f'],['',''],['Plan: 10 to add, 0 to change, 0 to destroy.','#FFC928']]);
+      var col=[[440,'📄 LO QUE QUIERES','el código',['vpc','subredes ×4','igw','ruta + asociación','sg','ec2']],[610,'🧠 LO QUE RECUERDA','el state',[]],[780,'☁️ LO QUE HAY','consulta a AWS',[]]];
+      col.forEach(function(k,j){var a=f(.3+j*.5);c.save();c.globalAlpha*=a;c.fillStyle='#0f2740';NetScene.rr(c,k[0],100,160,250,10);c.fill();c.strokeStyle=j===0?'#5fa8d3':(j===1?'#8c4fff':'#ff9900');c.lineWidth=1.5;c.stroke();c.restore();
+        V.tx(c,k[1],k[0]+80,122,10.5,'#fff','center',800,a);V.tx(c,k[2],k[0]+80,138,9.5,'#9fb3c8','center',600,a);
+        if(j===0)k[3].forEach(function(r,i){var b=f(.5+i*.15);V.tx(c,(t>2.6?'+ ':'')+r,k[0]+14,166+i*26,11,t>2.6?'#34c38f':'#e6edf3','left',700,b,M);});
+        if(j===1){V.tx(c,'vacío',k[0]+80,210,12,'#c9b6ff','center',800,f(1.2));V.tx(c,'nunca ha creado nada',k[0]+80,228,10,'#c9b6ff','center',600,f(1.2));}
+        if(j===2){V.tx(c,'Describe… (solo lectura)',k[0]+80,200,10,'#ffb98a','center',700,f(1.6),M);V.tx(c,'nada de esto existe aún',k[0]+80,226,10,'#ffd0b0','center',600,f(2));}});
+      V.tx(c,'quieres 10  −  existen 0  =  ',600,388,14,'#fff','center',800,f(2.6));V.tx(c,'+10 por crear',740,388,14,'#34c38f','left',800,f(2.6));
+      V.tx(c,'ningún Create todavía: plan solo LEE y COMPARA',697,434,12,'#9ff0c8','center',800,f(3));return;}
+    if(st===3){
+      term([['terraform apply','cmd'],['Enter a value: yes','#FFC928',.6],['aws_vpc.pyme: Creating...','',.7],['aws_vpc.pyme: Creation complete [id=vpc-0c1d2e3f]','#9ff0c8',.5],['aws_subnet.area["web"]: Creating...  (×4)'],['aws_internet_gateway.puerta: Creating...'],['aws_security_group.web: Creating...','',.6],['aws_route_table.publica: Creation complete','#9ff0c8',.5],['aws_instance.web: Still creating... [10s]','',.9],['aws_instance.web: Creation complete [id=i-0f9e]','#9ff0c8',.4],['',''],['Apply complete! Resources: 10 added.','#9ff0c8']]);
+      var W={vpc:[.9,'CreateVpc','vpc-0c1d2e3f'],sub:[2,'CreateSubnet ×4','subnet-…'],igw:[2.1,'CreateInternetGW','igw-0a1b'],sg:[2.2,'CreateSecurityGroup','sg-07c4'],rt:[3,'CreateRouteTable','rtb-0d2f'],ec2:[3.1,'RunInstances','i-0f9e8d7c'],as:[3.6,'AssociateRouteTbl','rtbassoc-…']};
+      api(t>2&&t<3.4?'3 a la vez (paralelo) ⚡':'','#FFC928');
+      graph(function(k){var w=W[k],d=t>=w[0]+(k==='ec2'?1.6:.8);return {a:1,hl:t>=w[0]&&!d,bg:d?'rgba(52,195,143,.25)':(t>=w[0]?'rgba(233,113,50,.25)':'#0f2740'),col:d?'#34c38f':(t>=w[0]?'#E97132':'#5fa8d3'),mark:d?'✓ ':'',id:d?w[2]:''};},1);
+      Object.keys(W).forEach(function(k,i){fly(k,W[k][1],W[k][0],i,'rgba(255,153,0,.9)','#ffd28a');});
+      V.tx(c,'sigue el mapa: nada se crea antes de lo que necesita',640,446,11.5,'#9ff0c8','center',800,f(4.6));return;}
+    if(st===4){
+      term([['terraform state list','cmd'],['aws_instance.web'],['aws_internet_gateway.puerta'],['aws_route_table.publica'],['aws_route_table_association.web'],['aws_security_group.web'],['aws_subnet.area["admin"]'],['aws_subnet.area["bd"]'],['aws_subnet.area["ventas"]'],['aws_subnet.area["web"]'],['aws_vpc.pyme'],['',''],['↑ 10 recursos en la memoria','#FFC928']]);
+      V.tx(c,'📄 terraform.tfstate (un archivo JSON en tu carpeta)',430,106,11,'#cfe3f1','left',700);
+      var MAP=[['aws_vpc.pyme','vpc-0c1d2e3f'],['aws_subnet.area["web"]','subnet-0a9b8c7d'],['aws_internet_gateway.puerta','igw-0a1b2c3d'],['aws_security_group.web','sg-07c4e1f2'],['aws_instance.web','i-0f9e8d7c6b5a']];
+      V.tx(c,'nombre en tu código',530,136,10,'#9fd8f0','center',800);V.tx(c,'ID real en AWS',850,136,10,'#ffb98a','center',800);
+      MAP.forEach(function(m,i){var a=f(.4+i*.35),y=162+i*40;c.save();c.globalAlpha*=a;c.fillStyle='#0f2740';NetScene.rr(c,436,y-14,190,26,7);c.fill();c.strokeStyle='#5fa8d3';c.stroke();c.fillStyle='rgba(255,153,0,.15)';NetScene.rr(c,770,y-14,160,26,7);c.fill();c.strokeStyle='#ff9900';c.stroke();
+        c.strokeStyle='#FFC928';c.setLineDash([4,4]);c.lineDashOffset=-t*20;c.beginPath();c.moveTo(626,y-1);c.lineTo(770,y-1);c.stroke();c.restore();
+        V.tx(c,m[0],531,y+3,9.5,'#fff','center',700,a,M);V.tx(c,m[1],850,y+3,9.5,'#ffd0b0','center',700,a,M);});
+      V.tx(c,'el próximo plan lee esta memoria → “No changes”',697,392,12,'#9ff0c8','center',800,f(2.4));
+      V.tx(c,'⚠️ si lo borras, Terraform “olvida” lo que creó · nunca a GitHub',697,430,11.5,'#ff9b9b','center',800,f(2.9));return;}
+    /* st 5: destroy */
+    term([['terraform destroy','cmd'],['Plan: 0 to add, 0 to change, 10 to destroy.','#ff9b9b',.3],['Enter a value: yes','#FFC928',.6],['aws_instance.web: Destroying...','',.5],['aws_instance.web: Destruction complete after 40s','#ff9b9b',.4],['aws_route_table_association.web: Destroying...'],['aws_security_group.web: Destroying...'],['aws_route_table.publica: Destroying...'],['aws_subnet.area["web"]: Destroying...  (×4)'],['aws_internet_gateway.puerta: Destroying...','',.5],['aws_vpc.pyme: Destroying...','',.4],['',''],['Destroy complete! Resources: 10 destroyed.','#ff9b9b']]);
+    var D={ec2:[.9,'TerminateInstances'],as:[1,'DisassociateRT'],sg:[2.2,'DeleteSecurityGroup'],rt:[2.3,'DeleteRouteTable'],sub:[3,'DeleteSubnet ×4'],igw:[3.1,'DeleteInternetGW'],vpc:[3.9,'DeleteVpc']};
+    api('state → vacío { }',t>4.8?'#9ff0c8':'#5f7890');
+    graph(function(k){var w=D[k],d=t>=w[0]+(k==='ec2'?1.1:.6);return {a:d?.18:1,bg:t>=w[0]&&!d?'rgba(208,43,43,.3)':'#0f2740',col:t>=w[0]?'#ff6b6b':'#5fa8d3',mark:t>=w[0]&&!d?'− ':''};});
+    Object.keys(D).forEach(function(k,i){fly(k,D[k][1],D[k][0],i,'rgba(255,107,107,.9)','#ffb0b0');});
+    V.tx(c,'al revés del mapa: la VPC es la última en irse',640,446,11.5,'#ff9b9b','center',800,f(4.6));
   });
   </script>
 </section>
