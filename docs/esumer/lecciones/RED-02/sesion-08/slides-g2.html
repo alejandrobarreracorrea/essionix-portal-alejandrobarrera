@@ -318,16 +318,16 @@ ul.clean li:first-child { border-top:0; }
       c.stroke();c.restore();}
     function make(id,W,H,caps,draw){
       var sec=document.getElementById(id),cv=sec.querySelector('canvas'),cap=sec.querySelector('.cap'),dots=sec.querySelector('.dots');
-      var ctx=cv.getContext('2d'),step=0,st=0,run=false;
+      var ctx=cv.getContext('2d'),step=0,st=0,run=false,rid=0;
       sec.querySelector('.scene').style.setProperty('--ar',W/H);
       function size(){var w=cv.parentElement.clientWidth||1000,h=w*H/W;cv.style.height=h+'px';cv.width=Math.round(w*DPR);cv.height=Math.round(h*DPR);}
       function setCap(){cap.innerHTML=caps[step];if(cap.animate&&!RM)cap.animate([{opacity:0,transform:'translateY(6px)'},{opacity:1,transform:'none'}],{duration:380,easing:'ease-out'});
         dots.innerHTML=caps.map(function(_,k){return '<i class="'+(k<=step?'on':'')+'"></i>';}).join('');}
       function frame(now){if(!sec.classList.contains('on')){run=false;return;}var t=(now-st)/1000;
         ctx.setTransform(cv.width/W,0,0,cv.width/W,0,0);ctx.clearRect(0,0,W,H);
-        draw(ctx,{step:step,t:t,now:now/1000,E:E,p:function(k,dur,del){if(step>k)return 1;if(step<k)return 0;if(RM)return 1;return cl((t-(del||0))/(dur||1));}});
-        requestAnimationFrame(frame);}
-      sec.__enter=function(){step=0;st=performance.now();size();setCap();if(!run){run=true;requestAnimationFrame(frame);}};
+        try{draw(ctx,{step:step,t:t,now:now/1000,E:E,p:function(k,dur,del){if(step>k)return 1;if(step<k)return 0;if(RM)return 1;return cl((t-(del||0))/(dur||1));}});}catch(err){if(!sec.__err){sec.__err=1;console.error('[escena '+id+' paso '+step+']',err);}}
+        rid=requestAnimationFrame(frame);}
+      sec.__enter=function(){step=0;st=performance.now();size();setCap();cancelAnimationFrame(rid);run=true;rid=requestAnimationFrame(frame);};
       sec.__next=function(){if(step<caps.length-1){step++;st=performance.now();setCap();return true;}return false;};
       window.addEventListener('resize',function(){if(sec.classList.contains('on'))size();});
       cap.innerHTML=caps[0];dots.innerHTML=caps.map(function(_,k){return '<i class="'+(k===0?'on':'')+'"></i>';}).join('');
@@ -447,7 +447,7 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
     function cloudshell(c,lines,cur){browser(c,'us-east-1.console.aws.amazon.com/cloudshell/home?region=us-east-1','CloudShell');header(c);
       c.fillStyle='#0f1b2a';c.fillRect(30,114,940,346);c.fillStyle='#232f3e';c.fillRect(30,114,940,26);tx(c,'CloudShell',46,131,11,'#fff','left',700);tx(c,'us-east-1',140,131,10.5,'#d5dbdb','left',400);
       lines.forEach(function(l,i){tx(c,l[0],46,166+i*20,12,l[1]||'#e6edf3','left',l[2]||400,'"JetBrains Mono",Menlo,monospace');});
-      if(cur){var last=lines[lines.length-1];c.save();c.font='400 12px "JetBrains Mono",Menlo,monospace';var w=c.measureText(last[0]).width;c.restore();if(Math.floor(Date.now()/450)%2===0){c.fillStyle='#39c8e8';c.fillRect(48+w,156+(lines.length-1)*20,7,13);}}}
+      if(cur&&lines.length){var last=lines[lines.length-1];c.save();c.font='400 12px "JetBrains Mono",Menlo,monospace';var w=c.measureText(last[0]).width;c.restore();if(Math.floor(Date.now()/450)%2===0){c.fillStyle='#39c8e8';c.fillRect(48+w,156+(lines.length-1)*20,7,13);}}}
     function envelope(c,x,y,w,title,rows,col,a){c.save();c.globalAlpha*=a;c.fillStyle='#fff';rr(c,x,y,w,32+rows.length*22,10);c.fill();c.fillStyle=col;rr(c,x,y,w,28,10);c.fill();c.fillRect(x,y+18,w,10);c.restore();
       tx(c,title,x+12,y+19,12,'#fff','left',800);rows.forEach(function(r,i){c.save();c.globalAlpha*=a;tx(c,r[0],x+12,y+48+i*22,11,'#5f6b7a','left',600);tx(c,r[1],x+120,y+48+i*22,11,'#000716','left',700,'"JetBrains Mono",Menlo,monospace');c.restore();});}
     function powershell(c,lines,cur){var M='"JetBrains Mono",Consolas,Menlo,monospace';c.save();c.shadowColor='rgba(0,0,0,.45)';c.shadowBlur=30;c.fillStyle='#012456';rr(c,30,20,940,440,10);c.fill();c.restore();
@@ -456,7 +456,7 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
       tx(c,'—',880,45,12,'#ddd','center',400);tx(c,'☐',915,46,12,'#ddd','center',400);tx(c,'✕',950,46,12,'#ddd','center',400);
       tx(c,'Windows PowerShell',46,84,12,'#c8d3e6','left',400,M);tx(c,'Copyright (C) Microsoft Corporation. Todos los derechos reservados.',46,102,12,'#c8d3e6','left',400,M);
       lines.forEach(function(l,i){tx(c,l[0],46,134+i*20,12,l[1]||'#eeedf0','left',l[2]||400,M);});
-      if(cur){var last=lines[lines.length-1];c.save();c.font='400 12px '+M;var w=c.measureText(last[0]).width;c.restore();if(Math.floor(Date.now()/450)%2===0){c.fillStyle='#eeedf0';c.fillRect(48+w,124+(lines.length-1)*20,7,13);}}}
+      if(cur&&lines.length){var last=lines[lines.length-1];c.save();c.font='400 12px '+M;var w=c.measureText(last[0]).width;c.restore();if(Math.floor(Date.now()/450)%2===0){c.fillStyle='#eeedf0';c.fillRect(48+w,124+(lines.length-1)*20,7,13);}}}
     return {cursor:cursor,createVpc:createVpc,trail:trail,cloudshell:cloudshell,powershell:powershell,envelope:envelope,tx:tx,browser:browser,header:header};
   })();
   NetScene.make('scA',1000,480,[
@@ -599,7 +599,8 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
     'Paso 2 · <b>Permisos</b> → “Adjuntar políticas directamente” y marcamos <b>solo lo necesario</b>: <b>EC2</b> (redes y servidores), <b>SSM lectura</b> (buscar la AMI) y <b>CloudTrail lectura</b>. ¿AdministratorAccess? <b>No</b>: es el principio de <b>mínimo privilegio</b>. Siguiente → <b>Crear usuario</b>.',
     'Paso 3 · Entras al usuario → pestaña <b>Credenciales de seguridad → Crear clave de acceso</b>. Caso de uso: <b>Interfaz de línea de comandos (CLI)</b>. AWS te sugiere opciones más modernas (las usan las empresas); hoy aprendemos la llave clásica, la que usarás en tu PC.',
     'Paso 4 · ¡Ahí está la llave! El <b>Access key ID</b> (empieza por AKIA) y la <b>Secret access key</b>. Ojo: la secreta <b>se ve UNA sola vez</b>. Descarga el <b>.csv</b> y guárdalo como guardas el PIN de tu tarjeta.',
-    'Paso 5 · En <b>PowerShell</b>, en tu PC, escribes <b>aws configure</b> y pegas el ID, la secreta, la región <b>us-east-1</b> y <b>json</b>. Queda guardada en <b>C:\\Users\\tú\\.aws\\credentials</b>. Prueba: <b>aws sts get-caller-identity</b> ya dice <b>user/terraform-lab</b>. Con ella la CLI y Terraform <b>firman</b> cada pedido; la secreta nunca viaja por internet.',
+    'Paso 5 · Abre <b>PowerShell</b> en tu PC y escribe <b>aws configure</b>. Te hace <b>4 preguntas</b>: el <b>Access key ID</b> y la <b>Secret access key</b> (las copias del <b>.csv</b> que descargaste), la región <b>us-east-1</b> y el formato <b>json</b>.',
+    'Paso 6 · ¿Qué hizo <b>aws configure</b>? Guardó <b>2 archivos</b> en tu PC: <b>.aws\\credentials</b> (tu llave) y <b>.aws\\config</b> (región y formato). Desde ahora la CLI y Terraform los leen solos y <b>firman</b> cada pedido. Prueba: <b>aws sts get-caller-identity</b> → <b>user/terraform-lab</b>.',
     'Las reglas de oro: una llave publicada en GitHub la encuentra un robot <b>en minutos</b> y te llena la cuenta de servidores (y de factura). <b>Nunca</b> la pegues en GitHub, el chat o WhatsApp · <b>nunca</b> llaves del usuario raíz · <b>solo</b> los permisos necesarios · al terminar, <b>desactívala y elimínala</b>.'
   ],function(c,s){
     var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t,MONO='"JetBrains Mono",monospace';V.bg(c,1000,480);
@@ -631,13 +632,25 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
     if(st===4){var show=t>1.5;AwsUI.iamSecret(c,{show:show});cur([[700,470],[780,296],[780,296],[760,470]],[0,1.2,2,9],t>1.45&&t<1.6);
       var a4=f(2.3);if(a4>0){c.save();c.globalAlpha*=a4;c.fillStyle='#0f9ed5';NetScene.rr(c,418,306,206,22,11);c.fill();c.fillStyle='#E97132';NetScene.rr(c,638,306,250,22,11);c.fill();c.restore();
         V.tx(c,'🪪 quién eres · se puede ver',521,321,11,'#fff','center',800,a4);V.tx(c,'🔑 la prueba · solo se ve UNA vez',763,321,11,'#fff','center',800,a4);}return;}
-    if(st===5){var SEQ=[['PS C:\\Users\\tú> aws configure',''],['AWS Access Key ID [None]: ','AKIAIOSFODNN7EXAMPLE'],['AWS Secret Access Key [None]: ','wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'],['Default region name [None]: ','us-east-1'],['Default output format [None]: ','json'],['PS C:\\Users\\tú> aws sts get-caller-identity',''],['{',0],['    "UserId": "AIDAEXAMPLEUSERID",',0],['    "Account": "123456789012",',0],['    "Arn": "arn:aws:iam::123456789012:user/terraform-lab"',1],['}',0]];
-      var L=[];SEQ.forEach(function(q,i){var t0=.3+i*(i<6?.75:.18);if(t<t0)return;var u=Math.min(1,(t-t0)/.5);
-        if(q[1]===0||q[1]===1)L.push([q[0],q[1]?'#FFC928':'#9fd8f0',q[1]?700:400]);
-        else if(q[1]===''){L.push([q[0].slice(0,Math.ceil(q[0].length*u)),'#e6edf3',700]);}
-        else L.push([q[0]+q[1].slice(0,Math.ceil(q[1].length*u)),'#e6edf3',400]);});
+    if(st===5){var Q=[['PS C:\\Users\\tú> aws configure',''],['AWS Access Key ID [None]: ','AKIAIOSFODNN7EXAMPLE'],['AWS Secret Access Key [None]: ','wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'],['Default region name [None]: ','us-east-1'],['Default output format [None]: ','json']];
+      var NOTE=['','← columna 1 del .csv','← columna 2 del .csv','← Norte de Virginia','← respuestas en JSON'],L=[],act=-1;
+      Q.forEach(function(q,i){var t0=.3+i*1.1;if(t<t0)return;var u=Math.min(1,(t-t0)/.7);if(u<1)act=i;
+        if(i===0)L.push([q[0].slice(0,Math.ceil(q[0].length*u)),'#e6edf3',700]);else L.push([q[0]+q[1].slice(0,Math.ceil(q[1].length*u)),'#e6edf3',400]);});
+      if(t>.3+5*1.1)L.push(['PS C:\\Users\\tú> ','#e6edf3',700]);
       AwsUI.powershell(c,L,true);
-      if(t>5.6)V.tx(c,'🔐 guardada en tu PC (.aws\\credentials) · ahora la CLI eres tú… con permisos de terraform-lab',500,438,13,'#ffb98a','center',800,f(5.6));return;}
+      NOTE.forEach(function(n,i){if(n)V.tx(c,n,600,134+i*20,12,'#FFC928','left',800,f(.3+i*1.1+.5,.4));});
+      var ca=E.out(f(.1,.5));c.save();c.globalAlpha*=ca;c.fillStyle='#fff';NetScene.rr(c,560,292,390,118,10);c.fill();c.fillStyle='#217346';NetScene.rr(c,560,292,390,30,10);c.fill();c.fillRect(560,310,390,12);
+      if(act===1||act===2){c.fillStyle='rgba(255,201,40,.45)';c.fillRect(act===1?566:752,362,act===1?180:192,26);}c.restore();
+      V.tx(c,'📄 terraform-lab_accessKeys.csv  (lo descargaste en el paso 4)',574,312,11.5,'#fff','left',800,ca);
+      V.tx(c,'Access key ID',574,348,11,'#5f6b7a','left',800,ca);V.tx(c,'Secret access key',760,348,11,'#5f6b7a','left',800,ca);
+      V.tx(c,'AKIAIOSFODNN7EXAMPLE',574,380,11,'#000716','left',700,ca,'"JetBrains Mono",monospace');V.tx(c,'wJalrXUtnFEMI/K7MDENG/…',760,380,11,'#000716','left',700,ca,'"JetBrains Mono",monospace');
+      V.tx(c,'💡 en PowerShell: clic derecho = pegar',46,420,12,'#9fd8f0','left',700,f(1.2));return;}
+    if(st===6){var R=[['PS C:\\Users\\tú> Get-Content $HOME\\.aws\\credentials',''],['[default]',0],['aws_access_key_id = AKIAIOSFODNN7EXAMPLE',0],['aws_secret_access_key = wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY',0],['PS C:\\Users\\tú> Get-Content $HOME\\.aws\\config',''],['[default]',0],['region = us-east-1',0],['output = json',0],['PS C:\\Users\\tú> aws sts get-caller-identity --query Arn',''],['"arn:aws:iam::123456789012:user/terraform-lab"',1]];
+      var L=[],T=.3;R.forEach(function(q){var t0=T;T+=q[1]===''?1.2:.2;if(t<t0)return;var u=Math.min(1,(t-t0)/.8);
+        if(q[1]==='')L.push([q[0].slice(0,Math.ceil(q[0].length*u)),'#e6edf3',700]);else L.push([q[0],q[1]?'#FFC928':'#9fd8f0',q[1]?700:400]);});
+      AwsUI.powershell(c,L,t<T+.4);
+      [[3,174,'🔑 tu llave (archivo credentials)'],[7,254,'⚙️ tus preferencias (archivo config)'],[9,314,'✓ la API te reconoce: terraform-lab']].forEach(function(k){if(L.length>k[0])V.tx(c,k[2],600,k[1],13,'#FFC928','left',800,1);});
+      if(t>T)V.tx(c,'La CLI y Terraform leen estos 2 archivos solos: la llave NUNCA va dentro de main.tf',500,420,13,'#ffb98a','center',800,f(T));return;}
     /* st 6: reglas de oro */
     var STO=[['1 · Subes la llave a GitHub','aws_key = "AKIA…"'],['2 · Un robot la encuentra','en minutos 🤖'],['3 · Lanza servidores en tu cuenta','💸 factura de miles de USD']];
     STO.forEach(function(k,i){var a=E.out(f(.2+i*.8,.5)),x=40+i*320;if(!(a>0))return;c.save();c.globalAlpha*=a;c.fillStyle='rgba(208,43,43,.14)';NetScene.rr(c,x,56,280,118,12);c.fill();c.strokeStyle='#ff6b6b';c.lineWidth=2;c.stroke();c.restore();
