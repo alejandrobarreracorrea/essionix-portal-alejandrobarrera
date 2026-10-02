@@ -279,11 +279,12 @@ ul.clean li:first-child { border-top:0; }
   <h2>Objetivo de hoy: <span class="grad">construir tu red y tu servidor con código</span>.</h2>
   <ul class="rows">
     <li><span class="t">Todo es una llamada a la API<small>Qué pasa de verdad cuando haces clic · CloudTrail · la CLI de AWS</small></span><span class="m">concepto</span></li>
+    <li><span class="t">La llave de la CLI<small>Usuario IAM · permisos · access key · aws configure</small></span><span class="m">concepto</span></li>
     <li><span class="t">¿Por qué nació Terraform?<small>De los clics a los scripts y del script al plano</small></span><span class="m">concepto</span></li>
     <li><span class="t">Cómo trabaja y por qué es el estándar<small>init · plan · apply · state · destroy</small></span><span class="m">concepto</span></li>
-    <li><span class="t">LAB: pyme-vpc + EC2 desde Terraform<small>CloudShell · lanzar · cambiar · destruir</small></span><span class="m">lab</span></li>
+    <li><span class="t">LAB: pyme-vpc + EC2 desde Terraform<small>tu llave · CloudShell · pieza por pieza · cambiar · destruir</small></span><span class="m">lab</span></li>
   </ul>
-  <p class="sub" style="margin-top:14px">Hasta hoy fueron <b>albañiles</b> (clic por clic). Hoy se vuelven <b>arquitectos</b>: dibujan el plano y la obra se construye sola. 📐</p>
+  <p class="sub" style="margin-top:14px">Hasta hoy construimos clic por clic. Hoy dibujamos <b>el plano</b> y la obra se construye sola. 📐</p>
 </section>
 
 <!-- 3 · TODO ES UNA LLAMADA A LA API -->
@@ -449,7 +450,7 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
       if(cur){var last=lines[lines.length-1];c.save();c.font='400 12px "JetBrains Mono",Menlo,monospace';var w=c.measureText(last[0]).width;c.restore();if(Math.floor(Date.now()/450)%2===0){c.fillStyle='#39c8e8';c.fillRect(48+w,156+(lines.length-1)*20,7,13);}}}
     function envelope(c,x,y,w,title,rows,col,a){c.save();c.globalAlpha*=a;c.fillStyle='#fff';rr(c,x,y,w,32+rows.length*22,10);c.fill();c.fillStyle=col;rr(c,x,y,w,28,10);c.fill();c.fillRect(x,y+18,w,10);c.restore();
       tx(c,title,x+12,y+19,12,'#fff','left',800);rows.forEach(function(r,i){c.save();c.globalAlpha*=a;tx(c,r[0],x+12,y+48+i*22,11,'#5f6b7a','left',600);tx(c,r[1],x+120,y+48+i*22,11,'#000716','left',700,'"JetBrains Mono",Menlo,monospace');c.restore();});}
-    return {cursor:cursor,createVpc:createVpc,trail:trail,cloudshell:cloudshell,envelope:envelope,tx:tx};
+    return {cursor:cursor,createVpc:createVpc,trail:trail,cloudshell:cloudshell,envelope:envelope,tx:tx,browser:browser,header:header};
   })();
   NetScene.make('scA',1000,480,[
     'Así se veía la consola cuando creaste tu VPC: escribiste un <b>nombre</b> (pyme-vpc), el rango <b>10.0.0.0/16</b> y diste clic en <b>«Crear VPC»</b>. Pero… ¿qué pasó después del clic?',
@@ -530,6 +531,117 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
       c.save();c.globalAlpha*=b*.5;c.strokeStyle=k[2];c.setLineDash([4,5]);c.lineWidth=1.5;c.beginPath();c.moveTo(330,y+44);c.lineTo(500,250);c.stroke();c.restore();
       var u=((t*.45)+i/3)%1,p=NetScene.along([[330,y+44],[500,250]],u);c.save();c.globalAlpha*=b;c.fillStyle=k[2];c.beginPath();c.arc(p[0],p[1],6,0,7);c.fill();c.restore();});
     V.tx(c,'mismo mesero · misma cocina · lo que cambia es cómo pides',500,440,14,'#ffb98a','center',800,Math.max(0,Math.min(1,(t-1.8)/.5)));
+  });
+  </script>
+</section>
+
+<!-- 3c · ANTES DE LA CLI: TU LLAVE (IAM + ACCESS KEY) -->
+<section class="slide" id="scK">
+  <span class="k"><span class="act-chip">🔑 PRERREQUISITO</span> Antes de usar la CLI · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">La CLI necesita <span class="grad">una llave</span>: usuario IAM + access key</h2>
+  <div class="scene"><canvas aria-label="Animación realista de la consola IAM: crear el usuario terraform-lab, adjuntar permisos, crear la clave de acceso, configurarla con aws configure y las reglas de seguridad"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  (function(){var U=window.AwsUI,rr=NetScene.rr,tx=U.tx,MONO='"JetBrains Mono",Menlo,monospace';
+    function hdr(){U.header(arguments[0]);var c=arguments[0];c.fillStyle='#232f3e';c.fillRect(740,88,126,22);tx(c,'Global ▾',860,102,11,'#fff','right',600);}
+    function nav(c){c.fillStyle='#fff';c.fillRect(30,114,170,346);c.fillStyle='#e9ebed';c.fillRect(199,114,1,346);
+      tx(c,'Identity and Access',44,140,11.5,'#000716','left',700);tx(c,'Management (IAM)',44,156,11.5,'#000716','left',700);tx(c,'Panel',44,186,11,'#000716','left',400);tx(c,'Administración del acceso ▾',44,212,10.5,'#5f6b7a','left',700);
+      ['Grupos de usuarios','Usuarios','Roles','Políticas','Proveedores de identidad'].forEach(function(s,i){var a=i===1,y=222+i*24;if(a){c.fillStyle='#f2f8fd';c.fillRect(30,y,169,22);c.fillStyle='#0972d3';c.fillRect(30,y,3,22);}tx(c,s,52,y+15,11,a?'#0972d3':'#000716','left',a?700:400);});}
+    function btn(c,x,y,w,l,p,down){c.fillStyle=p?(down?'#ec7211':'#ff9900'):'#fff';rr(c,x,y,w,28,14);c.fill();if(!p){c.strokeStyle='#0972d3';c.lineWidth=2;c.stroke();}tx(c,l,x+w/2,y+19,12,p?'#000716':'#0972d3','center',800);}
+    function chk(c,x,y,on){c.fillStyle=on?'#0972d3':'#fff';rr(c,x,y,13,13,3);c.fill();c.strokeStyle=on?'#0972d3':'#8c8c94';c.lineWidth=1.5;c.stroke();if(on){c.strokeStyle='#fff';c.lineWidth=2;c.beginPath();c.moveTo(x+3,y+7);c.lineTo(x+6,y+10);c.lineTo(x+11,y+3);c.stroke();}}
+    function rad(c,x,y,on){c.strokeStyle=on?'#0972d3':'#8c8c94';c.lineWidth=2;c.beginPath();c.arc(x,y,6,0,7);c.stroke();if(on){c.fillStyle='#0972d3';c.beginPath();c.arc(x,y,3,0,7);c.fill();}}
+    function inp(c,x,y,w,v,f,ph){c.fillStyle='#fff';rr(c,x,y,w,26,8);c.fill();c.strokeStyle=f?'#0972d3':'#8c8c94';c.lineWidth=f?2:1;c.stroke();tx(c,v||ph||'',x+10,y+17,11.5,v?'#000716':'#8c8c94','left',400);}
+    function card(c,x,y,w,h){c.fillStyle='#fff';rr(c,x,y,w,h,10);c.fill();c.strokeStyle='#e9ebed';c.lineWidth=1;c.stroke();}
+    var S1=[['Especificar los detalles','del usuario'],['Establecer permisos'],['Revisar y crear']],S2=[['Prácticas recomendadas','y alternativas'],['Etiqueta de descripción','(opcional)'],['Recuperar claves','de acceso']];
+    function wiz(c,url,tab,crumb,steps,cur,title){U.browser(c,url,tab);hdr(c);nav(c);c.fillStyle='#f4f4f4';c.fillRect(200,114,770,346);tx(c,crumb,216,138,10.5,'#0972d3','left',400);
+      steps.forEach(function(s,i){var y=168+i*48,on=i===cur;tx(c,'Paso '+(i+1),216,y,10,'#5f6b7a','left',400);tx(c,s[0],216,y+15,11,on?'#000716':'#5f6b7a','left',on?800:400);if(s[1])tx(c,s[1],216,y+29,11,on?'#000716':'#5f6b7a','left',on?800:400);if(on){c.fillStyle='#0972d3';c.fillRect(208,y-10,3,s[1]?42:28);}});
+      if(title)tx(c,title,400,166,17,'#000716','left',800);}
+    U.iamUser=function(c,o){wiz(c,'us-east-1.console.aws.amazon.com/iam/home#/users/create','Crear usuario | IAM | Global','IAM  ›  Usuarios  ›  Crear usuario',S1,0,'Especificar los detalles del usuario');
+      card(c,400,180,556,236);tx(c,'Detalles del usuario',416,206,13,'#000716','left',800);tx(c,'Nombre de usuario',416,232,11,'#000716','left',700);inp(c,416,240,300,o.name,o.focus,'');
+      tx(c,'Puede tener hasta 64 caracteres. Caracteres válidos: A-Z, a-z, 0-9 y + = , . @ _ - (guion)',416,284,9.5,'#5f6b7a','left',400);
+      chk(c,416,302,false);tx(c,'Proporcione acceso de usuario a la consola de administración de AWS: opcional',436,313,10.5,'#000716','left',400);
+      btn(c,790,428,80,'Cancelar',false);btn(c,880,428,80,'Siguiente',true,o.press);};
+    U.iamPerms=function(c,o){wiz(c,'us-east-1.console.aws.amazon.com/iam/home#/users/create','Crear usuario | IAM | Global','IAM  ›  Usuarios  ›  Crear usuario',S1,1,'Establecer permisos');
+      card(c,400,176,556,70);tx(c,'Opciones de permisos',416,196,12,'#000716','left',800);
+      ['Agregar usuario al grupo','Copiar permisos','Adjuntar políticas directamente'].forEach(function(s,i){var x=414+i*180,on=i===2;c.fillStyle=on?'#f2f8fd':'#fff';rr(c,x,206,176,30,8);c.fill();c.strokeStyle=on?'#0972d3':'#8c8c94';c.lineWidth=on?2:1;c.stroke();rad(c,x+13,221,on);tx(c,s,x+24,225,9.5,'#000716','left',on?700:400);});
+      var n=o.ticks||0;card(c,400,254,556,166);tx(c,'Políticas de permisos ('+n+'/1.312)',416,276,12,'#000716','left',800);inp(c,416,284,250,'',false,'🔍  Filtrar por nombre de política');
+      c.fillStyle='#f4f4f4';c.fillRect(410,316,536,20);tx(c,'Nombre de la política',446,330,10.5,'#000716','left',700);tx(c,'Tipo',770,330,10.5,'#000716','left',700);
+      [['AmazonEC2FullAccess',1],['AmazonSSMReadOnlyAccess',1],['AWSCloudTrail_ReadOnlyAccess',1],['AdministratorAccess',0]].forEach(function(r,i){var y=338+i*20,on=r[1]&&i<n;if(on){c.fillStyle='#f2f8fd';c.fillRect(410,y,536,20);}chk(c,420,y+4,on);tx(c,r[0],446,y+14,10.5,'#0972d3','left',700);tx(c,'Administrada por AWS',770,y+14,10.5,'#000716','left',400);});
+      btn(c,790,428,80,'Anterior',false);btn(c,880,428,80,'Siguiente',true,o.press);};
+    U.iamKey=function(c,o){wiz(c,'us-east-1.console.aws.amazon.com/iam/home#/users/details/terraform-lab/create-access-key','Crear clave de acceso | IAM | Global','IAM  ›  Usuarios  ›  terraform-lab  ›  Crear clave de acceso',S2,0,'');
+      tx(c,'Prácticas recomendadas y alternativas de la clave de acceso',400,166,14,'#000716','left',800);
+      card(c,400,178,556,240);tx(c,'Caso de uso',416,200,12,'#000716','left',800);
+      ['Interfaz de línea de comandos (CLI)','Código local','Aplicación que se ejecuta en un servicio de computación de AWS','Servicio de terceros','Otros'].forEach(function(s,i){var y=220+i*21;rad(c,424,y,o.cli&&i===0);tx(c,s,436,y+4,10.5,'#000716','left',o.cli&&i===0?700:400);});
+      c.fillStyle='#f2f8fd';rr(c,416,322,524,48,8);c.fill();c.strokeStyle='#0972d3';c.lineWidth=1.5;c.stroke();
+      tx(c,'ℹ  Alternativas recomendadas',428,340,10.5,'#000716','left',800);tx(c,'Use AWS CloudShell, o la CLI de AWS V2 con un usuario de IAM Identity Center.',428,358,10,'#000716','left',400);
+      chk(c,416,384,o.ok);tx(c,'Entiendo la recomendación anterior y deseo continuar para crear una clave de acceso.',436,395,10.5,'#000716','left',400);
+      btn(c,790,428,80,'Cancelar',false);btn(c,880,428,80,'Siguiente',true,o.press);};
+    U.iamSecret=function(c,o){wiz(c,'us-east-1.console.aws.amazon.com/iam/home#/users/details/terraform-lab/create-access-key','Crear clave de acceso | IAM | Global','IAM  ›  Usuarios  ›  terraform-lab  ›  Crear clave de acceso',S2,2,'Recuperar claves de acceso');
+      c.fillStyle='#f2f8fd';rr(c,400,178,556,40,8);c.fill();c.strokeStyle='#0972d3';c.lineWidth=1.5;c.stroke();
+      tx(c,'ℹ  Esta es la única vez que se puede ver o descargar la clave de acceso secreta.',414,194,10.5,'#000716','left',700);tx(c,'No podrá recuperarla más adelante. Sin embargo, puede crear una nueva clave de acceso en cualquier momento.',414,210,9.5,'#000716','left',400);
+      card(c,400,226,556,96);tx(c,'Clave de acceso',416,248,12,'#000716','left',800);c.fillStyle='#f4f4f4';c.fillRect(410,258,536,20);tx(c,'Clave de acceso',420,272,10.5,'#000716','left',700);tx(c,'Clave de acceso secreta',640,272,10.5,'#000716','left',700);
+      tx(c,'AKIAIOSFODNN7EXAMPLE',420,300,11.5,'#000716','left',600,MONO);
+      if(o.show)tx(c,'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY',640,300,10.5,'#000716','left',600,MONO);else{tx(c,'••••••••••••••••',640,300,11.5,'#000716','left',600);tx(c,'Mostrar',760,300,11,'#0972d3','left',700);}
+      card(c,400,330,556,90);tx(c,'Prácticas recomendadas de claves de acceso',416,350,12,'#000716','left',800);
+      ['• Nunca almacene su clave de acceso en texto sin formato, en un repositorio de código ni en el código.','• Desactive o elimine la clave de acceso cuando ya no la necesite.','• Habilite los permisos de privilegio mínimo.'].forEach(function(s,i){tx(c,s,416,370+i*16,9.5,'#000716','left',400);});
+      btn(c,680,428,190,'Descargar archivo .csv',false);btn(c,880,428,80,'Listo',true);};
+  })();
+  NetScene.make('scK',1000,480,[
+    'En la consola entras con <b>usuario + contraseña</b> (y MFA). Pero la <b>CLI</b> y <b>Terraform</b> son programas: no pueden escribir tu contraseña. Necesitan una <b>llave de acceso</b> de dos partes: el <b>ID</b> (como el número de tu tarjeta: dice quién eres) y la <b>clave secreta</b> (como el PIN: prueba que eres tú).',
+    'Paso 1 · En <b>IAM → Usuarios → Crear usuario</b> creamos un usuario solo para la CLI: <b>terraform-lab</b>. Sin acceso a la consola (la casilla queda vacía): es un usuario “robot”, no una persona.',
+    'Paso 2 · <b>Permisos</b> → “Adjuntar políticas directamente” y marcamos <b>solo lo necesario</b>: <b>EC2</b> (redes y servidores), <b>SSM lectura</b> (buscar la AMI) y <b>CloudTrail lectura</b>. ¿AdministratorAccess? <b>No</b>: es el principio de <b>mínimo privilegio</b>. Siguiente → <b>Crear usuario</b>.',
+    'Paso 3 · Entras al usuario → pestaña <b>Credenciales de seguridad → Crear clave de acceso</b>. Caso de uso: <b>Interfaz de línea de comandos (CLI)</b>. AWS te sugiere opciones más modernas (las usan las empresas); hoy aprendemos la llave clásica, la que usarás en tu PC.',
+    'Paso 4 · ¡Ahí está la llave! El <b>Access key ID</b> (empieza por AKIA) y la <b>Secret access key</b>. Ojo: la secreta <b>se ve UNA sola vez</b>. Descarga el <b>.csv</b> y guárdalo como guardas el PIN de tu tarjeta.',
+    'Paso 5 · En CloudShell escribes <b>aws configure</b> y pegas el ID, la secreta, la región <b>us-east-1</b> y <b>json</b>. Queda guardada en <b>~/.aws/credentials</b>. Prueba: <b>aws sts get-caller-identity</b> ya dice <b>user/terraform-lab</b>. Con ella la CLI y Terraform <b>firman</b> cada pedido; la secreta nunca viaja por internet.',
+    'Las reglas de oro: una llave publicada en GitHub la encuentra un robot <b>en minutos</b> y te llena la cuenta de servidores (y de factura). <b>Nunca</b> la pegues en GitHub, el chat o WhatsApp · <b>nunca</b> llaves del usuario raíz · <b>solo</b> los permisos necesarios · al terminar, <b>desactívala y elimínala</b>.'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t,MONO='"JetBrains Mono",monospace';V.bg(c,1000,480);
+    function f(d,u){return Math.max(0,Math.min(1,(t-d)/(u||.5)));}
+    function cur(P,T,down){var k=0;while(k<T.length-2&&t>T[k+1])k++;var u=Math.min(1,Math.max(0,(t-T[k])/(T[k+1]-T[k]))),e=E.io(u);AwsUI.cursor(c,P[k][0]+(P[k+1][0]-P[k][0])*e,P[k][1]+(P[k+1][1]-P[k][1])*e,down);}
+    if(st===0){var a=E.out(f(0,.6));
+      V.tx(c,'Tú, en la consola',210,64,15,'#9fd8f0','center',800,a);
+      c.save();c.globalAlpha*=a;c.fillStyle='#fff';NetScene.rr(c,60,80,300,262,14);c.fill();
+      AwsUI.tx(c,'aws',84,112,18,'#232f3e','left',800,'Arial,sans-serif');AwsUI.tx(c,'Iniciar sesión',84,140,15,'#000716','left',800);
+      [['Nombre de usuario','tu-usuario'],['Contraseña','••••••••••'],['Código MFA','482 913']].forEach(function(r,i){var y=160+i*52;AwsUI.tx(c,r[0],84,y,11,'#000716','left',700);c.fillStyle='#fff';NetScene.rr(c,84,y+6,252,26,8);c.fill();c.strokeStyle='#8c8c94';c.lineWidth=1;c.stroke();AwsUI.tx(c,r[1],94,y+23,11.5,'#000716','left',400);});
+      c.fillStyle='#ff9900';NetScene.rr(c,84,312,252,26,13);c.fill();AwsUI.tx(c,'Iniciar sesión',210,330,12,'#000716','center',800);c.restore();
+      V.tx(c,'✓ una persona escribe su clave',210,370,13,'#9ff0c8','center',800,f(.6));
+      var b=E.out(f(.8,.6));V.tx(c,'La CLI y Terraform',760,64,15,'#9fd8f0','center',800,b);
+      c.save();c.globalAlpha*=b;c.fillStyle='#0b1a2b';NetScene.rr(c,600,80,320,96,12);c.fill();c.strokeStyle='rgba(159,182,201,.4)';c.stroke();c.restore();
+      V.tx(c,'$ terraform apply',620,114,14,'#e6edf3','left',700,b,MONO);V.tx(c,'$ aws ec2 create-vpc …',620,144,14,'#e6edf3','left',700,b,MONO);
+      NetScene.bubble(c,760,222,'¿y dónde escribo la contraseña? 🤔','700 13px Poppins,sans-serif','#fff','#0e2841',f(1.6));
+      var k1=E.back(f(2.6,.6)),k2=E.back(f(3.1,.6));
+      [[560,'🪪 Access key ID','AKIAIOSFODNN7EXAMPLE','= quién eres','(como el número de tu tarjeta)','#0f9ed5',k1],[780,'🔑 Secret access key','wJalr…EXAMPLEKEY','= la prueba de que eres tú','(como el PIN: secreto)','#E97132',k2]].forEach(function(k){if(!(k[6]>0))return;c.save();c.globalAlpha*=Math.min(1,k[6]);c.fillStyle='#0f2740';NetScene.rr(c,k[0],246,200,122,12);c.fill();c.strokeStyle=k[5];c.lineWidth=2.5;c.stroke();c.restore();
+        var al=Math.min(1,k[6]);V.tx(c,k[1],k[0]+14,274,14,'#fff','left',800,al);V.tx(c,k[2],k[0]+14,300,11.5,k[5],'left',700,al,MONO);V.tx(c,k[3],k[0]+14,328,12,'#fff','left',700,al);V.tx(c,k[4],k[0]+14,348,11,'#cfe3f1','left',600,al);});
+      V.tx(c,'y IAM decide qué puede hacer esa llave: sus permisos (políticas)',500,430,15,'#ffb98a','center',800,f(4));return;}
+    if(st===1){var nm='terraform-lab',n=Math.floor(nm.length*f(1,1));var press=t>3.1&&t<3.4;AwsUI.iamUser(c,{name:nm.slice(0,n),focus:t<2.4,press:press});
+      cur([[700,470],[560,252],[560,252],[915,442],[915,442]],[0,.8,2.4,3.1,9],press);
+      if(t>1.4)V.tx(c,'sin consola: usuario solo para la CLI ✓',690,348,12,'#d45b07','center',800,f(1.6));return;}
+    if(st===2){var tk=(t>.8?1:0)+(t>1.5?1:0)+(t>2.2?1:0),press=t>3.2&&t<3.5;AwsUI.iamPerms(c,{ticks:tk,press:press});
+      cur([[700,470],[426,344],[426,344],[426,364],[426,364],[426,384],[426,384],[915,442],[915,442]],[0,.6,.8,1.3,1.5,2,2.2,3,9],(t>.8&&t<.95)||(t>1.5&&t<1.65)||(t>2.2&&t<2.35)||press);
+      if(t>2.5)V.tx(c,'✗ no: demasiado poder',596,412,11,'#d02b2b','left',800,f(2.5));return;}
+    if(st===3){var cli=t>.9,ok=t>1.9,press=t>2.9&&t<3.2;AwsUI.iamKey(c,{cli:cli,ok:ok,press:press});
+      cur([[700,470],[428,222],[428,222],[422,390],[422,390],[915,442],[915,442]],[0,.7,1,1.7,2,2.8,9],(t>.9&&t<1.05)||(t>1.9&&t<2.05)||press);return;}
+    if(st===4){var show=t>1.5;AwsUI.iamSecret(c,{show:show});cur([[700,470],[780,296],[780,296],[760,470]],[0,1.2,2,9],t>1.45&&t<1.6);
+      var a4=f(2.3);if(a4>0){c.save();c.globalAlpha*=a4;c.fillStyle='#0f9ed5';NetScene.rr(c,418,306,206,22,11);c.fill();c.fillStyle='#E97132';NetScene.rr(c,638,306,250,22,11);c.fill();c.restore();
+        V.tx(c,'🪪 quién eres · se puede ver',521,321,11,'#fff','center',800,a4);V.tx(c,'🔑 la prueba · solo se ve UNA vez',763,321,11,'#fff','center',800,a4);}return;}
+    if(st===5){var SEQ=[['$ aws configure',''],['AWS Access Key ID [None]: ','AKIAIOSFODNN7EXAMPLE'],['AWS Secret Access Key [None]: ','wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'],['Default region name [None]: ','us-east-1'],['Default output format [None]: ','json'],['$ aws sts get-caller-identity',''],['{',0],['    "UserId": "AIDAEXAMPLEUSERID",',0],['    "Account": "123456789012",',0],['    "Arn": "arn:aws:iam::123456789012:user/terraform-lab"',1],['}',0]];
+      var L=[];SEQ.forEach(function(q,i){var t0=.3+i*(i<6?.75:.18);if(t<t0)return;var u=Math.min(1,(t-t0)/.5);
+        if(q[1]===0||q[1]===1)L.push([q[0],q[1]?'#FFC928':'#9fd8f0',q[1]?700:400]);
+        else if(q[0][0]==='$'){L.push([q[0].slice(0,Math.ceil(q[0].length*u)),'#e6edf3',700]);}
+        else L.push([q[0]+q[1].slice(0,Math.ceil(q[1].length*u)),'#e6edf3',400]);});
+      AwsUI.cloudshell(c,L,true);
+      if(t>5.6)V.tx(c,'🔐 guardada en ~/.aws/credentials · ahora la CLI eres tú… con permisos de terraform-lab',500,438,13,'#ffb98a','center',800,f(5.6));return;}
+    /* st 6: reglas de oro */
+    var STO=[['1 · Subes la llave a GitHub','aws_key = "AKIA…"'],['2 · Un robot la encuentra','en minutos 🤖'],['3 · Lanza servidores en tu cuenta','💸 factura de miles de USD']];
+    STO.forEach(function(k,i){var a=E.out(f(.2+i*.8,.5)),x=40+i*320;if(!(a>0))return;c.save();c.globalAlpha*=a;c.fillStyle='rgba(208,43,43,.14)';NetScene.rr(c,x,56,280,118,12);c.fill();c.strokeStyle='#ff6b6b';c.lineWidth=2;c.stroke();c.restore();
+      V.tx(c,k[0],x+140,88,14,'#fff','center',800,a);
+      if(i===0){c.save();c.globalAlpha*=a;c.fillStyle='#0b1a2b';NetScene.rr(c,x+40,104,200,30,6);c.fill();c.restore();V.tx(c,k[1],x+140,124,12,'#ff9b9b','center',700,a,MONO);}
+      if(i===1){V.pulse(c,x+140,128,8,t,'#ff6b6b',a);V.tx(c,k[1],x+140,162,12,'#ffd0d0','center',700,a);}
+      if(i===2){for(var q=0;q<6;q++)V.server(c,x+40+q*34,104,28,22,t,q,false,a);V.tx(c,k[1],x+140,156,13,'#ffd0d0','center',800,a);}
+      if(i<2)V.tx(c,'→',x+300,120,22,'#ff6b6b','center',800,E.out(f(.6+i*.8,.4)));});
+    var R=[['🚫 Nunca en GitHub, el chat ni WhatsApp','ni siquiera “un ratico” para probar'],['👑 Nunca llaves del usuario raíz (root)','el root puede TODO, hasta cerrar la cuenta'],['🎯 Solo los permisos necesarios','mínimo privilegio: EC2 sí, Administrator no'],['🗑️ Al terminar: desactívala y elimínala','IAM → terraform-lab → Credenciales de seguridad']];
+    R.forEach(function(r,i){var a=E.back(f(2.6+i*.4,.5)),x=40+(i%2)*480,y=210+Math.floor(i/2)*110;if(!(a>0))return;var al=Math.min(1,a);c.save();c.globalAlpha*=al;c.fillStyle='rgba(52,195,143,.12)';NetScene.rr(c,x,y,440,90,12);c.fill();c.strokeStyle=C.grn;c.lineWidth=2;c.stroke();c.restore();
+      V.tx(c,r[0],x+20,y+38,16,'#fff','left',800,al);V.tx(c,r[1],x+20,y+66,13,'#cfe3f1','left',600,al);});
   });
   </script>
 </section>
@@ -698,6 +810,21 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   </ul>
   <p class="sub" style="margin-top:12px">Fíjense en <b>aws_vpc.pyme.id</b>: así un recurso usa el ID de otro. Por eso Terraform sabe <b>el orden</b>: no puede crear una subred antes que su VPC.</p>
 </section>
+<!-- 9a · LAB 0: TU LLAVE -->
+<section class="slide" id="lab0">
+  <span class="k"><span class="act-chip">🧪 PASO 0</span> Crea tu llave para la CLI (en la consola de AWS)</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">Tu usuario <span class="grad">terraform-lab</span> y su access key</h2>
+  <ul class="cmdlist" style="max-width:1100px">
+    <li><span>Barra de búsqueda → <b>IAM</b> → <b>Usuarios</b> → <b>Crear usuario</b></span><span>nombre <code>terraform-lab</code> · la casilla de acceso a la consola queda <b>vacía</b></span></li>
+    <li><span><b>Establecer permisos</b> → Adjuntar políticas directamente</span><span><code>AmazonEC2FullAccess</code> · <code>AmazonSSMReadOnlyAccess</code> · <code>AWSCloudTrail_ReadOnlyAccess</code></span></li>
+    <li><span><b>Siguiente</b> → <b>Crear usuario</b></span><span>listo tu usuario “robot” (sin AdministratorAccess)</span></li>
+    <li><span>Entra a <b>terraform-lab</b> → <b>Credenciales de seguridad</b> → <b>Crear clave de acceso</b></span><span>caso de uso <b>CLI</b> · marca “Entiendo…” → Siguiente → <b>Crear clave de acceso</b></span></li>
+    <li><span><b>Recuperar claves de acceso</b></span><span><b>Descargar archivo .csv</b>: la secreta se ve <b>una sola vez</b></span></li>
+    <li><span>En CloudShell (paso 1): <code>aws configure</code></span><span>pega el ID y la secreta · región <code>us-east-1</code> · formato <code>json</code></span></li>
+  </ul>
+  <p class="sub" style="margin-top:12px">Checkpoint ✅ al chat: escribe solo <b>“listo 🔑”</b>. <b>Nunca</b> pegues tu llave en el chat. Al terminar la clase: IAM → terraform-lab → Credenciales de seguridad → <b>Desactivar</b> y <b>Eliminar</b> la clave.</p>
+</section>
+
 <!-- 9 · LAB 1: CLOUDSHELL Y LA CLI -->
 <section class="slide" id="lab1">
   <span class="k"><span class="act-chip">🧪 PASO 1</span> Abre CloudShell y habla con la API</span>
@@ -715,17 +842,19 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   <div class="grid2" style="align-items:start">
     <div class="demo term lab" id="lab1t" style="min-height:300px"></div>
     <ul class="cmdlist">
-      <li><span>En la consola de AWS, ícono <b>&gt;_</b> (arriba a la derecha)</span><span>abre <b>CloudShell</b>: una terminal con tus credenciales</span></li>
-      <li><code>aws sts get-caller-identity</code><span>"¿quién soy?" para la API</span></li>
+      <li><span>En la consola de AWS, ícono <b>&gt;_</b> (arriba a la derecha)</span><span>abre <b>CloudShell</b>: una terminal dentro de AWS</span></li>
+      <li><code>aws configure</code><span>guarda <b>tu llave</b> (ID + secreta), región y formato</span></li>
+      <li><code>aws sts get-caller-identity</code><span>"¿quién soy?" → <b>user/terraform-lab</b></span></li>
       <li><code>aws ec2 describe-vpcs …</code><span>tus VPC: ¡ahí está la que hiciste a clics!</span></li>
       <li><code>aws cloudtrail lookup-events …</code><span>busca <b>tu clic</b>: el CreateVpc de la clase pasada</span></li>
       <li><code>aws ec2 describe-key-pairs …</code><span><b>anota</b> el nombre de tu key pair</span></li>
     </ul>
   </div>
-  <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: el nombre de tu key pair. Revisa arriba a la derecha que la región sea <b>N. Virginia (us-east-1)</b>.</p>
+  <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: <b>user/terraform-lab</b> y el nombre de tu key pair. Revisa arriba a la derecha que la región sea <b>N. Virginia (us-east-1)</b>.</p>
   <script>
   typeTerm(document.getElementById('lab1'),document.getElementById('lab1t'),[
-    ['cmd','$ aws sts get-caller-identity'],['hl','"Arn": "arn:aws:iam::<b>123456789012</b>:user/<b>tu-usuario</b>"'],['note','  ↑ la CLI ya sabe quién eres (CloudShell usa tu sesión)'],
+    ['cmd','$ aws configure'],['out','AWS Access Key ID [None]: AKIA****************'],['out','AWS Secret Access Key [None]: ****************************************'],['out','Default region name [None]: us-east-1'],['out','Default output format [None]: json'],
+    ['cmd','$ aws sts get-caller-identity'],['hl','"Arn": "arn:aws:iam::<b>123456789012</b>:user/<b>terraform-lab</b>"'],['note','  ↑ la API ya te reconoce por tu llave: eres terraform-lab'],
     ['cmd','$ aws ec2 describe-vpcs --query "Vpcs[].[VpcId,CidrBlock]" --output table'],['hl','|  vpc-0a1b2c3d  |  <b>10.0.0.0/16</b>   |   ← la pyme-vpc que hiciste a clics'],['out','|  vpc-9f8e7d6c  |  172.31.0.0/16 |   ← la VPC por defecto'],
     ['cmd','$ aws cloudtrail lookup-events --lookup-attributes AttributeKey=EventName,AttributeValue=CreateVpc --query "Events[].[EventTime,Username]" --output table'],['hl','|  2026-09-25T19:42:10  |  <b>tu-usuario</b>  |   ← ¡tu clic quedó anotado!'],
     ['cmd','$ aws ec2 describe-key-pairs --query "KeyPairs[].KeyName" --output text'],['hl','<b>mi-llave</b>'],['note','  ↑ anota este nombre: lo usará Terraform']]);
@@ -734,7 +863,7 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
 
 <!-- 10 · LAB 2: INSTALAR TERRAFORM Y BAJAR EL PLANO -->
 <section class="slide" id="lab2">
-  <span class="k"><span class="act-chip">🧪 PASO 2</span> Instala Terraform y baja el plano</span>
+  <span class="k"><span class="act-chip">🧪 PASO 2</span> Instala Terraform</span>
   <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">Terraform en <span class="grad">CloudShell</span></h2>
   <div class="grid2" style="align-items:start">
     <div class="demo term lab" id="lab2t" style="min-height:320px"></div>
@@ -742,8 +871,8 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
       <li><code>curl … terraform_1.16.5_linux_amd64.zip</code><span>descarga Terraform (un solo archivo)</span></li>
       <li><code>unzip … -d ~/bin</code><span>lo deja en tu carpeta personal</span></li>
       <li><code>terraform -version</code><span>¿quedó instalado?</span></li>
-      <li><code>curl -sO …/main.tf</code><span>baja <b>el plano</b> de la clase</span></li>
-      <li><code>cat main.tf</code><span>léelo: cada bloque es algo que antes hacías a clics</span></li>
+      <li><code>mkdir ~/pyme-tf</code><span>la carpeta de tu proyecto: ahí vivirá <b>el plano</b></span></li>
+      <li><span>El plano (main.tf)</span><span>lo armamos <b>pieza por pieza</b> en el paso 3 🧩</span></li>
     </ul>
   </div>
   <p class="sub" style="margin-top:10px">Los comandos completos te los paso por el chat (para copiar y pegar). Checkpoint ✅: <b>Terraform v1.16.5</b>.</p>
@@ -752,61 +881,129 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
     ['cmd','$ curl -sLo /tmp/tf.zip https://releases.hashicorp.com/terraform/1.16.5/terraform_1.16.5_linux_amd64.zip'],
     ['cmd','$ mkdir -p ~/bin && unzip -oq /tmp/tf.zip -d ~/bin && export PATH=$HOME/bin:$PATH'],
     ['cmd','$ terraform -version'],['hl','<b>Terraform v1.16.5</b> on linux_amd64'],
-    ['cmd','$ mkdir -p ~/pyme-tf && cd ~/pyme-tf'],
-    ['cmd','$ curl -sO https://raw.githubusercontent.com/alejandrobarreracorrea/essionix-portal-alejandrobarrera/main/docs/esumer/lecciones/RED-02/sesion-08/terraform/main.tf'],
-    ['cmd','$ ls'],['hl','<b>main.tf</b>'],['note','  ↑ el plano de tu red y tu servidor']]);
+    ['cmd','$ mkdir -p ~/pyme-tf && cd ~/pyme-tf && pwd'],['hl','<b>/home/cloudshell-user/pyme-tf</b>'],['note','  ↑ aquí vamos a armar el plano, pieza por pieza']]);
   </script>
 </section>
 
-<!-- 11 · LAB 3: INIT Y PLAN -->
-<section class="slide" id="lab3">
-  <span class="k"><span class="act-chip">🧪 PASO 3</span> init y plan: el presupuesto antes de la obra</span>
-  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">¿Qué va a construir? <span class="grad">terraform plan</span></h2>
-  <div class="grid2" style="align-items:start">
-    <div class="demo term lab" id="lab3t" style="min-height:330px"></div>
-    <ul class="cmdlist">
-      <li><span>En <b>tu navegador</b> abre <code>checkip.amazonaws.com</code></span><span>esa es tu IP de casa (para el SSH)</span></li>
-      <li><code>terraform.tfvars</code><span>tus datos: IP con <b>/32</b> y nombre de tu key pair</span></li>
-      <li><code>terraform init</code><span>descarga el provider (el traductor)</span></li>
-      <li><code>terraform plan</code><span>la lista de lo que va a crear · <b>no toca nada</b></span></li>
-    </ul>
+<!-- 11 · LAB 3: ARMA TU RED PIEZA POR PIEZA (CONSTRUCTOR INTERACTIVO) -->
+<section class="slide" id="scX">
+  <style>
+    .bld{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:14px;width:min(100%,1240px);margin:4px auto 0;align-items:start}
+    .bld-cv{width:100%;max-width:calc(62vh * 620 / 460);justify-self:center}
+    .bld-cv canvas{display:block;width:100%;border-radius:14px;cursor:pointer;border:1px solid var(--line)}
+    .bld-cv .hint{font-size:.78rem;color:var(--muted);text-align:center;margin-top:6px}
+    .bld-p{background:#0b1a2b;color:#e6edf3;border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;max-height:66vh;overflow:auto}
+    .bld-steps{display:flex;flex-wrap:wrap;gap:5px}
+    .bld-steps button{font:600 .72rem Poppins,sans-serif;border:1.5px solid #2b4f74;background:#10243a;color:#cfe3f1;border-radius:999px;padding:4px 10px;cursor:pointer}
+    .bld-steps button.sel{border-color:#E97132;background:#E97132;color:#fff}
+    .bld-steps button.done:not(.sel){border-color:#34c38f;color:#9ff0c8}
+    .bld-p h3{font:800 1.05rem Poppins,sans-serif;margin:0;color:#fff}
+    .bld-p .d{font-size:.86rem;line-height:1.45;color:#cfe3f1;margin:0}.bld-p .d b{color:#fff}
+    .bld-p .meta{display:flex;flex-wrap:wrap;gap:6px;font-size:.74rem}
+    .bld-p .meta span{background:rgba(255,255,255,.07);border-radius:6px;padding:3px 8px}
+    .bld-p .meta .warn{background:rgba(255,201,40,.16);color:#FFC928}
+    .bld-p .meta .exp{background:rgba(52,195,143,.16);color:#9ff0c8;font-family:var(--mono)}
+    .bld-snip{border:1px solid #2b4f74;border-radius:10px;overflow:hidden}
+    .bld-snip .top{display:flex;justify-content:space-between;align-items:center;gap:8px;background:#10243a;padding:5px 8px;font-size:.74rem;color:#9fd8f0;font-weight:700}
+    .bld-snip button{font:700 .74rem Poppins,sans-serif;border:0;border-radius:999px;padding:5px 12px;background:#ff9900;color:#0e2841;cursor:pointer;white-space:nowrap}
+    .bld-snip button.ok{background:#34c38f;color:#fff}
+    .bld-snip pre{margin:0;padding:8px 10px;font:500 clamp(.6rem,.82vw,.74rem)/1.45 var(--mono);color:#e6edf3;white-space:pre;overflow:auto;max-height:24vh;font-variant-ligatures:none}
+    .bld-p .foot{display:flex;justify-content:space-between;font-size:.72rem;color:#9fb3c8}
+    .bld-p .foot a{color:#9fd8f0;cursor:pointer;text-decoration:underline}
+    .bld button:focus-visible{outline:2px solid #FFC928;outline-offset:2px}
+  </style>
+  <span class="k"><span class="act-chip">🧪 PASO 3</span> Toca una pieza del dibujo → copia su bloque → pégalo en CloudShell</span>
+  <h2 style="font-size:clamp(1.15rem,2.3vw,1.65rem);margin-bottom:2px">Arma tu red <span class="grad">pieza por pieza</span> con Terraform</h2>
+  <div class="bld">
+    <div class="bld-cv"><canvas aria-label="Diagrama interactivo de la arquitectura: al tocar cada pieza aparece su bloque de Terraform"></canvas><div class="hint">Las piezas punteadas aún no existen · al copiar su bloque se “construyen” · el número es el orden</div></div>
+    <div class="bld-p" aria-live="polite">
+      <div class="bld-steps"></div>
+      <h3></h3><p class="d"></p>
+      <div class="meta"></div>
+      <div class="snips" style="display:flex;flex-direction:column;gap:8px"></div>
+      <div class="foot"><span>Cada bloque: <b>pégalo una sola vez</b> y responde <b>yes</b></span><a class="reset">reiniciar dibujo</a></div>
+    </div>
   </div>
-  <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: <b>Plan: 10 to add, 0 to change, 0 to destroy.</b></p>
   <script>
-  typeTerm(document.getElementById('lab3'),document.getElementById('lab3t'),[
-    ['cmd','$ printf \'mi_ip = "181.53.20.14/32"\\nllave = "mi-llave"\\n\' > terraform.tfvars'],['note','  ↑ cambia la IP por la tuya y el nombre por tu key pair'],
-    ['cmd','$ terraform init'],['out','Installing hashicorp/aws v6.x…'],['hl','<b>Terraform has been successfully initialized!</b>'],
-    ['cmd','$ terraform plan'],['out','  + resource "aws_vpc" "pyme"  { cidr_block = "10.0.0.0/16" }'],['out','  + resource "aws_subnet" "area" ["ventas"] ["admin"] ["web"] ["bd"]'],['out','  + resource "aws_internet_gateway" "puerta"'],['out','  + resource "aws_instance" "web"  …'],
-    ['hl','<b>Plan: 10 to add, 0 to change, 0 to destroy.</b>'],['note','  ↑ todavía no existe nada: es el presupuesto']]);
-  </script>
-</section>
-
-<!-- 12 · LAB 4: APPLY -->
-<section class="slide" id="lab4">
-  <span class="k"><span class="act-chip">🧪 PASO 4</span> apply: que se construya la obra</span>
-  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">Un comando, <span class="grad">10 recursos</span></h2>
-  <div class="grid2" style="align-items:start">
-    <div class="demo term lab" id="lab4t" style="min-height:330px"></div>
-    <ul class="cmdlist">
-      <li><code>terraform apply</code><span>muestra el plan otra vez y pregunta</span></li>
-      <li><code>yes</code><span>"sí, constrúyelo"</span></li>
-      <li><span>Mira el orden</span><span>VPC primero, después subredes… Terraform lo calcula solo</span></li>
-      <li><code>tu_web = "http://…"</code><span>espera <b>1–2 min</b> (NGINX se instala) y ábrela</span></li>
-      <li><span>Consola → VPC</span><span>ahí está <b>pyme-vpc-tf</b>, igualita a la tuya</span></li>
-    </ul>
-  </div>
-  <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: pantallazo de tu página <b>“Hola desde Terraform 🚀”</b>.</p>
-  <script>
-  typeTerm(document.getElementById('lab4'),document.getElementById('lab4t'),[
-    ['cmd','$ terraform apply'],['out','Do you want to perform these actions?  Enter a value: yes'],
-    ['out','aws_vpc.pyme: Creating...'],['hl','aws_vpc.pyme: Creation complete after 2s [id=<b>vpc-0c1d2e3f</b>]'],['out','aws_internet_gateway.puerta: Creating...'],['out','aws_subnet.area["web"]: Creating...  (×4 en paralelo)'],['out','aws_security_group.web: Creating...'],['out','aws_instance.web: Still creating... [10s elapsed]'],
-    ['hl','<b>Apply complete! Resources: 10 added, 0 changed, 0 destroyed.</b>'],['out','Outputs:'],['hl','tu_web = "<b>http://54.210.33.17</b>"'],['note','  ↑ espera 1–2 min y ábrela en el navegador']]);
+  (function(){
+    var P=[{"n": "Base", "t": "El traductor y tus datos", "d": "Le dice a Terraform que hable con <b>AWS<\/b> en <b>us-east-1<\/b> (el <b>provider<\/b>) y declara lo que cambia por estudiante: tu IP y tu key pair. <b>init<\/b> descarga el traductor.", "req": "Terraform instalado (paso 2) y tu llave configurada (aws configure)", "exp": "Terraform has been successfully initialized!", "c": [["1 · Plano base + init", "mkdir -p ~/pyme-tf && cd ~/pyme-tf && export PATH=$HOME/bin:$PATH\ncat > main.tf <<'EOF'\nterraform {\n  required_providers {\n    aws = { source = \"hashicorp/aws\", version = \"~> 6.0\" }\n  }\n}\n\nprovider \"aws\" {\n  region = \"us-east-1\"\n}\n\nvariable \"mi_ip\" { type = string } # tu IP de casa con /32\nvariable \"llave\" { type = string } # nombre de tu key pair\nvariable \"tipo_instancia\" {\n  type    = string\n  default = \"t3.micro\"\n}\nEOF\nterraform init"], ["2 · Tus datos (te pregunta tu IP y tu key pair)", "cd ~/pyme-tf && read -p \"Tu IP de casa (mírala en checkip.amazonaws.com): \" IP && read -p \"Nombre de tu key pair: \" K && printf 'mi_ip = \"%s/32\"\\nllave = \"%s\"\\n' \"$IP\" \"$K\" > terraform.tfvars && cat terraform.tfvars"]]}, {"n": "VPC", "t": "La urbanización: la VPC", "d": "Un solo bloque = el botón <b>«Crear VPC»<\/b> que diste la clase pasada: <b>10.0.0.0/16<\/b>.", "req": "0 · Base", "exp": "Plan: 1 to add → escribe yes", "c": [["Pégalo en CloudShell", "cd ~/pyme-tf && export PATH=$HOME/bin:$PATH\ncat >> main.tf <<'EOF'\n# ---------- La urbanización: la VPC\nresource \"aws_vpc\" \"pyme\" {\n  cidr_block           = \"10.0.0.0/16\"\n  enable_dns_hostnames = true\n  tags                 = { Name = \"pyme-vpc-tf\" }\n}\nEOF\nterraform apply"]]}, {"n": "Subredes", "t": "Las 4 calles: subredes", "d": "Con <b>for_each<\/b>, un bloque crea las 4 subredes. Fíjate en <b>aws_vpc.pyme.id<\/b>: así sabe en qué VPC van. Por eso la VPC va primero.", "req": "1 · VPC", "exp": "Plan: 4 to add → yes", "c": [["Pégalo en CloudShell", "cd ~/pyme-tf && export PATH=$HOME/bin:$PATH\ncat >> main.tf <<'EOF'\n# ---------- Las 4 calles: subredes (VLSM)\nlocals {\n  subredes = {\n    ventas = \"10.0.1.0/26\"\n    admin  = \"10.0.1.64/27\"\n    web    = \"10.0.1.96/28\"\n    bd     = \"10.0.1.112/28\"\n  }\n}\n\nresource \"aws_subnet\" \"area\" {\n  for_each                = local.subredes\n  vpc_id                  = aws_vpc.pyme.id\n  cidr_block              = each.value\n  availability_zone       = \"us-east-1a\"\n  map_public_ip_on_launch = each.key == \"web\"\n  tags                    = { Name = \"${each.key}-tf\" }\n}\nEOF\nterraform apply"]]}, {"n": "Puerta + ruta", "t": "Internet Gateway + tabla de rutas", "d": "La <b>puerta<\/b> a internet y el camino <b>0.0.0.0/0 → puerta<\/b>, asociado <b>solo<\/b> a la calle web. Eso es lo que la vuelve <b>pública<\/b>.", "req": "2 · Subredes", "exp": "Plan: 3 to add → yes", "c": [["Pégalo en CloudShell", "cd ~/pyme-tf && export PATH=$HOME/bin:$PATH\ncat >> main.tf <<'EOF'\n# ---------- La puerta a internet y el camino hacia ella\nresource \"aws_internet_gateway\" \"puerta\" {\n  vpc_id = aws_vpc.pyme.id\n  tags   = { Name = \"pyme-igw-tf\" }\n}\n\nresource \"aws_route_table\" \"publica\" {\n  vpc_id = aws_vpc.pyme.id\n  route {\n    cidr_block = \"0.0.0.0/0\"\n    gateway_id = aws_internet_gateway.puerta.id\n  }\n  tags = { Name = \"rt-publica-tf\" }\n}\n\nresource \"aws_route_table_association\" \"web\" {\n  subnet_id      = aws_subnet.area[\"web\"].id\n  route_table_id = aws_route_table.publica.id\n}\nEOF\nterraform apply"]]}, {"n": "Portero", "t": "El portero: Security Group", "d": "Puerto <b>80<\/b> abierto para todos (la página) y <b>22<\/b> solo para tu IP (el SSH). Usa <b>var.mi_ip<\/b>, el dato que diste en la base.", "req": "1 · VPC", "exp": "Plan: 1 to add → yes", "c": [["Pégalo en CloudShell", "cd ~/pyme-tf && export PATH=$HOME/bin:$PATH\ncat >> main.tf <<'EOF'\n# ---------- El portero: Security Group\nresource \"aws_security_group\" \"web\" {\n  name        = \"web-sg-tf\"\n  description = \"HTTP para todos, SSH solo desde mi IP\"\n  vpc_id      = aws_vpc.pyme.id\n\n  ingress {\n    description = \"Web\"\n    from_port   = 80\n    to_port     = 80\n    protocol    = \"tcp\"\n    cidr_blocks = [\"0.0.0.0/0\"]\n  }\n  ingress {\n    description = \"SSH solo mi IP\"\n    from_port   = 22\n    to_port     = 22\n    protocol    = \"tcp\"\n    cidr_blocks = [var.mi_ip]\n  }\n  egress {\n    from_port   = 0\n    to_port     = 0\n    protocol    = \"-1\"\n    cidr_blocks = [\"0.0.0.0/0\"]\n  }\n  tags = { Name = \"web-sg-tf\" }\n}\nEOF\nterraform apply"]]}, {"n": "Servidor", "t": "La casa: EC2 + NGINX + tu URL", "d": "Busca la AMI de Amazon Linux más reciente, lanza la EC2 en la calle <b>web<\/b> con el portero y le instala <b>NGINX<\/b> al nacer (user_data). Al final te entrega <b>tu URL<\/b>.", "req": "2 · Subredes, 3 · Puerta y 4 · Portero", "exp": "Plan: 1 to add → yes → tu_web = \"http://…\" (espera 1–2 min)", "c": [["Pégalo en CloudShell", "cd ~/pyme-tf && export PATH=$HOME/bin:$PATH\ncat >> main.tf <<'EOF'\n# ---------- La casa: EC2 con Amazon Linux 2023 + NGINX\ndata \"aws_ssm_parameter\" \"amazon_linux\" {\n  name = \"/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64\"\n}\n\nresource \"aws_instance\" \"web\" {\n  ami                    = data.aws_ssm_parameter.amazon_linux.value\n  instance_type          = var.tipo_instancia\n  subnet_id              = aws_subnet.area[\"web\"].id\n  vpc_security_group_ids = [aws_security_group.web.id]\n  key_name               = var.llave\n\n  user_data = <<-SCRIPT\n    #!/bin/bash\n    dnf install -y nginx\n    echo \"<h1>Hola desde Terraform 🚀<\/h1><p>Esta red y este servidor nacieron de un archivo de código.<\/p>\" > /usr/share/nginx/html/index.html\n    systemctl enable --now nginx\n  SCRIPT\n\n  tags = { Name = \"web-tf\" }\n}\n\noutput \"tu_web\" {\n  value = \"http://${aws_instance.web.public_ip}\"\n}\nEOF\nterraform apply"]]}, {"n": "Destroy", "t": "Borrar todo, en orden", "d": "Terraform borra los <b>10 recursos<\/b> en orden inverso (primero la EC2, al final la VPC). Tu pyme-vpc hecha a clics <b>no se toca<\/b>.", "req": "al final de la clase", "exp": "Destroy complete! Resources: 10 destroyed.", "c": [["Pégalo en CloudShell", "cd ~/pyme-tf && export PATH=$HOME/bin:$PATH\nterraform destroy"]]}];
+    var sec=document.getElementById('scX'),cv=sec.querySelector('canvas'),ctx=cv.getContext('2d'),W=620,H=460,DPR=Math.min(window.devicePixelRatio||1,2);
+    var pan=sec.querySelector('.bld-p'),stepsEl=pan.querySelector('.bld-steps'),sel=0,hov=-1,built=[0,0,0,0,0,0],run=false,t0=performance.now();
+    sec.querySelector('.bld').addEventListener('click',function(e){e.stopPropagation();});
+    var X0=10,Y0=10,gx=X0+281,gy=Y0+66,ex=X0+96,ey=Y0+226;
+    var SUB=[['web','10.0.1.96/28',1,X0+60,Y0+126,212,236],['ventas','10.0.1.0/26',0,X0+290,Y0+126,206,72],['admin','10.0.1.64/27',0,X0+290,Y0+208,206,72],['bd','10.0.1.112/28',0,X0+290,Y0+290,206,72]];
+    function inR(x,y,r){return x>=r[0]&&x<=r[0]+r[2]&&y>=r[1]&&y<=r[1]+r[3];}
+    function hit(x,y){if(inR(x,y,[ex+36,ey+34,68,80]))return 5;if(inR(x,y,[ex,ey,140,116]))return 4;
+      if(Math.hypot(x-gx,y-gy)<22||inR(x,y,[X0+72,Y0+168,188,40]))return 3;for(var k=0;k<4;k++){var s=SUB[k];if(inR(x,y,[s[3],s[4],s[5],s[6]]))return 2;}
+      if(inR(x,y,[X0+28,Y0+66,500,320]))return 1;if(inR(x,y,[X0,Y0,600,440]))return 0;return -1;}
+    function size(){var w=cv.parentElement.clientWidth||620;cv.style.height=(w*H/W)+'px';cv.width=Math.round(w*DPR);cv.height=Math.round(w*H/W*DPR);}
+    function pos(e){var r=cv.getBoundingClientRect();return [(e.clientX-r.left)*W/r.width,(e.clientY-r.top)*H/r.height];}
+    cv.addEventListener('mousemove',function(e){var p=pos(e);hov=hit(p[0],p[1]);cv.style.cursor=hov>=0?'pointer':'default';});
+    cv.addEventListener('mouseleave',function(){hov=-1;});
+    cv.addEventListener('click',function(e){var p=pos(e),k=hit(p[0],p[1]);if(k>=0)pick(k);});
+    function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+    function copy(txt,b,k,last){if(last&&k<6){built[k]=1;renderSteps();renderMeta(k);}if(k===6){built=[0,0,0,0,0,0];renderSteps();}function ok(){b.textContent='✓ Copiado';b.classList.add('ok');setTimeout(function(){b.textContent='📋 Copiar';b.classList.remove('ok');},1800);}
+      if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(txt).then(ok,fb);else fb();
+      function fb(){var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(_){}ta.remove();ok();}}
+    function renderSteps(){stepsEl.innerHTML='';P.forEach(function(p,k){var b=document.createElement('button');b.textContent=(k<6?k+' · ':'🧹 ')+p.n;if(k===sel)b.className='sel';else if(k<6&&built[k])b.className='done';b.onclick=function(){pick(k);};stepsEl.appendChild(b);});}
+    var NEED=[[],[0],[1],[2],[1],[2,3,4],[]];
+    function renderMeta(k){var p=P[k],miss=NEED[k].filter(function(j){return !built[j];}),m='';
+      m+=miss.length?'<span class="warn">⚠️ Primero: '+miss.map(function(j){return j+' · '+P[j].n;}).join(', ')+'</span>':'<span>requiere: '+p.req+'</span>';
+      m+='<span class="exp">verás: '+esc(p.exp)+'</span>';pan.querySelector('.meta').innerHTML=m;}
+    function pick(k){sel=k;var p=P[k];renderSteps();pan.querySelector('h3').textContent=(k<6?k+' · ':'')+p.t;pan.querySelector('.d').innerHTML=p.d;
+      renderMeta(k);
+      var box=pan.querySelector('.snips');box.innerHTML='';
+      p.c.forEach(function(s,i){var d=document.createElement('div');d.className='bld-snip';d.innerHTML='<div class="top"><span>'+esc(s[0])+'</span><button type="button">📋 Copiar</button></div><pre>'+esc(s[1])+'</pre>';
+        var b=d.querySelector('button');b.onclick=function(){copy(s[1],b,k,i===p.c.length-1);};box.appendChild(d);});}
+    pan.querySelector('.reset').onclick=function(){built=[0,0,0,0,0,0];pick(0);};
+    function draw(now){if(!sec.classList.contains('on')){run=false;return;}var t=(now-t0)/1000,c=ctx,V=Viz,C=V.C;
+      c.setTransform(cv.width/W,0,0,cv.width/W,0,0);c.clearRect(0,0,W,H);c.fillStyle='#0e2238';c.fillRect(0,0,W,H);
+      function st(k){return {on:!!built[k],s:sel===k,h:hov===k};}
+      function frame(k,fn){var q=st(k);c.save();c.globalAlpha*=q.on?1:(q.s||q.h?.85:.4);if(!q.on)c.setLineDash([5,5]);fn(q);c.restore();
+        if(q.s){c.save();c.globalAlpha*=.55+.35*Math.sin(t*4);c.shadowColor='#E97132';c.shadowBlur=18;fn({glow:1});c.restore();}}
+      function badge(k,x,y){var q=st(k);c.save();c.fillStyle=q.on?C.grn:(q.s?'#E97132':'#2b4f74');c.beginPath();c.arc(x,y,10,0,7);c.fill();c.restore();V.tx(c,q.on?'✓':String(k),x,y+4,11,'#fff','center',800,1);}
+      /* 0 base: AWS Cloud + región */
+      frame(0,function(q){c.strokeStyle=q.glow?'#E97132':'#d5dbdb';c.lineWidth=q.glow?3:1.5;NetScene.rr(c,X0,Y0,600,440,4);c.stroke();if(q.glow)return;c.fillStyle='#232f3e';c.fillRect(X0,Y0,30,24);
+        c.strokeStyle='#00a4a6';c.lineWidth=1.5;c.setLineDash([6,4]);NetScene.rr(c,X0+14,Y0+34,572,394,4);c.stroke();});
+      V.tx(c,'aws',X0+15,Y0+16,10,'#fff','center',800,built[0]?1:.6,'Arial,sans-serif');V.tx(c,'AWS Cloud · provider "aws"',X0+38,Y0+16,11,'#d5dbdb','left',700,built[0]?1:.6);V.tx(c,'Región us-east-1 (Norte de Virginia)',X0+26,Y0+52,11,'#5fd4d6','left',700,built[0]?1:.6);badge(0,X0+580,Y0+12);
+      V.tx(c,'🌐',X0+556,Y0+96,22,'#fff','center',400,1);V.tx(c,'Internet',X0+556,Y0+116,10,C.mut,'center',700,1);
+      /* 1 VPC */
+      frame(1,function(q){c.strokeStyle=q.glow?'#E97132':'#8c4fff';c.lineWidth=2;NetScene.rr(c,X0+28,Y0+66,500,320,4);c.stroke();if(q.glow)return;c.fillStyle='#8c4fff';c.fillRect(X0+28,Y0+66,26,22);
+        c.strokeStyle='#147eba';c.lineWidth=1;c.setLineDash([5,4]);NetScene.rr(c,X0+44,Y0+98,468,272,4);c.stroke();});
+      var a1=built[1]?1:.55;V.tx(c,'🔒',X0+41,Y0+82,11,'#fff','center',400,a1);V.tx(c,'VPC pyme-vpc-tf · 10.0.0.0/16',X0+62,Y0+82,11,'#c9b6ff','left',800,a1);V.tx(c,'Zona de disponibilidad us-east-1a',X0+56,Y0+114,10,'#6cb6e6','left',700,a1);badge(1,X0+514,Y0+80);
+      /* 2 subredes */
+      SUB.forEach(function(sb){var pub=sb[2],col=pub?'#7aa116':'#147eba';frame(2,function(q){if(!q.glow&&q.on){c.fillStyle=pub?'rgba(122,161,22,.12)':'rgba(20,126,186,.12)';NetScene.rr(c,sb[3],sb[4],sb[5],sb[6],4);c.fill();}
+          c.strokeStyle=q.glow?'#E97132':col;c.lineWidth=1.5;NetScene.rr(c,sb[3],sb[4],sb[5],sb[6],4);c.stroke();if(!q.glow){c.fillStyle=col;c.fillRect(sb[3],sb[4],22,20);}});
+        var a=built[2]?1:.55;V.tx(c,pub?'🔓':'🔒',sb[3]+11,sb[4]+14,10,'#fff','center',400,a);V.tx(c,(pub?'Subred pública · ':'Subred privada · ')+sb[0],sb[3]+28,sb[4]+14,10,pub?'#c1e07a':'#8cc8ee','left',800,a);V.tx(c,sb[1],sb[3]+28,sb[4]+30,10,C.mut,'left',600,a,'"JetBrains Mono",monospace');});
+      badge(2,X0+484,Y0+138);
+      /* 3 IGW + ruta */
+      frame(3,function(q){c.strokeStyle=q.glow?'#E97132':'#c9b6ff';c.lineWidth=2;c.beginPath();c.moveTo(gx+15,gy);c.lineTo(X0+540,Y0+92);c.stroke();
+        c.fillStyle=q.glow?'#E97132':'#8c4fff';c.beginPath();c.arc(gx,gy,15,0,7);q.on||q.glow?c.fill():c.stroke();
+        c.fillStyle='#16324f';NetScene.rr(c,X0+72,Y0+168,188,40,6);if(!q.glow)c.fill();c.strokeStyle=q.glow?'#E97132':'#8c4fff';c.lineWidth=1.5;c.stroke();
+        c.setLineDash([4,4]);c.beginPath();c.moveTo(X0+250,Y0+168);c.lineTo(gx,gy+15);c.stroke();});
+      var a3=built[3]?1:.55;V.tx(c,'⇅',gx,gy+5,14,'#fff','center',800,a3);V.tx(c,'Internet Gateway',gx+20,gy-10,10,'#c9b6ff','left',800,a3);
+      V.tx(c,'Tabla de rutas · rt-publica-tf',X0+82,Y0+184,9.5,'#c9b6ff','left',800,a3);V.tx(c,'0.0.0.0/0 → Internet Gateway',X0+82,Y0+200,9.5,'#fff','left',700,a3,'"JetBrains Mono",monospace');badge(3,gx-24,gy-16);
+      /* 4 SG */
+      frame(4,function(q){c.strokeStyle=q.glow?'#E97132':'#dd344c';c.setLineDash([5,4]);c.lineWidth=1.8;NetScene.rr(c,ex,ey,140,116,6);c.stroke();});
+      var a4=built[4]?1:.55;V.tx(c,'Security Group · web-sg-tf',ex+6,ey+16,9.5,'#ff8a9a','left',800,a4);V.tx(c,'80: todos · 22: tu IP',ex+6,ey+30,9.5,'#ffd0d6','left',600,a4,'"JetBrains Mono",monospace');badge(4,ex+140,ey);
+      /* 5 EC2 */
+      frame(5,function(q){if(q.on&&!q.glow){V.glow(c,'#ed7100',12);c.fillStyle='#ed7100';NetScene.rr(c,ex+44,ey+40,52,52,6);c.fill();c.shadowBlur=0;}else{c.strokeStyle=q.glow?'#E97132':'#ed7100';c.lineWidth=2;NetScene.rr(c,ex+44,ey+40,52,52,6);c.stroke();}
+        if(q.glow)return;c.setLineDash([]);c.strokeStyle='#fff';c.lineWidth=2;NetScene.rr(c,ex+56,ey+52,28,28,3);c.stroke();for(var z=0;z<4;z++){c.beginPath();c.moveTo(ex+60+z*7,ey+48);c.lineTo(ex+60+z*7,ey+52);c.moveTo(ex+60+z*7,ey+80);c.lineTo(ex+60+z*7,ey+84);c.stroke();}});
+      V.tx(c,'EC2 web-tf · NGINX',ex+70,ey+108,10,'#ffb98a','center',800,built[5]?1:.55);badge(5,ex+104,ey+40);
+      /* todo construido: llegan visitas */
+      if(built.every(function(b){return b;})){var path=[[X0+540,Y0+92],[gx+15,gy],[gx,gy+15],[X0+250,Y0+168],[X0+166,Y0+250],[X0+166,Y0+292]],u=(t%2.6)/2;
+        if(u<=1){var p=NetScene.along(path,u);c.save();V.glow(c,C.grn,12);c.fillStyle=C.grn;c.beginPath();c.arc(p[0],p[1],7,0,7);c.fill();c.restore();}
+        V.pill(c,X0+130,Y0+398,'tu_web = "http://54.x.x.x" → Hola desde Terraform 🚀','rgba(52,195,143,.3)','#fff',1);}
+      requestAnimationFrame(draw);}
+    sec.__enter=function(){size();pick(sel);if(!run){run=true;requestAnimationFrame(draw);}};
+    window.addEventListener('resize',function(){if(sec.classList.contains('on'))size();});
+  })();
   </script>
 </section>
 
 <!-- 13 · LAB 5: LA MAGIA Y EL DESTROY -->
 <section class="slide" id="lab5">
-  <span class="k"><span class="act-chip">🧪 PASO 5</span> La magia: correrlo otra vez, cambiar y borrar</span>
+  <span class="k"><span class="act-chip">🧪 PASO 4</span> La magia: correrlo otra vez, cambiar y borrar</span>
   <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">El GPS en acción: <span class="grad">plan, cambio y destroy</span></h2>
   <div class="grid2" style="align-items:start">
     <div class="demo term lab" id="lab5t" style="min-height:330px"></div>
@@ -820,7 +1017,7 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: <b>Destroy complete! Resources: 10 destroyed.</b> (tu pyme-vpc hecha a clics no se toca)</p>
   <script>
   typeTerm(document.getElementById('lab5'),document.getElementById('lab5t'),[
-    ['cmd','$ terraform plan'],['hl','<b>No changes.</b> Your infrastructure matches the configuration.'],['note','  ↑ lo corres 10 veces: el resultado es el mismo'],
+    ['cmd','$ cd ~/pyme-tf && terraform plan'],['hl','<b>No changes.</b> Your infrastructure matches the configuration.'],['note','  ↑ lo corres 10 veces: el resultado es el mismo'],
     ['cmd','$ sed -i \'s/"web-tf"/"web-terraform"/\' main.tf && terraform apply'],['out','  ~ resource "aws_instance" "web" { tags.Name: "web-tf" → "web-terraform" }'],['hl','<b>Plan: 0 to add, 1 to change, 0 to destroy.</b>'],['out','Enter a value: yes  →  Apply complete! 1 changed.'],
     ['cmd','$ terraform destroy'],['out','Enter a value: yes'],['hl','<b>Destroy complete! Resources: 10 destroyed.</b>'],['note','  ↑ cero recursos olvidados, cero sorpresas en la factura']]);
   </script>
@@ -860,7 +1057,8 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
     <li><b>terraform destroy</b> → <b>10 destroyed</b> (en la consola ya no aparece pyme-vpc-tf)</li>
     <li>Tu <b>pyme-vpc</b> hecha a clics y tu EC2 de siempre <b>siguen intactas</b> (Terraform solo toca lo que él creó)</li>
     <li>La carpeta <b>~/pyme-tf</b> queda guardada en CloudShell: la próxima clase solo haces <b>terraform apply</b></li>
-    <li>El <b>terraform.tfstate</b> y la <b>.ppk</b> nunca van a GitHub</li>
+    <li>Tu llave: IAM → terraform-lab → Credenciales de seguridad → <b>Desactivar y Eliminar</b> (y <b>rm ~/.aws/credentials</b>)</li>
+    <li>El <b>terraform.tfstate</b>, la <b>.ppk</b> y el <b>.csv</b> de la llave nunca van a GitHub</li>
     <li>¿No vas a usar tu EC2 de siempre hoy? <b>Stop</b> — capa gratuita cuidada 💵</li>
   </ul>
 </section>
