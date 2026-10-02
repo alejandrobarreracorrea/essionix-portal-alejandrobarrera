@@ -267,8 +267,8 @@ ul.clean li:first-child { border-top:0; }
   <img class="cover-bg" src="../../../assets/portada.png" alt="">
   <div class="cover-txt">
     <span class="cover-k">Estud-IA · Ruta TI · 2026-2 · Sesión {{SESION}} · clase virtual · {{G_ID}}</span>
-    <h1 class="cover-h">Docker en acción: 3 sitios web y un balanceador en tu EC2</h1>
-    <p class="cover-s">Instalamos Docker, montamos tres sitios web en contenedores dentro de la misma máquina y ponemos delante un balanceador de carga que reparte las visitas. Después tumbamos uno… y la web sigue viva.<br>Alejandro Barrera · Cloud Architect</p>
+    <h1 class="cover-h">Tu infraestructura como código: pyme-vpc con Terraform</h1>
+    <p class="cover-s">Todo lo que construyeron a clics (la red y la EC2) lo vamos a escribir en un archivo… y lo vamos a lanzar, cambiar y borrar con tres comandos.<br>Alejandro Barrera · Cloud Architect</p>
   </div>
   <img class="cover-logo" src="../../../assets/estudia-blanco.png" alt="Estud-IA">
 </section>
@@ -276,18 +276,18 @@ ul.clean li:first-child { border-top:0; }
 <!-- 2 · PLAN -->
 <section class="slide">
   <span class="k">El plan de hoy · clase {{SESION}}</span>
-  <h2>Objetivo de hoy: <span class="grad">varios sitios y un balanceador en una sola EC2</span>.</h2>
+  <h2>Objetivo de hoy: <span class="grad">construir tu red y tu servidor con código</span>.</h2>
   <ul class="rows">
-    <li><span class="t">La idea<small>Contenedores como habitaciones · el balanceador como recepcionista</small></span><span class="m">concepto</span></li>
-    <li><span class="t">Paso 1–2 · Docker y los 3 sitios<small>Instalar Docker y crear las páginas A, B y C</small></span><span class="m">lab</span></li>
-    <li><span class="t">Paso 3–4 · Contenedores y balanceador<small>Una red de Docker, 3 NGINX y uno más que reparte</small></span><span class="m">lab</span></li>
-    <li><span class="t">Paso 5 · Prueba de fuego<small>Reparto por turnos · tumbamos un contenedor · limpieza</small></span><span class="m">lab</span></li>
+    <li><span class="t">Todo es una llamada a la API<small>Qué pasa de verdad cuando haces clic · la CLI de AWS</small></span><span class="m">concepto</span></li>
+    <li><span class="t">¿Por qué nació Terraform?<small>De los clics a los scripts y del script al plano</small></span><span class="m">concepto</span></li>
+    <li><span class="t">Cómo trabaja y por qué es el estándar<small>init · plan · apply · state · destroy</small></span><span class="m">concepto</span></li>
+    <li><span class="t">LAB: pyme-vpc + EC2 desde Terraform<small>CloudShell · lanzar · cambiar · destruir</small></span><span class="m">lab</span></li>
   </ul>
-  <p class="sub" style="margin-top:14px">Esto es lo que verán en las semanas 12–13 (NGINX como proxy inverso y balanceo de carga)… <b>hoy lo adelantamos</b>. 🚀</p>
+  <p class="sub" style="margin-top:14px">Hasta hoy fueron <b>albañiles</b> (clic por clic). Hoy se vuelven <b>arquitectos</b>: dibujan el plano y la obra se construye sola. 📐</p>
 </section>
 
-<!-- 3 · LA IDEA (escena) -->
-<section class="slide" id="scLB">
+<!-- 3 · TODO ES UNA LLAMADA A LA API -->
+<section class="slide" id="scA">
   <style>
     .scene{width:min(100%,1080px,calc(58vh * var(--ar)));margin:6px auto 0}
     .scene canvas{display:block;width:100%;border-radius:14px;background:#f7f9fc;border:1px solid var(--line)}
@@ -401,177 +401,367 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   </script>
 
 
-  <span class="k"><span class="act-chip">⚖️ BALANCEADOR</span> Varios sitios, una sola máquina · clic o → para avanzar</span>
-  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">Un <span class="grad">recepcionista</span> que reparte las visitas</h2>
-  <div class="scene"><canvas aria-label="Animación: tu EC2 con tres contenedores web y un contenedor balanceador que reparte las visitas por turnos; uno se cae y el balanceador lo salta"></canvas></div>
+  <span class="k"><span class="act-chip">📡 API</span> Lo que pasa cuando haces clic · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">Cada clic en la consola es <span class="grad">una llamada a la API</span></h2>
+  <div class="scene"><canvas aria-label="Animación: un clic en la consola envía una petición HTTPS a la API de AWS, que crea la VPC y responde; la CLI y Terraform hacen la misma llamada"></canvas></div>
   <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
   <script>
-  NetScene.make('scLB',1000,480,[
-    'Hasta hoy: <b>una EC2 = un sitio</b>, con NGINX instalado directo en Amazon Linux. Si ese NGINX se cae, se cae tu web.',
-    'Con <b>Docker</b> metemos <b>3 sitios en la misma EC2</b>, cada uno en su <b>contenedor</b> (su habitación): <b>web-A</b>, <b>web-B</b> y <b>web-C</b>. Viven en una red privada de Docker.',
-    'Adelante ponemos un contenedor más: el <b>balanceador</b> (otro NGINX). Recibe <b>todas</b> las visitas por el puerto 80 y las reparte <b>por turnos</b>: A, B, C, A, B, C… (round robin).',
-    '¿Y si se cae uno? El balanceador <b>se da cuenta y lo salta</b>: las visitas siguen llegando a A y C. <b>Tu web no se cae.</b> Eso es <b>alta disponibilidad</b>.',
-    'En la vida real los contenedores son <b>copias del mismo sitio</b> (aquí les pusimos colores para ver el reparto), y AWS tiene un balanceador administrado, el <b>ALB</b>, que reparte entre varias EC2 en distintas zonas.'
+  NetScene.make('scA',1000,480,[
+    'Cuando creaste tu VPC hiciste clic en <b>«Crear VPC»</b> en la consola de AWS. ¿Qué pasó en realidad?',
+    'Tu navegador envió un <b>mensaje por internet (HTTPS)</b> a la <b>API de AWS</b>: <i>“crea una VPC con 10.0.0.0/16”</i>, firmado con <b>tus credenciales</b> para probar que eres tú.',
+    'AWS revisa permisos, <b>crea la VPC</b> en tu cuenta y responde con un <b>ID</b>: vpc-0a1b2c… Eso es una <b>API</b>: una ventanilla donde se piden cosas con mensajes.',
+    'La <b>CLI de AWS</b> (aws en la terminal) envía <b>exactamente el mismo mensaje</b>, pero escrito como comando. Sin clics.',
+    '<b>Consola, CLI y Terraform</b> son tres formas de hacer <b>la misma llamada</b> a la misma API. Lo que cambia es <b>cuánto trabajo haces tú</b>.'
   ],function(c,s){
     var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
-    var COL=['#e5484d','#34c38f','#3b82f6'],NAMES=['A','B','C'];
-    var LB=[520,250],CT=[[820,140],[820,250],[820,360]],U=[[90,150],[90,250],[90,350]];
-    U.forEach(function(p,i){NetScene.person(c,p[0],p[1]+12,20,'#cfe3f1',1);});V.tx(c,'visitantes',90,410,12,C.mut,'center',700,1);
-    c.save();c.strokeStyle=C.ora;c.lineWidth=2.5;V.glow(c,C.ora,12);NetScene.rr(c,380,70,580,370,16);c.stroke();c.restore();V.tx(c,'TU EC2',396,94,14,'#ffb98a','left',800,1);
-    if(st===0){V.vm(c,610,200,220,110,'NGINX','instalado directo',C.blue,1,true);var u=(t%1.6)/1.6,p=NetScene.along([[110,250],[610,255]],u);c.save();V.glow(c,C.grn,10);c.fillStyle=C.grn;c.beginPath();c.arc(p[0],p[1],6,0,7);c.fill();c.restore();
-      V.tx(c,'1 EC2 = 1 sitio · si se cae, se cae todo',670,400,14,'#ffb98a','center',800,1);return;}
-    c.save();c.fillStyle='rgba(29,99,237,.25)';NetScene.rr(c,400,404,540,28,8);c.fill();c.restore();V.tx(c,'🐳 Docker · red-web',670,423,12,'#cfe3f1','center',800,1);
-    var down=st===3;
-    CT.forEach(function(p,i){var a=st===1?E.back(Math.max(0,Math.min(1,(t-i*.25)/.5))):1,dead=down&&i===1;
-      c.save();c.globalAlpha*=a;if(!dead)V.glow(c,COL[i],12);c.fillStyle=dead?'#3a2a2a':'#0f2740';NetScene.rr(c,p[0]-90,p[1]-40,180,80,10);c.fill();c.shadowBlur=0;c.strokeStyle=dead?C.red:COL[i];c.lineWidth=2.5;c.stroke();c.restore();
-      V.tx(c,'web-'+NAMES[i],p[0],p[1]-6,16,'#fff','center',800,a);V.tx(c,dead?'✗ caído':'Sitio '+NAMES[i],p[0],p[1]+16,12,dead?'#ff9b9b':COL[i],'center',800,a);});
-    if(st>=2){var a2=st===2?E.back(Math.min(1,t/.6)):1;c.save();c.globalAlpha*=a2;V.glow(c,C.ora,16);c.fillStyle='#3a2518';NetScene.rr(c,LB[0]-90,LB[1]-50,180,100,12);c.fill();c.strokeStyle=C.ora;c.lineWidth=3;c.stroke();c.restore();
-      NetScene.person(c,LB[0]-58,LB[1]+12,16,'#ffb98a',a2);V.tx(c,'balanceador',LB[0]+16,LB[1]-8,15,'#fff','center',800,a2);V.tx(c,'NGINX · puerto 80',LB[0]+16,LB[1]+14,11,'#ffd0b0','center',700,a2,'"JetBrains Mono",monospace');
-      var order=down?[0,2]:[0,1,2],period=1.4,k=Math.floor(t/period),u2=(t%period)/period,tgt=order[k%order.length],src=U[k%3];
-      var path=[[src[0]+22,src[1]],[LB[0]-90,LB[1]],[LB[0]+90,LB[1]],[CT[tgt][0]-90,CT[tgt][1]]],pp=NetScene.along(path,E.io(u2));
-      c.save();V.glow(c,COL[tgt],12);c.fillStyle=COL[tgt];c.beginPath();c.arc(pp[0],pp[1],7,0,7);c.fill();c.restore();
-      var seq=[];for(var q=0;q<6;q++)seq.push(NAMES[order[(k+q)%order.length]]);V.tx(c,'turnos: '+seq.join(' → ')+' …',670,64,13,'#ffd0b0','center',800,a2,'"JetBrains Mono",monospace');}
-    if(down){V.tx(c,'web-B se cayó → el balanceador lo salta ✓',200,456,14,'#9ff0c8','left',800,1);}
-    if(st>=4){var a4=E.out(Math.min(1,t/.6));c.save();c.globalAlpha*=a4;c.fillStyle='rgba(8,24,42,.9)';NetScene.rr(c,120,120,760,250,16);c.fill();c.strokeStyle='rgba(159,182,201,.4)';c.stroke();c.restore();
-      V.tx(c,'Hoy (laboratorio)',300,170,17,'#ffb98a','center',800,a4);V.tx(c,'3 contenedores en 1 EC2',300,200,14,'#fff','center',700,a4);V.tx(c,'balanceador = NGINX en Docker',300,226,14,'#fff','center',700,a4);
-      V.tx(c,'En producción (AWS)',700,170,17,'#9ff0c8','center',800,a4);V.tx(c,'copias del mismo sitio en varias EC2',700,200,14,'#fff','center',700,a4);V.tx(c,'en distintas zonas de disponibilidad',700,226,14,'#fff','center',700,a4);V.tx(c,'balanceador = ALB (administrado)',700,252,14,'#fff','center',700,a4);
-      V.tx(c,'misma idea, otra escala',500,330,18,'#fff','center',800,a4);}
+    var API=[620,240],ACC=[880,240];
+    /* API de AWS */c.save();V.glow(c,C.ora,16);c.fillStyle='#3a2518';NetScene.rr(c,API[0]-80,API[1]-60,160,120,14);c.fill();c.strokeStyle=C.ora;c.lineWidth=2.5;c.stroke();c.restore();
+    V.tx(c,'API de AWS',API[0],API[1]-14,16,'#fff','center',800,1);V.tx(c,'ec2.us-east-1',API[0],API[1]+8,11,'#ffd0b0','center',700,1,'"JetBrains Mono",monospace');V.tx(c,'.amazonaws.com',API[0],API[1]+24,11,'#ffd0b0','center',700,1,'"JetBrains Mono",monospace');
+    /* tu cuenta */c.save();c.strokeStyle='rgba(159,182,201,.45)';c.setLineDash([5,5]);NetScene.rr(c,ACC[0]-80,API[1]-110,160,220,12);c.stroke();c.restore();V.tx(c,'tu cuenta AWS',ACC[0],API[1]-124,12,C.mut,'center',700,1);
+    var made=st>=2?E.back(Math.min(1,(st===2?t:9)/.6)):0;if(made>0){c.save();c.globalAlpha*=made;c.strokeStyle=C.blue;c.lineWidth=2.5;V.glow(c,C.blue,12);NetScene.rr(c,ACC[0]-60,API[1]-40,120,80,10);c.stroke();c.restore();V.tx(c,'VPC',ACC[0],API[1]-6,18,'#fff','center',800,made);V.tx(c,'10.0.0.0/16',ACC[0],API[1]+16,11,'#9fd8f0','center',700,made,'"JetBrains Mono",monospace');}
+    /* consola */var conA=st<=2||st===4?1:.3;c.save();c.globalAlpha*=conA;c.fillStyle='#f4f8fb';NetScene.rr(c,40,80,300,170,10);c.fill();c.fillStyle='#232F3E';NetScene.rr(c,40,80,300,26,4);c.fill();c.restore();
+    V.tx(c,'aws  Consola · VPC',56,98,12,'#fff','left',800,conA);V.tx(c,'Bloque CIDR IPv4',60,134,11,'#44546A','left',600,conA);c.save();c.globalAlpha*=conA;c.strokeStyle='#c9d1d9';NetScene.rr(c,60,142,170,26,5);c.stroke();c.restore();V.tx(c,'10.0.0.0/16',70,160,12,'#0E2841','left',700,conA,'"JetBrains Mono",monospace');
+    var press=st===0&&(t%2.2)>1.4&&(t%2.2)<1.7;c.save();c.globalAlpha*=conA;c.fillStyle=press?'#c75d00':'#ec7211';NetScene.rr(c,200,196,120,32,6);c.fill();c.restore();V.tx(c,'Crear VPC',260,217,13,'#fff','center',800,conA);
+    if(st===0){var cu=Math.min(1,(t%2.2)/1.3);NetScene.person;c.save();c.translate(330-60*E.io(cu),250-30*E.io(cu));c.fillStyle='#fff';c.strokeStyle='#08182a';c.lineWidth=1.5;c.beginPath();c.moveTo(0,0);c.lineTo(0,18);c.lineTo(5,13);c.lineTo(9,21);c.lineTo(12,19);c.lineTo(8,12);c.lineTo(14,12);c.closePath();c.fill();c.stroke();c.restore();
+      V.tx(c,'¿qué pasa al hacer clic?',500,420,18,'#ffb98a','center',800,1);}
+    function msg(from,to,txt,col,dur,off){var u=Math.min(1,Math.max(0,((t-(off||0))%dur)/(dur*.7))),p=NetScene.along([from,to],E.io(u));c.save();V.glow(c,col,12);c.fillStyle=col;NetScene.rr(c,p[0]-70,p[1]-14,140,28,8);c.fill();c.restore();V.tx(c,txt,p[0],p[1]+4,10,'#fff','center',800,1,'"JetBrains Mono",monospace');}
+    if(st===1){msg([340,180],[API[0]-80,API[1]],'CreateVpc 10.0.0.0/16',C.blue,2.6);
+      c.save();c.fillStyle='rgba(8,24,42,.9)';NetScene.rr(c,40,300,480,140,10);c.fill();c.strokeStyle='rgba(159,182,201,.4)';c.stroke();c.restore();
+      ['POST https://ec2.us-east-1.amazonaws.com/','Action=CreateVpc','CidrBlock=10.0.0.0/16','Authorization: AWS4-HMAC-SHA256 Credential=AKIA…/ec2 …  🔐'].forEach(function(l,i){V.tx(c,l,58,332+i*26,12,i===3?'#ffb98a':'#e6edf3','left',600,Math.min(1,Math.max(0,(t-.3-i*.3)/.4)),'"JetBrains Mono",monospace');});}
+    if(st===2){msg([API[0]+80,API[1]],[ACC[0]-60,API[1]],'crear',C.ora,2.2);
+      c.save();c.fillStyle='rgba(8,24,42,.9)';NetScene.rr(c,40,300,480,140,10);c.fill();c.strokeStyle='rgba(52,195,143,.5)';c.stroke();c.restore();
+      ['HTTP/1.1 200 OK','<CreateVpcResponse>','  <vpcId>vpc-0a1b2c3d4e5f</vpcId>','  <state>available</state>'].forEach(function(l,i){V.tx(c,l,58,332+i*26,12,i===0?'#9ff0c8':'#e6edf3','left',600,Math.min(1,Math.max(0,(t-.3-i*.3)/.4)),'"JetBrains Mono",monospace');});}
+    if(st===3){c.save();c.fillStyle='#0b1a2b';NetScene.rr(c,40,290,500,120,10);c.fill();c.strokeStyle='rgba(159,182,201,.4)';c.stroke();c.restore();V.tx(c,'terminal',56,312,11,C.mut,'left',700,1);
+      var cmd='$ aws ec2 create-vpc --cidr-block 10.0.0.0/16',n=Math.floor(cmd.length*Math.min(1,t/1.6));V.tx(c,cmd.slice(0,n),56,346,14,'#e6edf3','left',700,1,'"JetBrains Mono",monospace');
+      if(t>1.8){V.tx(c,'{ "Vpc": { "VpcId": "vpc-0a1b2c3d4e5f", … } }',56,380,12,'#9ff0c8','left',700,1,'"JetBrains Mono",monospace');}
+      if(t>1.4)msg([540,320],[API[0]-80,API[1]+20],'CreateVpc 10.0.0.0/16',C.blue,2.6,1.4);V.tx(c,'mismo mensaje, sin clics',290,440,14,'#ffb98a','center',800,Math.min(1,t/.6));}
+    if(st===4){var src=[['🖱️ Consola','clics',[190,120]],['⌨️ CLI','comandos',[190,330]],['📐 Terraform','un plano',[400,430]]];
+      src.forEach(function(k,i){var a=E.back(Math.max(0,Math.min(1,(t-i*.3)/.5)));if(i===2){c.save();c.globalAlpha*=a;c.fillStyle='#2a1f4a';NetScene.rr(c,k[2][0]-90,k[2][1]-30,180,56,12);c.fill();c.strokeStyle='#8a5cf6';c.lineWidth=2.5;c.stroke();c.restore();V.tx(c,k[0],k[2][0],k[2][1]-4,15,'#fff','center',800,a);V.tx(c,k[1],k[2][0],k[2][1]+16,11,'#c9b6ff','center',700,a);}
+        else if(i===1){c.save();c.globalAlpha*=a;c.fillStyle='#0b1a2b';NetScene.rr(c,40,300,300,60,10);c.fill();c.restore();V.tx(c,k[0]+' · '+k[1],190,336,15,'#fff','center',800,a);}
+        var from=i===0?[340,165]:i===1?[340,330]:[490,430];var u=((t*.5)+i/3)%1,p=NetScene.along([from,[API[0]-80,API[1]+(i-1)*30]],u);c.save();c.globalAlpha*=a;c.fillStyle=['#3b82f6','#34c38f','#8a5cf6'][i];c.beginPath();c.arc(p[0],p[1],6,0,7);c.fill();c.restore();});
+      V.tx(c,'misma API · mismo resultado',API[0],API[1]+92,14,'#ffb98a','center',800,1);}
   });
   </script>
 </section>
 
-<!-- 4 · PASO 1: INSTALAR DOCKER -->
+<!-- 4 · ¿POR QUÉ NACIÓ TERRAFORM? -->
+<section class="slide" id="scW">
+  <span class="k"><span class="act-chip">💡 HISTORIA</span> De los clics al plano · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">¿Por qué nació <span class="grad">Terraform</span>?</h2>
+  <div class="scene"><canvas aria-label="Animación: problemas de los clics y de los scripts; la idea del plano declarativo; Terraform calcula la diferencia como un GPS"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scW',1000,480,[
+    '<b>Problema 1 · los clics.</b> Tu LAB de la VPC fueron unos <b>35 clics</b>. ¿Y si mañana la empresa necesita <b>10 redes iguales</b>? ¿Y si alguien cambió algo y nadie sabe qué? Los clics <b>no dejan rastro</b> ni se pueden repetir igual.',
+    '<b>Problema 2 · los scripts.</b> Mejor: una lista de comandos de la CLI. Pero si la corres <b>dos veces</b>, crea <b>dos VPC</b>. Y si falla a la mitad, queda todo <b>a medias</b>. El script dice <b>los pasos</b>, no sabe <b>cómo quedó</b> la obra.',
+    '<b>La idea (HashiCorp, 2014):</b> en vez de escribir los pasos, escribes <b>el plano</b>: <i>“quiero una VPC con 4 subredes, una puerta y una EC2”</i>. A eso se le llama <b>infraestructura como código</b>.',
+    'Terraform funciona como un <b>GPS</b>: tú dices <b>a dónde quieres llegar</b>; él mira <b>dónde estás</b> y calcula <b>solo lo que falta</b>. Si ya estás ahí, <b>no hace nada</b>. Lo corres 10 veces y el resultado es el mismo.'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    if(st===0){var n=Math.min(35,Math.floor(t*14));V.tx(c,String(n),250,220,96,'#fff','center',900,1);V.tx(c,'clics para una red',250,262,16,C.mut,'center',700,1);
+      for(var k=0;k<10;k++){var a=Math.max(0,Math.min(1,(t-2.6-k*.15)/.3));c.save();c.globalAlpha*=a;c.strokeStyle=k===6?C.red:C.blue;c.lineWidth=2;NetScene.rr(c,520+(k%5)*88,110+Math.floor(k/5)*120,74,90,8);c.stroke();c.restore();V.tx(c,k===6?'¿?':'VPC '+(k+1),557+(k%5)*88,160+Math.floor(k/5)*120,12,k===6?'#ff9b9b':'#9fd8f0','center',800,a);}
+      V.tx(c,'×10 = 350 clics · ¿todas iguales?',740,380,15,'#ffb98a','center',800,Math.max(0,Math.min(1,(t-3.6)/.5)));V.tx(c,'(la #7 quedó distinta y nadie sabe por qué)',740,404,12,'#ff9b9b','center',600,Math.max(0,Math.min(1,(t-4)/.5)));return;}
+    if(st===1){c.save();c.fillStyle='#0b1a2b';NetScene.rr(c,40,90,440,300,10);c.fill();c.restore();V.tx(c,'crear-red.sh',58,114,12,C.mut,'left',700,1,'"JetBrains Mono",monospace');
+      ['aws ec2 create-vpc …','aws ec2 create-subnet … (×4)','aws ec2 create-internet-gateway','aws ec2 attach-internet-gateway …','aws ec2 create-route-table …','aws ec2 run-instances …'].forEach(function(l,i){V.tx(c,(i+1)+'  '+l,58,150+i*32,13,'#e6edf3','left',600,1,'"JetBrains Mono",monospace');});
+      var a1=Math.max(0,Math.min(1,(t-.8)/.5));V.tx(c,'▶ lo corres 2 veces…',740,120,15,'#fff','center',800,a1);
+      [0,1].forEach(function(k){var a=Math.max(0,Math.min(1,(t-1.2-k*.5)/.4));c.save();c.globalAlpha*=a;c.strokeStyle=k?C.red:C.blue;c.lineWidth=2.5;NetScene.rr(c,600+k*150,150,120,80,10);c.stroke();c.restore();V.tx(c,'VPC',660+k*150,196,16,k?'#ff9b9b':'#9fd8f0','center',800,a);});
+      V.tx(c,'✗ ¡dos VPC! (duplicada)',740,262,14,'#ff9b9b','center',800,Math.max(0,Math.min(1,(t-2.2)/.4)));
+      var a3=Math.max(0,Math.min(1,(t-3)/.5));V.tx(c,'▶ falla en el paso 4…',740,310,15,'#fff','center',800,a3);V.tx(c,'✗ red a medias: sin puerta, sin ruta',740,338,14,'#ff9b9b','center',800,a3);return;}
+    if(st===2){var a=E.out(Math.min(1,t/.6));c.save();c.globalAlpha*=a;c.fillStyle='#0d3a5c';NetScene.rr(c,60,80,420,320,12);c.fill();c.strokeStyle='rgba(15,158,213,.35)';c.lineWidth=1;for(var g=80;g<480;g+=24){c.beginPath();c.moveTo(g,82);c.lineTo(g,398);c.stroke();}for(var h=104;h<400;h+=24){c.beginPath();c.moveTo(62,h);c.lineTo(478,h);c.stroke();}c.restore();
+      V.tx(c,'📐 el plano (main.tf)',270,116,16,'#fff','center',800,a);['quiero:','· 1 VPC 10.0.0.0/16','· 4 subredes (ventas, admin, web, bd)','· 1 Internet Gateway + ruta pública','· 1 Security Group (80 y 22)','· 1 EC2 con NGINX en web'].forEach(function(l,i){V.tx(c,l,90,160+i*34,15,i?'#e6edf3':'#9fd8f0','left',700,Math.max(0,Math.min(1,(t-.4-i*.25)/.4)));});
+      var b=Math.max(0,Math.min(1,(t-2)/.6));V.tx(c,'describes el QUÉ',740,170,22,'#fff','center',800,b);V.tx(c,'no el CÓMO',740,206,22,'#ffb98a','center',800,b);V.tx(c,'Infraestructura como Código (IaC)',740,270,15,'#9ff0c8','center',800,Math.max(0,Math.min(1,(t-2.6)/.5)));V.tx(c,'Terraform · HashiCorp · 2014',740,300,13,C.mut,'center',700,Math.max(0,Math.min(1,(t-3)/.5)));return;}
+    /* st 3: GPS */var a=E.out(Math.min(1,t/.6));
+    var A=[120,380],B=[860,120];c.save();c.globalAlpha*=a;c.strokeStyle='rgba(159,182,201,.3)';c.lineWidth=14;c.lineCap='round';c.beginPath();c.moveTo(A[0],A[1]);c.bezierCurveTo(400,420,500,80,B[0],B[1]);c.stroke();c.restore();
+    V.tx(c,'📍 dónde estás',A[0],A[1]+36,14,'#fff','center',800,a);V.tx(c,'(lo que existe en AWS)',A[0],A[1]+54,11,C.mut,'center',600,a);V.tx(c,'🏁 a dónde quieres llegar',B[0],B[1]-30,14,'#fff','center',800,a);V.tx(c,'(tu plano)',B[0],B[1]-12,11,C.mut,'center',600,a);
+    var u=Math.min(1,(t%4)/3);function bz(k){var x=Math.pow(1-k,3)*A[0]+3*Math.pow(1-k,2)*k*400+3*(1-k)*k*k*500+k*k*k*B[0],y=Math.pow(1-k,3)*A[1]+3*Math.pow(1-k,2)*k*420+3*(1-k)*k*k*80+k*k*k*B[1];return [x,y];}var p=bz(u);
+    c.save();V.glow(c,C.ora,14);c.fillStyle=C.ora;c.beginPath();c.arc(p[0],p[1],10,0,7);c.fill();c.restore();
+    [['+ crear lo que falta','#34c38f'],['~ cambiar lo distinto','#FFC928'],['− borrar lo que sobra','#e5484d'],['= si ya estás ahí: nada','#9fd8f0']].forEach(function(k,i){V.pill(c,640,250+i*36,k[0],'rgba(255,255,255,.08)',k[1],Math.max(0,Math.min(1,(t-.8-i*.3)/.4)));});
+  });
+  </script>
+</section>
+<!-- 5 · ¿CÓMO TRABAJA TERRAFORM? -->
+<section class="slide" id="scC">
+  <span class="k"><span class="act-chip">⚙️ CICLO</span> init · plan · apply · state · destroy · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">¿Cómo trabaja <span class="grad">Terraform</span>?</h2>
+  <div class="scene"><canvas aria-label="Animación del ciclo de Terraform: escribir el código, init descarga el provider, plan compara, apply llama a la API, el state recuerda y destroy borra"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scC',1000,480,[
+    '<b>1 · Escribes el plano</b> en un archivo <b>.tf</b> con un lenguaje sencillo (HCL): bloques que dicen <i>qué recurso quieres y cómo es</i>.',
+    '<b>2 · terraform init</b> descarga el <b>provider</b> de AWS: el <b>traductor</b> que convierte tu plano en llamadas a la API de AWS (hay providers para Azure, Google, Oracle…).',
+    '<b>3 · terraform plan</b> compara el plano con lo que ya existe y te muestra la lista: <b>+</b> crear, <b>~</b> cambiar, <b>−</b> borrar. <b>Todavía no toca nada</b>: es el presupuesto antes de la obra.',
+    '<b>4 · terraform apply</b> hace las llamadas a la API <b>en el orden correcto</b> (primero la VPC, luego las subredes…) y <b>en paralelo</b> cuando puede. Tú solo dices <b>yes</b>.',
+    '<b>5 · El state</b> (terraform.tfstate) es la <b>memoria</b> de Terraform: qué creó y con qué ID. Gracias a él, la próxima vez sabe <b>qué ya existe</b>.',
+    '<b>6 · terraform destroy</b> borra <b>todo lo que creó</b>, en orden inverso. Cero recursos olvidados, cero sorpresas en la factura.'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    var N=[['código .tf','📄',[120,150]],['init','📥',[330,150]],['plan','🔍',[540,150]],['apply','🚀',[750,150]],['state','🧠',[750,420]],['destroy','🧹',[330,420]]];
+    N.forEach(function(n,i){var on=i<=st,cur=i===st,a=on?1:.25;c.save();c.globalAlpha*=a;if(cur)V.glow(c,C.ora,18);c.fillStyle=cur?'#3a2518':'#0f2740';NetScene.rr(c,n[2][0]-80,n[2][1]-40,160,80,14);c.fill();c.shadowBlur=0;c.strokeStyle=cur?C.ora:(on?C.blue:'#2f4a63');c.lineWidth=cur?3:2;c.stroke();c.restore();
+      V.tx(c,n[1]+' '+n[0],n[2][0],n[2][1]+6,16,'#fff','center',800,a);});
+    [[0,1],[1,2],[2,3],[3,4],[4,2]].forEach(function(e,i){var A=N[e[0]][2],B=N[e[1]][2],on=st>=e[1]||(e[0]===4&&st>=4);c.save();c.globalAlpha*=on?.8:.2;c.strokeStyle=C.blue;c.lineWidth=2;c.setLineDash([6,6]);c.lineDashOffset=-t*20;c.beginPath();
+      if(i===4){c.moveTo(A[0]-80,A[1]);c.quadraticCurveTo(560,420,B[0],B[1]+40);}else{c.moveTo(A[0]+(B[0]>A[0]?80:0),A[1]+(B[1]>A[1]?40:0));c.lineTo(B[0]-(B[0]>A[0]?80:0),B[1]-(B[1]>A[1]?40:0));}c.stroke();c.restore();});
+    var box=[60,228,880,92];function panel(){c.save();c.fillStyle='rgba(8,24,42,.92)';NetScene.rr(c,box[0],box[1],box[2],box[3],10);c.fill();c.strokeStyle='rgba(159,182,201,.35)';c.stroke();c.restore();}
+    if(st===0){panel();['resource "aws_vpc" "pyme" {','  cidr_block = "10.0.0.0/16"','}'].forEach(function(l,i){V.tx(c,l,90,272+i*22,14,i===1?'#ffb98a':'#9fd8f0','left',700,Math.min(1,(t-i*.3)/.4),'"JetBrains Mono",monospace');});}
+    if(st===1){panel();V.tx(c,'$ terraform init',90,272,14,'#e6edf3','left',700,1,'"JetBrains Mono",monospace');var u=Math.min(1,t/1.6);c.save();c.fillStyle='rgba(255,255,255,.1)';NetScene.rr(c,90,284,500,12,6);c.fill();c.fillStyle=C.grn;NetScene.rr(c,90,284,500*u,12,6);c.fill();c.restore();
+      V.tx(c,u<1?'Installing hashicorp/aws v6.x…':'✓ Terraform has been successfully initialized!',90,318,13,u<1?'#cfe3f1':'#9ff0c8','left',700,1,'"JetBrains Mono",monospace');V.tx(c,'provider = traductor plano → API',780,300,14,'#ffb98a','center',800,1);}
+    if(st===2){panel();[['+ aws_vpc.pyme','#34c38f'],['+ aws_subnet.area["web"]','#34c38f'],['+ aws_instance.web','#34c38f']].forEach(function(k,i){V.tx(c,k[0],90,270+i*20,13,k[1],'left',700,Math.min(1,(t-i*.25)/.3),'"JetBrains Mono",monospace');});
+      V.tx(c,'Plan: 10 to add, 0 to change, 0 to destroy.',540,290,14,'#fff','left',800,Math.min(1,(t-.9)/.4),'"JetBrains Mono",monospace');V.tx(c,'(todavía no se creó nada)',540,312,12,'#ffb98a','left',700,Math.min(1,(t-1.2)/.4));}
+    if(st===3){panel();var R=['vpc','subredes ×4','igw','rutas','sg','ec2'];R.forEach(function(r,i){var d=Math.max(0,Math.min(1,(t-.2-i*.45)/.4));c.save();c.globalAlpha*=.3+.7*d;c.fillStyle=d>=1?'rgba(52,195,143,.3)':'rgba(255,255,255,.06)';NetScene.rr(c,90+i*140,262,124,40,8);c.fill();c.restore();V.tx(c,(d>=1?'✓ ':'… ')+r,152+i*140,287,13,d>=1?'#9ff0c8':'#cfe3f1','center',800,1);});
+      V.tx(c,'Apply complete! Resources: 10 added.',90,322,13,'#9ff0c8','left',800,Math.max(0,Math.min(1,(t-3)/.4)),'"JetBrains Mono",monospace');}
+    if(st===4){panel();V.tx(c,'terraform.tfstate',90,268,13,'#ffb98a','left',800,1,'"JetBrains Mono",monospace');['aws_vpc.pyme       → vpc-0a1b2c3d4e5f','aws_instance.web   → i-0f9e8d7c6b5a','… (los 10 recursos con su ID real)'].forEach(function(l,i){V.tx(c,l,90,290+i*18,12,'#e6edf3','left',600,Math.min(1,(t-i*.3)/.4),'"JetBrains Mono",monospace');});V.tx(c,'la memoria: plan la usa para comparar',740,300,14,'#9fd8f0','center',800,1);}
+    if(st===5){panel();V.tx(c,'$ terraform destroy  →  yes',90,272,14,'#e6edf3','left',700,1,'"JetBrains Mono",monospace');['ec2','sg','rutas','igw','subredes','vpc'].forEach(function(r,i){var d=Math.max(0,Math.min(1,(t-.4-i*.35)/.3));V.tx(c,'− '+r,90+i*120,306,13,d>=1?'#ff9b9b':'#5f7890','left',800,1);});V.tx(c,'Destroy complete! Resources: 10 destroyed.',540,272,13,'#ff9b9b','left',800,Math.max(0,Math.min(1,(t-2.6)/.4)),'"JetBrains Mono",monospace');}
+  });
+  </script>
+</section>
+
+<!-- 6 · ¿POR QUÉ ES EL ESTÁNDAR? -->
+<section class="slide" id="scE">
+  <span class="k"><span class="act-chip">🏆 ESTÁNDAR</span> Por qué lo usa la industria · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">¿Por qué Terraform es <span class="grad">el estándar de la industria</span>?</h2>
+  <div class="scene"><canvas aria-label="Animación: Terraform en el centro conectado a muchas nubes y servicios, con sus ventajas"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scE',1000,480,[
+    '<b>Un solo idioma para todo:</b> con el mismo lenguaje manejas AWS, Azure, Google Cloud, Oracle… y también GitHub, Cloudflare, Kubernetes o Datadog. Hay <b>miles de providers</b>.',
+    '<b>Ves el cambio antes de hacerlo:</b> el <b>plan</b> te muestra qué va a crear, cambiar o borrar. En una empresa, eso evita el clásico <i>“¿quién borró la base de datos?”</i>.',
+    '<b>Vive en Git:</b> el código se guarda en GitHub (¡ya saben hacer push!). Hay <b>historial</b> de quién cambió qué, y los cambios se <b>revisan</b> antes de aplicarse.',
+    '<b>Repetible:</b> el mismo archivo crea la red de pruebas y la de producción <b>idénticas</b>. Y es de lo más pedido en ofertas de trabajo cloud y DevOps.'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);var CX=500,CY=230;
+    c.save();V.glow(c,'#8a5cf6',24);c.fillStyle='#2a1f4a';NetScene.rr(c,CX-90,CY-44,180,88,16);c.fill();c.strokeStyle='#8a5cf6';c.lineWidth=3;c.stroke();c.restore();V.tx(c,'📐 Terraform',CX,CY+2,20,'#fff','center',800,1);V.tx(c,'un idioma (HCL)',CX,CY+24,11,'#c9b6ff','center',700,1);
+    if(st===0){var P=['AWS','Azure','Google Cloud','Oracle Cloud','GitHub','Cloudflare','Kubernetes','Datadog'];P.forEach(function(p,i){var an=-Math.PI/2+i*Math.PI*2/P.length,x=CX+Math.cos(an)*300,y=CY+Math.sin(an)*170,a=E.back(Math.max(0,Math.min(1,(t-i*.15)/.4)));
+        c.save();c.globalAlpha*=a*.6;c.strokeStyle='#8a5cf6';c.setLineDash([4,5]);c.lineDashOffset=-t*20;c.beginPath();c.moveTo(CX,CY);c.lineTo(x,y);c.stroke();c.restore();V.pill(c,x-50,y-12,p,i<4?'rgba(233,113,50,.35)':'rgba(15,158,213,.3)','#fff',a);});
+      V.tx(c,'+ miles de providers',CX,460,14,'#ffb98a','center',800,Math.max(0,Math.min(1,(t-1.6)/.5)));return;}
+    if(st===1){c.save();c.fillStyle='rgba(8,24,42,.92)';NetScene.rr(c,620,120,320,220,12);c.fill();c.strokeStyle='rgba(159,182,201,.4)';c.stroke();c.restore();V.tx(c,'terraform plan',640,148,13,'#ffb98a','left',800,1,'"JetBrains Mono",monospace');
+      [['~ aws_security_group.web','#FFC928'],['   puerto 22: tu IP → 0.0.0.0/0','#FFC928'],['− aws_db_instance.ventas','#e5484d'],['   ⚠ ¡se borraría la base de datos!','#ff9b9b']].forEach(function(k,i){V.tx(c,k[0],640,180+i*26,12,k[1],'left',700,Math.min(1,(t-.3-i*.3)/.4),'"JetBrains Mono",monospace');});
+      V.tx(c,'→ lo ves ANTES y dices "no" ✋',780,318,13,'#9ff0c8','center',800,Math.max(0,Math.min(1,(t-1.6)/.4)));return;}
+    if(st===2){c.save();c.fillStyle='#0b1a2b';NetScene.rr(c,620,110,320,250,12);c.fill();c.restore();V.tx(c,'GitHub · historial de main.tf',640,138,12,C.mut,'left',700,1);
+      [['Ana','abre el puerto 443','hace 2 h'],['Luis','agrega subred bd','ayer'],['Tú','crea pyme-vpc','hoy']].forEach(function(k,i){var a=Math.max(0,Math.min(1,(t-.3-i*.35)/.4));c.save();c.globalAlpha*=a;c.fillStyle=C.grn;c.beginPath();c.arc(650,180+i*60,7,0,7);c.fill();c.restore();V.tx(c,k[0]+': '+k[1],668,184+i*60,13,'#fff','left',700,a);V.tx(c,k[2]+' · revisado ✓',668,202+i*60,11,'#9ff0c8','left',600,a);});return;}
+    [['pruebas','#3b82f6',230],['producción','#34c38f',770]].forEach(function(k,i){var a=E.back(Math.max(0,Math.min(1,(t-i*.3)/.5)));c.save();c.globalAlpha*=a;c.strokeStyle=k[1];c.lineWidth=2.5;NetScene.rr(c,k[2]-110,300,220,120,12);c.stroke();c.restore();V.tx(c,'red de '+k[0],k[2],332,14,'#fff','center',800,a);V.tx(c,'idéntica ✓',k[2],392,13,k[1],'center',800,a);
+      for(var q=0;q<4;q++){c.save();c.globalAlpha*=a;c.fillStyle=k[1];NetScene.rr(c,k[2]-90+q*46,344,38,28,5);c.fill();c.restore();}
+      var u=((t*.5)+i*.5)%1,p=NetScene.along([[CX,CY+44],[k[2],300]],u);c.save();c.fillStyle='#8a5cf6';c.beginPath();c.arc(p[0],p[1],6,0,7);c.fill();c.restore();});
+    V.pill(c,CX-130,80,'💼 de lo más pedido en empleos cloud','rgba(233,113,50,.35)','#fff',Math.max(0,Math.min(1,(t-.8)/.4)));
+  });
+  </script>
+</section>
+
+<!-- 7 · EL DIBUJO DE HOY -->
+<section class="slide" id="scM">
+  <span class="k"><span class="act-chip">🗺️ EL DIBUJO</span> Lo que vamos a construir hoy · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">De un archivo a <span class="grad">tu red y tu servidor</span></h2>
+  <div class="scene"><canvas aria-label="Animación: desde CloudShell, Terraform lee main.tf y crea en AWS la VPC, las 4 subredes, el Internet Gateway, la ruta, el Security Group y la EC2 con NGINX"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scM',1000,480,[
+    'Trabajaremos en <b>AWS CloudShell</b>: una terminal dentro de la consola, que ya tiene <b>tus credenciales</b>. Ahí corre Terraform con nuestro archivo <b>main.tf</b>.',
+    'Terraform crea primero la <b>VPC pyme-vpc-tf</b> (10.0.0.0/16) y después las <b>4 subredes</b>: ventas, admin, web y bd. El mismo diseño de la clase de redes.',
+    'Luego la <b>puerta</b>: el <b>Internet Gateway</b> y la <b>ruta 0.0.0.0/0</b>, solo para la subred <b>web</b> (la pública).',
+    'Por último el <b>Security Group</b> (80 para todos, 22 solo tu IP) y la <b>EC2</b>, que al nacer <b>instala NGINX sola</b> (user_data).',
+    'Terraform te devuelve la <b>URL</b>: la abres y dice <b>“Hola desde Terraform 🚀”</b>. 10 recursos, un comando, ~2 minutos.'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    /* CloudShell */c.save();c.fillStyle='#0b1a2b';NetScene.rr(c,30,80,220,150,10);c.fill();c.strokeStyle='rgba(159,182,201,.4)';c.stroke();c.restore();V.tx(c,'>_ CloudShell',46,104,13,'#9fd8f0','left',800,1);
+    V.tx(c,'$ terraform apply',46,138,13,'#e6edf3','left',700,1,'"JetBrains Mono",monospace');c.save();c.fillStyle='#f4f8fb';NetScene.rr(c,60,156,90,56,6);c.fill();c.restore();V.tx(c,'📄 main.tf',105,190,12,'#0E2841','center',800,1);
+    var pulse=(t%1.4)/1.4;if(st>=1&&st<=3){var p=NetScene.along([[250,150],[330,150]],pulse);c.save();V.glow(c,'#8a5cf6',10);c.fillStyle='#8a5cf6';c.beginPath();c.arc(p[0],p[1],6,0,7);c.fill();c.restore();}
+    /* AWS */c.save();c.strokeStyle='rgba(233,113,50,.6)';c.setLineDash([6,6]);NetScene.rr(c,330,50,640,410,14);c.stroke();c.restore();V.tx(c,'AWS · us-east-1',346,72,13,'#ffb98a','left',800,1);
+    function lit(k,d){return st>k?1:(st<k?0:E.out(Math.max(0,Math.min(1,(t-(d||0))/.5))));}
+    var a1=lit(1);if(a1>0){c.save();c.globalAlpha*=a1;c.strokeStyle=C.blue;c.lineWidth=2.5;V.glow(c,C.blue,10);NetScene.rr(c,360,90,440,350,12);c.stroke();c.restore();V.tx(c,'pyme-vpc-tf · 10.0.0.0/16',376,114,13,'#9fd8f0','left',800,a1);V.tx(c,'aws_vpc.pyme',780,114,10,'#c9b6ff','right',700,a1,'"JetBrains Mono",monospace');}
+    var SUB=[['ventas','10.0.1.0/26'],['admin','10.0.1.64/27'],['web','10.0.1.96/28'],['bd','10.0.1.112/28']];
+    SUB.forEach(function(sb,i){var a=lit(1,.6+i*.3);if(!(a>0))return;var y=134+i*74,pub=sb[0]==='web'&&st>=2;c.save();c.globalAlpha*=a;c.fillStyle=pub?'rgba(52,195,143,.15)':'rgba(255,255,255,.05)';NetScene.rr(c,380,y,300,62,8);c.fill();c.strokeStyle=pub?C.grn:'rgba(159,182,201,.4)';c.stroke();c.restore();
+      V.tx(c,sb[0]+' · '+sb[1],394,y+24,13,'#fff','left',800,a);V.tx(c,pub?'pública':'privada',666,y+24,11,pub?'#9ff0c8':C.mut,'right',700,a);});
+    if(st>=1)V.tx(c,'aws_subnet.area[×4]',690,140,10,'#c9b6ff','left',700,lit(1,1.8),'"JetBrains Mono",monospace');
+    var a2=lit(2);if(a2>0){c.save();c.globalAlpha*=a2;V.glow(c,C.ora,12);c.fillStyle='#3a2518';NetScene.rr(c,830,250,120,56,10);c.fill();c.strokeStyle=C.ora;c.lineWidth=2;c.stroke();c.restore();V.tx(c,'🚪 IGW',890,276,14,'#fff','center',800,a2);V.tx(c,'aws_internet_gateway',890,294,9,'#ffd0b0','center',700,a2,'"JetBrains Mono",monospace');
+      c.save();c.globalAlpha*=a2;c.strokeStyle=C.grn;c.lineWidth=2.5;c.setLineDash([6,6]);c.lineDashOffset=-t*20;c.beginPath();c.moveTo(680,312);c.lineTo(830,280);c.stroke();c.restore();V.tx(c,'0.0.0.0/0 → IGW',758,328,11,'#9ff0c8','center',800,a2,'"JetBrains Mono",monospace');
+      NetScene.cloud(c,890,150,34,'#2b4f74',a2);V.tx(c,'Internet',890,155,12,'#fff','center',800,a2);c.save();c.globalAlpha*=a2;c.strokeStyle='rgba(159,182,201,.5)';c.lineWidth=2;c.beginPath();c.moveTo(890,186);c.lineTo(890,250);c.stroke();c.restore();}
+    var a3=lit(3);if(a3>0){var y=134+2*74;c.save();c.globalAlpha*=a3;c.strokeStyle='#FFC928';c.lineWidth=2;c.setLineDash([3,3]);NetScene.rr(c,500,y+6,124,50,8);c.stroke();c.restore();V.tx(c,'🛡 SG: 80 · 22',562,y+22,10,'#FFC928','center',800,a3);
+      V.vm(c,512,y+26,100,26,'','',C.ora,a3,true);V.tx(c,'EC2 · NGINX',562,y+44,11,'#fff','center',800,a3);}
+    if(st>=4){var a4=E.out(Math.min(1,t/.6));c.save();c.globalAlpha*=a4;c.fillStyle='#f4f8fb';NetScene.rr(c,30,270,260,170,10);c.fill();c.fillStyle='#d9e1ea';NetScene.rr(c,30,270,260,24,4);c.fill();c.restore();
+      V.tx(c,'http://54.x.x.x',160,287,11,'#44546A','center',700,a4,'"JetBrains Mono",monospace');V.tx(c,'Hola desde Terraform 🚀',160,346,16,'#0E2841','center',800,a4);V.tx(c,'esta red nació de un archivo',160,372,11,'#44546A','center',600,a4);
+      var u=Math.min(1,(t%2.4)/1.4),p4=NetScene.along([[890,186],[290,330]],u);if(u<1){c.save();V.glow(c,C.grn,10);c.fillStyle=C.grn;c.beginPath();c.arc(p4[0],p4[1],6,0,7);c.fill();c.restore();}
+      V.tx(c,'10 recursos · 1 comando · ~2 min',160,250,13,'#9ff0c8','center',800,a4);}
+  });
+  </script>
+</section>
+
+<!-- 8 · EL CÓDIGO, BLOQUE POR BLOQUE -->
+<section class="slide">
+  <span class="k"><span class="act-chip">📄 main.tf</span> Cada bloque = algo que antes hacías a clics</span>
+  <h2>El código, <span class="grad">bloque por bloque</span></h2>
+  <ul class="cmdlist" style="max-width:1050px">
+    <li><code>provider "aws" { region = "us-east-1" }</code><span>el traductor a la API de AWS, en Norte de Virginia</span></li>
+    <li><code>variable "mi_ip" / "llave"</code><span>lo que cambia por estudiante: tu IP de casa y tu key pair</span></li>
+    <li><code>resource "aws_vpc" "pyme"</code><span>VPC → Crear VPC → 10.0.0.0/16</span></li>
+    <li><code>resource "aws_subnet" "area" (for_each)</code><span>Subredes → Crear subred ×4 (un solo bloque crea las 4)</span></li>
+    <li><code>resource "aws_internet_gateway"</code><span>Internet gateways → Crear → Asociar a la VPC</span></li>
+    <li><code>resource "aws_route_table" + "…_association"</code><span>Tablas de rutas → 0.0.0.0/0 → IGW → asociar a web</span></li>
+    <li><code>resource "aws_security_group" "web"</code><span>Security Groups → reglas 80 (todos) y 22 (Mi IP)</span></li>
+    <li><code>resource "aws_instance" "web" + user_data</code><span>Lanzar instancia… y NGINX se instala solo al nacer</span></li>
+    <li><code>output "tu_web"</code><span>lo que Terraform te muestra al terminar: tu URL</span></li>
+  </ul>
+  <p class="sub" style="margin-top:12px">Fíjense en <b>aws_vpc.pyme.id</b>: así un recurso usa el ID de otro. Por eso Terraform sabe <b>el orden</b>: no puede crear una subred antes que su VPC.</p>
+</section>
+<!-- 9 · LAB 1: CLOUDSHELL Y LA CLI -->
 <section class="slide" id="lab1">
-  <span class="k"><span class="act-chip">🧪 PASO 1</span> Instala Docker en tu EC2</span>
-  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">Docker en <span class="grad">Amazon Linux</span></h2>
-  <style>.term.lab{max-height:52vh;overflow:auto;font-size:clamp(.72rem,1.05vw,.9rem)}.term.lab p{white-space:pre-wrap;word-break:break-all;min-height:1.35em}.term.lab p.hl b{color:#FFC928;font-weight:600;background:rgba(255,201,40,.14);border-radius:4px;padding:0 3px}.term.lab p.note{color:#9fb3c8;font-size:.85em}.term.lab .cur{display:inline-block;width:.6em;background:#39c8e8;animation:blk 1s steps(1) infinite}@keyframes blk{50%{opacity:0}}
+  <span class="k"><span class="act-chip">🧪 PASO 1</span> Abre CloudShell y habla con la API</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">La <span class="grad">CLI de AWS</span>: tu cuenta, vista por la API</h2>
+  <style>.term.lab{max-height:52vh;overflow:auto;font-size:clamp(.7rem,1vw,.88rem)}.term.lab p{white-space:pre-wrap;word-break:break-all;min-height:1.35em}.term.lab p.hl b{color:#FFC928;font-weight:600;background:rgba(255,201,40,.14);border-radius:4px;padding:0 3px}.term.lab p.note{color:#9fb3c8;font-size:.85em}.term.lab .cur{display:inline-block;width:.6em;background:#39c8e8;animation:blk 1s steps(1) infinite}@keyframes blk{50%{opacity:0}}
   .cmdlist{list-style:none;display:flex;flex-direction:column;gap:6px;font-size:clamp(.78rem,1.1vw,.95rem)}.cmdlist li{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}.cmdlist code{font-family:var(--mono);color:var(--a1);font-weight:600;font-size:.92em}</style>
   <script>
   window.typeTerm=window.typeTerm||function(sec,box,L){var T=[];function esc(x){return x.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
     function at(ms,fn){T.push(setTimeout(fn,ms));}
     sec.__enter=function(){T.forEach(clearTimeout);T=[];box.innerHTML='';var d=300;
       L.forEach(function(l){var el=document.createElement('p');if(l[0]!=='cmd')el.className=l[0];
-        if(l[0]==='cmd'){at(d,function(){box.appendChild(el);box.scrollTop=box.scrollHeight;});for(var i=1;i<=l[1].length;i++)(function(k){at(d+k*30,function(){el.innerHTML=esc(l[1].slice(0,k))+'<span class="cur">&nbsp;</span>';});})(i);d+=l[1].length*30+380;at(d-10,function(){el.innerHTML=esc(l[1]);});}
+        if(l[0]==='cmd'){at(d,function(){box.appendChild(el);box.scrollTop=box.scrollHeight;});for(var i=1;i<=l[1].length;i++)(function(k){at(d+k*24,function(){el.innerHTML=esc(l[1].slice(0,k))+'<span class="cur">&nbsp;</span>';});})(i);d+=l[1].length*24+380;at(d-10,function(){el.innerHTML=esc(l[1]);});}
         else{at(d,function(){el.innerHTML=l[0]==='out'?esc(l[1]):l[1];el.style.opacity=0;box.appendChild(el);box.scrollTop=box.scrollHeight;el.animate([{opacity:0},{opacity:1}],{duration:300,fill:'forwards'});});d+=l[0]==='note'?800:300;}});};};
   </script>
   <div class="grid2" style="align-items:start">
     <div class="demo term lab" id="lab1t" style="min-height:300px"></div>
     <ul class="cmdlist">
-      <li><code>sudo dnf install -y docker</code><span>instala Docker</span></li>
-      <li><code>sudo systemctl enable --now docker</code><span>lo enciende (y arranca solo al reiniciar)</span></li>
-      <li><code>sudo usermod -aG docker ec2-user</code><span>te da permiso de usar Docker sin sudo</span></li>
-      <li><code>newgrp docker</code><span>aplica el permiso ya, sin salir</span></li>
-      <li><code>docker run --rm hello-world</code><span>prueba: un contenedor que saluda y se borra</span></li>
+      <li><span>En la consola de AWS, ícono <b>&gt;_</b> (arriba a la derecha)</span><span>abre <b>CloudShell</b>: una terminal con tus credenciales</span></li>
+      <li><code>aws sts get-caller-identity</code><span>"¿quién soy?" para la API</span></li>
+      <li><code>aws ec2 describe-vpcs …</code><span>tus VPC: ¡ahí está la que hiciste a clics!</span></li>
+      <li><code>aws ec2 describe-key-pairs …</code><span><b>anota</b> el nombre de tu key pair</span></li>
     </ul>
   </div>
-  <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: el mensaje <b>Hello from Docker!</b> Si sale <b>permission denied</b>, corre <b>newgrp docker</b> otra vez.</p>
+  <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: el nombre de tu key pair. Revisa arriba a la derecha que la región sea <b>N. Virginia (us-east-1)</b>.</p>
   <script>
   typeTerm(document.getElementById('lab1'),document.getElementById('lab1t'),[
-    ['cmd','$ sudo dnf install -y docker'],['out','… Complete!'],
-    ['cmd','$ sudo systemctl enable --now docker'],['cmd','$ sudo usermod -aG docker ec2-user && newgrp docker'],
-    ['cmd','$ docker run --rm hello-world'],['hl','<b>Hello from Docker!</b>'],['note','  ↑ Docker descargó una imagen, creó un contenedor, lo corrió y lo borró']]);
+    ['cmd','$ aws sts get-caller-identity'],['hl','"Arn": "arn:aws:iam::<b>123456789012</b>:user/<b>tu-usuario</b>"'],['note','  ↑ la CLI ya sabe quién eres (CloudShell usa tu sesión)'],
+    ['cmd','$ aws ec2 describe-vpcs --query "Vpcs[].[VpcId,CidrBlock]" --output table'],['hl','|  vpc-0a1b2c3d  |  <b>10.0.0.0/16</b>   |   ← la pyme-vpc que hiciste a clics'],['out','|  vpc-9f8e7d6c  |  172.31.0.0/16 |   ← la VPC por defecto'],
+    ['cmd','$ aws ec2 describe-key-pairs --query "KeyPairs[].KeyName" --output text'],['hl','<b>mi-llave</b>'],['note','  ↑ anota este nombre: lo usará Terraform']]);
   </script>
 </section>
 
-<!-- 5 · PASO 2-3: SITIOS Y CONTENEDORES -->
+<!-- 10 · LAB 2: INSTALAR TERRAFORM Y BAJAR EL PLANO -->
 <section class="slide" id="lab2">
-  <span class="k"><span class="act-chip">🧪 PASO 2–3</span> Tres sitios, tres contenedores</span>
-  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">Crea los sitios <span class="grad">A, B y C</span> y enciéndelos</h2>
+  <span class="k"><span class="act-chip">🧪 PASO 2</span> Instala Terraform y baja el plano</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">Terraform en <span class="grad">CloudShell</span></h2>
   <div class="grid2" style="align-items:start">
-    <div class="demo term lab" id="lab2t" style="min-height:330px"></div>
+    <div class="demo term lab" id="lab2t" style="min-height:320px"></div>
     <ul class="cmdlist">
-      <li><span><b>Paso 2</b> · el <code>for</code> crea 3 carpetas con un index.html de color</span><span>A rojo · B verde · C azul</span></li>
-      <li><code>docker network create red-web</code><span>una red privada para que se encuentren por nombre</span></li>
-      <li><span><b>Paso 3</b> · <code>docker run -d --name web-A …</code></span><span>un NGINX liviano (<b>nginx:alpine</b>) por sitio, con su carpeta adentro (<code>-v</code>)</span></li>
-      <li><code>docker ps</code><span>¿están los 3 corriendo?</span></li>
+      <li><code>curl … terraform_1.16.5_linux_amd64.zip</code><span>descarga Terraform (un solo archivo)</span></li>
+      <li><code>unzip … -d ~/bin</code><span>lo deja en tu carpeta personal</span></li>
+      <li><code>terraform -version</code><span>¿quedó instalado?</span></li>
+      <li><code>curl -sO …/main.tf</code><span>baja <b>el plano</b> de la clase</span></li>
+      <li><code>cat main.tf</code><span>léelo: cada bloque es algo que antes hacías a clics</span></li>
     </ul>
   </div>
-  <p class="sub" style="margin-top:10px">Los comandos completos para <b>copiar y pegar</b> te los paso por el chat. Checkpoint ✅: pantallazo de <b>docker ps</b> con web-A, web-B y web-C.</p>
+  <p class="sub" style="margin-top:10px">Los comandos completos te los paso por el chat (para copiar y pegar). Checkpoint ✅: <b>Terraform v1.16.5</b>.</p>
   <script>
   typeTerm(document.getElementById('lab2'),document.getElementById('lab2t'),[
-    ['cmd','$ for p in A:tomato B:seagreen C:royalblue; do s=${p%%:*}; c=${p##*:}; mkdir -p ~/sitios/$s; echo "<body style=\'background:$c;color:#fff;font:40px sans-serif;text-align:center;padding-top:20vh\'><h1>Sitio $s</h1><p>contenedor web-$s</p></body>" > ~/sitios/$s/index.html; done'],
-    ['cmd','$ docker network create red-web'],
-    ['cmd','$ for s in A B C; do docker run -d --name web-$s --network red-web -v ~/sitios/$s:/usr/share/nginx/html:ro nginx:alpine; done'],['out','Unable to find image nginx:alpine locally … Pulled'],
-    ['cmd','$ docker ps --format "table {{.Names}}\\t{{.Status}}"'],['hl','<b>web-A</b>   Up 5 seconds'],['hl','<b>web-B</b>   Up 5 seconds'],['hl','<b>web-C</b>   Up 4 seconds'],['note','  ↑ 3 sitios corriendo en la misma EC2']]);
+    ['cmd','$ curl -sLo /tmp/tf.zip https://releases.hashicorp.com/terraform/1.16.5/terraform_1.16.5_linux_amd64.zip'],
+    ['cmd','$ mkdir -p ~/bin && unzip -oq /tmp/tf.zip -d ~/bin && export PATH=$HOME/bin:$PATH'],
+    ['cmd','$ terraform -version'],['hl','<b>Terraform v1.16.5</b> on linux_amd64'],
+    ['cmd','$ mkdir -p ~/pyme-tf && cd ~/pyme-tf'],
+    ['cmd','$ curl -sO https://raw.githubusercontent.com/alejandrobarreracorrea/essionix-portal-alejandrobarrera/main/docs/esumer/lecciones/RED-02/sesion-08/terraform/main.tf'],
+    ['cmd','$ ls'],['hl','<b>main.tf</b>'],['note','  ↑ el plano de tu red y tu servidor']]);
   </script>
 </section>
 
-<!-- 6 · PASO 4: EL BALANCEADOR -->
+<!-- 11 · LAB 3: INIT Y PLAN -->
 <section class="slide" id="lab3">
-  <span class="k"><span class="act-chip">🧪 PASO 4</span> El balanceador de carga</span>
-  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">Un NGINX que <span class="grad">reparte las visitas</span></h2>
+  <span class="k"><span class="act-chip">🧪 PASO 3</span> init y plan: el presupuesto antes de la obra</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">¿Qué va a construir? <span class="grad">terraform plan</span></h2>
   <div class="grid2" style="align-items:start">
     <div class="demo term lab" id="lab3t" style="min-height:330px"></div>
     <ul class="cmdlist">
-      <li><code>upstream sitios { … }</code><span>la lista de contenedores a los que reparte</span></li>
-      <li><code>zone sitios 64k;</code><span>que todos los procesos de NGINX compartan el turno (sin esto, siempre responde A)</span></li>
-      <li><code>proxy_pass http://sitios;</code><span>"lo que llegue, pásalo a uno de la lista"</span></li>
-      <li><code>sudo systemctl stop nginx</code><span>apaga el NGINX viejo: el puerto 80 ahora es del balanceador</span></li>
-      <li><code>-p 80:80</code><span>el único contenedor con puerta a la calle</span></li>
+      <li><span>En <b>tu navegador</b> abre <code>checkip.amazonaws.com</code></span><span>esa es tu IP de casa (para el SSH)</span></li>
+      <li><code>terraform.tfvars</code><span>tus datos: IP con <b>/32</b> y nombre de tu key pair</span></li>
+      <li><code>terraform init</code><span>descarga el provider (el traductor)</span></li>
+      <li><code>terraform plan</code><span>la lista de lo que va a crear · <b>no toca nada</b></span></li>
     </ul>
   </div>
-  <p class="sub" style="margin-top:10px">Checkpoint ✅: abre <b>http://tu-IP-pública</b> y recarga con <b>Ctrl+F5</b> varias veces: ¿cambia de color?</p>
+  <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: <b>Plan: 10 to add, 0 to change, 0 to destroy.</b></p>
   <script>
   typeTerm(document.getElementById('lab3'),document.getElementById('lab3t'),[
-    ['cmd','$ mkdir -p ~/lb && nano ~/lb/default.conf'],
-    ['out','upstream sitios {'],['out','    zone sitios 64k;'],['out','    server web-A:80;'],['out','    server web-B:80;'],['out','    server web-C:80;'],['out','}'],
-    ['out','server {'],['out','    listen 80;'],['out','    location / {'],['out','        proxy_pass http://sitios;'],['out','        add_header X-Atendido-Por $upstream_addr always;'],['out','    }'],['out','}'],
-    ['cmd','$ sudo systemctl stop nginx && sudo systemctl disable nginx'],
-    ['cmd','$ docker run -d --name balanceador --network red-web -p 80:80 -v ~/lb/default.conf:/etc/nginx/conf.d/default.conf:ro nginx:alpine'],
-    ['hl','<b>4f2c9a…</b>'],['note','  ↑ el recepcionista ya está en la puerta 80']]);
+    ['cmd','$ printf \'mi_ip = "181.53.20.14/32"\\nllave = "mi-llave"\\n\' > terraform.tfvars'],['note','  ↑ cambia la IP por la tuya y el nombre por tu key pair'],
+    ['cmd','$ terraform init'],['out','Installing hashicorp/aws v6.x…'],['hl','<b>Terraform has been successfully initialized!</b>'],
+    ['cmd','$ terraform plan'],['out','  + resource "aws_vpc" "pyme"  { cidr_block = "10.0.0.0/16" }'],['out','  + resource "aws_subnet" "area" ["ventas"] ["admin"] ["web"] ["bd"]'],['out','  + resource "aws_internet_gateway" "puerta"'],['out','  + resource "aws_instance" "web"  …'],
+    ['hl','<b>Plan: 10 to add, 0 to change, 0 to destroy.</b>'],['note','  ↑ todavía no existe nada: es el presupuesto']]);
   </script>
 </section>
 
-<!-- 7 · PASO 5: PRUEBA DE FUEGO -->
+<!-- 12 · LAB 4: APPLY -->
 <section class="slide" id="lab4">
-  <span class="k"><span class="act-chip">🧪 PASO 5</span> Prueba de fuego</span>
-  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">Mira el reparto… y <span class="grad">tumba un contenedor</span></h2>
+  <span class="k"><span class="act-chip">🧪 PASO 4</span> apply: que se construya la obra</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">Un comando, <span class="grad">10 recursos</span></h2>
   <div class="grid2" style="align-items:start">
     <div class="demo term lab" id="lab4t" style="min-height:330px"></div>
     <ul class="cmdlist">
-      <li><code>for i in 1 2 3 4 5 6; do curl -s localhost | grep -o "Sitio ."; done</code><span>6 visitas seguidas: ¿se reparten?</span></li>
-      <li><code>docker stop web-B</code><span>apaga un sitio a propósito</span></li>
-      <li><span>repite las 6 visitas</span><span>¿la web sigue viva sin B?</span></li>
-      <li><code>docker start web-B</code><span>B vuelve al reparto en ~10 s (si no: <code>docker restart balanceador</code>)</span></li>
-      <li><code>docker logs balanceador --tail 5</code><span>el registro de quién atendió</span></li>
+      <li><code>terraform apply</code><span>muestra el plan otra vez y pregunta</span></li>
+      <li><code>yes</code><span>"sí, constrúyelo"</span></li>
+      <li><span>Mira el orden</span><span>VPC primero, después subredes… Terraform lo calcula solo</span></li>
+      <li><code>tu_web = "http://…"</code><span>espera <b>1–2 min</b> (NGINX se instala) y ábrela</span></li>
+      <li><span>Consola → VPC</span><span>ahí está <b>pyme-vpc-tf</b>, igualita a la tuya</span></li>
     </ul>
   </div>
-  <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: la salida del <b>for</b> antes y después de tumbar <b>web-B</b>.</p>
+  <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: pantallazo de tu página <b>“Hola desde Terraform 🚀”</b>.</p>
   <script>
   typeTerm(document.getElementById('lab4'),document.getElementById('lab4t'),[
-    ['cmd','$ for i in 1 2 3 4 5 6; do curl -s localhost | grep -o "Sitio ."; done'],['hl','<b>Sitio A</b>'],['hl','<b>Sitio B</b>'],['hl','<b>Sitio C</b>'],['hl','<b>Sitio A</b>'],['hl','<b>Sitio B</b>'],['hl','<b>Sitio C</b>'],['note','  ↑ reparto por turnos (round robin)'],
-    ['cmd','$ docker stop web-B'],
-    ['cmd','$ for i in 1 2 3 4; do curl -s localhost | grep -o "Sitio ."; done'],['hl','<b>Sitio A</b>'],['hl','<b>Sitio C</b>'],['hl','<b>Sitio C</b>'],['hl','<b>Sitio A</b>'],['note','  ↑ B está caído y la web sigue viva: alta disponibilidad ✓'],
-    ['cmd','$ docker start web-B'],['note','  ↑ en ~10 s B vuelve al reparto (si no vuelve: docker restart balanceador)']]);
+    ['cmd','$ terraform apply'],['out','Do you want to perform these actions?  Enter a value: yes'],
+    ['out','aws_vpc.pyme: Creating...'],['hl','aws_vpc.pyme: Creation complete after 2s [id=<b>vpc-0c1d2e3f</b>]'],['out','aws_internet_gateway.puerta: Creating...'],['out','aws_subnet.area["web"]: Creating...  (×4 en paralelo)'],['out','aws_security_group.web: Creating...'],['out','aws_instance.web: Still creating... [10s elapsed]'],
+    ['hl','<b>Apply complete! Resources: 10 added, 0 changed, 0 destroyed.</b>'],['out','Outputs:'],['hl','tu_web = "<b>http://54.210.33.17</b>"'],['note','  ↑ espera 1–2 min y ábrela en el navegador']]);
   </script>
 </section>
 
-<!-- 8 · CHULETA DOCKER -->
-<section class="slide">
-  <span class="k"><span class="act-chip">📋 CHULETA</span> Los comandos de Docker que usaste hoy</span>
-  <h2>Tu <span class="grad">chuleta de Docker</span></h2>
-  <ul class="cmdlist" style="max-width:1000px">
-    <li><code>docker run -d --name X imagen</code><span>crea y enciende un contenedor (<b>-d</b> = en segundo plano)</span></li>
-    <li><code>docker ps</code> / <code>docker ps -a</code><span>los que están corriendo / todos</span></li>
-    <li><code>docker stop X</code> · <code>docker start X</code><span>apagar y encender</span></li>
-    <li><code>docker logs X</code><span>qué ha pasado dentro del contenedor</span></li>
-    <li><code>docker exec -it X sh</code><span>entrar al contenedor (como SSH, pero a la habitación)</span></li>
-    <li><code>docker images</code><span>los moldes descargados (nginx:alpine pesa ~20 MB)</span></li>
-    <li><code>docker rm -f X</code><span>borrar un contenedor</span></li>
-    <li><span><code>-p 80:80</code> · <code>-v carpeta:ruta</code> · <code>--network red</code></span><span>abrir puerto · montar una carpeta · conectar a una red</span></li>
-  </ul>
+<!-- 13 · LAB 5: LA MAGIA Y EL DESTROY -->
+<section class="slide" id="lab5">
+  <span class="k"><span class="act-chip">🧪 PASO 5</span> La magia: correrlo otra vez, cambiar y borrar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">El GPS en acción: <span class="grad">plan, cambio y destroy</span></h2>
+  <div class="grid2" style="align-items:start">
+    <div class="demo term lab" id="lab5t" style="min-height:330px"></div>
+    <ul class="cmdlist">
+      <li><code>terraform plan</code> (otra vez)<span><b>No changes</b>: ya estás en el destino</span></li>
+      <li><code>sed -i … main.tf</code><span>cambias el nombre de la EC2 en el plano</span></li>
+      <li><code>terraform apply</code><span><b>1 to change</b>: solo toca lo distinto</span></li>
+      <li><code>terraform destroy</code><span>borra los 10 recursos, en orden inverso</span></li>
+    </ul>
+  </div>
+  <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: <b>Destroy complete! Resources: 10 destroyed.</b> (tu pyme-vpc hecha a clics no se toca)</p>
+  <script>
+  typeTerm(document.getElementById('lab5'),document.getElementById('lab5t'),[
+    ['cmd','$ terraform plan'],['hl','<b>No changes.</b> Your infrastructure matches the configuration.'],['note','  ↑ lo corres 10 veces: el resultado es el mismo'],
+    ['cmd','$ sed -i \'s/"web-tf"/"web-terraform"/\' main.tf && terraform apply'],['out','  ~ resource "aws_instance" "web" { tags.Name: "web-tf" → "web-terraform" }'],['hl','<b>Plan: 0 to add, 1 to change, 0 to destroy.</b>'],['out','Enter a value: yes  →  Apply complete! 1 changed.'],
+    ['cmd','$ terraform destroy'],['out','Enter a value: yes'],['hl','<b>Destroy complete! Resources: 10 destroyed.</b>'],['note','  ↑ cero recursos olvidados, cero sorpresas en la factura']]);
+  </script>
 </section>
 
-<!-- 9 · LIMPIEZA -->
+<!-- 14 · CLICS VS TERRAFORM -->
+<section class="slide">
+  <span class="k"><span class="act-chip">⚖️ EL BALANCE</span> Lo que ganaste hoy</span>
+  <h2><span class="grad">Clics vs. Terraform</span></h2>
+  <ul class="cmdlist" style="max-width:1000px">
+    <li><span><b>🖱️ A clics</b></span><span><b>📐 Con Terraform</b></span></li>
+    <li><span>~35 clics y 20 minutos</span><span>1 comando y ~2 minutos</span></li>
+    <li><span>10 redes = 10 veces lo mismo (y errores)</span><span>10 redes = el mismo archivo</span></li>
+    <li><span>Nadie sabe quién cambió qué</span><span>Historial en Git, cambios revisados</span></li>
+    <li><span>Cambias algo y cruzas los dedos</span><span>El <b>plan</b> te muestra el cambio antes</span></li>
+    <li><span>Borrar = buscar recurso por recurso</span><span><b>destroy</b>: todo, en orden, sin olvidos</span></li>
+  </ul>
+  <p class="sub" style="margin-top:16px">¿Entonces los clics no sirven? Sí: para <b>aprender</b> y <b>explorar</b>. Para <b>construir y mantener</b>, el código. Por eso primero lo hicieron a mano: ahora entienden <b>cada línea</b> del plano. 🧠</p>
+</section>
+
+<!-- 15 · RETO -->
+<section class="slide">
+  <span class="k"><span class="act-chip">🏁 RETO</span> Ponle trampas a Terraform</span>
+  <h2>¿De verdad <span class="grad">funciona como un GPS</span>?</h2>
+  <ul class="clean">
+    <li>1 · Antes del destroy, en la consola <b>borra a mano</b> la ruta 0.0.0.0/0 de <b>rt-publica-tf</b>… y corre <b>terraform plan</b>. ¿Qué te dice?</li>
+    <li>2 · Agrega en el plano una quinta subred <b>"wifi" = "10.0.1.128/28"</b> y corre <b>terraform plan</b>: ¿cuántos recursos agrega?</li>
+    <li>3 · Sube tu <b>main.tf</b> a tu repositorio de GitHub (¡nunca el terraform.tfstate ni tu .ppk!)</li>
+  </ul>
+  <p class="sub" style="margin-top:18px">Pista del 1: Terraform detecta que la realidad <b>ya no coincide</b> con el plano y la vuelve a crear. A eso se le llama <b>drift</b> (deriva).</p>
+</section>
+<!-- 16 · CIERRE -->
 <section class="slide">
   <span class="k"><span class="act-chip">✅ CIERRE</span> Deja la casa en orden</span>
-  <h2>Antes de irte: <span class="grad">vuelve a tu web de siempre</span></h2>
+  <h2>Antes de irte: <span class="grad">cero recursos sueltos</span></h2>
   <ul class="clean check">
-    <li>Borra los contenedores: <b>docker rm -f balanceador web-A web-B web-C</b></li>
-    <li>Borra la red: <b>docker network rm red-web</b></li>
-    <li>Enciende tu NGINX de siempre: <b>sudo systemctl enable --now nginx</b> → tu web vuelve a la IP pública</li>
-    <li><b>docker ps -a</b> vacío y <b>curl -I localhost</b> → <b>200 OK</b></li>
-    <li>¿No lo vas a usar más hoy? <b>Stop</b> a la instancia — capa gratuita cuidada 💵</li>
+    <li><b>terraform destroy</b> → <b>10 destroyed</b> (en la consola ya no aparece pyme-vpc-tf)</li>
+    <li>Tu <b>pyme-vpc</b> hecha a clics y tu EC2 de siempre <b>siguen intactas</b> (Terraform solo toca lo que él creó)</li>
+    <li>La carpeta <b>~/pyme-tf</b> queda guardada en CloudShell: la próxima clase solo haces <b>terraform apply</b></li>
+    <li>El <b>terraform.tfstate</b> y la <b>.ppk</b> nunca van a GitHub</li>
+    <li>¿No vas a usar tu EC2 de siempre hoy? <b>Stop</b> — capa gratuita cuidada 💵</li>
   </ul>
 </section>
 
@@ -579,11 +769,11 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   <span class="k">Para la próxima clase</span>
   <h2>Su misión</h2>
   <ul class="clean">
-    <li>1 · Pantallazo de <b>docker ps</b> con <b>web-A, web-B, web-C y balanceador</b> corriendo</li>
-    <li>2 · Pantallazo del <b>for con curl</b> repartiendo A → B → C, y después de <b>docker stop web-B</b></li>
-    <li>3 · En tu bitácora: ¿qué es un <b>contenedor</b>, qué hace un <b>balanceador de carga</b> y qué es <b>alta disponibilidad</b>? (una frase cada uno)</li>
+    <li>1 · Pantallazo del <b>terraform plan</b> con <b>Plan: 10 to add</b> y de tu página <b>“Hola desde Terraform 🚀”</b></li>
+    <li>2 · Pantallazo del <b>Destroy complete! Resources: 10 destroyed.</b></li>
+    <li>3 · En tu bitácora: ¿qué es una <b>API</b>, qué hace <b>terraform plan</b> y por qué Terraform es <b>declarativo</b>? (una frase cada uno)</li>
   </ul>
-  <p class="sub" style="margin-top:24px">Hoy montaron <b>varios sitios en una sola máquina</b> y un <b>balanceador</b> que no deja caer la web. Eso es arquitectura de verdad. ⚖️🐳</p>
+  <p class="sub" style="margin-top:24px">Hoy pasaron de <b>albañiles a arquitectos</b>: su red y su servidor ahora son <b>un archivo</b> que se lanza, se cambia y se borra con un comando. 📐🚀</p>
   <div class="qrs">
     <div class="qr qr-ticket">{{QR_TICKET}}
 

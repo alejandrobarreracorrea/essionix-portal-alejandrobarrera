@@ -1,11 +1,11 @@
 # WhatsApp RED-02 — Recordatorio clase 8 · 2026-10-02
-**Tema:** LAB Docker: 3 sitios en contenedores + balanceador NGINX (round robin) en la misma EC2; prueba de caída (alta disponibilidad).
+**Tema:** Terraform: APIs y CLI de AWS, por qué nació Terraform, ciclo init/plan/apply/state/destroy, LAB pyme-vpc + EC2 desde código en CloudShell.
 
-🐳 *¡Grupo 2! Hoy montamos arquitectura de verdad*
+📐 *¡Grupo 2! Hoy pasamos de albañiles a arquitectos*
 
-En su misma EC2 vamos a correr *3 sitios web con Docker* y un *balanceador de carga* que reparte las visitas… y después tumbamos uno a propósito para ver que la web sigue viva. ⚖️🔥
+Toda la red y el servidor que construyeron a clics los vamos a convertir en *código con Terraform*: lo lanzamos, lo cambiamos y lo borramos con un comando. Es la herramienta estándar de la industria cloud. 🚀
 
 📅 *HOY* · 💻 Virtual
 🔗 https://meet.google.com/dzm-ohyv-wez
 
-Lleguen con su EC2 encendida y MobaXterm listo. ¡Los espero! 💪
+Lleguen con acceso a la consola de AWS y el nombre de su key pair a la mano. ¡Los espero! 💪
