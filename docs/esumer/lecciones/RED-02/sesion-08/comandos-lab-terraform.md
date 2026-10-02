@@ -1,7 +1,7 @@
 # LAB Terraform · pyme-vpc + EC2 desde TU PC (copiar y pegar en el chat)
 
-_Bloques probados en PowerShell 7 (pegado pieza por pieza → `terraform validate` OK en cada etapa, también con saltos de línea de Windows), 2026-10-02._
-Todo se hace en **PowerShell de tu PC** (Inicio → PowerShell). Terraform ya quedó instalado en la clase 2.
+_Bloques validados con `terraform validate` (el main.tf armado pieza por pieza), 2026-10-02._
+Todo se hace en **tu PC con VS Code**: el editor para main.tf y su terminal (**Terminal → New Terminal**, PowerShell) para los comandos. Terraform ya quedó instalado en la clase 2.
 
 **Paso 0 · Tu llave para la CLI (en la consola de AWS)**
 1. Buscador → **IAM** → **Usuarios** → **Crear usuario** → nombre `terraform-lab` (casilla de acceso a la consola **vacía**).
@@ -22,7 +22,9 @@ winget install -e --id Amazon.AWSCLI
 → **cierra PowerShell y ábrelo de nuevo** y repite `aws --version`. Luego:
 ```
 mkdir $HOME\pyme-tf
+code $HOME\pyme-tf
 ```
+(o en VS Code: **File → Open Folder → pyme-tf**)
 
 **Paso 2 · Conecta tu PC a AWS con tu llave**
 ```
@@ -37,15 +39,12 @@ aws ec2 describe-key-pairs --query "KeyPairs[].KeyName" --output text
 ```
 > `get-caller-identity` debe decir `user/terraform-lab`. CloudTrail guarda 90 días: ahí aparece el `CreateVpc` de cuando creaste tu VPC a clics.
 
-**Paso 3 · Arma tu red pieza por pieza** (en el deck: diapositiva interactiva → toca la pieza → Copiar). Pega **cada bloque una sola vez**, en orden, y responde `yes`.
+**Paso 3 · Arma tu red pieza por pieza** (en el deck: diapositiva interactiva → toca la pieza → Copiar). Pega **cada bloque una sola vez al final de main.tf**, guarda con **Ctrl+S** y en la terminal corre el comando; responde `yes`.
 
 ### 0 · El traductor y tus datos
-Le dice a Terraform que hable con AWS en us-east-1 (el provider) y declara lo que cambia por estudiante: tu IP y tu key pair. init descarga el traductor. → verás: `Terraform has been successfully initialized! · y luego tu IP y tu key pair`
-_1 · Plano base + init_
-```powershell
-New-Item -ItemType Directory -Force $HOME\pyme-tf | Out-Null
-Set-Location $HOME\pyme-tf
-@'
+En la carpeta pyme-tf (abierta en VS Code) crea main.tf con este bloque: le dice a Terraform que hable con AWS en us-east-1 (el provider) y declara lo que cambia por estudiante. Crea también terraform.tfvars con tus datos. → verás: `Terraform has been successfully initialized!`
+_Crea main.tf, pega esto y guarda (Ctrl+S)_
+```hcl
 terraform {
   required_providers {
     aws = { source = "hashicorp/aws", version = "~> 6.0" }
@@ -62,34 +61,37 @@ variable "tipo_instancia" {
   type    = string
   default = "t3.micro"
 }
-'@ | Set-Content -Encoding ascii main.tf
-terraform init
 ```
-_2 · Tus datos (detecta tu IP y te pregunta tu key pair)_
+_Crea terraform.tfvars, pon tus datos y guarda_
+```hcl
+mi_ip = "TU.IP.DE.CASA/32"   # mírala en https://checkip.amazonaws.com
+llave = "NOMBRE-DE-TU-KEY-PAIR"
+```
+_En la terminal de VS Code_
 ```powershell
-Set-Location $HOME\pyme-tf; $k = Read-Host "Nombre de tu key pair"; $ip = (Invoke-RestMethod https://checkip.amazonaws.com).Trim(); Set-Content -Encoding ascii terraform.tfvars "mi_ip = `"$ip/32`"`nllave = `"$k`""; Get-Content terraform.tfvars
+terraform init
 ```
 
 ### 1 · La urbanización: la VPC
 Un solo bloque = el botón «Crear VPC» que diste la clase pasada: 10.0.0.0/16. → verás: `Plan: 1 to add → escribe yes`
-```powershell
-Set-Location $HOME\pyme-tf
-@'
-# ---------- La urbanizacion: la VPC
+_Pégalo al final de main.tf y guarda (Ctrl+S)_
+```hcl
+# ---------- La urbanización: la VPC
 resource "aws_vpc" "pyme" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_hostnames = true
   tags                 = { Name = "pyme-vpc-tf" }
 }
-'@ | Add-Content -Encoding ascii main.tf
+```
+_En la terminal de VS Code_
+```powershell
 terraform apply
 ```
 
 ### 2 · Las 4 calles: subredes
 Con for_each, un bloque crea las 4 subredes. Fíjate en aws_vpc.pyme.id: así sabe en qué VPC van. Por eso la VPC va primero. → verás: `Plan: 4 to add → yes`
-```powershell
-Set-Location $HOME\pyme-tf
-@'
+_Pégalo al final de main.tf y guarda (Ctrl+S)_
+```hcl
 # ---------- Las 4 calles: subredes (VLSM)
 locals {
   subredes = {
@@ -108,15 +110,16 @@ resource "aws_subnet" "area" {
   map_public_ip_on_launch = each.key == "web"
   tags                    = { Name = "${each.key}-tf" }
 }
-'@ | Add-Content -Encoding ascii main.tf
+```
+_En la terminal de VS Code_
+```powershell
 terraform apply
 ```
 
 ### 3 · Internet Gateway + tabla de rutas
 La puerta a internet y el camino 0.0.0.0/0 → puerta, asociado solo a la calle web. Eso es lo que la vuelve pública. → verás: `Plan: 3 to add → yes`
-```powershell
-Set-Location $HOME\pyme-tf
-@'
+_Pégalo al final de main.tf y guarda (Ctrl+S)_
+```hcl
 # ---------- La puerta a internet y el camino hacia ella
 resource "aws_internet_gateway" "puerta" {
   vpc_id = aws_vpc.pyme.id
@@ -136,15 +139,16 @@ resource "aws_route_table_association" "web" {
   subnet_id      = aws_subnet.area["web"].id
   route_table_id = aws_route_table.publica.id
 }
-'@ | Add-Content -Encoding ascii main.tf
+```
+_En la terminal de VS Code_
+```powershell
 terraform apply
 ```
 
 ### 4 · El portero: Security Group
-Puerto 80 abierto para todos (la página) y 22 solo para tu IP (el SSH). Usa var.mi_ip, el dato que diste en la base. → verás: `Plan: 1 to add → yes`
-```powershell
-Set-Location $HOME\pyme-tf
-@'
+Puerto 80 abierto para todos (la página) y 22 solo para tu IP (el SSH). Usa var.mi_ip, el dato de tu terraform.tfvars. → verás: `Plan: 1 to add → yes`
+_Pégalo al final de main.tf y guarda (Ctrl+S)_
+```hcl
 # ---------- El portero: Security Group
 resource "aws_security_group" "web" {
   name        = "web-sg-tf"
@@ -173,15 +177,16 @@ resource "aws_security_group" "web" {
   }
   tags = { Name = "web-sg-tf" }
 }
-'@ | Add-Content -Encoding ascii main.tf
+```
+_En la terminal de VS Code_
+```powershell
 terraform apply
 ```
 
 ### 5 · La casa: EC2 + NGINX + tu URL
 Busca la AMI de Amazon Linux más reciente, lanza la EC2 en la calle web con el portero y le instala NGINX al nacer (user_data). Al final te entrega tu URL. → verás: `Plan: 1 to add → yes → tu_web = "http://…" (espera 1–2 min)`
-```powershell
-Set-Location $HOME\pyme-tf
-@'
+_Pégalo al final de main.tf y guarda (Ctrl+S)_
+```hcl
 # ---------- La casa: EC2 con Amazon Linux 2023 + NGINX
 data "aws_ssm_parameter" "amazon_linux" {
   name = "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
@@ -207,35 +212,36 @@ resource "aws_instance" "web" {
 output "tu_web" {
   value = "http://${aws_instance.web.public_ip}"
 }
-'@ | Add-Content -Encoding ascii main.tf
+```
+_En la terminal de VS Code_
+```powershell
 terraform apply
 ```
 
 ### 🧹 Borrar todo, en orden
 Terraform borra los 10 recursos en orden inverso (primero la EC2, al final la VPC). Tu pyme-vpc hecha a clics no se toca. → verás: `Destroy complete! Resources: 10 destroyed.`
+_En la terminal de VS Code_
 ```powershell
-Set-Location $HOME\pyme-tf
 terraform destroy
 ```
 
 **Paso 4 · La magia**
-```powershell
-Set-Location $HOME\pyme-tf; terraform plan
-(Get-Content main.tf) -replace '"web-tf"','"web-terraform"' | Set-Content -Encoding ascii main.tf; terraform apply
-```
-→ `No changes` y luego `1 to change`. Al final, el bloque 🧹 Destroy.
+1. En la terminal: `terraform plan` → `No changes`.
+2. En main.tf cambia `Name = "web-tf"` por `Name = "web-terraform"` → **Ctrl+S** → `terraform apply` → `1 to change`.
+3. Al final, el bloque 🧹 Destroy.
 
 **Cierre · apaga tu llave**
-IAM → `terraform-lab` → Credenciales de seguridad → la clave → **Acciones → Desactivar** → **Eliminar**. Y en PowerShell: `Remove-Item $HOME\.aws\credentials`.
+IAM → `terraform-lab` → Credenciales de seguridad → la clave → **Acciones → Desactivar** → **Eliminar**. Y en la terminal: `Remove-Item $HOME\.aws\credentials`.
 
-**Plan B (todo de una):** en `$HOME\pyme-tf`: `Invoke-WebRequest https://raw.githubusercontent.com/alejandrobarreracorrea/essionix-portal-alejandrobarrera/main/docs/esumer/lecciones/RED-02/sesion-08/terraform/main.tf -OutFile main.tf` + tus datos (bloque 0.2) + `terraform init; terraform apply`.
+**Plan B (todo de una):** descarga el archivo completo en la carpeta: `Invoke-WebRequest https://raw.githubusercontent.com/alejandrobarreracorrea/essionix-portal-alejandrobarrera/main/docs/esumer/lecciones/RED-02/sesion-08/terraform/main.tf -OutFile main.tf` + tu terraform.tfvars + `terraform init; terraform apply`.
 
-> ¿Mac/Linux? Usa la app Terminal: `brew install awscli`; los bloques funcionan en `pwsh` o cambia `@'…'@ | Add-Content` por `cat >> main.tf <<'EOF' … EOF`.
-> Si `Duplicate resource …`: pegaste un bloque dos veces → `notepad main.tf` y borra la copia.
+> Tu IP de casa: abre https://checkip.amazonaws.com en el navegador y agrégale `/32`.
+> Si `Duplicate resource …`: pegaste un bloque dos veces → bórralo en main.tf y guarda.
+> Si `Reference to undeclared resource`: pegaste una pieza antes de la que necesita (respeta el orden 0→5).
 > Si `UnauthorizedOperation` / `AccessDenied`: a terraform-lab le falta una política (paso 0.2).
 > Si `No valid credential sources found`: falta `aws configure` (paso 2).
-> Si `InvalidKeyPair.NotFound`: el nombre de la llave en terraform.tfvars no coincide (paso 2, último comando).
+> Si `InvalidKeyPair.NotFound`: el nombre en terraform.tfvars no coincide con tu key pair (paso 2, último comando).
 > Si `VpcLimitExceeded`: máximo 5 VPC por región → borra VPC de pruebas que no uses.
-> Si `t3.micro` no es elegible en tu cuenta: `Add-Content -Encoding ascii terraform.tfvars 'tipo_instancia = "t2.micro"'`.
-> Los bloques usan `-Encoding ascii` a propósito (sin tildes ni emojis): así Windows no mete caracteres raros que Terraform rechace.
-> Nunca subas `terraform.tfstate`, tu `.ppk` ni el `.csv` de la llave a GitHub.
+> Si `t3.micro` no es elegible en tu cuenta: agrega `tipo_instancia = "t2.micro"` en terraform.tfvars.
+> ¿No guardaste? Si `terraform apply` dice `No changes` justo después de pegar, te faltó **Ctrl+S**.
+> Nunca subas `terraform.tfstate`, `terraform.tfvars`, tu `.ppk` ni el `.csv` de la llave a GitHub.
