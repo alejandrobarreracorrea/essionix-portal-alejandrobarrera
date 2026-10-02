@@ -671,7 +671,43 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   <span class="k"><span class="act-chip">💡 HISTORIA</span> De los clics al plano · clic o → para avanzar</span>
   <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">¿Por qué nació <span class="grad">Terraform</span>?</h2>
   <div class="scene"><canvas aria-label="Animación: problemas de los clics y de los scripts; la idea del plano declarativo; Terraform calcula la diferencia como un GPS"></canvas></div>
-  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><button type="button" class="trybtn" id="tryW">🧪 Pruébalo: una VPC por CLI</button><span class="shint">clic / → paso a paso</span></div>
+  <style>
+    #scW .scene{position:relative}
+    .trybtn{font:700 .78rem Poppins,sans-serif;border:0;border-radius:999px;padding:7px 14px;background:#E97132;color:#fff;cursor:pointer;white-space:nowrap}
+    .trybtn:focus-visible,.trypop button:focus-visible{outline:2px solid #FFC928;outline-offset:2px}
+    .trypop{display:none;position:absolute;inset:3% 3%;background:rgba(8,20,36,.97);border:1.5px solid #E97132;border-radius:14px;padding:14px 18px;color:#e6edf3;overflow:auto;flex-direction:column;gap:9px}
+    .trypop.on{display:flex}.trypop>*{flex-shrink:0}
+    .trypop h3{margin:0;font:800 1.05rem Poppins,sans-serif;color:#fff}.trypop p{margin:0;font-size:.85rem;color:#cfe3f1;line-height:1.4}.trypop p b{color:#fff}
+    .trypop .x{position:absolute;top:10px;right:12px;background:none;border:0;color:#9fb3c8;font-size:1.2rem;cursor:pointer}
+    .trypop .sn{border:1px solid #2b4f74;border-radius:10px;overflow:hidden}
+    .trypop .sn .top{display:flex;justify-content:space-between;align-items:center;background:#10243a;padding:5px 9px;font-size:.76rem;color:#9fd8f0;font-weight:700;gap:8px}
+    .trypop .sn button{font:700 .74rem Poppins,sans-serif;border:0;border-radius:999px;padding:4px 12px;background:#ff9900;color:#0e2841;cursor:pointer;white-space:nowrap}
+    .trypop .sn button.ok{background:#34c38f;color:#fff}
+    .trypop pre{margin:0;padding:7px 10px;font:500 clamp(.62rem,.85vw,.78rem)/1.45 var(--mono);white-space:pre-wrap;word-break:break-all;font-variant-ligatures:none}
+    .trypop .warn{color:#FFC928;font-size:.8rem}
+  </style>
+  <div class="trypop" id="tryWpop" role="dialog" aria-label="Crear una VPC por CLI">
+    <button type="button" class="x" aria-label="Cerrar">✕</button>
+    <h3>🧪 Crea <b>solo una VPC</b> con la CLI: <span style="color:#FFC928">10.2.0.0/16</span></h3>
+    <p>En la terminal de VS Code (PowerShell), con tu llave ya configurada. Un comando = <b>un pedido CreateVpc</b>, el mismo que hace el botón de la consola.</p>
+    <div class="sn"><div class="top"><span>1 · Créala → te responde su ID (vpc-…)</span><button type="button">📋 Copiar</button></div><pre>aws ec2 create-vpc --cidr-block 10.2.0.0/16 --tag-specifications "ResourceType=vpc,Tags=[{Key=Name,Value=vpc-cli}]" --query Vpc.VpcId --output text</pre></div>
+    <div class="sn"><div class="top"><span>2 · Mírala (también en la consola → VPC)</span><button type="button">📋 Copiar</button></div><pre>aws ec2 describe-vpcs --filters "Name=tag:Name,Values=vpc-cli" --query "Vpcs[].[VpcId,CidrBlock,State]" --output table</pre></div>
+    <p>3 · Ahora corre el <b>paso 1 otra vez</b> y repite el 2: ¿cuántas <b>vpc-cli</b> hay? 😱 <b>Dos.</b> El script no sabe que ya existía: ese es el <b>problema 2</b>.</p>
+    <div class="sn"><div class="top"><span>4 · Limpia: borra todas las vpc-cli</span><button type="button">📋 Copiar</button></div><pre>foreach ($id in (aws ec2 describe-vpcs --filters "Name=tag:Name,Values=vpc-cli" --query "Vpcs[].VpcId" --output text).Split()) { aws ec2 delete-vpc --vpc-id $id; "borrada: $id" }</pre></div>
+    <p class="warn">⚠️ AWS permite máximo 5 VPC por región: bórralas antes del laboratorio.</p>
+  </div>
+  <script>
+  (function(){var sec=document.getElementById('scW'),pop=document.getElementById('tryWpop'),btn=document.getElementById('tryW');
+    sec.querySelector('.scene').appendChild(pop);
+    [btn,pop].forEach(function(el){el.addEventListener('click',function(e){e.stopPropagation();});});
+    btn.onclick=function(){pop.classList.toggle('on');};pop.querySelector('.x').onclick=function(){pop.classList.remove('on');};
+    pop.querySelectorAll('.sn').forEach(function(sn){var b=sn.querySelector('button'),txt=sn.querySelector('pre').textContent;
+      b.onclick=function(){function ok(){b.textContent='✓ Copiado';b.classList.add('ok');setTimeout(function(){b.textContent='📋 Copiar';b.classList.remove('ok');},1800);}
+        function fb(){var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(_){}ta.remove();ok();}
+        if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(txt).then(ok,fb);else fb();};});
+  })();
+  </script>
   <script>
   NetScene.make('scW',1000,480,[
     '<b>Problema 1 · los clics.</b> Tu LAB de la VPC fueron unos <b>35 clics</b>. ¿Y si mañana la empresa necesita <b>10 redes iguales</b>? ¿Y si alguien cambió algo y nadie sabe qué? Los clics <b>no dejan rastro</b> ni se pueden repetir igual.',
@@ -955,7 +991,7 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
     ['cmd','PS C:\\Users\\tú> aws configure'],['out','AWS Access Key ID [None]: AKIA****************'],['out','AWS Secret Access Key [None]: ****************************************'],['out','Default region name [None]: us-east-1'],['out','Default output format [None]: json'],
     ['cmd','PS C:\\Users\\tú> aws sts get-caller-identity'],['hl','"Arn": "arn:aws:iam::<b>123456789012</b>:user/<b>terraform-lab</b>"'],['note','  ↑ la API ya reconoce a tu PC por tu llave: eres terraform-lab'],
     ['cmd','PS C:\\Users\\tú> aws ec2 describe-vpcs --query "Vpcs[].[VpcId,CidrBlock]" --output table'],['hl','|  vpc-0a1b2c3d  |  <b>10.0.0.0/16</b>   |   ← la pyme-vpc que hiciste a clics'],['out','|  vpc-9f8e7d6c  |  172.31.0.0/16 |   ← la VPC por defecto'],
-    ['cmd','PS C:\\Users\\tú> aws cloudtrail lookup-events --lookup-attributes AttributeKey=EventName,AttributeValue=CreateVpc --query "Events[].[EventTime,Username]" --output table'],['hl','|  2026-09-25T19:42:10  |  <b>tu-usuario</b>  |   ← ¡tu clic quedó anotado!'],
+    ['cmd','PS C:\\Users\\tú> aws cloudtrail lookup-events --lookup-attributes "AttributeKey=EventName,AttributeValue=CreateVpc" --query "Events[].[EventTime,Username]" --output table'],['hl','|  2026-09-25T19:42:10  |  <b>tu-usuario</b>  |   ← ¡tu clic quedó anotado!'],
     ['cmd','PS C:\\Users\\tú> aws ec2 describe-key-pairs --query "KeyPairs[].KeyName" --output text'],['hl','<b>mi-llave</b>'],['note','  ↑ anota este nombre: lo usará Terraform']]);
   </script>
 </section>

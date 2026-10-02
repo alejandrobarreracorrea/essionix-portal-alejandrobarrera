@@ -34,10 +34,20 @@ Pega el *Access key ID*, la *Secret access key*, región `us-east-1` y formato `
 ```
 aws sts get-caller-identity
 aws ec2 describe-vpcs --query "Vpcs[].[VpcId,CidrBlock]" --output table
-aws cloudtrail lookup-events --lookup-attributes AttributeKey=EventName,AttributeValue=CreateVpc --query "Events[].[EventTime,Username]" --output table
+aws cloudtrail lookup-events --lookup-attributes "AttributeKey=EventName,AttributeValue=CreateVpc" --query "Events[].[EventTime,Username]" --output table
 aws ec2 describe-key-pairs --query "KeyPairs[].KeyName" --output text
 ```
 > `get-caller-identity` debe decir `user/terraform-lab`. CloudTrail guarda 90 días: ahí aparece el `CreateVpc` de cuando creaste tu VPC a clics.
+
+**Demo · una VPC por CLI (diapositiva "¿Por qué nació Terraform?" → botón 🧪)**
+```powershell
+aws ec2 create-vpc --cidr-block 10.2.0.0/16 --tag-specifications "ResourceType=vpc,Tags=[{Key=Name,Value=vpc-cli}]" --query Vpc.VpcId --output text
+aws ec2 describe-vpcs --filters "Name=tag:Name,Values=vpc-cli" --query "Vpcs[].[VpcId,CidrBlock,State]" --output table
+```
+Corre el primero **otra vez** y vuelve a mirar: ¡dos `vpc-cli`! (el problema de los scripts). Luego bórralas (máximo 5 VPC por región):
+```powershell
+foreach ($id in (aws ec2 describe-vpcs --filters "Name=tag:Name,Values=vpc-cli" --query "Vpcs[].VpcId" --output text).Split()) { aws ec2 delete-vpc --vpc-id $id; "borrada: $id" }
+```
 
 **Paso 3 · Arma tu red pieza por pieza** (en el deck: diapositiva interactiva → toca la pieza → Copiar). Pega **cada bloque una sola vez al final de main.tf**, guarda con **Ctrl+S** y en la terminal corre el comando; responde `yes`.
 
