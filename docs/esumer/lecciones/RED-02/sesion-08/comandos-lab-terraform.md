@@ -7,8 +7,10 @@ Se trabaja en **AWS CloudShell** (ícono `>_` arriba a la derecha de la consola,
 ```
 aws sts get-caller-identity
 aws ec2 describe-vpcs --query "Vpcs[].[VpcId,CidrBlock]" --output table
+aws cloudtrail lookup-events --lookup-attributes AttributeKey=EventName,AttributeValue=CreateVpc --query "Events[].[EventTime,Username]" --output table
 aws ec2 describe-key-pairs --query "KeyPairs[].KeyName" --output text
 ```
+> CloudTrail guarda 90 días: ahí aparece el `CreateVpc` de cuando creaste tu VPC a clics.
 
 **Paso 2 · Instalar Terraform y bajar el plano**
 ```

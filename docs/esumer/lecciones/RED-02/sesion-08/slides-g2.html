@@ -278,7 +278,7 @@ ul.clean li:first-child { border-top:0; }
   <span class="k">El plan de hoy · clase 8</span>
   <h2>Objetivo de hoy: <span class="grad">construir tu red y tu servidor con código</span>.</h2>
   <ul class="rows">
-    <li><span class="t">Todo es una llamada a la API<small>Qué pasa de verdad cuando haces clic · la CLI de AWS</small></span><span class="m">concepto</span></li>
+    <li><span class="t">Todo es una llamada a la API<small>Qué pasa de verdad cuando haces clic · CloudTrail · la CLI de AWS</small></span><span class="m">concepto</span></li>
     <li><span class="t">¿Por qué nació Terraform?<small>De los clics a los scripts y del script al plano</small></span><span class="m">concepto</span></li>
     <li><span class="t">Cómo trabaja y por qué es el estándar<small>init · plan · apply · state · destroy</small></span><span class="m">concepto</span></li>
     <li><span class="t">LAB: pyme-vpc + EC2 desde Terraform<small>CloudShell · lanzar · cambiar · destruir</small></span><span class="m">lab</span></li>
@@ -401,45 +401,135 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   </script>
 
 
-  <span class="k"><span class="act-chip">📡 API</span> Lo que pasa cuando haces clic · clic o → para avanzar</span>
-  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">Cada clic en la consola es <span class="grad">una llamada a la API</span></h2>
-  <div class="scene"><canvas aria-label="Animación: un clic en la consola envía una petición HTTPS a la API de AWS, que crea la VPC y responde; la CLI y Terraform hacen la misma llamada"></canvas></div>
+  <span class="k"><span class="act-chip">📡 API</span> Lo que pasa de verdad cuando haces clic · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">La consola <span class="grad">por dentro</span>: tu clic es un pedido a la API</h2>
+  <div class="scene"><canvas aria-label="Animación realista: la página Crear VPC de la consola de AWS; el clic se convierte en un pedido a la API; AWS verifica identidad y permisos, crea la VPC y lo anota en CloudTrail"></canvas></div>
   <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
   <script>
+  /* Réplica de la consola de AWS (Cloudscape, en español) */
+  window.AwsUI=window.AwsUI||(function(){
+    function rr(c,x,y,w,h,r){NetScene.rr(c,x,y,w,h,r);}
+    function tx(c,s,x,y,sz,col,al,w,f){c.save();c.font=(w||400)+' '+sz+'px '+(f||'"Open Sans","Helvetica Neue",Arial,sans-serif');c.fillStyle=col;c.textAlign=al||'left';c.textBaseline='alphabetic';c.fillText(s,x,y);c.restore();}
+    function cursor(c,x,y,down){c.save();c.translate(x,y);if(down)c.scale(.85,.85);c.fillStyle='#fff';c.strokeStyle='#000';c.lineWidth=1.4;c.beginPath();c.moveTo(0,0);c.lineTo(0,20);c.lineTo(5,15);c.lineTo(9,24);c.lineTo(13,22);c.lineTo(9,14);c.lineTo(16,14);c.closePath();c.fill();c.stroke();c.restore();}
+    function browser(c,url,title){c.save();c.shadowColor='rgba(0,0,0,.45)';c.shadowBlur=30;c.fillStyle='#fff';rr(c,30,20,940,440,10);c.fill();c.restore();
+      c.save();c.beginPath();c.rect(30,20,940,440);c.clip();c.fillStyle='#dee1e6';c.fillRect(30,20,940,30);c.fillStyle='#fff';rr(c,44,26,230,30,8);c.fill();c.restore();
+      ['#ff5f57','#febc2e','#28c840'].forEach(function(k,i){c.fillStyle=k;c.beginPath();c.arc(48+i*0,0,0,0,0);c.fill();});
+      c.fillStyle='#ff9900';rr(c,56,33,14,14,3);c.fill();tx(c,title,78,45,11,'#202124','left',600);
+      c.fillStyle='#fff';c.fillRect(30,50,940,30);c.fillStyle='#f1f3f4';rr(c,80,55,700,20,10);c.fill();tx(c,'🔒 '+url,92,69,10.5,'#3c4043','left',400);
+      c.fillStyle='#e8eaed';c.fillRect(30,80,940,1);}
+    function header(c){c.fillStyle='#232f3e';c.fillRect(30,80,940,34);tx(c,'aws',46,102,17,'#fff','left',800,'Arial,sans-serif');c.strokeStyle='#ff9900';c.lineWidth=2.2;c.beginPath();c.moveTo(47,106);c.quadraticCurveTo(62,112,76,104);c.stroke();
+      tx(c,'▦',96,103,15,'#d5dbdb','left',400);c.fillStyle='#fff';rr(c,122,88,330,19,4);c.fill();tx(c,'🔍  Buscar',132,102,10.5,'#5f6b7a','left',400);tx(c,'[Alt+S]',440,102,9.5,'#5f6b7a','right',400);
+      tx(c,'Norte de Virginia ▾',860,102,11,'#fff','right',600);tx(c,'tu-usuario ▾',955,102,11,'#fff','right',600);}
+    function nav(c,active){c.fillStyle='#fff';c.fillRect(30,114,170,346);c.fillStyle='#e9ebed';c.fillRect(199,114,1,346);
+      tx(c,'Panel de VPC',44,140,11.5,'#000716','left',700);tx(c,'Nube privada virtual ▾',44,166,10.5,'#5f6b7a','left',700);
+      ['Sus VPC','Subredes','Tablas de enrutamiento','Gateways de Internet','Gateways NAT','Grupos de seguridad'].forEach(function(s,i){var a=s===active;if(a){c.fillStyle='#f2f8fd';c.fillRect(30,176+i*24,169,22);c.fillStyle='#0972d3';c.fillRect(30,176+i*24,3,22);}tx(c,s,52,191+i*24,11,a?'#0972d3':'#000716','left',a?700:400);});}
+    function input(c,x,y,w,val,focus,ph){c.fillStyle='#fff';rr(c,x,y,w,26,8);c.fill();c.strokeStyle=focus?'#0972d3':'#8c8c94';c.lineWidth=focus?2:1;c.stroke();tx(c,val||ph||'',x+10,y+17,11.5,val?'#000716':'#8c8c94','left',400);}
+    function radio(c,x,y,on,label){c.strokeStyle=on?'#0972d3':'#8c8c94';c.lineWidth=2;c.beginPath();c.arc(x,y,6,0,7);c.stroke();if(on){c.fillStyle='#0972d3';c.beginPath();c.arc(x,y,3,0,7);c.fill();}tx(c,label,x+12,y+4,11,'#000716','left',400);}
+    function createVpc(c,o){browser(c,'us-east-1.console.aws.amazon.com/vpcconsole/home?region=us-east-1#CreateVpc:','Crear VPC | VPC Console');header(c);nav(c,'Sus VPC');
+      c.fillStyle='#f4f4f4';c.fillRect(200,114,770,346);
+      if(o.ok){c.fillStyle='#037f0c';c.fillRect(200,114,770,30);tx(c,'✓  Ha creado correctamente vpc-0a1b2c3d4e5f / pyme-vpc',216,134,11.5,'#fff','left',700);}
+      var oy=o.ok?18:0;tx(c,'VPC  ›  Sus VPC  ›  Crear VPC',216,140+oy,10.5,'#0972d3','left',400);tx(c,'Crear VPC',216,168+oy,19,'#000716','left',800);
+      c.fillStyle='#fff';rr(c,216,180+oy,740,232-oy,10);c.fill();c.strokeStyle='#e9ebed';c.lineWidth=1;c.stroke();
+      tx(c,'Configuración de la VPC',232,204+oy,13,'#000716','left',800);tx(c,'Recursos que se van a crear',232,226+oy,11,'#000716','left',700);
+      [['Solo la VPC',1],['VPC y más',0]].forEach(function(k,i){var x=232+i*200;c.fillStyle=k[1]?'#f2f8fd':'#fff';rr(c,x,232+oy,190,26,8);c.fill();c.strokeStyle=k[1]?'#0972d3':'#8c8c94';c.lineWidth=k[1]?2:1;c.stroke();radio(c,x+14,245+oy,k[1],k[0]);});
+      tx(c,'Etiqueta de nombre: opcional',232,280+oy,11,'#000716','left',700);input(c,232,286+oy,300,o.name,o.focus==='name','mi-vpc-01');
+      tx(c,'Bloque de CIDR IPv4',232,330+oy,11,'#000716','left',700);radio(c,240,344+oy,1,'Entrada manual de CIDR IPv4');
+      tx(c,'CIDR IPv4',232,372+oy,11,'#000716','left',700);if(!o.ok)input(c,232,378+oy,300,o.cidr,o.focus==='cidr','10.0.0.0/24');
+      tx(c,'Cancelar',846,446,12,'#0972d3','right',700);c.fillStyle=o.press?'#ec7211':'#ff9900';rr(c,860,428,100,28,14);c.fill();tx(c,'Crear VPC',910,447,12,'#000716','center',800);}
+    function trail(c,rows,hl){browser(c,'us-east-1.console.aws.amazon.com/cloudtrailv2/home?region=us-east-1#/events','Historial de eventos | CloudTrail');header(c);
+      c.fillStyle='#fff';c.fillRect(30,114,940,346);tx(c,'CloudTrail  ›  Historial de eventos',46,140,10.5,'#0972d3','left',400);tx(c,'Historial de eventos',46,168,19,'#000716','left',800);
+      tx(c,'Atributos de búsqueda:  Nombre del evento  =  CreateVpc',46,194,11,'#5f6b7a','left',400);
+      var cols=[['Nombre del evento',46],['Hora del evento',200],['Nombre de usuario',380],['Origen del evento',540],['Agente de usuario',720]];
+      c.fillStyle='#f4f4f4';c.fillRect(40,206,920,28);cols.forEach(function(k){tx(c,k[0],k[1],224,11,'#000716','left',700);});
+      rows.forEach(function(r,i){var y=234+i*34;if(hl===i){c.fillStyle='rgba(255,153,0,.16)';c.fillRect(40,y,920,34);c.fillStyle='#ff9900';c.fillRect(40,y,3,34);}c.fillStyle='#e9ebed';c.fillRect(40,y+33,920,1);
+        r.forEach(function(v,j){tx(c,v,cols[j][0]===undefined?0:cols[j][1],y+22,11,j===0?'#0972d3':'#000716','left',j===0?700:400);});});}
+    function cloudshell(c,lines,cur){browser(c,'us-east-1.console.aws.amazon.com/cloudshell/home?region=us-east-1','CloudShell');header(c);
+      c.fillStyle='#0f1b2a';c.fillRect(30,114,940,346);c.fillStyle='#232f3e';c.fillRect(30,114,940,26);tx(c,'CloudShell',46,131,11,'#fff','left',700);tx(c,'us-east-1',140,131,10.5,'#d5dbdb','left',400);
+      lines.forEach(function(l,i){tx(c,l[0],46,166+i*20,12,l[1]||'#e6edf3','left',l[2]||400,'"JetBrains Mono",Menlo,monospace');});
+      if(cur){var last=lines[lines.length-1];c.save();c.font='400 12px "JetBrains Mono",Menlo,monospace';var w=c.measureText(last[0]).width;c.restore();if(Math.floor(Date.now()/450)%2===0){c.fillStyle='#39c8e8';c.fillRect(48+w,156+(lines.length-1)*20,7,13);}}}
+    function envelope(c,x,y,w,title,rows,col,a){c.save();c.globalAlpha*=a;c.fillStyle='#fff';rr(c,x,y,w,32+rows.length*22,10);c.fill();c.fillStyle=col;rr(c,x,y,w,28,10);c.fill();c.fillRect(x,y+18,w,10);c.restore();
+      tx(c,title,x+12,y+19,12,'#fff','left',800);rows.forEach(function(r,i){c.save();c.globalAlpha*=a;tx(c,r[0],x+12,y+48+i*22,11,'#5f6b7a','left',600);tx(c,r[1],x+120,y+48+i*22,11,'#000716','left',700,'"JetBrains Mono",Menlo,monospace');c.restore();});}
+    return {cursor:cursor,createVpc:createVpc,trail:trail,cloudshell:cloudshell,envelope:envelope,tx:tx};
+  })();
   NetScene.make('scA',1000,480,[
-    'Cuando creaste tu VPC hiciste clic en <b>«Crear VPC»</b> en la consola de AWS. ¿Qué pasó en realidad?',
-    'Tu navegador envió un <b>mensaje por internet (HTTPS)</b> a la <b>API de AWS</b>: <i>“crea una VPC con 10.0.0.0/16”</i>, firmado con <b>tus credenciales</b> para probar que eres tú.',
-    'AWS revisa permisos, <b>crea la VPC</b> en tu cuenta y responde con un <b>ID</b>: vpc-0a1b2c… Eso es una <b>API</b>: una ventanilla donde se piden cosas con mensajes.',
-    'La <b>CLI de AWS</b> (aws en la terminal) envía <b>exactamente el mismo mensaje</b>, pero escrito como comando. Sin clics.',
-    '<b>Consola, CLI y Terraform</b> son tres formas de hacer <b>la misma llamada</b> a la misma API. Lo que cambia es <b>cuánto trabajo haces tú</b>.'
+    'Así se veía la consola cuando creaste tu VPC: escribiste un <b>nombre</b> (pyme-vpc), el rango <b>10.0.0.0/16</b> y diste clic en <b>«Crear VPC»</b>. Pero… ¿qué pasó después del clic?',
+    'La consola <b>no crea nada por sí misma</b>: es un <b>control remoto</b>. Tu clic se convierte en un <b>pedido</b> que viaja por internet a la <b>API de AWS</b> (una “ventanilla” en ec2.us-east-1.amazonaws.com). El pedido lleva <b>qué quieres</b> y <b>una firma con tu identidad</b>.',
+    'En la ventanilla AWS revisa 3 cosas: <b>¿quién eres?</b> (la firma), <b>¿tienes permiso?</b> (IAM) y entonces <b>crea</b> la VPC. Responde con un <b>ID</b> y la consola te muestra el aviso verde.',
+    '¿Cómo sabemos que fue así? Porque AWS <b>anota cada pedido</b> en <b>CloudTrail</b>: ahí está tu <b>CreateVpc</b>, con hora, usuario y origen. ¡Lo vas a buscar tú mismo en el laboratorio!'
   ],function(c,s){
     var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
-    var API=[620,240],ACC=[880,240];
-    /* API de AWS */c.save();V.glow(c,C.ora,16);c.fillStyle='#3a2518';NetScene.rr(c,API[0]-80,API[1]-60,160,120,14);c.fill();c.strokeStyle=C.ora;c.lineWidth=2.5;c.stroke();c.restore();
-    V.tx(c,'API de AWS',API[0],API[1]-14,16,'#fff','center',800,1);V.tx(c,'ec2.us-east-1',API[0],API[1]+8,11,'#ffd0b0','center',700,1,'"JetBrains Mono",monospace');V.tx(c,'.amazonaws.com',API[0],API[1]+24,11,'#ffd0b0','center',700,1,'"JetBrains Mono",monospace');
-    /* tu cuenta */c.save();c.strokeStyle='rgba(159,182,201,.45)';c.setLineDash([5,5]);NetScene.rr(c,ACC[0]-80,API[1]-110,160,220,12);c.stroke();c.restore();V.tx(c,'tu cuenta AWS',ACC[0],API[1]-124,12,C.mut,'center',700,1);
-    var made=st>=2?E.back(Math.min(1,(st===2?t:9)/.6)):0;if(made>0){c.save();c.globalAlpha*=made;c.strokeStyle=C.blue;c.lineWidth=2.5;V.glow(c,C.blue,12);NetScene.rr(c,ACC[0]-60,API[1]-40,120,80,10);c.stroke();c.restore();V.tx(c,'VPC',ACC[0],API[1]-6,18,'#fff','center',800,made);V.tx(c,'10.0.0.0/16',ACC[0],API[1]+16,11,'#9fd8f0','center',700,made,'"JetBrains Mono",monospace');}
-    /* consola */var conA=st<=2||st===4?1:.3;c.save();c.globalAlpha*=conA;c.fillStyle='#f4f8fb';NetScene.rr(c,40,80,300,170,10);c.fill();c.fillStyle='#232F3E';NetScene.rr(c,40,80,300,26,4);c.fill();c.restore();
-    V.tx(c,'aws  Consola · VPC',56,98,12,'#fff','left',800,conA);V.tx(c,'Bloque CIDR IPv4',60,134,11,'#44546A','left',600,conA);c.save();c.globalAlpha*=conA;c.strokeStyle='#c9d1d9';NetScene.rr(c,60,142,170,26,5);c.stroke();c.restore();V.tx(c,'10.0.0.0/16',70,160,12,'#0E2841','left',700,conA,'"JetBrains Mono",monospace');
-    var press=st===0&&(t%2.2)>1.4&&(t%2.2)<1.7;c.save();c.globalAlpha*=conA;c.fillStyle=press?'#c75d00':'#ec7211';NetScene.rr(c,200,196,120,32,6);c.fill();c.restore();V.tx(c,'Crear VPC',260,217,13,'#fff','center',800,conA);
-    if(st===0){var cu=Math.min(1,(t%2.2)/1.3);NetScene.person;c.save();c.translate(330-60*E.io(cu),250-30*E.io(cu));c.fillStyle='#fff';c.strokeStyle='#08182a';c.lineWidth=1.5;c.beginPath();c.moveTo(0,0);c.lineTo(0,18);c.lineTo(5,13);c.lineTo(9,21);c.lineTo(12,19);c.lineTo(8,12);c.lineTo(14,12);c.closePath();c.fill();c.stroke();c.restore();
-      V.tx(c,'¿qué pasa al hacer clic?',500,420,18,'#ffb98a','center',800,1);}
-    function msg(from,to,txt,col,dur,off){var u=Math.min(1,Math.max(0,((t-(off||0))%dur)/(dur*.7))),p=NetScene.along([from,to],E.io(u));c.save();V.glow(c,col,12);c.fillStyle=col;NetScene.rr(c,p[0]-70,p[1]-14,140,28,8);c.fill();c.restore();V.tx(c,txt,p[0],p[1]+4,10,'#fff','center',800,1,'"JetBrains Mono",monospace');}
-    if(st===1){msg([340,180],[API[0]-80,API[1]],'CreateVpc 10.0.0.0/16',C.blue,2.6);
-      c.save();c.fillStyle='rgba(8,24,42,.9)';NetScene.rr(c,40,300,480,140,10);c.fill();c.strokeStyle='rgba(159,182,201,.4)';c.stroke();c.restore();
-      ['POST https://ec2.us-east-1.amazonaws.com/','Action=CreateVpc','CidrBlock=10.0.0.0/16','Authorization: AWS4-HMAC-SHA256 Credential=AKIA…/ec2 …  🔐'].forEach(function(l,i){V.tx(c,l,58,332+i*26,12,i===3?'#ffb98a':'#e6edf3','left',600,Math.min(1,Math.max(0,(t-.3-i*.3)/.4)),'"JetBrains Mono",monospace');});}
-    if(st===2){msg([API[0]+80,API[1]],[ACC[0]-60,API[1]],'crear',C.ora,2.2);
-      c.save();c.fillStyle='rgba(8,24,42,.9)';NetScene.rr(c,40,300,480,140,10);c.fill();c.strokeStyle='rgba(52,195,143,.5)';c.stroke();c.restore();
-      ['HTTP/1.1 200 OK','<CreateVpcResponse>','  <vpcId>vpc-0a1b2c3d4e5f</vpcId>','  <state>available</state>'].forEach(function(l,i){V.tx(c,l,58,332+i*26,12,i===0?'#9ff0c8':'#e6edf3','left',600,Math.min(1,Math.max(0,(t-.3-i*.3)/.4)),'"JetBrains Mono",monospace');});}
-    if(st===3){c.save();c.fillStyle='#0b1a2b';NetScene.rr(c,40,290,500,120,10);c.fill();c.strokeStyle='rgba(159,182,201,.4)';c.stroke();c.restore();V.tx(c,'terminal',56,312,11,C.mut,'left',700,1);
-      var cmd='$ aws ec2 create-vpc --cidr-block 10.0.0.0/16',n=Math.floor(cmd.length*Math.min(1,t/1.6));V.tx(c,cmd.slice(0,n),56,346,14,'#e6edf3','left',700,1,'"JetBrains Mono",monospace');
-      if(t>1.8){V.tx(c,'{ "Vpc": { "VpcId": "vpc-0a1b2c3d4e5f", … } }',56,380,12,'#9ff0c8','left',700,1,'"JetBrains Mono",monospace');}
-      if(t>1.4)msg([540,320],[API[0]-80,API[1]+20],'CreateVpc 10.0.0.0/16',C.blue,2.6,1.4);V.tx(c,'mismo mensaje, sin clics',290,440,14,'#ffb98a','center',800,Math.min(1,t/.6));}
-    if(st===4){var src=[['🖱️ Consola','clics',[190,120]],['⌨️ CLI','comandos',[190,330]],['📐 Terraform','un plano',[400,430]]];
-      src.forEach(function(k,i){var a=E.back(Math.max(0,Math.min(1,(t-i*.3)/.5)));if(i===2){c.save();c.globalAlpha*=a;c.fillStyle='#2a1f4a';NetScene.rr(c,k[2][0]-90,k[2][1]-30,180,56,12);c.fill();c.strokeStyle='#8a5cf6';c.lineWidth=2.5;c.stroke();c.restore();V.tx(c,k[0],k[2][0],k[2][1]-4,15,'#fff','center',800,a);V.tx(c,k[1],k[2][0],k[2][1]+16,11,'#c9b6ff','center',700,a);}
-        else if(i===1){c.save();c.globalAlpha*=a;c.fillStyle='#0b1a2b';NetScene.rr(c,40,300,300,60,10);c.fill();c.restore();V.tx(c,k[0]+' · '+k[1],190,336,15,'#fff','center',800,a);}
-        var from=i===0?[340,165]:i===1?[340,330]:[490,430];var u=((t*.5)+i/3)%1,p=NetScene.along([from,[API[0]-80,API[1]+(i-1)*30]],u);c.save();c.globalAlpha*=a;c.fillStyle=['#3b82f6','#34c38f','#8a5cf6'][i];c.beginPath();c.arc(p[0],p[1],6,0,7);c.fill();c.restore();});
-      V.tx(c,'misma API · mismo resultado',API[0],API[1]+92,14,'#ffb98a','center',800,1);}
+    if(st===0){var name='pyme-vpc',cidr='10.0.0.0/16',nn=Math.floor(name.length*Math.min(1,Math.max(0,(t-1.4)/.8))),nc=Math.floor(cidr.length*Math.min(1,Math.max(0,(t-2.9)/1)));
+      var press=t>4.9&&t<5.3,ok=t>5.6;AwsUI.createVpc(c,{name:name.slice(0,nn),cidr:cidr.slice(0,nc),focus:t<2.6?'name':(t<4.2?'cidr':''),press:press,ok:ok});
+      var P=[[700,470],[400,300],[400,300],[400,392],[400,392],[905,442],[905,442]],T=[0,1.1,2.5,2.9,4.1,4.8,9],k=0;while(k<T.length-2&&t>T[k+1])k++;var u=Math.min(1,(t-T[k])/(T[k+1]-T[k])),e=E.io(u);
+      AwsUI.cursor(c,P[k][0]+(P[k+1][0]-P[k][0])*e,P[k][1]+(P[k+1][1]-P[k][1])*e,press);return;}
+    /* consola en miniatura a la izquierda */
+    c.save();c.translate(10,110);c.scale(.48,.48);c.translate(-30,-20);AwsUI.createVpc(c,{name:'pyme-vpc',cidr:'10.0.0.0/16',ok:st>=2&&(st>2||t>4.2)});c.restore();
+    V.tx(c,'tu navegador (la consola)',236,94,13,'#9fd8f0','center',800,1);
+    if(st===1){var a=E.out(Math.min(1,t/.6)),u=Math.min(1,Math.max(0,(t-.3)/1.4)),bx=10+(910-30)*.48,by=110+(442-20)*.48;
+      var ex=bx+(560-bx)*E.io(u),ey=by+(150-by)*E.io(u);
+      AwsUI.envelope(c,u<1?ex-60:540,u<1?ey-20:150,u<1?120:420,u<1?'📨 pedido':'📨 Pedido a la API de AWS',u<1?[]:[['Destino','ec2.us-east-1.amazonaws.com'],['Acción','CreateVpc'],['CidrBlock','10.0.0.0/16'],['Etiqueta','Name = pyme-vpc'],['Firma','tu identidad 🔐 (SigV4)']],'#0972d3',1);
+      if(u>=1)V.tx(c,'tu clic se convirtió en este mensaje',750,135,13,'#ffb98a','center',800,Math.min(1,(t-1.7)/.4));return;}
+    if(st===2){/* ventanilla AWS */c.save();c.fillStyle='#16324f';NetScene.rr(c,560,90,410,330,14);c.fill();c.strokeStyle='#ff9900';c.lineWidth=2;c.stroke();c.restore();
+      V.tx(c,'☁️ AWS · ventanilla de la API (EC2)',580,118,14,'#ffb98a','left',800,1);V.tx(c,'ec2.us-east-1.amazonaws.com',580,138,11,C.mut,'left',600,1,'"JetBrains Mono",monospace');
+      [['¿Quién eres?','revisa la firma 🔐 → tu-usuario'],['¿Tienes permiso?','IAM: ec2:CreateVpc → permitido'],['Crear la VPC','en us-east-1 → vpc-0a1b2c3d4e5f']].forEach(function(k,i){var d=Math.max(0,Math.min(1,(t-.4-i*.9)/.5));
+        c.save();c.globalAlpha*=.35+.65*d;c.fillStyle=d>=1?'rgba(52,195,143,.18)':'rgba(255,255,255,.05)';NetScene.rr(c,580,160+i*72,370,58,10);c.fill();c.strokeStyle=d>=1?C.grn:'rgba(159,182,201,.35)';c.stroke();c.restore();
+        V.tx(c,(d>=1?'✓ ':(i+1)+' · ')+k[0],600,184+i*72,14,'#fff','left',800,.35+.65*d);V.tx(c,k[1],600,204+i*72,11,d>=1?'#9ff0c8':C.mut,'left',600,.35+.65*d,'"JetBrains Mono",monospace');});
+      var r=Math.max(0,Math.min(1,(t-3.2)/1));if(r>0){var p=NetScene.along([[580,380],[240,230]],E.io(r));if(r<1)AwsUI.envelope(c,p[0]-60,p[1]-16,120,'✓ 200 OK',[],'#037f0c',1);}
+      if(t>4.2)V.tx(c,'respuesta: vpcId = vpc-0a1b2c3d4e5f',236,370,13,'#9ff0c8','center',800,Math.min(1,(t-4.2)/.4));return;}
+    /* st 3: CloudTrail */
+    c.save();c.globalAlpha*=E.out(Math.min(1,t/.6));c.translate(500,240);c.scale(.98,.98);c.translate(-500,-240);
+    AwsUI.trail(c,[['CreateVpc','25 sep 2026, 19:42','tu-usuario','ec2.amazonaws.com','consola de AWS']],t>1?0:-1);c.restore();
+    if(t>1.2)V.tx(c,'↑ aquí quedó registrado tu clic',500,320,15,'#E97132','center',800,Math.min(1,(t-1.2)/.4));
+  });
+  </script>
+</section>
+
+<!-- 3b · LA CLI: EL MISMO PEDIDO, ESCRITO -->
+<section class="slide" id="scB">
+  <span class="k"><span class="act-chip">⌨️ CLI</span> Sin clics: el pedido escrito · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">La <span class="grad">CLI de AWS</span>: el mismo pedido, escrito como comando</h2>
+  <div class="scene"><canvas aria-label="Animación realista: en CloudShell se escribe aws ec2 create-vpc; el pedido es idéntico al de la consola; CloudTrail registra una segunda fila; analogía del restaurante"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scB',1000,480,[
+    'Ahora sin clics: en <b>CloudShell</b> (la terminal dentro de la consola) escribes <b>un comando</b>. La CLI de AWS arma el pedido, lo firma con tu identidad y lo envía. La respuesta llega en texto (JSON).',
+    'Compara los dos pedidos: el de la consola y el de la CLI son <b>idénticos</b>. Misma ventanilla, misma acción, mismos datos. Solo cambió <b>quién lo escribió</b>: antes la consola por ti, ahora tú.',
+    'Y CloudTrail lo confirma: aparece <b>otra fila CreateVpc</b>, igual a la primera. La única diferencia es el <b>agente</b>: ahora dice <b>aws-cli</b>.',
+    'Piénsalo como un <b>restaurante</b>: AWS es la <b>cocina</b> y la API es el <b>mesero</b>. La <b>consola</b> es pedir señalando las fotos del menú; la <b>CLI</b> es dictar el pedido exacto; <b>Terraform</b> es entregar la lista completa de lo que quieres en la mesa… y el mesero se encarga de que quede así.'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    if(st===0){var cmd='$ aws ec2 create-vpc --cidr-block 10.0.0.0/16 \\',cmd2='    --tag-specifications "ResourceType=vpc,Tags=[{Key=Name,Value=pyme-vpc}]"';
+      var n1=Math.floor(cmd.length*Math.min(1,t/1.6)),n2=Math.floor(cmd2.length*Math.min(1,Math.max(0,(t-1.7)/1.8)));var L=[[cmd.slice(0,n1),'#e6edf3',600]];if(t>1.7)L.push([cmd2.slice(0,n2),'#e6edf3',600]);
+      if(t>3.9){[['{','#9fb3c8'],['    "Vpc": {','#9fb3c8'],['        "CidrBlock": "10.0.0.0/16",','#9ff0c8'],['        "VpcId": "vpc-0f9e8d7c6b5a",','#FFC928'],['        "State": "pending", …','#9fb3c8'],['}','#9fb3c8']].forEach(function(k,i){if(t>4+i*.15)L.push(k);});}
+      AwsUI.cloudshell(c,L,t<3.9);return;}
+    if(st===1){var rows=[['Destino','ec2.us-east-1.amazonaws.com'],['Acción','CreateVpc'],['CidrBlock','10.0.0.0/16'],['Etiqueta','Name = pyme-vpc'],['Firma','tu identidad 🔐 (SigV4)']];
+      var a=E.out(Math.min(1,t/.5)),b=E.out(Math.max(0,Math.min(1,(t-.5)/.5)));AwsUI.envelope(c,40,90,420,'📨 Pedido desde la CONSOLA',rows,'#0972d3',a);AwsUI.envelope(c,540,90,420,'📨 Pedido desde la CLI',rows,'#037f0c',b);
+      if(t>1.3){V.tx(c,'=',500,190,40,'#fff','center',800,Math.min(1,(t-1.3)/.4));V.tx(c,'idénticos: misma ventanilla, misma acción, mismos datos',500,330,16,'#ffb98a','center',800,Math.min(1,(t-1.5)/.4));}
+      V.tx(c,'solo cambió quién lo escribió: la consola por ti, o tú',500,362,14,'#9fd8f0','center',700,Math.max(0,Math.min(1,(t-1.9)/.4)));return;}
+    if(st===2){AwsUI.trail(c,[['CreateVpc','25 sep 2026, 19:42','tu-usuario','ec2.amazonaws.com','consola de AWS'],['CreateVpc','2 oct 2026, 18:55','tu-usuario','ec2.amazonaws.com','aws-cli/2.x']],t>.8?1:-1);
+      if(t>1)V.tx(c,'↑ la misma acción · ahora con agente aws-cli',500,354,15,'#E97132','center',800,Math.min(1,(t-1)/.4));return;}
+    /* restaurante */
+    var a3=E.out(Math.min(1,t/.6));
+    /* cocina: mesón con los "platos" que AWS prepara */
+    c.save();c.globalAlpha*=a3;c.fillStyle='#3a2518';NetScene.rr(c,690,96,280,300,16);c.fill();c.strokeStyle=C.ora;c.lineWidth=2.5;c.stroke();
+    c.fillStyle='#232f3e';NetScene.rr(c,690,96,280,40,16);c.fill();c.fillRect(690,120,280,16);c.restore();
+    V.tx(c,'LA COCINA = AWS',830,122,16,'#fff','center',800,a3);V.tx(c,'aquí se crea todo de verdad',830,156,11,'#ffd0b0','center',600,a3);
+    c.save();c.globalAlpha*=a3;c.fillStyle='#5a3a24';NetScene.rr(c,708,340,244,14,4);c.fill();c.restore();
+    var D=[['VPC','#8c4fff'],['Subred','#7aa116'],['IGW','#8c4fff'],['SG','#dd344c'],['EC2','#ed7100'],['S3','#3f8624']];
+    D.forEach(function(d,k){var x=730+(k%3)*80,y=184+Math.floor(k/3)*76,cook=Math.max(0,Math.min(1,(t-1.2-k*.25)/.4)),bob=Math.sin(t*3+k)*2*cook;
+      c.save();c.globalAlpha*=a3*(.25+.75*cook);c.fillStyle=d[1];NetScene.rr(c,x,y+bob,52,48,8);c.fill();c.restore();V.tx(c,d[0],x+26,y+30+bob,12,'#fff','center',800,a3*(.25+.75*cook));
+      if(cook>0&&cook<1){c.save();c.globalAlpha*=a3*(1-cook);c.strokeStyle='#ffd0b0';c.lineWidth=2;for(var q=0;q<3;q++){c.beginPath();c.moveTo(x+12+q*14,y-4);c.quadraticCurveTo(x+18+q*14,y-14,x+12+q*14,y-22);c.stroke();}c.restore();}});
+    /* mesero con bandeja y libreta */
+    NetScene.person(c,540,236,30,'#cfe3f1',a3);c.save();c.globalAlpha*=a3;c.fillStyle='#e6edf3';c.beginPath();c.ellipse(578,226,26,5,0,0,7);c.fill();c.fillStyle='#fff';NetScene.rr(c,500,250,22,28,3);c.fill();c.restore();
+    V.tx(c,'EL MESERO = la API',540,312,15,'#fff','center',800,a3);V.tx(c,'toma el pedido, revisa quién eres',540,334,11,'#9fd8f0','center',600,a3);V.tx(c,'y lo lleva a la cocina',540,350,11,'#9fd8f0','center',600,a3);
+    /* comanda viajando a la cocina */
+    var cu=((t-.9)*.5)%1;if(t>.9){var cp=NetScene.along([[582,236],[690,236]],cu);c.save();c.globalAlpha*=a3*(cu<.9?1:(1-cu)*10);c.fillStyle='#fff8e6';NetScene.rr(c,cp[0]-26,cp[1]-12,52,24,3);c.fill();c.restore();V.tx(c,'CreateVpc',cp[0],cp[1]+4,8.5,'#3a2518','center',800,a3*(cu<.9?1:(1-cu)*10),'"JetBrains Mono",monospace');}
+    var W=[['Consola','señalas las fotos del menú','#3b82f6','1 clic = 1 pedido'],['CLI','le dictas el pedido exacto','#34c38f','1 comando = 1 pedido'],['Terraform','le entregas la lista completa','#8a5cf6','la lista = todos los pedidos']];
+    W.forEach(function(k,i){var b=E.back(Math.max(0,Math.min(1,(t-.5-i*.4)/.5))),y=104+i*104;c.save();c.globalAlpha*=b;c.fillStyle='#0f2740';NetScene.rr(c,30,y,300,88,12);c.fill();c.strokeStyle=k[2];c.lineWidth=2.5;c.stroke();c.fillStyle=k[2];NetScene.rr(c,30,y,10,88,4);c.fill();c.restore();
+      V.tx(c,k[0],56,y+30,17,'#fff','left',800,b);V.tx(c,k[1],56,y+54,13,'#cfe3f1','left',600,b);V.tx(c,k[3],56,y+74,11,k[2],'left',800,b,'"JetBrains Mono",monospace');
+      c.save();c.globalAlpha*=b*.5;c.strokeStyle=k[2];c.setLineDash([4,5]);c.lineWidth=1.5;c.beginPath();c.moveTo(330,y+44);c.lineTo(500,250);c.stroke();c.restore();
+      var u=((t*.45)+i/3)%1,p=NetScene.along([[330,y+44],[500,250]],u);c.save();c.globalAlpha*=b;c.fillStyle=k[2];c.beginPath();c.arc(p[0],p[1],6,0,7);c.fill();c.restore();});
+    V.tx(c,'mismo mesero · misma cocina · lo que cambia es cómo pides',500,440,14,'#ffb98a','center',800,Math.max(0,Math.min(1,(t-1.8)/.5)));
   });
   </script>
 </section>
@@ -547,38 +637,46 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
 
 <!-- 7 · EL DIBUJO DE HOY -->
 <section class="slide" id="scM">
-  <span class="k"><span class="act-chip">🗺️ EL DIBUJO</span> Lo que vamos a construir hoy · clic o → para avanzar</span>
-  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">De un archivo a <span class="grad">tu red y tu servidor</span></h2>
-  <div class="scene"><canvas aria-label="Animación: desde CloudShell, Terraform lee main.tf y crea en AWS la VPC, las 4 subredes, el Internet Gateway, la ruta, el Security Group y la EC2 con NGINX"></canvas></div>
+  <span class="k"><span class="act-chip">🗺️ EL DIBUJO</span> Cada bloque de código = una pieza de la red · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">Lo que vamos a construir: <span class="grad">del código al diagrama</span></h2>
+  <div class="scene"><canvas aria-label="Diagrama de arquitectura estilo AWS: a la izquierda el código main.tf con el bloque resaltado; a la derecha aparecen la VPC, las subredes, el Internet Gateway, la ruta, el Security Group y la EC2"></canvas></div>
   <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
   <script>
   NetScene.make('scM',1000,480,[
-    'Trabajaremos en <b>AWS CloudShell</b>: una terminal dentro de la consola, que ya tiene <b>tus credenciales</b>. Ahí corre Terraform con nuestro archivo <b>main.tf</b>.',
-    'Terraform crea primero la <b>VPC pyme-vpc-tf</b> (10.0.0.0/16) y después las <b>4 subredes</b>: ventas, admin, web y bd. El mismo diseño de la clase de redes.',
-    'Luego la <b>puerta</b>: el <b>Internet Gateway</b> y la <b>ruta 0.0.0.0/0</b>, solo para la subred <b>web</b> (la pública).',
-    'Por último el <b>Security Group</b> (80 para todos, 22 solo tu IP) y la <b>EC2</b>, que al nacer <b>instala NGINX sola</b> (user_data).',
-    'Terraform te devuelve la <b>URL</b>: la abres y dice <b>“Hola desde Terraform 🚀”</b>. 10 recursos, un comando, ~2 minutos.'
+    'A la izquierda, el <b>plano</b> (main.tf). A la derecha, el <b>diagrama</b> como lo dibujan los arquitectos de AWS: la <b>nube de AWS</b> y adentro la <b>región us-east-1</b>. Vamos bloque por bloque.',
+    'El bloque <b>aws_vpc</b> crea tu <b>urbanización</b>: la VPC <b>pyme-vpc-tf</b> con 10.0.0.0/16. Adentro, una <b>zona de disponibilidad</b> (us-east-1a, un data center).',
+    'El bloque <b>aws_subnet</b> (con for_each) crea <b>las 4 calles</b> de una sola vez: ventas, admin y bd <b>privadas</b> (azul) y web <b>pública</b> (verde).',
+    '<b>aws_internet_gateway</b> pone la <b>puerta a internet</b> y <b>aws_route_table</b> dibuja el camino <b>0.0.0.0/0 → puerta</b>, solo desde la calle web. Por eso web es pública.',
+    '<b>aws_security_group</b> es el <b>portero</b> (80 para todos, 22 solo tu IP) y <b>aws_instance</b> es <b>tu casa</b>: la EC2 que al nacer instala NGINX.',
+    'Al terminar, el bloque <b>output</b> te da la URL. Un visitante entra por internet → la puerta → la calle web → el portero → tu EC2. <b>Ese es el recorrido de cada visita.</b>'
   ],function(c,s){
     var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
-    /* CloudShell */c.save();c.fillStyle='#0b1a2b';NetScene.rr(c,30,80,220,150,10);c.fill();c.strokeStyle='rgba(159,182,201,.4)';c.stroke();c.restore();V.tx(c,'>_ CloudShell',46,104,13,'#9fd8f0','left',800,1);
-    V.tx(c,'$ terraform apply',46,138,13,'#e6edf3','left',700,1,'"JetBrains Mono",monospace');c.save();c.fillStyle='#f4f8fb';NetScene.rr(c,60,156,90,56,6);c.fill();c.restore();V.tx(c,'📄 main.tf',105,190,12,'#0E2841','center',800,1);
-    var pulse=(t%1.4)/1.4;if(st>=1&&st<=3){var p=NetScene.along([[250,150],[330,150]],pulse);c.save();V.glow(c,'#8a5cf6',10);c.fillStyle='#8a5cf6';c.beginPath();c.arc(p[0],p[1],6,0,7);c.fill();c.restore();}
-    /* AWS */c.save();c.strokeStyle='rgba(233,113,50,.6)';c.setLineDash([6,6]);NetScene.rr(c,330,50,640,410,14);c.stroke();c.restore();V.tx(c,'AWS · us-east-1',346,72,13,'#ffb98a','left',800,1);
-    function lit(k,d){return st>k?1:(st<k?0:E.out(Math.max(0,Math.min(1,(t-(d||0))/.5))));}
-    var a1=lit(1);if(a1>0){c.save();c.globalAlpha*=a1;c.strokeStyle=C.blue;c.lineWidth=2.5;V.glow(c,C.blue,10);NetScene.rr(c,360,90,440,350,12);c.stroke();c.restore();V.tx(c,'pyme-vpc-tf · 10.0.0.0/16',376,114,13,'#9fd8f0','left',800,a1);V.tx(c,'aws_vpc.pyme',780,114,10,'#c9b6ff','right',700,a1,'"JetBrains Mono",monospace');}
-    var SUB=[['ventas','10.0.1.0/26'],['admin','10.0.1.64/27'],['web','10.0.1.96/28'],['bd','10.0.1.112/28']];
-    SUB.forEach(function(sb,i){var a=lit(1,.6+i*.3);if(!(a>0))return;var y=134+i*74,pub=sb[0]==='web'&&st>=2;c.save();c.globalAlpha*=a;c.fillStyle=pub?'rgba(52,195,143,.15)':'rgba(255,255,255,.05)';NetScene.rr(c,380,y,300,62,8);c.fill();c.strokeStyle=pub?C.grn:'rgba(159,182,201,.4)';c.stroke();c.restore();
-      V.tx(c,sb[0]+' · '+sb[1],394,y+24,13,'#fff','left',800,a);V.tx(c,pub?'pública':'privada',666,y+24,11,pub?'#9ff0c8':C.mut,'right',700,a);});
-    if(st>=1)V.tx(c,'aws_subnet.area[×4]',690,140,10,'#c9b6ff','left',700,lit(1,1.8),'"JetBrains Mono",monospace');
-    var a2=lit(2);if(a2>0){c.save();c.globalAlpha*=a2;V.glow(c,C.ora,12);c.fillStyle='#3a2518';NetScene.rr(c,830,250,120,56,10);c.fill();c.strokeStyle=C.ora;c.lineWidth=2;c.stroke();c.restore();V.tx(c,'🚪 IGW',890,276,14,'#fff','center',800,a2);V.tx(c,'aws_internet_gateway',890,294,9,'#ffd0b0','center',700,a2,'"JetBrains Mono",monospace');
-      c.save();c.globalAlpha*=a2;c.strokeStyle=C.grn;c.lineWidth=2.5;c.setLineDash([6,6]);c.lineDashOffset=-t*20;c.beginPath();c.moveTo(680,312);c.lineTo(830,280);c.stroke();c.restore();V.tx(c,'0.0.0.0/0 → IGW',758,328,11,'#9ff0c8','center',800,a2,'"JetBrains Mono",monospace');
-      NetScene.cloud(c,890,150,34,'#2b4f74',a2);V.tx(c,'Internet',890,155,12,'#fff','center',800,a2);c.save();c.globalAlpha*=a2;c.strokeStyle='rgba(159,182,201,.5)';c.lineWidth=2;c.beginPath();c.moveTo(890,186);c.lineTo(890,250);c.stroke();c.restore();}
-    var a3=lit(3);if(a3>0){var y=134+2*74;c.save();c.globalAlpha*=a3;c.strokeStyle='#FFC928';c.lineWidth=2;c.setLineDash([3,3]);NetScene.rr(c,500,y+6,124,50,8);c.stroke();c.restore();V.tx(c,'🛡 SG: 80 · 22',562,y+22,10,'#FFC928','center',800,a3);
-      V.vm(c,512,y+26,100,26,'','',C.ora,a3,true);V.tx(c,'EC2 · NGINX',562,y+44,11,'#fff','center',800,a3);}
-    if(st>=4){var a4=E.out(Math.min(1,t/.6));c.save();c.globalAlpha*=a4;c.fillStyle='#f4f8fb';NetScene.rr(c,30,270,260,170,10);c.fill();c.fillStyle='#d9e1ea';NetScene.rr(c,30,270,260,24,4);c.fill();c.restore();
-      V.tx(c,'http://54.x.x.x',160,287,11,'#44546A','center',700,a4,'"JetBrains Mono",monospace');V.tx(c,'Hola desde Terraform 🚀',160,346,16,'#0E2841','center',800,a4);V.tx(c,'esta red nació de un archivo',160,372,11,'#44546A','center',600,a4);
-      var u=Math.min(1,(t%2.4)/1.4),p4=NetScene.along([[890,186],[290,330]],u);if(u<1){c.save();V.glow(c,C.grn,10);c.fillStyle=C.grn;c.beginPath();c.arc(p4[0],p4[1],6,0,7);c.fill();c.restore();}
-      V.tx(c,'10 recursos · 1 comando · ~2 min',160,250,13,'#9ff0c8','center',800,a4);}
+    function A(k,d){return st>k?1:(st<k?0:E.out(Math.max(0,Math.min(1,(t-(d||0))/.55))));}
+    /* --- código --- */
+    var CODE=[['provider "aws" { region = "us-east-1" }',0],['',0],['resource "aws_vpc" "pyme" {',1],['  cidr_block = "10.0.0.0/16"',1],['}',1],['resource "aws_subnet" "area" {',2],['  for_each = { ventas, admin,',2],['              web, bd }',2],['}',2],['resource "aws_internet_gateway" …',3],['resource "aws_route_table" …',3],['  0.0.0.0/0 → igw',3],['resource "aws_security_group" …',4],['resource "aws_instance" "web" {',4],['  user_data = instala NGINX',4],['}',4],['output "tu_web" { … }',5]];
+    c.save();c.fillStyle='#0b1a2b';NetScene.rr(c,14,40,350,420,12);c.fill();c.restore();V.tx(c,'📄 main.tf',30,64,13,'#9fd8f0','left',800,1);
+    CODE.forEach(function(l,i){var y=92+i*21,cur=l[1]===st&&st>0,done=l[1]<st;if(cur){c.save();c.fillStyle='rgba(233,113,50,.22)';c.fillRect(18,y-14,342,20);c.fillStyle=C.ora;c.fillRect(18,y-14,3,20);c.restore();}
+      V.tx(c,l[0],30,y,11,cur?'#fff':(done?'#9fd8f0':'#5f7890'),'left',cur?800:600,1,'"JetBrains Mono",monospace');});
+    /* --- diagrama estilo AWS --- */
+    var X0=384,Y0=40;c.save();c.strokeStyle='#d5dbdb';c.lineWidth=1.5;NetScene.rr(c,X0,Y0,600,420,4);c.stroke();c.fillStyle='#232f3e';c.fillRect(X0,Y0,30,24);c.restore();V.tx(c,'aws',X0+15,Y0+16,10,'#fff','center',800,1,'Arial,sans-serif');V.tx(c,'AWS Cloud',X0+38,Y0+16,11,'#d5dbdb','left',700,1);
+    c.save();c.strokeStyle='#00a4a6';c.setLineDash([6,4]);NetScene.rr(c,X0+14,Y0+34,572,374,4);c.stroke();c.restore();V.tx(c,'Región us-east-1 (Norte de Virginia)',X0+26,Y0+52,11,'#5fd4d6','left',700,1);
+    /* internet */V.tx(c,'🌐',934,108,22,'#fff','center',400,1);V.tx(c,'Internet',934,128,10,C.mut,'center',700,1);
+    var a1=A(1);if(a1>0){c.save();c.globalAlpha*=a1;c.strokeStyle='#8c4fff';c.lineWidth=2;NetScene.rr(c,X0+28,Y0+66,500,300,4);c.stroke();c.fillStyle='#8c4fff';c.fillRect(X0+28,Y0+66,26,22);c.restore();V.tx(c,'🔒',X0+41,Y0+82,11,'#fff','center',400,a1);V.tx(c,'VPC pyme-vpc-tf · 10.0.0.0/16',X0+62,Y0+82,11,'#c9b6ff','left',800,a1);
+      c.save();c.globalAlpha*=a1;c.strokeStyle='#147eba';c.setLineDash([5,4]);NetScene.rr(c,X0+44,Y0+98,468,256,4);c.stroke();c.restore();V.tx(c,'Zona de disponibilidad us-east-1a',X0+56,Y0+114,10,'#6cb6e6','left',700,a1);}
+    var SUB=[['web','10.0.1.96/28',1,X0+60,Y0+126],['ventas','10.0.1.0/26',0,X0+290,Y0+126],['admin','10.0.1.64/27',0,X0+290,Y0+204],['bd','10.0.1.112/28',0,X0+290,Y0+282]];
+    SUB.forEach(function(sb,i){var a=A(2,i*.25);if(!(a>0))return;var pub=sb[2],w=pub?212:206,h=pub?226:70,col=pub?'#7aa116':'#147eba';
+      c.save();c.globalAlpha*=a;c.fillStyle=pub?'rgba(122,161,22,.12)':'rgba(20,126,186,.12)';NetScene.rr(c,sb[3],sb[4],w,h,4);c.fill();c.strokeStyle=col;c.lineWidth=1.5;c.stroke();c.fillStyle=col;c.fillRect(sb[3],sb[4],22,20);c.restore();
+      V.tx(c,pub?'🔓':'🔒',sb[3]+11,sb[4]+14,10,'#fff','center',400,a);V.tx(c,(pub?'Subred pública · ':'Subred privada · ')+sb[0],sb[3]+28,sb[4]+14,10,pub?'#c1e07a':'#8cc8ee','left',800,a);V.tx(c,sb[1],sb[3]+28,sb[4]+30,10,C.mut,'left',600,a,'"JetBrains Mono",monospace');});
+    var a3=A(3);if(a3>0){var gx=X0+281,gy=Y0+66;c.save();c.globalAlpha*=a3;c.fillStyle='#8c4fff';c.beginPath();c.arc(gx,gy,15,0,7);c.fill();c.restore();V.tx(c,'⇅',gx,gy+5,14,'#fff','center',800,a3);V.tx(c,'Internet Gateway',gx+20,gy-10,10,'#c9b6ff','left',800,a3);
+      c.save();c.globalAlpha*=a3;c.strokeStyle='#c9b6ff';c.lineWidth=2;c.beginPath();c.moveTo(gx+15,gy);c.lineTo(916,104);c.stroke();c.restore();
+      c.save();c.globalAlpha*=a3;c.fillStyle='#16324f';NetScene.rr(c,X0+72,Y0+168,188,40,6);c.fill();c.strokeStyle='#8c4fff';c.stroke();c.restore();V.tx(c,'Tabla de rutas · rt-publica-tf',X0+82,Y0+184,9.5,'#c9b6ff','left',800,a3);V.tx(c,'0.0.0.0/0 → Internet Gateway',X0+82,Y0+200,9.5,'#fff','left',700,a3,'"JetBrains Mono",monospace');
+      c.save();c.globalAlpha*=a3;c.strokeStyle='#8c4fff';c.setLineDash([4,4]);c.beginPath();c.moveTo(X0+250,Y0+168);c.lineTo(gx,gy+15);c.stroke();c.restore();}
+    var a4=A(4);if(a4>0){var ex=X0+96,ey=Y0+226;c.save();c.globalAlpha*=a4;c.strokeStyle='#dd344c';c.setLineDash([5,4]);c.lineWidth=1.8;NetScene.rr(c,ex,ey,140,116,6);c.stroke();c.restore();V.tx(c,'Security Group · web-sg-tf',ex+6,ey+16,9.5,'#ff8a9a','left',800,a4);V.tx(c,'80: todos · 22: tu IP',ex+6,ey+30,9.5,'#ffd0d6','left',600,a4,'"JetBrains Mono",monospace');
+      c.save();c.globalAlpha*=a4;V.glow(c,'#ed7100',12);c.fillStyle='#ed7100';NetScene.rr(c,ex+44,ey+40,52,52,6);c.fill();c.restore();c.save();c.globalAlpha*=a4;c.strokeStyle='#fff';c.lineWidth=2;NetScene.rr(c,ex+56,ey+52,28,28,3);c.stroke();for(var q=0;q<4;q++){c.beginPath();c.moveTo(ex+60+q*7,ey+48);c.lineTo(ex+60+q*7,ey+52);c.moveTo(ex+60+q*7,ey+80);c.lineTo(ex+60+q*7,ey+84);c.stroke();}c.restore();
+      V.tx(c,'EC2 web-tf · NGINX',ex+70,ey+108,10,'#ffb98a','center',800,a4);}
+    if(st>=5){var a5=E.out(Math.min(1,t/.5)),path=[[916,104],[gx+15,gy],[gx,gy+15],[X0+250,Y0+168],[X0+166,Y0+250],[X0+166,Y0+292]],u=(t%2.6)/2,p=NetScene.along(path,Math.min(1,u));
+      if(u<=1){c.save();V.glow(c,C.grn,12);c.fillStyle=C.grn;c.beginPath();c.arc(p[0],p[1],7,0,7);c.fill();c.restore();}
+            V.pill(c,X0+140,Y0+388,'tu_web = "http://54.x.x.x" → Hola desde Terraform 🚀','rgba(52,195,143,.3)','#fff',a5);}
   });
   </script>
 </section>
@@ -620,6 +718,7 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
       <li><span>En la consola de AWS, ícono <b>&gt;_</b> (arriba a la derecha)</span><span>abre <b>CloudShell</b>: una terminal con tus credenciales</span></li>
       <li><code>aws sts get-caller-identity</code><span>"¿quién soy?" para la API</span></li>
       <li><code>aws ec2 describe-vpcs …</code><span>tus VPC: ¡ahí está la que hiciste a clics!</span></li>
+      <li><code>aws cloudtrail lookup-events …</code><span>busca <b>tu clic</b>: el CreateVpc de la clase pasada</span></li>
       <li><code>aws ec2 describe-key-pairs …</code><span><b>anota</b> el nombre de tu key pair</span></li>
     </ul>
   </div>
@@ -628,6 +727,7 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   typeTerm(document.getElementById('lab1'),document.getElementById('lab1t'),[
     ['cmd','$ aws sts get-caller-identity'],['hl','"Arn": "arn:aws:iam::<b>123456789012</b>:user/<b>tu-usuario</b>"'],['note','  ↑ la CLI ya sabe quién eres (CloudShell usa tu sesión)'],
     ['cmd','$ aws ec2 describe-vpcs --query "Vpcs[].[VpcId,CidrBlock]" --output table'],['hl','|  vpc-0a1b2c3d  |  <b>10.0.0.0/16</b>   |   ← la pyme-vpc que hiciste a clics'],['out','|  vpc-9f8e7d6c  |  172.31.0.0/16 |   ← la VPC por defecto'],
+    ['cmd','$ aws cloudtrail lookup-events --lookup-attributes AttributeKey=EventName,AttributeValue=CreateVpc --query "Events[].[EventTime,Username]" --output table'],['hl','|  2026-09-25T19:42:10  |  <b>tu-usuario</b>  |   ← ¡tu clic quedó anotado!'],
     ['cmd','$ aws ec2 describe-key-pairs --query "KeyPairs[].KeyName" --output text'],['hl','<b>mi-llave</b>'],['note','  ↑ anota este nombre: lo usará Terraform']]);
   </script>
 </section>
