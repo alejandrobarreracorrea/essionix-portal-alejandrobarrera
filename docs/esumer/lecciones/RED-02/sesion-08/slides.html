@@ -849,6 +849,50 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   </script>
 </section>
 
+<!-- 5b · TERRAFORM EN EL CENTRO, PROVIDERS ALREDEDOR -->
+<section class="slide" id="scP">
+  <span class="k"><span class="act-chip">🔌 PROVIDERS</span> Un solo Terraform, muchos traductores · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">Terraform en el centro, <span class="grad">un provider por cada nube</span></h2>
+  <div class="scene"><canvas aria-label="Terraform en el centro; alrededor los providers (aws, azurerm, google, oci, kubernetes, github) y por fuera cada nube o servicio; los pedidos viajan del centro al provider y del provider a la nube"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scP',1000,480,[
+    'En el centro está <b>Terraform</b>: lee tu plano (HCL), arma el mapa y guarda el state. Pero <b>no sabe hablar con ninguna nube</b>. Solo habla <b>su idioma</b>.',
+    'Para hablar con AWS se conecta el <b>provider aws</b>: el <b>traductor</b>. Tu <b>resource "aws_vpc"</b> entra en HCL, el provider lo convierte en <b>CreateVpc</b> y se lo pide a la <b>API de AWS</b>. Es el que usamos hoy.',
+    '¿Otra nube? <b>Mismo Terraform, mismo idioma, otro traductor</b>: <b>azurerm</b> habla con Azure, <b>google</b> con Google Cloud, <b>oci</b> con Oracle… y hasta servicios como <b>Kubernetes</b> o <b>GitHub</b>. En el Registry hay <b>miles</b> de providers.',
+    'Por eso el <b>nombre del recurso</b> dice a qué traductor va: una red es <b>aws_vpc</b> en AWS, <b>azurerm_virtual_network</b> en Azure, <b>google_compute_network</b> en Google, <b>oci_core_vcn</b> en Oracle. Aprendes Terraform <b>una vez</b> y lo usas en <b>cualquier nube</b>: por eso es el estándar.'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t,M='"JetBrains Mono",monospace',CX=500,CY=244;V.bg(c,1000,480);
+    function f(d,u){return Math.max(0,Math.min(1,(t-d)/(u||.5)));}
+    var S=[['aws','AWS','#ff9900','aws_vpc','CreateVpc',-90],['azurerm','Azure','#2f8fe0','azurerm_virtual_network','',-30],['google','Google Cloud','#34a853','google_compute_network','',30],['oci','Oracle Cloud','#e2574c','oci_core_vcn','',90],['kubernetes','Kubernetes','#5b8def','kubernetes_deployment','',150],['github','GitHub','#c9d1d9','github_repository','',210]];
+    function pt(ang,rx,ry){var r=ang*Math.PI/180;return [CX+Math.cos(r)*rx,CY+Math.sin(r)*ry];}
+    S.forEach(function(k,i){var a=i===0?(st>=1?f(st===1?.2:-1,.5):0):(st>=2?(st===2?f(.2+i*.35,.5):1):0);if(!(a>0))return;var on=st===1?i===0:true;
+      var P=pt(k[5],215,128),Q=pt(k[5],390,196);
+      /* rayos */
+      c.save();c.globalAlpha*=a*(on?.9:.5);c.strokeStyle='rgba(159,182,201,.5)';c.lineWidth=2;c.setLineDash([5,6]);c.lineDashOffset=-t*25;c.beginPath();c.moveTo(CX,CY);c.lineTo(P[0],P[1]);c.stroke();c.strokeStyle=k[2];c.beginPath();c.moveTo(P[0],P[1]);c.lineTo(Q[0],Q[1]);c.stroke();c.restore();
+      /* paquete: morado (HCL) hasta el provider, color de la nube (API) después */
+      var u=((t*.42)+i*.17)%1,p=u<.5?[CX+(P[0]-CX)*u*2,CY+(P[1]-CY)*u*2]:[P[0]+(Q[0]-P[0])*(u-.5)*2,P[1]+(Q[1]-P[1])*(u-.5)*2];
+      c.save();c.globalAlpha*=a;V.glow(c,u<.5?'#a67af4':k[2],10);c.fillStyle=u<.5?'#a67af4':k[2];c.beginPath();c.arc(p[0],p[1],5,0,7);c.fill();c.restore();
+      /* nube */
+      NetScene.cloud(c,Q[0],Q[1],34,k[2],a*.9);V.tx(c,k[1],Q[0],Q[1]+5,k[1].length>10?11:13,i===5?'#0e2841':'#fff','center',800,a);
+      /* provider */
+      c.save();c.globalAlpha*=a;c.fillStyle='#3a2a12';NetScene.rr(c,P[0]-58,P[1]-17,116,34,10);c.fill();c.strokeStyle='#ff9900';c.lineWidth=2;c.stroke();c.restore();V.tx(c,'🔌 '+k[0],P[0],P[1]+5,12,'#fff','center',800,a,M);
+      /* paso 3: el recurso de red en cada nube */
+      if(st>=3&&i<4){var b=f(.3+i*.4,.5),L=[P[0],P[1]+(i===3?-30:30)];var w=k[3].length*6.4+16;c.save();c.globalAlpha*=b;c.fillStyle='rgba(8,24,42,.95)';NetScene.rr(c,L[0]-w/2,L[1]-11,w,22,6);c.fill();c.strokeStyle=k[2];c.lineWidth=1.5;c.stroke();c.restore();V.tx(c,k[3],L[0],L[1]+4,10.5,'#fff','center',700,b,M);}});
+    /* paso 1: el viaje explicado sobre el rayo de AWS */
+    if(st===1){var P=pt(-90,215,128);V.pill(c,CX+14,P[1]+36,'resource "aws_vpc"  (HCL)','rgba(166,122,244,.35)','#fff',f(1));V.pill(c,P[0]+66,P[1]-30,'→ CreateVpc  (API)','rgba(255,153,0,.35)','#fff',f(1.6));
+      V.tx(c,'el que usamos hoy',P[0]-70,P[1]+5,11,'#ffb98a','right',800,f(2));}
+    /* centro: Terraform */
+    var g=st===0?E.back(f(.1,.6)):1;c.save();c.translate(CX,CY);c.scale(g,g);V.glow(c,'#7b42bc',24+6*Math.sin(t*2.4));c.fillStyle='#2a1b4a';NetScene.rr(c,-96,-50,192,100,18);c.fill();c.shadowBlur=0;c.strokeStyle='#a67af4';c.lineWidth=3;c.stroke();
+      c.fillStyle='#a67af4';[[-82,-30,0],[-60,-17,0],[-60,9,0],[-38,-4,0]].forEach(function(q){c.beginPath();c.moveTo(q[0],q[1]);c.lineTo(q[0]+18,q[1]+10);c.lineTo(q[0]+18,q[1]+32);c.lineTo(q[0],q[1]+22);c.closePath();c.fill();});c.restore();
+    V.tx(c,'Terraform',CX+32,CY-6,17,'#fff','center',800,g);V.tx(c,'habla HCL',CX+32,CY+14,11,'#c9b6ff','center',700,g);V.tx(c,'mapa · plan · state',CX+32,CY+30,9.5,'#cfe3f1','center',600,g);
+    if(st===0){V.tx(c,'📄 main.tf →',CX-112,CY+5,14,'#9fd8f0','right',800,f(.8));V.tx(c,'¿AWS? ¿Azure? … ni idea 🤷',CX,CY+90,14,'#ffb98a','center',800,f(1.4));}
+    if(st>=2)V.tx(c,'anillo de adentro: los traductores (providers) · afuera: las nubes y servicios',CX,470,11.5,'#9fb3c8','center',700,f(st===2?2.6:0));
+  });
+  </script>
+</section>
+
+
 <!-- 6 · ¿POR QUÉ ES EL ESTÁNDAR? -->
 <section class="slide" id="scE">
   <span class="k"><span class="act-chip">🏆 ESTÁNDAR</span> Por qué lo usa la industria · clic o → para avanzar</span>
