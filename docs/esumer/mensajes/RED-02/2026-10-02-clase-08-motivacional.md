@@ -1,11 +1,11 @@
 # WhatsApp RED-02 — Recordatorio clase 8 · 2026-10-02
-**Tema:** redes virtuales (NAT/bridge/host-only + equivalente AWS), SSH con llaves, SFTP con MobaXterm, exposición segura de servicios.
+**Tema:** LAB Docker: 3 sitios en contenedores + balanceador NGINX (round robin) en la misma EC2; prueba de caída (alta disponibilidad).
 
-🔐 *¡Grupo 2! Hoy aprendemos a entrar a nuestro servidor como los profesionales*
+🐳 *¡Grupo 2! Hoy montamos arquitectura de verdad*
 
-Cómo se conecta una máquina virtual a la red, por qué tu llave .ppk vale oro, cómo subir archivos a tu servidor (¡tu web va a tener foto! 📸) y qué puertas dejar abiertas.
+En su misma EC2 vamos a correr *3 sitios web con Docker* y un *balanceador de carga* que reparte las visitas… y después tumbamos uno a propósito para ver que la web sigue viva. ⚖️🔥
 
 📅 *HOY* · 💻 Virtual
 🔗 https://meet.google.com/dzm-ohyv-wez
 
-Lleguen con MobaXterm, su llave .ppk y una foto lista para subir. ¡Los espero! 💪
+Lleguen con su EC2 encendida y MobaXterm listo. ¡Los espero! 💪

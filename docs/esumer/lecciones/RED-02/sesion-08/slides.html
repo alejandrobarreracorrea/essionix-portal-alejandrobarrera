@@ -267,8 +267,8 @@ ul.clean li:first-child { border-top:0; }
   <img class="cover-bg" src="../../../assets/portada.png" alt="">
   <div class="cover-txt">
     <span class="cover-k">Estud-IA · Ruta TI · 2026-2 · Sesión {{SESION}} · clase virtual · {{G_ID}}</span>
-    <h1 class="cover-h">Redes virtuales y acceso remoto: cómo llegas a tu servidor</h1>
-    <p class="cover-s">Cómo se conecta una máquina virtual a la red, cómo te deja entrar SSH con llaves, cómo subir archivos a tu servidor y qué puertas abrir (y cuáles no).<br>Alejandro Barrera · Cloud Architect</p>
+    <h1 class="cover-h">Docker en acción: 3 sitios web y un balanceador en tu EC2</h1>
+    <p class="cover-s">Instalamos Docker, montamos tres sitios web en contenedores dentro de la misma máquina y ponemos delante un balanceador de carga que reparte las visitas. Después tumbamos uno… y la web sigue viva.<br>Alejandro Barrera · Cloud Architect</p>
   </div>
   <img class="cover-logo" src="../../../assets/estudia-blanco.png" alt="Estud-IA">
 </section>
@@ -276,18 +276,18 @@ ul.clean li:first-child { border-top:0; }
 <!-- 2 · PLAN -->
 <section class="slide">
   <span class="k">El plan de hoy · clase {{SESION}}</span>
-  <h2>Objetivo de hoy: <span class="grad">llegar a tu servidor de forma segura</span>.</h2>
+  <h2>Objetivo de hoy: <span class="grad">varios sitios y un balanceador en una sola EC2</span>.</h2>
   <ul class="rows">
-    <li><span class="t">Redes virtuales<small>Modos NAT, bridge y host-only… y su equivalente en AWS</small></span><span class="m">sem. 5</span></li>
-    <li><span class="t">SSH: llaves vs. contraseñas<small>Por qué tu .ppk vale oro y cómo viaja todo cifrado</small></span><span class="m">sem. 5</span></li>
-    <li><span class="t">Transferir archivos<small>SFTP con MobaXterm: sube una foto a tu web</small></span><span class="m">sem. 5</span></li>
-    <li><span class="t">Exponer servicios sin miedo<small>Qué puertas abrir · LAB de conectividad · reto</small></span><span class="m">lab</span></li>
+    <li><span class="t">La idea<small>Contenedores como habitaciones · el balanceador como recepcionista</small></span><span class="m">concepto</span></li>
+    <li><span class="t">Paso 1–2 · Docker y los 3 sitios<small>Instalar Docker y crear las páginas A, B y C</small></span><span class="m">lab</span></li>
+    <li><span class="t">Paso 3–4 · Contenedores y balanceador<small>Una red de Docker, 3 NGINX y uno más que reparte</small></span><span class="m">lab</span></li>
+    <li><span class="t">Paso 5 · Prueba de fuego<small>Reparto por turnos · tumbamos un contenedor · limpieza</small></span><span class="m">lab</span></li>
   </ul>
-  <p class="sub" style="margin-top:14px">Ya saben <b>qué es</b> su EC2. Hoy aprenden <b>cómo se conecta</b>, <b>cómo entran</b> y <b>cómo le llevan cosas</b>. 🔐</p>
+  <p class="sub" style="margin-top:14px">Esto es lo que verán en las semanas 12–13 (NGINX como proxy inverso y balanceo de carga)… <b>hoy lo adelantamos</b>. 🚀</p>
 </section>
 
-<!-- 3 · MODOS DE RED DE UNA VM -->
-<section class="slide" id="scN">
+<!-- 3 · LA IDEA (escena) -->
+<section class="slide" id="scLB">
   <style>
     .scene{width:min(100%,1080px,calc(58vh * var(--ar)));margin:6px auto 0}
     .scene canvas{display:block;width:100%;border-radius:14px;background:#f7f9fc;border:1px solid var(--line)}
@@ -401,126 +401,49 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   </script>
 
 
-  <span class="k"><span class="act-chip">🌐 REDES VIRTUALES</span> ¿Cómo sale una VM a internet? · clic o → para avanzar</span>
-  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">Los 3 modos de red de una <span class="grad">máquina virtual</span></h2>
-  <div class="scene"><canvas aria-label="Animación: una VM dentro de tu portátil se conecta en modo NAT, bridge y host-only, y su equivalente en AWS"></canvas></div>
+  <span class="k"><span class="act-chip">⚖️ BALANCEADOR</span> Varios sitios, una sola máquina · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">Un <span class="grad">recepcionista</span> que reparte las visitas</h2>
+  <div class="scene"><canvas aria-label="Animación: tu EC2 con tres contenedores web y un contenedor balanceador que reparte las visitas por turnos; uno se cae y el balanceador lo salta"></canvas></div>
   <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
   <script>
-  NetScene.make('scN',1000,480,[
-    'Tienes una <b>VM</b> en tu portátil (VirtualBox, tipo 2): un cuarto dentro de tu casa. ¿Cómo sale a internet? Hay <b>3 formas</b> de conectarla.',
-    '<b>NAT:</b> la VM sale a internet <b>usando la puerta de tu casa</b> (la IP de tu portátil). Puede navegar, pero <b>nadie de afuera la ve</b>: si alguien la busca, se estrella en el router.',
-    '<b>Bridge (puente):</b> la VM recibe <b>su propia IP del router</b>, como si fuera otro aparato del Wi-Fi. Tu celular la puede visitar directo.',
-    '<b>Host-only (solo anfitrión):</b> la VM <b>solo habla con tu portátil</b>. No tiene salida a internet: perfecta para laboratorios aislados.',
-    '<b>En AWS es lo mismo con otros nombres:</b> lo que construyeron en <b>pyme-vpc</b> ya usa estos tres modos.'
+  NetScene.make('scLB',1000,480,[
+    'Hasta hoy: <b>una EC2 = un sitio</b>, con NGINX instalado directo en Amazon Linux. Si ese NGINX se cae, se cae tu web.',
+    'Con <b>Docker</b> metemos <b>3 sitios en la misma EC2</b>, cada uno en su <b>contenedor</b> (su habitación): <b>web-A</b>, <b>web-B</b> y <b>web-C</b>. Viven en una red privada de Docker.',
+    'Adelante ponemos un contenedor más: el <b>balanceador</b> (otro NGINX). Recibe <b>todas</b> las visitas por el puerto 80 y las reparte <b>por turnos</b>: A, B, C, A, B, C… (round robin).',
+    '¿Y si se cae uno? El balanceador <b>se da cuenta y lo salta</b>: las visitas siguen llegando a A y C. <b>Tu web no se cae.</b> Eso es <b>alta disponibilidad</b>.',
+    'En la vida real los contenedores son <b>copias del mismo sitio</b> (aquí les pusimos colores para ver el reparto), y AWS tiene un balanceador administrado, el <b>ALB</b>, que reparte entre varias EC2 en distintas zonas.'
   ],function(c,s){
     var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
-    if(st>=4){var a=E.out(Math.min(1,t/.6));V.tx(c,'Los mismos 3 modos, en AWS',500,56,22,'#fff','center',800,a);
-      [['BRIDGE','IP propia, visible desde afuera','subred PÚBLICA + Internet Gateway','tu EC2 web (IP pública)',C.grn],
-       ['NAT','sale, pero nadie la ve','subred PRIVADA + NAT Gateway','servidores internos que se actualizan',C.blue],
-       ['HOST-ONLY','solo habla adentro','subred AISLADA (sin ruta afuera)','la base de datos (bd)','#8a5cf6']].forEach(function(k,i){
-        var x=60+i*300,ai=E.back(Math.max(0,Math.min(1,(t-.2-i*.25)/.5)));c.save();c.globalAlpha*=ai;c.fillStyle='#0f2740';NetScene.rr(c,x,90,280,330,14);c.fill();c.strokeStyle=k[4];c.lineWidth=2.5;c.stroke();c.fillStyle=k[4];NetScene.rr(c,x,90,280,8,4);c.fill();c.restore();
-        V.tx(c,k[0],x+140,140,22,'#fff','center',800,ai);V.tx(c,k[1],x+140,166,13,C.mut,'center',600,ai);
-        V.tx(c,'≈ en AWS',x+140,222,13,k[4],'center',800,ai);
-        var w=k[2].split(' + ');w.forEach(function(l,j){V.tx(c,(j?'+ ':'')+l,x+140,252+j*24,15,'#fff','center',800,ai);});
-        V.tx(c,'ej.: '+k[3],x+140,370,12,'#ffb98a','center',700,ai);});
-      V.tx(c,'web = pública · bd = aislada: ¡ya lo hicieron en el LAB de la VPC!',500,458,14,'#9ff0c8','center',700,Math.max(0,Math.min(1,(t-1)/.5)));return;}
-    var NET=[880,110],RT=[640,220],HOUSE={x:120,y:170,w:330,h:230},VM=[240,300],LAP=[380,330],PH=[640,400];
-    /* internet */NetScene.cloud(c,NET[0],NET[1],48,'#2b4f74',1);V.tx(c,'Internet',NET[0],NET[1]+6,14,'#fff','center',800,1);
-    /* router */c.save();c.fillStyle='#16324f';NetScene.rr(c,RT[0]-50,RT[1]-26,100,52,10);c.fill();c.strokeStyle='rgba(159,182,201,.5)';c.stroke();c.restore();V.tx(c,'router',RT[0],RT[1]+5,13,'#fff','center',800,1);V.tx(c,'(tu Wi-Fi)',RT[0],RT[1]+44,11,C.mut,'center',600,1);
-    /* casa / portátil */c.save();c.fillStyle='rgba(15,158,213,.08)';c.strokeStyle='rgba(15,158,213,.5)';c.lineWidth=1.5;NetScene.rr(c,HOUSE.x,HOUSE.y,HOUSE.w,HOUSE.h,14);c.fill();c.stroke();c.restore();V.tx(c,'🏠 tu portátil',HOUSE.x+14,HOUSE.y+24,13,'#9fd8f0','left',800,1);
-    NetScene.laptop(c,LAP[0],LAP[1],70,'#9fd8f0',1);V.tx(c,'Windows',LAP[0],LAP[1]+28,11,C.mut,'center',600,1);
-    var vmcol=st===1?C.blue:st===2?C.grn:st===3?'#8a5cf6':C.ora;V.vm(c,VM[0]-70,VM[1]-60,140,96,'VM Ubuntu',st===1?'10.0.2.15':st===2?'192.168.1.50':st===3?'192.168.56.10':'(VirtualBox)',vmcol,1,true);
-    c.save();c.strokeStyle='rgba(159,182,201,.35)';c.lineWidth=2;c.beginPath();c.moveTo(LAP[0]+40,LAP[1]-20);c.lineTo(RT[0]-50,RT[1]);c.stroke();c.beginPath();c.moveTo(RT[0]+50,RT[1]-10);c.lineTo(NET[0]-40,NET[1]+20);c.stroke();c.restore();
-    function run(path,col,dur,off){var u=((t+(off||0))%dur)/dur,p=NetScene.along(path,u);c.save();V.glow(c,col,12);c.fillStyle=col;c.beginPath();c.arc(p[0],p[1],6,0,7);c.fill();c.restore();}
-    function blocked(x,y,txt){V.tx(c,'✗',x,y,30,C.red,'center',900,.6+.4*Math.sin(t*6));if(txt)V.tx(c,txt,x,y+24,12,'#ff9b9b','center',800,1);}
-    if(st===0){V.tx(c,'¿cómo conecto esta VM?',VM[0],VM[1]-78,14,'#ffb98a','center',800,.7+.3*Math.sin(t*3));}
-    if(st===1){run([[VM[0]+70,VM[1]],[LAP[0],LAP[1]-30],[RT[0]-50,RT[1]],[NET[0]-40,NET[1]+20]],C.grn,2.4);
-      if(t>1){var u=Math.min(1,((t-1)%3)/1.6),p=NetScene.along([[NET[0]-40,NET[1]+20],[RT[0]+50,RT[1]-10]],u);if(u<1){c.save();c.fillStyle=C.red;c.beginPath();c.arc(p[0],p[1],6,0,7);c.fill();c.restore();}else blocked(RT[0]+150,RT[1]+6,'nadie de afuera la ve');}
-      V.tx(c,'✓ navega por la puerta de tu casa',VM[0],HOUSE.y+HOUSE.h+28,13,'#9ff0c8','center',800,1);}
-    if(st===2){c.save();c.strokeStyle=C.grn;c.setLineDash([6,6]);c.lineDashOffset=-t*30;c.lineWidth=2.5;c.beginPath();c.moveTo(VM[0]+70,VM[1]-40);c.lineTo(RT[0]-50,RT[1]-10);c.stroke();c.restore();
-      c.save();c.fillStyle='#0b1a2b';NetScene.rr(c,PH[0]-20,PH[1]-34,40,68,8);c.fill();c.strokeStyle='#cfe3f1';c.lineWidth=2;c.stroke();c.restore();V.tx(c,'tu celular',PH[0],PH[1]+52,12,'#fff','center',700,1);
-      run([[PH[0],PH[1]-34],[RT[0],RT[1]+26],[RT[0]-50,RT[1]-10],[VM[0]+70,VM[1]-40]],C.grn,2.6);V.tx(c,'✓ el celular la visita directo',VM[0],HOUSE.y+HOUSE.h+28,13,'#9ff0c8','center',800,1);}
-    if(st===3){run([[VM[0]+70,VM[1]],[LAP[0]-30,LAP[1]-20]],'#b79bff',1.2);var u3=(t%2.4)/2.4,p3=NetScene.along([[VM[0]+70,VM[1]-20],[HOUSE.x+HOUSE.w+8,VM[1]-40]],Math.min(1,u3*1.6));c.save();c.fillStyle=C.red;c.beginPath();c.arc(p3[0],p3[1],6,0,7);c.fill();c.restore();
-      if(u3>.62)blocked(HOUSE.x+HOUSE.w+24,VM[1]-36,'sin internet');V.tx(c,'✓ solo habla con tu portátil',VM[0],HOUSE.y+HOUSE.h+28,13,'#c9b6ff','center',800,1);}
-    if(st>=1&&st<=3)V.pill(c,22,16,['','NAT','BRIDGE','HOST-ONLY'][st],vmcol,'#fff',1);
+    var COL=['#e5484d','#34c38f','#3b82f6'],NAMES=['A','B','C'];
+    var LB=[520,250],CT=[[820,140],[820,250],[820,360]],U=[[90,150],[90,250],[90,350]];
+    U.forEach(function(p,i){NetScene.person(c,p[0],p[1]+12,20,'#cfe3f1',1);});V.tx(c,'visitantes',90,410,12,C.mut,'center',700,1);
+    c.save();c.strokeStyle=C.ora;c.lineWidth=2.5;V.glow(c,C.ora,12);NetScene.rr(c,380,70,580,370,16);c.stroke();c.restore();V.tx(c,'TU EC2',396,94,14,'#ffb98a','left',800,1);
+    if(st===0){V.vm(c,610,200,220,110,'NGINX','instalado directo',C.blue,1,true);var u=(t%1.6)/1.6,p=NetScene.along([[110,250],[610,255]],u);c.save();V.glow(c,C.grn,10);c.fillStyle=C.grn;c.beginPath();c.arc(p[0],p[1],6,0,7);c.fill();c.restore();
+      V.tx(c,'1 EC2 = 1 sitio · si se cae, se cae todo',670,400,14,'#ffb98a','center',800,1);return;}
+    c.save();c.fillStyle='rgba(29,99,237,.25)';NetScene.rr(c,400,404,540,28,8);c.fill();c.restore();V.tx(c,'🐳 Docker · red-web',670,423,12,'#cfe3f1','center',800,1);
+    var down=st===3;
+    CT.forEach(function(p,i){var a=st===1?E.back(Math.max(0,Math.min(1,(t-i*.25)/.5))):1,dead=down&&i===1;
+      c.save();c.globalAlpha*=a;if(!dead)V.glow(c,COL[i],12);c.fillStyle=dead?'#3a2a2a':'#0f2740';NetScene.rr(c,p[0]-90,p[1]-40,180,80,10);c.fill();c.shadowBlur=0;c.strokeStyle=dead?C.red:COL[i];c.lineWidth=2.5;c.stroke();c.restore();
+      V.tx(c,'web-'+NAMES[i],p[0],p[1]-6,16,'#fff','center',800,a);V.tx(c,dead?'✗ caído':'Sitio '+NAMES[i],p[0],p[1]+16,12,dead?'#ff9b9b':COL[i],'center',800,a);});
+    if(st>=2){var a2=st===2?E.back(Math.min(1,t/.6)):1;c.save();c.globalAlpha*=a2;V.glow(c,C.ora,16);c.fillStyle='#3a2518';NetScene.rr(c,LB[0]-90,LB[1]-50,180,100,12);c.fill();c.strokeStyle=C.ora;c.lineWidth=3;c.stroke();c.restore();
+      NetScene.person(c,LB[0]-58,LB[1]+12,16,'#ffb98a',a2);V.tx(c,'balanceador',LB[0]+16,LB[1]-8,15,'#fff','center',800,a2);V.tx(c,'NGINX · puerto 80',LB[0]+16,LB[1]+14,11,'#ffd0b0','center',700,a2,'"JetBrains Mono",monospace');
+      var order=down?[0,2]:[0,1,2],period=1.4,k=Math.floor(t/period),u2=(t%period)/period,tgt=order[k%order.length],src=U[k%3];
+      var path=[[src[0]+22,src[1]],[LB[0]-90,LB[1]],[LB[0]+90,LB[1]],[CT[tgt][0]-90,CT[tgt][1]]],pp=NetScene.along(path,E.io(u2));
+      c.save();V.glow(c,COL[tgt],12);c.fillStyle=COL[tgt];c.beginPath();c.arc(pp[0],pp[1],7,0,7);c.fill();c.restore();
+      var seq=[];for(var q=0;q<6;q++)seq.push(NAMES[order[(k+q)%order.length]]);V.tx(c,'turnos: '+seq.join(' → ')+' …',670,64,13,'#ffd0b0','center',800,a2,'"JetBrains Mono",monospace');}
+    if(down){V.tx(c,'web-B se cayó → el balanceador lo salta ✓',200,456,14,'#9ff0c8','left',800,1);}
+    if(st>=4){var a4=E.out(Math.min(1,t/.6));c.save();c.globalAlpha*=a4;c.fillStyle='rgba(8,24,42,.9)';NetScene.rr(c,120,120,760,250,16);c.fill();c.strokeStyle='rgba(159,182,201,.4)';c.stroke();c.restore();
+      V.tx(c,'Hoy (laboratorio)',300,170,17,'#ffb98a','center',800,a4);V.tx(c,'3 contenedores en 1 EC2',300,200,14,'#fff','center',700,a4);V.tx(c,'balanceador = NGINX en Docker',300,226,14,'#fff','center',700,a4);
+      V.tx(c,'En producción (AWS)',700,170,17,'#9ff0c8','center',800,a4);V.tx(c,'copias del mismo sitio en varias EC2',700,200,14,'#fff','center',700,a4);V.tx(c,'en distintas zonas de disponibilidad',700,226,14,'#fff','center',700,a4);V.tx(c,'balanceador = ALB (administrado)',700,252,14,'#fff','center',700,a4);
+      V.tx(c,'misma idea, otra escala',500,330,18,'#fff','center',800,a4);}
   });
   </script>
 </section>
 
-<!-- 4 · SSH: LLAVES VS CONTRASEÑAS -->
-<section class="slide" id="scS">
-  <span class="k"><span class="act-chip">🔐 SSH</span> Cómo entras a tu servidor · clic o → para avanzar</span>
-  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">SSH: <span class="grad">llaves vs. contraseñas</span></h2>
-  <div class="scene"><canvas aria-label="Animación: un robot prueba contraseñas; el par de llaves, candado en el servidor y llave en tu PC; túnel cifrado por el puerto 22"></canvas></div>
-  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
-  <script>
-  NetScene.make('scS',1000,480,[
-    '<b>SSH</b> es el <b>control remoto</b> de tu servidor: desde tu PC escribes comandos y se ejecutan allá. Entra por el <b>puerto 22</b>. Pero ¿cómo sabe el servidor que eres tú?',
-    'Con <b>contraseña</b> hay un problema: en internet hay <b>robots</b> probando claves todo el día (123456, admin, password…). Si tu clave es débil, entran.',
-    'Por eso AWS usa un <b>par de llaves</b>: el <b>candado</b> (llave pública) queda en el servidor y la <b>llave</b> (privada: tu <b>.ppk</b>) solo la tienes tú. Se descargó una sola vez.',
-    'Al conectarte, MobaXterm muestra tu llave, el candado abre y se arma un <b>túnel cifrado</b>: lo que viaja por ahí no lo puede leer nadie.',
-    '<b>Reglas de oro:</b> la llave <b>nunca se comparte</b> ni se sube a GitHub · si la pierdes no hay copia · el puerto 22 abierto <b>solo para tu IP</b>. El robot rebota.'
-  ],function(c,s){
-    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
-    var PC=[180,270],SV=[870,270],LX=690;
-    NetScene.laptop(c,PC[0],PC[1]+30,130,'#9fd8f0',1);V.tx(c,'tu PC · MobaXterm',PC[0],PC[1]+70,13,'#fff','center',800,1);
-    V.iso(c,SV[0]-60,SV[1]+60,110,80,110,'#aab6c3','#56626f','#7a8796',1);V.tx(c,'tu EC2',SV[0]-10,SV[1]+96,13,'#fff','center',800,1);
-    c.save();c.fillStyle='#e5484d';NetScene.rr(c,LX-20,SV[1]-20,40,16,4);c.fill();c.restore();V.tx(c,'puerto 22',LX,SV[1]-26,11,'#ffb98a','center',800,1);
-    if(st===0){var u=(t%2)/2,p=NetScene.along([[PC[0]+70,PC[1]],[LX-20,SV[1]-12]],u);c.save();V.glow(c,C.blue,10);c.fillStyle=C.blue;NetScene.rr(c,p[0]-30,p[1]-12,60,24,6);c.fill();c.restore();V.tx(c,'$ ls',p[0],p[1]+4,11,'#fff','center',800,1,'"JetBrains Mono",monospace');
-      V.tx(c,'¿cómo sabe el servidor que eres tú?',500,130,18,'#ffb98a','center',800,1);}
-    if(st===1){NetScene.person(c,500,150,28,'#c9d1d9',1);V.tx(c,'🤖 robot de internet',500,186,13,'#ff9b9b','center',800,1);
-      var P=['123456','admin','password','qwerty','pereira2026'],k=Math.floor(t/.7)%P.length,u1=(t%.7)/.7,pp=NetScene.along([[540,170],[LX-20,SV[1]-12]],u1);
-      c.save();c.fillStyle=C.red;NetScene.rr(c,pp[0]-44,pp[1]-12,88,24,6);c.fill();c.restore();V.tx(c,P[k],pp[0],pp[1]+4,11,'#fff','center',800,1,'"JetBrains Mono",monospace');
-      V.tx(c,'miles de intentos por hora',500,430,15,'#ff9b9b','center',800,1);}
-    if(st>=2){var a2=st===2?E.back(Math.min(1,t/.6)):1;
-      c.save();c.globalAlpha*=a2;c.translate(LX,SV[1]-70);c.fillStyle='#E97132';NetScene.rr(c,-22,-6,44,36,6);c.fill();c.strokeStyle='#E97132';c.lineWidth=6;c.beginPath();c.arc(0,-6,14,Math.PI,0);c.stroke();c.restore();
-      V.tx(c,'🔒 llave pública (candado)',LX,SV[1]-126,12,'#ffb98a','center',800,a2);V.tx(c,'~/.ssh/authorized_keys',LX,SV[1]-110,10,C.mut,'center',600,a2,'"JetBrains Mono",monospace');
-      var kx=st===3?PC[0]+70+(LX-90-PC[0]-70)*E.io(Math.min(1,t/1.2)):PC[0]+40;c.save();c.globalAlpha*=a2;c.translate(kx,PC[1]-90);c.fillStyle=C.yel;c.beginPath();c.arc(0,0,13,0,7);c.fill();c.fillRect(10,-4,38,8);c.fillRect(38,4,6,10);c.fillRect(28,4,6,8);c.fillStyle='#08182a';c.beginPath();c.arc(0,0,5,0,7);c.fill();c.restore();
-      V.tx(c,'🗝 llave privada: tu .ppk',PC[0]+40,PC[1]-120,12,C.yel,'center',800,a2);V.tx(c,'solo tú la tienes',PC[0]+40,PC[1]-104,10,C.mut,'center',600,a2);}
-    if(st>=3){var a3=E.out(Math.max(0,Math.min(1,(t-(st===3?1.2:0))/.5)));c.save();c.globalAlpha*=a3;c.strokeStyle=C.grn;c.lineWidth=3;V.glow(c,C.grn,12);NetScene.rr(c,PC[0]+80,PC[1]-24,LX-PC[0]-110,40,20);c.stroke();c.restore();
-      for(var q=0;q<3;q++){var u3=((t*.4)+q/3)%1,x=PC[0]+100+u3*(LX-PC[0]-150);V.tx(c,['a8F#k2','Zq9!vX','7mP@rT'][q],x,PC[1]+1,12,'#9ff0c8','center',800,a3,'"JetBrains Mono",monospace');}
-      V.tx(c,'túnel cifrado · puerto 22 ✓',500,PC[1]+50,15,'#9ff0c8','center',800,a3);}
-    if(st>=4){var a4=E.out(Math.min(1,t/.5));NetScene.person(c,500,130,22,'#c9d1d9',a4);var u4=Math.min(1,(t%2.2)/1.2),p4=NetScene.along([[500,150],[LX-30,SV[1]-30]],u4);if(u4<1){c.save();c.fillStyle=C.red;c.beginPath();c.arc(p4[0],p4[1],6,0,7);c.fill();c.restore();}else V.tx(c,'✗ rebota: no tiene la llave',LX-110,SV[1]-50,13,'#ff9b9b','center',800,1);
-      ['nunca compartas tu .ppk / .pem','nunca la subas a GitHub','si la pierdes, no hay copia','puerto 22 solo para tu IP'].forEach(function(r,i){V.pill(c,40+i*235,420,'✓ '+r,'rgba(52,195,143,.25)','#fff',a4);});}
-  });
-  </script>
-</section>
-
-<!-- 5 · TRANSFERIR ARCHIVOS -->
-<section class="slide" id="scF">
-  <span class="k"><span class="act-chip">📦 ARCHIVOS</span> Llevar cosas a tu servidor · clic o → para avanzar</span>
-  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">SSH es el control remoto; <span class="grad">SFTP es el camión</span></h2>
-  <div class="scene"><canvas aria-label="Animación: una foto viaja por SFTP desde tu PC a tu EC2, se mueve a la carpeta de NGINX y aparece en tu página"></canvas></div>
-  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
-  <script>
-  NetScene.make('scF',1000,480,[
-    'Con <b>SSH</b> mandas <b>comandos</b>. Para llevar <b>archivos</b> (una foto, un PDF) usas <b>SFTP</b>: un camión que viaja por <b>el mismo túnel seguro</b> del puerto 22.',
-    'En <b>MobaXterm</b>, el panel de la izquierda es SFTP: <b>arrastras la foto</b> desde tu PC y llega a tu carpeta del servidor: <b>/home/ec2-user</b>.',
-    'Pero tu web vive en <b>/usr/share/nginx/html</b>, que es de <b>root</b>. Por eso la mueves con <b>sudo mv</b>.',
-    'Agregas la foto a tu <b>index.html</b> con una etiqueta <b>&lt;img&gt;</b>, recargas… ¡y tu web ya tiene foto! 📸'
-  ],function(c,s){
-    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
-    NetScene.laptop(c,160,300,150,'#9fd8f0',1);V.tx(c,'tu PC',160,340,13,'#fff','center',800,1);
-    function photo(x,y,a){if(!(a>0))return;c.save();c.globalAlpha*=a;c.fillStyle='#f4f8fb';NetScene.rr(c,x-26,y-20,52,40,4);c.fill();c.fillStyle='#E97132';c.beginPath();c.arc(x-8,y-6,6,0,7);c.fill();c.fillStyle='#156082';c.beginPath();c.moveTo(x-22,y+16);c.lineTo(x-4,y-2);c.lineTo(x+8,y+8);c.lineTo(x+16,y);c.lineTo(x+22,y+16);c.closePath();c.fill();c.restore();V.tx(c,'foto.jpg',x,y+34,11,'#fff','center',700,a,'"JetBrains Mono",monospace');}
-    /* servidor con carpetas */c.save();c.fillStyle='#0f2740';NetScene.rr(c,560,90,400,320,14);c.fill();c.strokeStyle=C.blue;c.lineWidth=2;c.stroke();c.restore();V.tx(c,'tu EC2',580,116,14,'#9fd8f0','left',800,1);
-    function folder(x,y,name,hl){c.save();c.fillStyle=hl?'#E97132':'#d4a53a';NetScene.rr(c,x,y,40,8,3);c.fill();NetScene.rr(c,x,y+6,170,46,6);c.fill();c.restore();V.tx(c,name,x+85,y+36,12,'#08182a','center',800,1,'"JetBrains Mono",monospace');}
-    folder(590,140,'/home/ec2-user',st===1);folder(590,260,'/usr/share/nginx/html',st>=2);
-    c.save();c.strokeStyle='rgba(52,195,143,.6)';c.lineWidth=3;NetScene.rr(c,240,224,320,32,16);c.stroke();c.restore();V.tx(c,'túnel seguro · puerto 22',400,214,12,'#9ff0c8','center',700,1);
-    if(st===0){var u=(t%2.4)/2.4;photo(260+u*290,240,1);V.tx(c,'SFTP = el camión de archivos',400,150,18,'#ffb98a','center',800,1);}
-    if(st===1){var u1=Math.min(1,t/1.4);photo(250+(680-250)*E.io(u1),240-(240-176)*E.io(u1)*(u1>.7?1:0),1);if(u1>=1)V.tx(c,'✓ llegó a tu carpeta',870,176,12,'#9ff0c8','left',700,1);
-      c.save();c.fillStyle='rgba(255,255,255,.08)';NetScene.rr(c,40,100,150,120,8);c.fill();c.restore();V.tx(c,'panel SFTP',115,124,12,'#9fd8f0','center',800,1);V.tx(c,'(MobaXterm)',115,142,11,C.mut,'center',600,1);V.tx(c,'↖ arrastra aquí',115,196,12,'#ffb98a','center',800,1);}
-    if(st===2){var u2=Math.min(1,t/1.2);photo(680,176+(296-176)*E.io(u2),1);V.tx(c,'$ sudo mv ~/foto.jpg /usr/share/nginx/html/',760,440,13,'#e6edf3','center',700,Math.min(1,t/.4),'"JetBrains Mono",monospace');}
-    if(st===3){photo(860,296,1);var a=E.out(Math.min(1,t/.6));c.save();c.globalAlpha*=a;c.fillStyle='#f4f8fb';NetScene.rr(c,250,90,270,190,10);c.fill();c.fillStyle='#156082';c.fillRect(256,116,258,30);c.restore();V.tx(c,'Mi página ☕',385,137,14,'#fff','center',800,a);
-      if(t>.8){c.save();c.globalAlpha=Math.min(1,(t-.8)/.5);c.fillStyle='#E97132';c.beginPath();c.arc(330,190,14,0,7);c.fill();c.fillStyle='#156082';c.beginPath();c.moveTo(270,268);c.lineTo(320,210);c.lineTo(370,246);c.lineTo(410,220);c.lineTo(500,268);c.closePath();c.fill();c.restore();}
-      V.tx(c,'<img src="foto.jpg">',385,312,14,'#ffb98a','center',800,a,'"JetBrains Mono",monospace');}
-  });
-  </script>
-</section>
-
-<!-- 6 · LAB 1: CONECTIVIDAD -->
-<section class="slide" id="labC">
-  <span class="k"><span class="act-chip">🧪 LAB 1</span> ¿Qué puertas tiene abiertas tu servidor?</span>
-  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">Revisa <span class="grad">quién entra y por dónde</span></h2>
+<!-- 4 · PASO 1: INSTALAR DOCKER -->
+<section class="slide" id="lab1">
+  <span class="k"><span class="act-chip">🧪 PASO 1</span> Instala Docker en tu EC2</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">Docker en <span class="grad">Amazon Linux</span></h2>
   <style>.term.lab{max-height:52vh;overflow:auto;font-size:clamp(.72rem,1.05vw,.9rem)}.term.lab p{white-space:pre-wrap;word-break:break-all;min-height:1.35em}.term.lab p.hl b{color:#FFC928;font-weight:600;background:rgba(255,201,40,.14);border-radius:4px;padding:0 3px}.term.lab p.note{color:#9fb3c8;font-size:.85em}.term.lab .cur{display:inline-block;width:.6em;background:#39c8e8;animation:blk 1s steps(1) infinite}@keyframes blk{50%{opacity:0}}
   .cmdlist{list-style:none;display:flex;flex-direction:column;gap:6px;font-size:clamp(.78rem,1.1vw,.95rem)}.cmdlist li{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}.cmdlist code{font-family:var(--mono);color:var(--a1);font-weight:600;font-size:.92em}</style>
   <script>
@@ -528,92 +451,126 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
     function at(ms,fn){T.push(setTimeout(fn,ms));}
     sec.__enter=function(){T.forEach(clearTimeout);T=[];box.innerHTML='';var d=300;
       L.forEach(function(l){var el=document.createElement('p');if(l[0]!=='cmd')el.className=l[0];
-        if(l[0]==='cmd'){at(d,function(){box.appendChild(el);box.scrollTop=box.scrollHeight;});for(var i=1;i<=l[1].length;i++)(function(k){at(d+k*38,function(){el.innerHTML=esc(l[1].slice(0,k))+'<span class="cur">&nbsp;</span>';});})(i);d+=l[1].length*38+380;at(d-10,function(){el.innerHTML=esc(l[1]);});}
+        if(l[0]==='cmd'){at(d,function(){box.appendChild(el);box.scrollTop=box.scrollHeight;});for(var i=1;i<=l[1].length;i++)(function(k){at(d+k*30,function(){el.innerHTML=esc(l[1].slice(0,k))+'<span class="cur">&nbsp;</span>';});})(i);d+=l[1].length*30+380;at(d-10,function(){el.innerHTML=esc(l[1]);});}
         else{at(d,function(){el.innerHTML=l[0]==='out'?esc(l[1]):l[1];el.style.opacity=0;box.appendChild(el);box.scrollTop=box.scrollHeight;el.animate([{opacity:0},{opacity:1}],{duration:300,fill:'forwards'});});d+=l[0]==='note'?800:300;}});};};
   </script>
   <div class="grid2" style="align-items:start">
-    <div class="demo term lab" id="labCterm" style="min-height:320px"></div>
+    <div class="demo term lab" id="lab1t" style="min-height:300px"></div>
     <ul class="cmdlist">
-      <li><code>sudo ss -tlnp</code><span>las <b>puertas abiertas</b> (puertos que escuchan) y qué programa las usa</span></li>
-      <li><code>echo $SSH_CLIENT</code><span>desde qué IP y puerto entraste</span></li>
-      <li><code>last -i | head</code><span>quién se ha conectado y desde dónde</span></li>
-      <li><code>curl -I localhost</code><span>¿tu web responde por dentro?</span></li>
-      <li><span>En tu PC (PowerShell): <code>Test-NetConnection IP -Port 80</code></span><span>¿se llega desde afuera? prueba 80, 22 y 3306</span></li>
+      <li><code>sudo dnf install -y docker</code><span>instala Docker</span></li>
+      <li><code>sudo systemctl enable --now docker</code><span>lo enciende (y arranca solo al reiniciar)</span></li>
+      <li><code>sudo usermod -aG docker ec2-user</code><span>te da permiso de usar Docker sin sudo</span></li>
+      <li><code>newgrp docker</code><span>aplica el permiso ya, sin salir</span></li>
+      <li><code>docker run --rm hello-world</code><span>prueba: un contenedor que saluda y se borra</span></li>
     </ul>
   </div>
-  <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: ¿qué puertos tiene abiertos tu servidor? ¿El 3306 llegó? (no debería 😉)</p>
+  <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: el mensaje <b>Hello from Docker!</b> Si sale <b>permission denied</b>, corre <b>newgrp docker</b> otra vez.</p>
   <script>
-  typeTerm(document.getElementById('labC'),document.getElementById('labCterm'),[
-    ['cmd','$ sudo ss -tlnp'],['hl','LISTEN  0.0.0.0:<b>22</b>   users:(("<b>sshd</b>"…))'],['hl','LISTEN  0.0.0.0:<b>80</b>   users:(("<b>nginx</b>"…))'],['note','  ↑ dos puertas abiertas: SSH y tu web'],
-    ['cmd','$ echo $SSH_CLIENT'],['hl','<b>181.53.20.14</b> 52344 22'],['note','  ↑ tu IP de casa · tu puerto · entraste por el 22'],
-    ['cmd','$ last -i | head -3'],['out','ec2-user pts/0  181.53.20.14  Fri Oct  2 18:41   still logged in'],
-    ['cmd','$ curl -I localhost'],['hl','HTTP/1.1 <b>200 OK</b>'],
-    ['cmd','PS> Test-NetConnection 54.x.x.10 -Port 80'],['hl','TcpTestSucceeded : <b>True</b>'],
-    ['cmd','PS> Test-NetConnection 54.x.x.10 -Port 3306'],['hl','TcpTestSucceeded : <b>False</b>'],['note','  ↑ el Security Group no la deja pasar ✓']]);
+  typeTerm(document.getElementById('lab1'),document.getElementById('lab1t'),[
+    ['cmd','$ sudo dnf install -y docker'],['out','… Complete!'],
+    ['cmd','$ sudo systemctl enable --now docker'],['cmd','$ sudo usermod -aG docker ec2-user && newgrp docker'],
+    ['cmd','$ docker run --rm hello-world'],['hl','<b>Hello from Docker!</b>'],['note','  ↑ Docker descargó una imagen, creó un contenedor, lo corrió y lo borró']]);
   </script>
 </section>
 
-<!-- 7 · LAB 2: SUBE UNA FOTO A TU WEB -->
-<section class="slide" id="labF">
-  <span class="k"><span class="act-chip">🧪 LAB 2</span> SFTP con MobaXterm</span>
-  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">Sube <span class="grad">una foto a tu web</span></h2>
+<!-- 5 · PASO 2-3: SITIOS Y CONTENEDORES -->
+<section class="slide" id="lab2">
+  <span class="k"><span class="act-chip">🧪 PASO 2–3</span> Tres sitios, tres contenedores</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">Crea los sitios <span class="grad">A, B y C</span> y enciéndelos</h2>
   <div class="grid2" style="align-items:start">
-    <div class="demo term lab" id="labFterm" style="min-height:320px"></div>
+    <div class="demo term lab" id="lab2t" style="min-height:330px"></div>
     <ul class="cmdlist">
-      <li><span>1 · En MobaXterm, panel <b>SFTP</b> (izquierda)</span><span>arrastra una foto tuya → queda en <code>/home/ec2-user</code></span></li>
-      <li><code>ls -lh ~</code><span>comprueba que llegó y cuánto pesa</span></li>
-      <li><code>sudo mv ~/foto.jpg /usr/share/nginx/html/</code><span>la llevas a la carpeta de la web</span></li>
-      <li><code>sudo nano …/index.html</code><span>agrega <code>&lt;img src="foto.jpg" width="400"&gt;</code></span></li>
-      <li><code>curl -I localhost/foto.jpg</code><span>¿NGINX la entrega? (200 OK, image/jpeg)</span></li>
-      <li><span>Sin MobaXterm (PowerShell):</span><span><code>scp -i llave.pem foto.jpg ec2-user@IP:~</code></span></li>
+      <li><span><b>Paso 2</b> · el <code>for</code> crea 3 carpetas con un index.html de color</span><span>A rojo · B verde · C azul</span></li>
+      <li><code>docker network create red-web</code><span>una red privada para que se encuentren por nombre</span></li>
+      <li><span><b>Paso 3</b> · <code>docker run -d --name web-A …</code></span><span>un NGINX liviano (<b>nginx:alpine</b>) por sitio, con su carpeta adentro (<code>-v</code>)</span></li>
+      <li><code>docker ps</code><span>¿están los 3 corriendo?</span></li>
     </ul>
   </div>
-  <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: el link de tu web <b>con tu foto</b>. Usa nombres sin espacios ni tildes: <b>foto.jpg</b>, no <b>Mi Foto (1).JPG</b>.</p>
+  <p class="sub" style="margin-top:10px">Los comandos completos para <b>copiar y pegar</b> te los paso por el chat. Checkpoint ✅: pantallazo de <b>docker ps</b> con web-A, web-B y web-C.</p>
   <script>
-  typeTerm(document.getElementById('labF'),document.getElementById('labFterm'),[
-    ['note','  (arrastraste foto.jpg al panel SFTP de MobaXterm)'],
-    ['cmd','$ ls -lh ~'],['hl','-rw-r--r--. 1 ec2-user ec2-user <b>240K</b> Oct  2 19:05 <b>foto.jpg</b>'],
-    ['cmd','$ sudo mv ~/foto.jpg /usr/share/nginx/html/'],
-    ['cmd','$ sudo nano /usr/share/nginx/html/index.html'],['note','  ↑ agrega: <img src="foto.jpg" width="400">  ·  Ctrl+O, Enter, Ctrl+X'],
-    ['cmd','$ curl -I localhost/foto.jpg'],['hl','HTTP/1.1 <b>200 OK</b>'],['hl','Content-Type: <b>image/jpeg</b>'],['note','  ↑ recarga tu IP pública: ¡tu web ya tiene foto! 📸']]);
+  typeTerm(document.getElementById('lab2'),document.getElementById('lab2t'),[
+    ['cmd','$ for p in A:tomato B:seagreen C:royalblue; do s=${p%%:*}; c=${p##*:}; mkdir -p ~/sitios/$s; echo "<body style=\'background:$c;color:#fff;font:40px sans-serif;text-align:center;padding-top:20vh\'><h1>Sitio $s</h1><p>contenedor web-$s</p></body>" > ~/sitios/$s/index.html; done'],
+    ['cmd','$ docker network create red-web'],
+    ['cmd','$ for s in A B C; do docker run -d --name web-$s --network red-web -v ~/sitios/$s:/usr/share/nginx/html:ro nginx:alpine; done'],['out','Unable to find image nginx:alpine locally … Pulled'],
+    ['cmd','$ docker ps --format "table {{.Names}}\\t{{.Status}}"'],['hl','<b>web-A</b>   Up 5 seconds'],['hl','<b>web-B</b>   Up 5 seconds'],['hl','<b>web-C</b>   Up 4 seconds'],['note','  ↑ 3 sitios corriendo en la misma EC2']]);
   </script>
 </section>
 
-<!-- 8 · BUENAS PRÁCTICAS DE EXPOSICIÓN -->
-<section class="slide">
-  <span class="k"><span class="act-chip">🛡️ EXPONER SIN MIEDO</span> Cada puerto abierto es una puerta</span>
-  <h2>Abre <span class="grad">solo lo necesario</span></h2>
-  <ul class="clean check">
-    <li><b>80 / 443</b> (web) → abiertos a todos: es lo que quieres mostrar</li>
-    <li><b>22</b> (SSH) → <b>solo tu IP</b> ("Mi IP" en el Security Group). Nunca <b>0.0.0.0/0</b></li>
-    <li><b>3306, 5432</b> (bases de datos) → <b>nunca</b> a internet: solo desde adentro de la VPC</li>
-    <li>Llaves en vez de contraseñas · la <b>.ppk/.pem</b> no se comparte ni se sube a GitHub</li>
-    <li>Revisa seguido: <b>sudo ss -tlnp</b> (qué escucha) y <b>last -i</b> (quién entró)</li>
-  </ul>
-  <p class="sub" style="margin-top:14px">Regla de la casa: <b>cada puerta abierta es una puerta que alguien va a tocar</b>. 🚪</p>
+<!-- 6 · PASO 4: EL BALANCEADOR -->
+<section class="slide" id="lab3">
+  <span class="k"><span class="act-chip">🧪 PASO 4</span> El balanceador de carga</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">Un NGINX que <span class="grad">reparte las visitas</span></h2>
+  <div class="grid2" style="align-items:start">
+    <div class="demo term lab" id="lab3t" style="min-height:330px"></div>
+    <ul class="cmdlist">
+      <li><code>upstream sitios { … }</code><span>la lista de contenedores a los que reparte</span></li>
+      <li><code>zone sitios 64k;</code><span>que todos los procesos de NGINX compartan el turno (sin esto, siempre responde A)</span></li>
+      <li><code>proxy_pass http://sitios;</code><span>"lo que llegue, pásalo a uno de la lista"</span></li>
+      <li><code>sudo systemctl stop nginx</code><span>apaga el NGINX viejo: el puerto 80 ahora es del balanceador</span></li>
+      <li><code>-p 80:80</code><span>el único contenedor con puerta a la calle</span></li>
+    </ul>
+  </div>
+  <p class="sub" style="margin-top:10px">Checkpoint ✅: abre <b>http://tu-IP-pública</b> y recarga con <b>Ctrl+F5</b> varias veces: ¿cambia de color?</p>
+  <script>
+  typeTerm(document.getElementById('lab3'),document.getElementById('lab3t'),[
+    ['cmd','$ mkdir -p ~/lb && nano ~/lb/default.conf'],
+    ['out','upstream sitios {'],['out','    zone sitios 64k;'],['out','    server web-A:80;'],['out','    server web-B:80;'],['out','    server web-C:80;'],['out','}'],
+    ['out','server {'],['out','    listen 80;'],['out','    location / {'],['out','        proxy_pass http://sitios;'],['out','        add_header X-Atendido-Por $upstream_addr always;'],['out','    }'],['out','}'],
+    ['cmd','$ sudo systemctl stop nginx && sudo systemctl disable nginx'],
+    ['cmd','$ docker run -d --name balanceador --network red-web -p 80:80 -v ~/lb/default.conf:/etc/nginx/conf.d/default.conf:ro nginx:alpine'],
+    ['hl','<b>4f2c9a…</b>'],['note','  ↑ el recepcionista ya está en la puerta 80']]);
+  </script>
 </section>
 
-<!-- 9 · RETO -->
-<section class="slide">
-  <span class="k"><span class="act-chip">🏁 RETO</span> Detective de tu propio servidor</span>
-  <h2>¿Tu servidor está <span class="grad">bien cerrado</span>?</h2>
-  <ul class="clean">
-    <li>1 · En la consola, revisa tu <b>Security Group</b>: ¿el 22 dice <b>Mi IP</b> o <b>0.0.0.0/0</b>? Si es 0.0.0.0/0, corrígelo</li>
-    <li>2 · Corre <b>sudo ss -tlnp</b>: ¿hay alguna puerta abierta que no reconozcas?</li>
-    <li>3 · Corre <b>sudo journalctl -u sshd | grep "Invalid user" | tail</b>: ¿ya te tocaron la puerta los robots? 🤖</li>
-  </ul>
-  <p class="sub" style="margin-top:20px">Spoiler: casi todos los servidores con el 22 abierto al mundo reciben intentos de robots <b>en las primeras horas</b>.</p>
+<!-- 7 · PASO 5: PRUEBA DE FUEGO -->
+<section class="slide" id="lab4">
+  <span class="k"><span class="act-chip">🧪 PASO 5</span> Prueba de fuego</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">Mira el reparto… y <span class="grad">tumba un contenedor</span></h2>
+  <div class="grid2" style="align-items:start">
+    <div class="demo term lab" id="lab4t" style="min-height:330px"></div>
+    <ul class="cmdlist">
+      <li><code>for i in 1 2 3 4 5 6; do curl -s localhost | grep -o "Sitio ."; done</code><span>6 visitas seguidas: ¿se reparten?</span></li>
+      <li><code>docker stop web-B</code><span>apaga un sitio a propósito</span></li>
+      <li><span>repite las 6 visitas</span><span>¿la web sigue viva sin B?</span></li>
+      <li><code>docker start web-B</code><span>B vuelve al reparto en ~10 s (si no: <code>docker restart balanceador</code>)</span></li>
+      <li><code>docker logs balanceador --tail 5</code><span>el registro de quién atendió</span></li>
+    </ul>
+  </div>
+  <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: la salida del <b>for</b> antes y después de tumbar <b>web-B</b>.</p>
+  <script>
+  typeTerm(document.getElementById('lab4'),document.getElementById('lab4t'),[
+    ['cmd','$ for i in 1 2 3 4 5 6; do curl -s localhost | grep -o "Sitio ."; done'],['hl','<b>Sitio A</b>'],['hl','<b>Sitio B</b>'],['hl','<b>Sitio C</b>'],['hl','<b>Sitio A</b>'],['hl','<b>Sitio B</b>'],['hl','<b>Sitio C</b>'],['note','  ↑ reparto por turnos (round robin)'],
+    ['cmd','$ docker stop web-B'],
+    ['cmd','$ for i in 1 2 3 4; do curl -s localhost | grep -o "Sitio ."; done'],['hl','<b>Sitio A</b>'],['hl','<b>Sitio C</b>'],['hl','<b>Sitio C</b>'],['hl','<b>Sitio A</b>'],['note','  ↑ B está caído y la web sigue viva: alta disponibilidad ✓'],
+    ['cmd','$ docker start web-B'],['note','  ↑ en ~10 s B vuelve al reparto (si no vuelve: docker restart balanceador)']]);
+  </script>
 </section>
 
-<!-- 10 · DEJA TODO SANO -->
+<!-- 8 · CHULETA DOCKER -->
+<section class="slide">
+  <span class="k"><span class="act-chip">📋 CHULETA</span> Los comandos de Docker que usaste hoy</span>
+  <h2>Tu <span class="grad">chuleta de Docker</span></h2>
+  <ul class="cmdlist" style="max-width:1000px">
+    <li><code>docker run -d --name X imagen</code><span>crea y enciende un contenedor (<b>-d</b> = en segundo plano)</span></li>
+    <li><code>docker ps</code> / <code>docker ps -a</code><span>los que están corriendo / todos</span></li>
+    <li><code>docker stop X</code> · <code>docker start X</code><span>apagar y encender</span></li>
+    <li><code>docker logs X</code><span>qué ha pasado dentro del contenedor</span></li>
+    <li><code>docker exec -it X sh</code><span>entrar al contenedor (como SSH, pero a la habitación)</span></li>
+    <li><code>docker images</code><span>los moldes descargados (nginx:alpine pesa ~20 MB)</span></li>
+    <li><code>docker rm -f X</code><span>borrar un contenedor</span></li>
+    <li><span><code>-p 80:80</code> · <code>-v carpeta:ruta</code> · <code>--network red</code></span><span>abrir puerto · montar una carpeta · conectar a una red</span></li>
+  </ul>
+</section>
+
+<!-- 9 · LIMPIEZA -->
 <section class="slide">
   <span class="k"><span class="act-chip">✅ CIERRE</span> Deja la casa en orden</span>
-  <h2>Antes de irte: <span class="grad">tu servidor sano y cerrado</span></h2>
+  <h2>Antes de irte: <span class="grad">vuelve a tu web de siempre</span></h2>
   <ul class="clean check">
-    <li>Security Group: <b>80</b> abierto · <b>22</b> solo <b>Mi IP</b> · nada más</li>
-    <li>Tu web abre en la IP pública <b>con tu foto</b></li>
-    <li><b>systemctl is-active nginx</b> → <b>active</b></li>
-    <li>Tu <b>.ppk</b> guardada en un lugar seguro (no en el escritorio ni en GitHub)</li>
+    <li>Borra los contenedores: <b>docker rm -f balanceador web-A web-B web-C</b></li>
+    <li>Borra la red: <b>docker network rm red-web</b></li>
+    <li>Enciende tu NGINX de siempre: <b>sudo systemctl enable --now nginx</b> → tu web vuelve a la IP pública</li>
+    <li><b>docker ps -a</b> vacío y <b>curl -I localhost</b> → <b>200 OK</b></li>
     <li>¿No lo vas a usar más hoy? <b>Stop</b> a la instancia — capa gratuita cuidada 💵</li>
   </ul>
 </section>
@@ -622,11 +579,11 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   <span class="k">Para la próxima clase</span>
   <h2>Su misión</h2>
   <ul class="clean">
-    <li>1 · Pantallazo de <b>sudo ss -tlnp</b> y del <b>Security Group</b> con el 22 en "Mi IP"</li>
-    <li>2 · El link de tu web <b>con tu foto</b> subida por SFTP</li>
-    <li>3 · En tu bitácora: los modos <b>NAT, bridge y host-only</b> y su equivalente en AWS (una frase cada uno)</li>
+    <li>1 · Pantallazo de <b>docker ps</b> con <b>web-A, web-B, web-C y balanceador</b> corriendo</li>
+    <li>2 · Pantallazo del <b>for con curl</b> repartiendo A → B → C, y después de <b>docker stop web-B</b></li>
+    <li>3 · En tu bitácora: ¿qué es un <b>contenedor</b>, qué hace un <b>balanceador de carga</b> y qué es <b>alta disponibilidad</b>? (una frase cada uno)</li>
   </ul>
-  <p class="sub" style="margin-top:24px">Hoy aprendieron a <b>entrar</b> a su servidor de forma segura, a <b>llevarle cosas</b> y a <b>cerrar las puertas</b> que sobran. 🔐</p>
+  <p class="sub" style="margin-top:24px">Hoy montaron <b>varios sitios en una sola máquina</b> y un <b>balanceador</b> que no deja caer la web. Eso es arquitectura de verdad. ⚖️🐳</p>
   <div class="qrs">
     <div class="qr qr-ticket">{{QR_TICKET}}
 
