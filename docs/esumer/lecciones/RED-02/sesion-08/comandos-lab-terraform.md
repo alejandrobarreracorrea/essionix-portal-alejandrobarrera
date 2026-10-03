@@ -240,6 +240,27 @@ terraform destroy
 2. En main.tf cambia `Name = "web-tf"` por `Name = "web-terraform"` → **Ctrl+S** → `terraform apply` → `1 to change`.
 3. Al final, el bloque 🧹 Destroy.
 
+**Subir tu plano a GitHub · .gitignore para Terraform**
+En VS Code crea el archivo `.gitignore` en la carpeta pyme-tf, pega esto y guarda (Ctrl+S):
+```
+.terraform/
+crash.log
+crash.*.log
+*.tfplan
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+*.ppk
+*.pem
+*accessKeys.csv
+```
+Sí se suben: `main.tf` y `.terraform.lock.hcl` (la versión exacta del provider). Comprueba con `git status` que no aparezcan `terraform.tfstate` ni `terraform.tfvars`.
+
 **Cierre · apaga tu llave**
 IAM → `terraform-lab` → Credenciales de seguridad → la clave → **Acciones → Desactivar** → **Eliminar**. Y en la terminal: `Remove-Item $HOME\.aws\credentials`.
 
