@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- deck-meta: grupo=RED-02 sesion=8 clase=8 -->
+<!-- deck-meta: grupo=RED-01 sesion=9 clase=9 -->
 <title>Sesión {{SESION}} · Grupo {{G_NUM}} · Cloud, Redes y Ciberseguridad — Esumer</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -276,31 +276,18 @@ ul.clean li:first-child { border-top:0; }
 <!-- 2 · PLAN -->
 <section class="slide">
   <span class="k">El plan de hoy · clase {{SESION}}</span>
-  <h2>Objetivo de hoy: <span class="grad">construir tu red y tu servidor con código</span>.</h2>
+  <h2>Objetivo de hoy: <span class="grad">proteger tu servidor y luego construirlo con código</span>.</h2>
   <ul class="rows">
+    <li><span class="t">Retomamos la clase 8<small>Snapshot vs. AMI · ¿qué fierro te dio el hipervisor? · daña tu web y recupérala · clónala con tu AMI</small></span><span class="m">lab</span></li>
     <li><span class="t">Todo es una llamada a la API<small>Qué pasa de verdad cuando haces clic · CloudTrail · la CLI de AWS</small></span><span class="m">concepto</span></li>
     <li><span class="t">La llave de la CLI<small>Usuario IAM · permisos · access key · aws configure</small></span><span class="m">concepto</span></li>
     <li><span class="t">¿Por qué nació Terraform?<small>De los clics a los scripts y del script al plano</small></span><span class="m">concepto</span></li>
     <li><span class="t">Cómo trabaja y por qué es el estándar<small>init · plan · apply · state · destroy</small></span><span class="m">concepto</span></li>
     <li><span class="t">LAB: pyme-vpc + EC2 desde Terraform<small>tu llave · tu PC (PowerShell) · pieza por pieza · cambiar · destruir</small></span><span class="m">lab</span></li>
   </ul>
-  <p class="sub" style="margin-top:14px">Hasta hoy construimos clic por clic. Hoy dibujamos <b>el plano</b> y la obra se construye sola. 📐</p>
 </section>
 
-<!-- 3 · TODO ES UNA LLAMADA A LA API -->
-<section class="slide" id="scA">
-  <style>
-    .scene{width:min(100%,1080px,calc(58vh * var(--ar)));margin:6px auto 0}
-    .scene canvas{display:block;width:100%;border-radius:14px;background:#f7f9fc;border:1px solid var(--line)}
-    .scbar{display:flex;align-items:center;gap:16px;margin:8px auto 0;width:min(100%,1080px)}
-    .scbar .cap{flex:1;font-size:clamp(.86rem,1.4vw,1.06rem);color:var(--muted);line-height:1.45;min-height:3em}
-    .scbar .cap b{color:var(--text)}
-    .scbar .dots{display:flex;gap:6px}
-    .scbar .dots i{width:10px;height:10px;border-radius:50%;background:var(--line);display:block;transition:background .3s}
-    .scbar .dots i.on{background:var(--naranja)}
-    .scbar .shint{font-family:var(--mono);font-size:.7rem;color:var(--faint);white-space:nowrap}
-  </style>
-  <script>
+<script>
   window.NetScene=(function(){
     var DPR=Math.min(window.devicePixelRatio||1,2);
     var RM=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -342,7 +329,7 @@ ul.clean li:first-child { border-top:0; }
     return {make:make,E:E,rr:rr,txt:txt,house:house,rectProg:rectProg,person:person,bubble:bubble,laptop:laptop,cloud:cloud,building:building,packet:packet,along:along};
   })();
   </script>
-  <script>
+<script>
   /* Viz: piezas visuales comunes (escenario oscuro, isometría, servidores, VMs) para las escenas de la sesión 7 */
   window.Viz=(function(){
     var C={bg0:'#08182a',bg1:'#123356',navy:'#0E2841',blue:'#0F9ED5',dblue:'#156082',ora:'#E97132',txt:'#EAF3FA',mut:'#9fb6c9',faint:'#5f7890',grn:'#34c38f',red:'#e5484d',yel:'#FFC928'};
@@ -400,6 +387,233 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
     return {C:C,dots:dots,mp:mp,bg:bg,tx:tx,pill:pill,crumbs:crumbs,pulse:pulse,iso:iso,server:server,rack:rack,vm:vm,building:building,fiber:fiber,chip:chip,glow:glow};
   })();
   </script>
+<!-- 2b · RETOMAMOS: LO QUE QUEDÓ PENDIENTE DE LA CLASE 8 -->
+<section class="slide">
+  <span class="k"><span class="act-chip">🔁 RETOMAMOS</span> Lo que quedó pendiente de la clase 8</span>
+  <h2>Primero, <span class="grad">la práctica del “hackeo”</span></h2>
+  <ul class="clean">
+    <li>La clase pasada entendimos qué hay debajo de tu EC2: el <b>hipervisor</b>, <b>Nitro</b>, las <b>VM vs. contenedores</b> y <b>x86 vs. ARM</b>.</li>
+    <li>Nos faltó lo más divertido: <b>sacarle la foto</b> a tu servidor (snapshot), <b>dañar tu web</b> a propósito y <b>recuperarla</b>, y <b>clonarla</b> con tu propia AMI.</li>
+    <li>Después damos el gran salto: toda tu red y tu servidor, <b>escritos como código con Terraform</b>.</li>
+  </ul>
+</section>
+
+<!-- 7 · AMI Y SNAPSHOT -->
+<section class="slide" id="scAMI">
+  <span class="k"><span class="act-chip">📸 AMI y SNAPSHOT</span> La fotocopia y el kit · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px"><span class="grad">Snapshot</span> vs. <span class="grad">AMI</span>: la fotocopia y la caja del kit</h2>
+  <div class="scene"><canvas aria-label="Animación: una AMI como plano que crea tres EC2 idénticas; un snapshot como foto del disco que permite restaurarlo tras un desastre"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scAMI',1000,480,[
+    'Tu EC2 es un computador, y su <b>disco</b> es como un <b>cuaderno</b> donde está escrito todo: Linux, NGINX y tu página web.',
+    '<b>SNAPSHOT = una fotocopia del cuaderno</b> 📸. Copia <b>solo el disco</b>, tal como estaba en ese momento, y AWS la guarda aparte.',
+    '¿Para qué sirve? Si dañas el cuaderno (borras algo, te hackean…), <b>lo reemplazas con la fotocopia</b> y recuperas todo. Sirve para <b>recuperar datos</b>.',
+    '<b>AMI = la caja de un kit armable</b> 📦. Adentro trae la <b>fotocopia (snapshot)</b> + un <b>manual de instrucciones</b>: tipo de procesador, qué disco va dónde, de qué tamaño…',
+    'Con la caja armas <b>computadores completos</b>, todos iguales. Así lanzaste tu EC2: con la AMI de Amazon Linux.',
+    '<b>La diferencia:</b> el <b>snapshot</b> es la copia de <b>un disco</b> (para recuperar). La <b>AMI</b> es <b>snapshot + instrucciones</b> (para crear máquinas enteras).'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    function A(k,d,dl){return st>k?1:(st<k?0:E.out(Math.max(0,Math.min(1,(t-(dl||0))/(d||.6)))));}
+    function notebook(x,y,sc,col,a,broken,label){if(!(a>0))return;c.save();c.globalAlpha*=a;c.translate(x,y);c.scale(sc,sc);
+      c.fillStyle=broken?'#5a2a2a':col;NetScene.rr(c,-60,-78,120,156,8);c.fill();c.fillStyle='#f4f8fb';NetScene.rr(c,-50,-70,104,140,5);c.fill();
+      c.fillStyle='#b8c4d0';for(var r=0;r<4;r++)c.fillRect(-40,-50+r*24,84,3);c.fillStyle='#0E2841';c.font='700 12px Poppins';c.textAlign='left';['Linux','NGINX','tu web'].forEach(function(w,k){c.fillText(broken&&k===2?'✗✗✗':w,-40,-55+k*24);});
+      c.fillStyle='#8a97a5';for(var k=0;k<7;k++){c.beginPath();c.arc(-60,-66+k*22,4,0,7);c.fill();}
+      if(broken){c.strokeStyle=C.red;c.lineWidth=4;c.beginPath();c.moveTo(-45,-60);c.lineTo(50,60);c.moveTo(50,-60);c.lineTo(-45,60);c.stroke();}
+      c.restore();if(label)V.tx(c,label,x,y+78*sc+22,13,'#fff','center',700,a);}
+    function copyMark(x,y,sc,a){V.tx(c,'📸 copia 30 sep 7:40 p. m.',x,y-78*sc-10,12,'#9fd8f0','center',700,a);}
+    function box(x,y,a,open,k){k=k||1;if(!(a>0))return;V.iso(c,x-100*k,y,130*k,110*k,90*k,'#E97132','#8a3f1a','#b0552a',a);V.tx(c,'AMI',x-20*k,y-38*k,26*k,'#fff','center',900,a);if(k>=1)V.tx(c,'kit para armar EC2',x-20,y-16,11,'#ffe0cc','center',700,a);}
+    var showSnapSide=st<=2;
+    /* izquierda: el cuaderno original = disco de tu EC2 */
+    if(showSnapSide){var a0=st===0?E.out(Math.min(1,t/.6)):1;
+      V.vm(c,70,70,220,64,'tu EC2','un computador',C.blue,a0,false);c.save();c.globalAlpha*=a0;c.strokeStyle='rgba(159,182,201,.5)';c.setLineDash([4,5]);c.beginPath();c.moveTo(180,134);c.lineTo(180,170);c.stroke();c.restore();
+      notebook(180,270,1,'#0F9ED5',a0,st===2&&t>.4,'disco = el cuaderno');
+      /* snapshot = fotocopia */var a1=A(1,.6,.5);
+      if(st===1){var fl=Math.max(0,1-(t-.1)/.4);if(fl>0){c.save();c.globalAlpha=fl*.7;c.fillStyle='#fff';c.fillRect(100,170,170,210);c.restore();}}
+      if(a1>0){var mx=st===1?180+(500-180)*E.io(Math.min(1,Math.max(0,(t-.4)/.8))):500;notebook(mx,270,1,'#6a7c8f',a1,false,'SNAPSHOT = la fotocopia');copyMark(mx,270,1,a1);
+        V.tx(c,'solo el disco · guardada aparte',500,410,12,C.mut,'center',600,a1);}
+      if(st===2&&t>.9){var u=Math.min(1,(t-.9)/.9),px=500+(760-500)*E.io(u);notebook(px,270,1,'#34c38f',u,false,u>=1?'✓ recuperado':'');
+        if(u>=1)V.tx(c,'la fotocopia te devuelve todo',760,410,13,'#9ff0c8','center',700,1);}}
+    /* AMI = caja kit */
+    if(st>=3&&st<5){var a3=st===3?E.out(Math.min(1,t/.6)):1,bx=250,by=320;
+      if(st===3){notebook(120,260,.7,'#6a7c8f',a3*Math.max(0,1-(t-.6)/.8),false,'');
+        c.save();c.globalAlpha*=a3*Math.max(0,1-(t-1.2)/.8);c.fillStyle='#f4f8fb';NetScene.rr(c,330,190,110,130,6);c.fill();c.restore();}
+      box(bx,by,a3,true);
+      var inside=A(3,.5,1.6);V.tx(c,'adentro trae:',bx-20,by+34,13,'#fff','center',700,inside);
+      V.pill(c,bx-160,by+46,'📸 snapshot (el disco)','rgba(15,158,213,.35)','#fff',inside);V.pill(c,bx-160,by+76,'📘 manual: x86 · 8 GB · disco raíz','rgba(233,113,50,.35)','#fff',inside);
+      if(st>=4){for(var k=0;k<3;k++){var a4=st===4?E.back(Math.max(0,Math.min(1,(t-.3-k*.3)/.5))):1,x=520+k*150;
+          if(st===4){var u4=Math.min(1,Math.max(0,(t-.1-k*.3)/.5));if(u4<1){var pt=NetScene.along([[bx+40,by-80],[x+60,170]],E.io(u4));NetScene.packet(c,pt[0],pt[1],C.ora,1);}}
+          V.vm(c,x,110,120,80,'EC2 #'+(k+1),'completa',C.blue,a4,false);V.server(c,x+10,200,100,14,t,k,false,a4);}
+        V.tx(c,'computadores completos, todos iguales',745,250,14,'#9fd8f0','center',700,A(4,.5,1.2));}}
+    /* la diferencia */
+    if(st>=5){var a5=E.out(Math.min(1,t/.6));c.save();c.globalAlpha*=a5;c.fillStyle='#0b1f35';c.fillRect(0,0,1000,480);c.restore();
+      V.tx(c,'¿Cuál es la diferencia?',500,70,24,'#fff','center',800,a5);
+      c.save();c.globalAlpha*=a5;c.fillStyle='rgba(15,158,213,.15)';NetScene.rr(c,70,100,410,330,16);c.fill();c.strokeStyle=C.blue;c.lineWidth=2;c.stroke();c.fillStyle='rgba(233,113,50,.15)';NetScene.rr(c,520,100,410,330,16);c.fill();c.strokeStyle=C.ora;c.stroke();c.restore();
+      notebook(275,210,.6,'#6a7c8f',a5,false,'');V.tx(c,'📸 SNAPSHOT',275,300,20,'#9fd8f0','center',800,a5);V.tx(c,'= copia de UN disco',275,328,15,'#fff','center',700,a5);V.tx(c,'sirve para: recuperar datos',275,360,14,'#cfe3f1','center',600,a5);V.tx(c,'"volver a como estaba"',275,386,13,C.mut,'center',500,a5);
+      box(752,250,a5,false,.55);V.tx(c,'📦 AMI',725,300,20,'#ffb98a','center',800,a5);V.tx(c,'= snapshot + instrucciones',725,328,15,'#fff','center',700,a5);V.tx(c,'sirve para: crear máquinas enteras',725,360,14,'#ffe0cc','center',600,a5);V.tx(c,'"sacar copias iguales"',725,386,13,C.mut,'center',500,a5);}
+  });
+  </script>
+</section>
+
+<!-- 8 · LAB 1: ¿QUÉ FIERRO TE DIO EL HIPERVISOR? -->
+<section class="slide" id="labV">
+  <span class="k"><span class="act-chip">🧪 LAB 1</span> Tu máquina virtual por dentro · MobaXterm + tu EC2</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">¿Qué <span class="grad">fierro</span> te dio el hipervisor?</h2>
+  <style>.term.lab{max-height:52vh;overflow:auto;font-size:clamp(.72rem,1.05vw,.9rem)}.term.lab p{white-space:pre-wrap;word-break:break-all;min-height:1.35em}.term.lab p.hl b{color:#FFC928;font-weight:600;background:rgba(255,201,40,.14);border-radius:4px;padding:0 3px}.term.lab p.note{color:#9fb3c8;font-size:.85em}.term.lab .cur{display:inline-block;width:.6em;background:#39c8e8;animation:blk 1s steps(1) infinite}@keyframes blk{50%{opacity:0}}
+  .cmdlist{list-style:none;display:flex;flex-direction:column;gap:6px;font-size:clamp(.78rem,1.1vw,.95rem)}.cmdlist li{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}.cmdlist code{font-family:var(--mono);color:var(--a1);font-weight:600;font-size:.92em}</style>  <script>
+  window.typeTerm=window.typeTerm||function(sec,box,L){var T=[];function esc(x){return x.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+    function at(ms,fn){T.push(setTimeout(fn,ms));}
+    sec.__enter=function(){T.forEach(clearTimeout);T=[];box.innerHTML='';var d=300;
+      L.forEach(function(l){var el=document.createElement('p');if(l[0]!=='cmd')el.className=l[0];
+        if(l[0]==='cmd'){at(d,function(){box.appendChild(el);box.scrollTop=box.scrollHeight;});for(var i=1;i<=l[1].length;i++)(function(k){at(d+k*38,function(){el.innerHTML=esc(l[1].slice(0,k))+'<span class="cur">&nbsp;</span>';});})(i);d+=l[1].length*38+380;at(d-10,function(){el.innerHTML=esc(l[1]);});}
+        else{at(d,function(){el.innerHTML=l[0]==='out'?esc(l[1]):l[1];el.style.opacity=0;box.appendChild(el);box.scrollTop=box.scrollHeight;el.animate([{opacity:0},{opacity:1}],{duration:300,fill:'forwards'});});d+=l[0]==='note'?800:300;}});};};
+  </script>
+  <div class="grid2" style="align-items:start">
+    <div class="demo term lab" id="labVterm" style="min-height:320px"></div>
+    <ul class="cmdlist">
+      <li><code>systemd-detect-virt</code><span>¿soy una VM? (amazon / xen)</span></li>
+      <li><code>lscpu</code><span>arquitectura (<b>x86_64</b> o <b>aarch64</b>=ARM), vCPU, hipervisor</span></li>
+      <li><code>uname -m</code><span>idioma del procesador, corto</span></li>
+      <li><code>free -h</code><span>la RAM que te tocó</span></li>
+      <li><span><code>lsblk</code> · <code>df -h /</code></span><span>tu disco EBS y cuánto usas</span></li>
+      <li><code>ip -brief a</code><span>tu <b>tarjeta de red virtual</b> y tu IP privada</span></li>
+      <li><code>uptime</code><span>hace cuánto está encendida</span></li>
+    </ul>
+  </div>
+  <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: tu <b>arquitectura</b>, <b>vCPU</b>, <b>RAM</b> y <b>disco</b>. Compara con un compañero: ¿a alguien le salió <b>aarch64</b>?</p>
+  <script>
+  typeTerm(document.getElementById('labV'),document.getElementById('labVterm'),[
+    ['cmd','$ systemd-detect-virt'],['hl','<b>amazon</b>'],['note','  ↑ sí: estás en una máquina virtual (en t2 dice xen)'],
+    ['cmd','$ lscpu | grep -E "Architecture|^CPU\\(s\\)|Hypervisor"'],['hl','Architecture:      <b>x86_64</b>'],['hl','CPU(s):            <b>2</b>'],['hl','Hypervisor vendor: <b>KVM</b>'],['note','  ↑ idioma x86 · 2 vCPU · hipervisor KVM (Nitro)'],
+    ['cmd','$ free -h | head -2'],['out','        total   used   free'],['hl','Mem:   <b>949Mi</b>   …'],
+    ['cmd','$ df -h /'],['hl','/dev/nvme0n1p1  <b>8.0G</b>  1.9G  6.1G  24% /'],
+    ['cmd','$ ip -brief a'],['hl','enX0   UP   <b>10.0.1.123/28</b>'],['note','  ↑ tu tarjeta de red virtual (la da Nitro)'],
+    ['cmd','$ uptime'],['out',' 19:42:10 up 2 days, 3:14, 1 user, load average: 0.00']]);
+  </script>
+</section>
+
+<!-- 8b · LAB 1b: TU EC2 TE DICE DÓNDE VIVE (metadatos) -->
+<section class="slide" id="labW">
+  <span class="k"><span class="act-chip">🧪 LAB 1b</span> Pregúntale a tu EC2 dónde vive</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">Tu EC2 te dice <span class="grad">en qué data center vive</span></h2>
+  <div class="grid2" style="align-items:start">
+    <div class="demo term lab" id="labWterm" style="min-height:320px"></div>
+    <ul class="cmdlist">
+      <li><code>169.254.169.254</code><span>la "portería" de AWS: solo tu EC2 le puede preguntar (metadatos)</span></li>
+      <li><code>TOKEN=$(curl …)</code><span>pides un pase temporal (IMDSv2, seguro)</span></li>
+      <li><code>…/placement/availability-zone</code><span>tu <b>zona de disponibilidad</b></span></li>
+      <li><code>…/instance-type</code><span>tu tipo: t2/t3.micro</span></li>
+      <li><code>…/ami-id</code><span>la <b>AMI</b> (el kit) con la que nació</span></li>
+      <li><span><code>…/local-ipv4</code> · <code>public-ipv4</code></span><span>tu IP privada y la pública</span></li>
+    </ul>
+  </div>
+  <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: <b>tu zona de disponibilidad</b> y tu <b>ami-id</b>. ¿Todos quedaron en la misma AZ?</p>
+  <script>
+  typeTerm(document.getElementById('labW'),document.getElementById('labWterm'),[
+    ['cmd','$ TOKEN=$(curl -sX PUT http://169.254.169.254/latest/api/token -H "X-aws-ec2-metadata-token-ttl-seconds: 300")'],['note','  ↑ pediste un pase de 5 minutos'],
+    ['cmd','$ M="curl -sH X-aws-ec2-metadata-token:$TOKEN http://169.254.169.254/latest/meta-data"'],
+    ['cmd','$ $M/placement/availability-zone; echo'],['hl','<b>us-east-1a</b>'],['note','  ↑ región us-east-1 · zona "a": ¡tu data center!'],
+    ['cmd','$ $M/instance-type; echo'],['hl','<b>t3.micro</b>'],
+    ['cmd','$ $M/ami-id; echo'],['hl','<b>ami-0a1b2c3d4e5f67890</b>'],['note','  ↑ el kit con el que nació tu máquina'],
+    ['cmd','$ $M/local-ipv4; echo; $M/public-ipv4; echo'],['hl','<b>10.0.1.123</b>'],['hl','<b>54.210.33.17</b>']]);
+  </script>
+</section>
+
+<!-- 9a · LAB 2: SNAPSHOT — TU SEGURO CONTRA DESASTRES -->
+<section class="slide" id="scG">
+  <span class="k"><span class="act-chip">🧪 LAB 2</span> Snapshot: tu seguro contra desastres · clic o → para el siguiente paso</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">Saca la foto, <span class="grad">daña tu web</span> y recupérala</h2>
+  <div class="scene"><canvas aria-label="Laboratorio animado: crear un snapshot del volumen, dañar la página a propósito, reemplazar el volumen raíz con el snapshot y comprobar que la web volvió"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scG',1000,480,[
+    '<b>LAB 2 · El seguro.</b> Vamos a hacer lo que hace una empresa antes de tocar un servidor: <b>sacar la foto del disco</b>. Después lo dañamos a propósito y lo recuperamos.',
+    '<b>Paso 1 · La foto.</b> EC2 → tu instancia → pestaña <b>Almacenamiento</b> → clic en el <b>ID del volumen</b> → <b>Acciones → Crear snapshot</b>. Descripción: <b>antes-del-desastre</b>.',
+    '<b>Paso 2 · Espera.</b> Menú <b>Elastic Block Store → Snapshots</b>: espera el estado <b>Completed</b> (1–3 min). Tu foto ya está guardada aparte, a salvo.',
+    '<b>Paso 3 · El desastre (a propósito).</b> En tu terminal: <b>echo "&lt;h1&gt;HACKEADO&lt;/h1&gt;" | sudo tee /usr/share/nginx/html/index.html</b> y recarga tu página. 😱',
+    '<b>Paso 4 · Restaura.</b> Tu instancia → <b>Acciones → Monitorear y solucionar problemas → Reemplazar volumen raíz</b> → elige el snapshot <b>antes-del-desastre</b> → marca <b>eliminar volumen reemplazado</b> → <b>Crear tarea</b>. La EC2 se reinicia sola.',
+    '<b>Paso 5 · ¡Volvió!</b> Espera 1–2 min y recarga tu IP pública: <b>tu web está como antes</b> ✓. Misma instancia, misma IP. Deja el snapshot por ahora: lo borramos en la limpieza del LAB 3.'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    function A(k,d,dl){return st>k?1:(st<k?0:E.out(Math.max(0,Math.min(1,(t-(dl||0))/(d||.6)))));}
+    function browser(x,y,state,a){if(!(a>0))return;c.save();c.globalAlpha*=a;c.fillStyle='#f4f8fb';NetScene.rr(c,x,y,230,150,10);c.fill();c.fillStyle='#d9e1ea';NetScene.rr(c,x,y,230,24,4);c.fill();
+      ['#ff5f57','#febc2e','#28c840'].forEach(function(cc,k){c.fillStyle=cc;c.beginPath();c.arc(x+14+k*12,y+12,4,0,7);c.fill();});c.restore();V.tx(c,'http://54.x.x.10',x+120,y+16,10,'#44546A','center',600,a,'"JetBrains Mono",monospace');
+      if(state==='hack'){c.save();c.globalAlpha*=a;c.fillStyle='#1a0000';c.fillRect(x+6,y+30,218,114);c.restore();V.tx(c,'HACKEADO',x+115,y+98,30,'#ff3b3b','center',900,a*(.7+.3*Math.sin(t*12)));}
+      else{c.save();c.globalAlpha*=a;c.fillStyle=state==='back'?'#1f7a50':'#156082';c.fillRect(x+6,y+30,218,40);c.fillStyle='#c9d6e2';c.fillRect(x+18,y+84,190,9);c.fillRect(x+18,y+102,150,8);c.fillRect(x+18,y+118,170,8);c.restore();V.tx(c,'Mi página ☕',x+115,y+56,15,'#fff','center',800,a);}}
+    function disk(x,y,col,label,a){if(!(a>0))return;c.save();c.globalAlpha*=a;V.glow(c,col,12);c.fillStyle=col;c.beginPath();c.ellipse(x,y-34,52,12,0,0,7);c.fill();c.fillRect(x-52,y-34,104,58);c.beginPath();c.ellipse(x,y+24,52,12,0,0,7);c.fill();c.restore();
+      c.save();c.globalAlpha*=a;c.fillStyle='rgba(255,255,255,.3)';c.beginPath();c.ellipse(x,y-34,52,12,0,0,7);c.fill();c.restore();V.tx(c,label,x,y+58,12,'#fff','center',700,a);}
+    /* tu EC2 */V.vm(c,60,70,230,64,'tu EC2','misma instancia, misma IP',C.blue,1,false);
+    var hacked=st===3||(st===4&&t<1.6),back=st>=5;
+    browser(60,160,hacked?'hack':(back?'back':'ok'),1);
+    var dcol=hacked?C.red:(back?C.grn:C.blue);disk(175,400,dcol,'volumen EBS (disco)',1);
+    if(st===0)V.tx(c,'antes de tocar un servidor… ¡foto!',620,250,20,'#ffb98a','center',800,E.out(Math.min(1,t/.6)));
+    /* snapshot */var a1=A(1,.6,.5);
+    if(st===1){var fl=Math.max(0,1-(t-.1)/.4);if(fl>0){c.save();c.globalAlpha=fl*.75;c.fillStyle='#fff';c.fillRect(100,320,160,140);c.restore();}
+      var u=Math.min(1,Math.max(0,(t-.3)/.8));if(u<1){var pt=NetScene.along([[230,400],[560,330]],E.io(u));NetScene.packet(c,pt[0],pt[1],C.ora,1);}}
+    if(a1>0){c.save();c.globalAlpha*=a1;c.fillStyle='#0d3a5c';NetScene.rr(c,560,270,300,120,12);c.fill();c.strokeStyle=C.blue;c.lineWidth=2;c.stroke();c.restore();
+      V.tx(c,'📸 snapshot',710,300,16,'#fff','center',800,a1);V.tx(c,'antes-del-desastre',710,324,14,'#9fd8f0','center',700,a1,'"JetBrains Mono",monospace');
+      var done=st>=2&&(st>2||t>1.6);V.tx(c,done?'✓ Completed':'⏳ Pending… '+Math.min(100,Math.round(t*55))+'%',710,352,13,done?'#9ff0c8':C.yel,'center',700,a1);
+      V.tx(c,'guardado aparte, a salvo',710,376,11,C.mut,'center',600,a1);}
+    if(st===3){var a3=E.out(Math.min(1,t/.5));c.save();c.globalAlpha*=a3;c.fillStyle='#0b1a2b';NetScene.rr(c,330,130,620,56,10);c.fill();c.restore();
+      V.tx(c,'$ echo "<h1>HACKEADO</h1>" | sudo tee /usr/share/nginx/html/index.html',640,164,12,'#ff9b9b','center',700,a3,'"JetBrains Mono",monospace');}
+    if(st===4){var u4=Math.min(1,Math.max(0,(t-.3)/1.2));var p4=NetScene.along([[560,330],[240,390]],E.io(u4));if(u4<1)NetScene.packet(c,p4[0],p4[1],C.grn,1);
+      V.tx(c,'Reemplazar volumen raíz ← snapshot',640,160,16,'#9ff0c8','center',800,E.out(Math.min(1,t/.5)));V.tx(c,t<1.6?'↻ reiniciando…':'✓ disco restaurado',640,186,13,C.mut,'center',600,1);}
+    if(st>=5){V.tx(c,'¡Volvió! ✓',640,170,30,'#9ff0c8','center',900,E.back(Math.min(1,t/.6)));V.tx(c,'el snapshot te devolvió el disco tal como estaba',640,200,14,'#fff','center',600,E.out(Math.min(1,t/.6)));}
+  });
+  </script>
+</section>
+
+<!-- 9 · LAB 2: CLONA TU SERVIDOR CON UNA AMI (escena) -->
+<section class="slide" id="scClon">
+  <span class="k"><span class="act-chip">🧪 LAB 3</span> Clona tu servidor web · clic o → para el siguiente paso</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">Tu web en <span class="grad">una segunda EC2</span>, con tu propia AMI</h2>
+  <div class="scene"><canvas aria-label="Laboratorio animado: foto de tu EC2, AMI disponible, lanzar una copia, abrir la misma página en otra IP y limpiar"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scClon',1000,480,[
+    '<b>LAB 3 · Clona tu servidor web.</b> Antes, en tu EC2 corre <b>sudo systemctl enable nginx</b>: así NGINX arranca solo cuando se encienda la copia.',
+    '<b>Paso 1 · La foto.</b> EC2 → tu instancia → <b>Acciones → Imagen y plantillas → Crear imagen</b>. Nombre: <b>mi-web-ami</b>.',
+    '<b>Paso 2 · Espera el molde.</b> En <b>AMIs</b> espera el estado <b>available</b> (3–5 min). En <b>Snapshots</b> verás la foto de tu disco que AWS creó por dentro.',
+    '<b>Paso 3 · Lanza la copia.</b> Selecciona <b>mi-web-ami → Lanzar instancia desde AMI</b>: t2/t3.micro, tu key pair, subred <b>web</b> de pyme-vpc y el mismo Security Group.',
+    '<b>Paso 4 · Compruébalo.</b> Abre <b>http://IP-pública-nueva</b>: ¡tu misma página, en otra máquina! Así escalan las empresas.',
+    '<b>Paso 5 · Limpieza (capa gratuita).</b> Termina la copia, haz <b>Deregister</b> a la AMI y en <b>Snapshots</b> borra los dos: el de la AMI y el <b>antes-del-desastre</b> del LAB 2. Si los dejas, cobran unos centavos al mes.'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    function A(k,d,dl){return st>k?1:(st<k?0:E.out(Math.max(0,Math.min(1,(t-(dl||0))/(d||.6)))));}
+    function page(x,y,col,a){if(!(a>0))return;c.save();c.globalAlpha*=a;c.fillStyle='#f4f8fb';NetScene.rr(c,x,y,120,78,8);c.fill();c.fillStyle=col;NetScene.rr(c,x,y,120,16,4);c.fill();c.fillStyle='#c9d6e2';c.fillRect(x+12,y+28,96,8);c.fillRect(x+12,y+44,70,6);c.fillRect(x+12,y+56,84,6);c.restore();}
+    V.vm(c,90,190,180,120,'tu EC2 · web','IP 54.x.x.10',C.blue,1,st<5);V.server(c,100,322,160,16,t,1,false,1);page(120,92,C.blue,1);
+    if(st===0)V.tx(c,'$ sudo systemctl enable nginx',180,410,14,'#9ff0c8','center',700,A(0,.5,.3),'"JetBrains Mono",monospace');
+    if(st===1){var fl=Math.max(0,1-(t-.1)/.45);if(fl>0){c.save();c.globalAlpha=fl*.8;c.fillStyle='#fff';c.fillRect(60,70,240,300);c.restore();}V.tx(c,'📸 Crear imagen',180,62,16,'#ffb98a','center',700,1);}
+    var am=A(1,.6,.4),gone=st>=5?E.out(Math.max(0,Math.min(1,(t-.3)/.6))):0;
+    if(am>0){c.save();c.globalAlpha*=am*(1-gone*.8);c.translate(500,240);c.scale(am,am);c.fillStyle='#0d3a5c';NetScene.rr(c,-105,-60,210,120,14);c.fill();c.strokeStyle=C.blue;c.lineWidth=2;c.stroke();c.restore();
+      V.tx(c,'mi-web-ami',500,236,20,'#fff','center',800,am*(1-gone*.8));var avail=st>=2&&(st>2||t>1.8);V.tx(c,avail?'✓ available':'⏳ pending…',500,262,13,avail?'#9ff0c8':C.yel,'center',700,am*(1-gone*.8));
+      if(gone>0)V.tx(c,'deregister ✗ · snapshot borrado',500,326,14,'#ff9b9b','center',700,gone);
+      if(st===1){var u=Math.min(1,Math.max(0,(t-.2)/.7));if(u<1){var pt=NetScene.along([[275,250],[395,250]],E.io(u));NetScene.packet(c,pt[0],pt[1],C.ora,1);}}}
+    var nh=A(3,.6,.3),term=st>=5?E.out(Math.min(1,t/.6)):0;
+    if(nh>0){if(st===3){var u3=Math.min(1,Math.max(0,(t-.1)/.6));if(u3<1){var p3=NetScene.along([[605,250],[730,250]],E.io(u3));NetScene.packet(c,p3[0],p3[1],C.ora,1);}}
+      V.vm(c,730,190,180,120,term>0?'copia terminada':'la copia',term>0?'':'IP 3.x.x.77 (nueva)',term>0?'#5f7890':C.grn,nh*(1-term*.6),st===4);V.server(c,740,322,160,16,t,4,false,nh*(1-term*.6));}
+    var pg=A(4,.5,.2);if(pg>0&&st<5){page(760,92,C.grn,pg);V.tx(c,'200 OK ✓ · misma web, otra máquina',820,410,15,'#9ff0c8','center',700,pg);}
+    if(st>=5)V.tx(c,'queda solo tu EC2 original ✓',180,410,15,'#9ff0c8','center',700,E.out(Math.max(0,Math.min(1,(t-.6)/.5))));
+  });
+  </script>
+</section>
+
+
+<!-- 3 · TODO ES UNA LLAMADA A LA API -->
+<section class="slide" id="scA">
+  <style>
+    .scene{width:min(100%,1080px,calc(58vh * var(--ar)));margin:6px auto 0}
+    .scene canvas{display:block;width:100%;border-radius:14px;background:#f7f9fc;border:1px solid var(--line)}
+    .scbar{display:flex;align-items:center;gap:16px;margin:8px auto 0;width:min(100%,1080px)}
+    .scbar .cap{flex:1;font-size:clamp(.86rem,1.4vw,1.06rem);color:var(--muted);line-height:1.45;min-height:3em}
+    .scbar .cap b{color:var(--text)}
+    .scbar .dots{display:flex;gap:6px}
+    .scbar .dots i{width:10px;height:10px;border-radius:50%;background:var(--line);display:block;transition:background .3s}
+    .scbar .dots i.on{background:var(--naranja)}
+    .scbar .shint{font-family:var(--mono);font-size:.7rem;color:var(--faint);white-space:nowrap}
+  </style>
+  
+  
 
 
   <span class="k"><span class="act-chip">📡 API</span> Lo que pasa de verdad cuando haces clic · clic o → para avanzar</span>
@@ -1288,6 +1502,7 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   <span class="k"><span class="act-chip">✅ CIERRE</span> Deja la casa en orden</span>
   <h2>Antes de irte: <span class="grad">cero recursos sueltos</span></h2>
   <ul class="clean check">
+    <li>De la práctica de virtualización: <b>Terminate</b> a la EC2 copia, <b>Deregister</b> a mi-web-ami y borra sus <b>2 snapshots</b></li>
     <li><b>terraform destroy</b> → <b>10 destroyed</b> (en la consola ya no aparece pyme-vpc-tf)</li>
     <li>Tu <b>pyme-vpc</b> hecha a clics y tu EC2 de siempre <b>siguen intactas</b> (Terraform solo toca lo que él creó)</li>
     <li>La carpeta <b>C:\Users\tú\pyme-tf</b> queda en tu PC: la próxima clase solo haces <b>terraform apply</b></li>
