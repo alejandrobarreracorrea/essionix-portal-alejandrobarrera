@@ -1,0 +1,310 @@
+<title>Bootcamps Estud-IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: una columna de lectura (~1080px); cada bootcamp es una "hoja de ruta" con columna de horas; las áreas se codifican siempre con el mismo color */
+:root{
+  --bg:#f5f6f8; --surface:#ffffff; --ink:#0e2841; --muted:#4d5b70; --faint:#8592a6; --line:#dfe3ea;
+  --accent:#d9611f; --accent-soft:#fbe9df;
+  --ia:#7b42bc; --ia-soft:#efe6f8; --infra:#0f72a8; --infra-soft:#e2f0f8; --seg:#c2364b; --seg-soft:#f9e3e7; --dat:#1d7f55; --dat-soft:#e1f2ea;
+  --display:"Sora",system-ui,sans-serif; --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0d1622; --surface:#142132; --ink:#e8eef6; --muted:#a9b6c7; --faint:#7b8aa0; --line:#26364b;
+  --accent:#f08a4b; --accent-soft:#3a2416;
+  --ia:#b48cf0; --ia-soft:#2a1f3d; --infra:#5db6e6; --infra-soft:#11293a; --seg:#f07a8c; --seg-soft:#3a1c24; --dat:#5fd29b; --dat-soft:#123024; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d1622; --surface:#142132; --ink:#e8eef6; --muted:#a9b6c7; --faint:#7b8aa0; --line:#26364b;
+  --accent:#f08a4b; --accent-soft:#3a2416;
+  --ia:#b48cf0; --ia-soft:#2a1f3d; --infra:#5db6e6; --infra-soft:#11293a; --seg:#f07a8c; --seg-soft:#3a1c24; --dat:#5fd29b; --dat-soft:#123024; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.55 var(--body);margin:0}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:20px;padding-block:40px 72px;display:flex;flex-direction:column;gap:56px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(2rem,5vw,3.1rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(1.4rem,3vw,1.9rem);font-weight:700;letter-spacing:-.01em}
+h3{font-size:1.1rem;font-weight:700}
+p{margin:0;max-width:68ch}
+.lede{font-size:1.15rem;color:var(--muted)}
+.label{font:700 .74rem/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.sec{display:flex;flex-direction:column;gap:18px}
+.meta{display:flex;flex-wrap:wrap;gap:8px 18px;color:var(--muted);font-size:.95rem}
+.meta b{color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:700 .78rem/1 var(--body);padding:6px 11px;border-radius:999px;white-space:nowrap}
+.c-ia{background:var(--ia-soft);color:var(--ia)} .c-infra{background:var(--infra-soft);color:var(--infra)} .c-seg{background:var(--seg-soft);color:var(--seg)} .c-dat{background:var(--dat-soft);color:var(--dat)}
+header{display:flex;flex-direction:column;gap:16px;border-bottom:2px solid var(--ink);padding-bottom:28px}
+/* hallazgos */
+.findings{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;align-items:start}
+.bars{display:flex;flex-direction:column;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px}
+.bar{display:grid;grid-template-columns:120px minmax(0,1fr) 34px;gap:10px;align-items:center;font-size:.95rem}
+.bar .track{height:14px;background:var(--line);border-radius:7px;overflow:hidden}
+.bar .fill{height:100%;border-radius:7px}
+.bar .n{font:700 .9rem var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+.bars small{color:var(--faint);font-size:.82rem}
+.facts{display:flex;flex-direction:column;gap:14px}
+.fact{display:grid;grid-template-columns:76px minmax(0,1fr);gap:14px;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:12px}
+.fact .big{font:800 1.9rem/1 var(--display);color:var(--accent);font-variant-numeric:tabular-nums}
+.fact p{font-size:.98rem}
+/* la idea */
+.flow{display:grid;grid-template-columns:minmax(0,1fr) 40px minmax(0,1fr) 40px minmax(0,1fr);align-items:stretch;gap:0}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:6px}
+.step.hl{border:2px solid var(--accent)}
+.step .k{font:700 .74rem var(--mono);color:var(--faint);letter-spacing:.06em;text-transform:uppercase}
+.arrow{display:flex;align-items:center;justify-content:center;color:var(--accent);font:800 1.4rem var(--display)}
+.roles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.role{border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+.role b{font-family:var(--display)}
+.role.r-ia{background:var(--ia-soft)} .role.r-ia b{color:var(--ia)}
+.role.r-infra{background:var(--infra-soft)} .role.r-infra b{color:var(--infra)}
+.role.r-seg{background:var(--seg-soft)} .role.r-seg b{color:var(--seg)}
+.role.r-dat{background:var(--dat-soft)} .role.r-dat b{color:var(--dat)}
+.role span{font-size:.92rem;color:var(--muted)}
+/* retos */
+.retos{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.reto{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px}
+.reto .src{font-size:.86rem;color:var(--faint)}
+.reto dl{margin:0;display:grid;grid-template-columns:78px minmax(0,1fr);gap:6px 10px;font-size:.93rem}
+.reto dt{font:700 .72rem/1.9 var(--mono);text-transform:uppercase;letter-spacing:.05em}
+.reto dd{margin:0}
+.reto .mvp{border-top:1px dashed var(--line);padding-top:10px;font-size:.93rem}
+.reto .mvp b{color:var(--accent)}
+/* agenda */
+.boot{display:flex;flex-direction:column;gap:14px}
+.boot-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px}
+.boot-head .tag{font:700 .8rem var(--mono);background:var(--ink);color:var(--bg);padding:5px 10px;border-radius:6px}
+.sessions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.session{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.session h3{padding:14px 18px;border-bottom:1px solid var(--line);font-size:1rem}
+.session h3 small{display:block;font:600 .85rem var(--body);color:var(--muted);margin-top:2px}
+.slot{display:grid;grid-template-columns:62px minmax(0,1fr);gap:12px;padding:10px 18px;border-bottom:1px solid var(--line);font-size:.93rem}
+.slot:last-child{border-bottom:0}
+.slot time{font:700 .82rem/1.6 var(--mono);color:var(--faint);font-variant-numeric:tabular-nums}
+.slot b{font-weight:700}
+.slot .m{display:block;color:var(--muted);font-size:.88rem}
+.slot.pause{background:var(--bg);color:var(--faint)}
+.slot .chips{margin-top:5px;gap:5px}.slot .chip{font-size:.7rem;padding:4px 8px}
+.deliver{background:var(--accent-soft);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.deliver b{color:var(--accent);font-family:var(--display)}
+.deliver ul{margin:0;padding-left:20px}
+/* rúbrica */
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:560px;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);font-size:.94rem;vertical-align:top}
+th{font:700 .74rem var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--faint);background:var(--bg)}
+td.pts{font:800 1rem var(--mono);color:var(--accent);text-align:right;font-variant-numeric:tabular-nums;width:70px}
+tr:last-child td{border-bottom:0}
+/* logística y decisiones */
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.list li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px;font-size:.96rem}
+.list li::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--accent);margin-top:8px}
+.ask li::before{border-radius:2px;background:transparent;border:2px solid var(--accent);width:12px;height:12px;margin-top:6px}
+footer{color:var(--faint);font-size:.85rem;border-top:1px solid var(--line);padding-top:16px}
+@media (max-width:820px){
+  .findings,.sessions,.two{grid-template-columns:minmax(0,1fr)}
+  .roles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .flow{grid-template-columns:minmax(0,1fr)}
+  .arrow{transform:rotate(90deg);height:34px}
+}
+@media (max-width:460px){.roles{grid-template-columns:minmax(0,1fr)}.bar{grid-template-columns:92px minmax(0,1fr) 30px}}
+</style>
+
+<div class="wrap">
+<header>
+  <span class="label">Propuesta · Programa Estud-IA · Esumer</span>
+  <h1>Dos bootcamps, un mismo reto de empresa</h1>
+  <p class="lede">Un bootcamp teórico para <b>diseñar</b> y uno práctico para <b>construir</b>. En los dos, cada equipo resuelve un reto real de pyme juntando lo que se enseña en las rutas: inteligencia artificial, infraestructura en la nube y ciberseguridad, con datos y programación como soporte.</p>
+  <div class="meta"><span><b>2 bootcamps</b> × 6 horas</span><span>cada uno en <b>2 sesiones de 3 horas</b></span><span>Semanas <b>8</b> y <b>14</b> del plan de trabajo</span><span>Borrador para el equipo Esumer · 5 de octubre de 2026</span></div>
+  <div class="chips"><span class="chip c-ia">Inteligencia artificial</span><span class="chip c-infra">Infraestructura y nube</span><span class="chip c-seg">Ciberseguridad</span><span class="chip c-dat">Datos y programación</span></div>
+</header>
+
+<section class="sec">
+  <span class="label">Punto de partida</span>
+  <h2>Lo que nos dejó la matriz de retos del corte anterior</h2>
+  <p>La matriz del 25 de noviembre reunió <b>56 retos de 42 empresas</b>. Es la mejor fuente para los bootcamps: son problemas reales de pymes de Medellín. Leída con calma, también muestra qué hay que corregir.</p>
+  <div class="findings">
+    <div class="bars" role="img" aria-label="Retos por línea: Programación 23, Inteligencia artificial 22, Análisis de datos 18, Ciberseguridad 6, Nube 1">
+      <h3>Retos por línea</h3>
+      <div class="bar"><span>Programación</span><div class="track"><div class="fill" style="width:100%;background:var(--dat)"></div></div><span class="n">23</span></div>
+      <div class="bar"><span>Inteligencia artificial</span><div class="track"><div class="fill" style="width:95.7%;background:var(--ia)"></div></div><span class="n">22</span></div>
+      <div class="bar"><span>Análisis de datos</span><div class="track"><div class="fill" style="width:78.3%;background:var(--dat)"></div></div><span class="n">18</span></div>
+      <div class="bar"><span>Ciberseguridad</span><div class="track"><div class="fill" style="width:26.1%;background:var(--seg)"></div></div><span class="n">6</span></div>
+      <div class="bar"><span>Nube</span><div class="track"><div class="fill" style="width:4.3%;background:var(--infra)"></div></div><span class="n">1</span></div>
+      <small>Un reto puede tener más de una línea. Escala: 23 = barra completa.</small>
+    </div>
+    <div class="facts">
+      <div class="fact"><span class="big">12</span><p>de 56 retos combinaban dos o más líneas. Los equipos trabajaron <b>en silos</b>: el de IA por un lado, el de datos por otro.</p></div>
+      <div class="fact"><span class="big">1</span><p>reto de nube y 6 de seguridad, aunque <b>28 pedían una app o plataforma web</b> y 21 hablaban de proteger datos o accesos. Todo eso necesita dónde vivir y quién lo cuide.</p></div>
+      <div class="fact"><span class="big">0</span><p>prototipos. De 41 entregables definidos, 38 eran <b>exploratorios</b> (brief, informe). El bootcamp práctico cierra esa brecha con algo que funciona.</p></div>
+      <div class="fact"><span class="big">42</span><p>de 56 retos eran de complejidad <b>alta o media-alta</b>. Por eso proponemos versiones acotadas (retos-tipo) que caben en 12 horas.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <span class="label">La idea</span>
+  <h2>Un reto, dos tiempos: primero el plano, después la obra</h2>
+  <p>Es la misma lógica que trabajamos en clase con Terraform: se diseña el plano antes de construir. El equipo que diseña en el bootcamp 1 es el mismo que construye en el bootcamp 2, sobre su propio diseño.</p>
+  <div class="flow">
+    <div class="step"><span class="k">Antes</span><h3>Eligen un reto-tipo</h3><p>Cinco retos inspirados en la matriz, cada uno exige IA, nube y seguridad.</p></div>
+    <div class="arrow" aria-hidden="true">→</div>
+    <div class="step hl"><span class="k">Bootcamp 1 · teórico · 6 h</span><h3>Diseña</h3><p>Del problema a una arquitectura segura con IA, con amenazas y costos. Sale el <b>plano</b> del equipo.</p></div>
+    <div class="arrow" aria-hidden="true">→</div>
+    <div class="step hl"><span class="k">Bootcamp 2 · práctico · 6 h</span><h3>Construye</h3><p>Del plano a un MVP en vivo en AWS, blindado y presentado ante un jurado.</p></div>
+  </div>
+  <h3>Células mixtas de 4 o 5 personas, con un rol por área</h3>
+  <div class="roles">
+    <div class="role r-ia"><b>IA</b><span>Qué decide o responde el modelo, con qué datos y con qué límites.</span></div>
+    <div class="role r-infra"><b>Infraestructura</b><span>Dónde vive la solución: red, servidor, almacenamiento, código de infraestructura.</span></div>
+    <div class="role r-seg"><b>Seguridad</b><span>Amenazas, accesos, datos personales, secretos y registros.</span></div>
+    <div class="role r-dat"><b>Datos y producto</b><span>El usuario, la métrica de éxito y la demo. Lidera el pitch.</span></div>
+  </div>
+  <p>Si el grupo viene de una sola ruta, los roles rotan entre sprints para que todos pasen por las tres áreas. Cada docente acompaña a todas las células en la parte de su especialidad.</p>
+</section>
+
+<section class="sec">
+  <span class="label">Los retos</span>
+  <h2>Cinco retos-tipo sacados de la matriz</h2>
+  <p>Cada uno agrupa retos parecidos del corte anterior y los recorta para que quepan en 12 horas. Si Esumer consigue empresas para esta cohorte, sus retos reales se ajustan a una de estas cinco formas.</p>
+  <div class="retos">
+    <article class="reto">
+      <h3>Asistente que agenda y recuerda</h3>
+      <span class="src">Inspirado en 10 retos de WhatsApp, CRM o chatbot: centros de diagnóstico, transporte, inmobiliarias.</span>
+      <dl><dt style="color:var(--ia)">IA</dt><dd>Entiende lo que pide el cliente y responde o agenda.</dd><dt style="color:var(--infra)">Infra</dt><dd>API en un servidor dentro de una VPC, con su base de datos.</dd><dt style="color:var(--seg)">Seguridad</dt><dd>Datos personales (Ley 1581 de 2012), tokens fuera del código, límite de mensajes.</dd></dl>
+      <p class="mvp"><b>MVP:</b> chat web que agenda una cita y deja el recordatorio listo. WhatsApp queda como siguiente paso.</p>
+    </article>
+    <article class="reto">
+      <h3>Tablero que se explica solo</h3>
+      <span class="src">Inspirado en 13 retos de tableros e indicadores: ferretería, concesionario, loterías, transporte.</span>
+      <dl><dt style="color:var(--dat)">Datos</dt><dd>Ventas en CSV que se cargan a un bucket de S3.</dd><dt style="color:var(--ia)">IA</dt><dd>Resume los indicadores y responde “¿por qué bajaron las ventas?”.</dd><dt style="color:var(--seg)">Seguridad</dt><dd>Bucket privado y acceso por rol (gerente o vendedor).</dd></dl>
+      <p class="mvp"><b>MVP:</b> tablero web con una caja de preguntas en lenguaje natural.</p>
+    </article>
+    <article class="reto">
+      <h3>Portal web seguro con asistente</h3>
+      <span class="src">Inspirado en 28 retos de app o plataforma web: carrocería, textil, turismo, papelería.</span>
+      <dl><dt style="color:var(--infra)">Infra</dt><dd>VPC, servidor y NGINX creados con Terraform (lo que ya hicimos en clase).</dd><dt style="color:var(--ia)">IA</dt><dd>Asistente de preguntas frecuentes con la información de la empresa.</dd><dt style="color:var(--seg)">Seguridad</dt><dd>HTTPS, Security Group mínimo, parches, cero llaves en el repositorio.</dd></dl>
+      <p class="mvp"><b>MVP:</b> sitio en vivo, con su asistente, levantado con un solo comando.</p>
+    </article>
+    <article class="reto">
+      <h3>Lector inteligente de documentos</h3>
+      <span class="src">Inspirado en 9 retos de documentos e inventarios: proformas, documentos de conductores, estados financieros.</span>
+      <dl><dt style="color:var(--ia)">IA</dt><dd>Extrae los campos de un PDF o de una foto.</dd><dt style="color:var(--infra)">Infra</dt><dd>Carga a S3 y un proceso que lee cada archivo nuevo.</dd><dt style="color:var(--seg)">Seguridad</dt><dd>Cifrado, bucket privado y enlaces que vencen.</dd></dl>
+      <p class="mvp"><b>MVP:</b> subes un documento y ves sus datos en una tabla.</p>
+    </article>
+    <article class="reto">
+      <h3>Vigilante de la nube</h3>
+      <span class="src">Inspirado en 21 retos que piden proteger datos o accesos, 6 de ellos de la línea de ciberseguridad.</span>
+      <dl><dt style="color:var(--seg)">Seguridad</dt><dd>Registrar todo lo que pasa: CloudTrail y logs del servidor.</dd><dt style="color:var(--ia)">IA</dt><dd>Explica en español qué pasó y qué tan grave es.</dd><dt style="color:var(--infra)">Infra</dt><dd>Servidor de prueba, reglas de alerta y notificación.</dd></dl>
+      <p class="mvp"><b>MVP:</b> cuando alguien abre un puerto o usa una llave rara, llega una alerta explicada.</p>
+    </article>
+  </div>
+</section>
+
+<section class="sec">
+  <span class="label">Bootcamp 1</span>
+  <div class="boot">
+    <div class="boot-head"><span class="tag">TEÓRICO · 6 h</span><h2>Diseña: del reto a una arquitectura segura con IA</h2></div>
+    <p>Teórico no significa pasivo: cada bloque de concepto termina en un taller donde la célula lo aplica a su reto.</p>
+    <div class="sessions">
+      <div class="session">
+        <h3>Sesión 1 · 3 horas<small>Del problema al recorrido del dato</small></h3>
+        <div class="slot"><time>0:00</time><div><b>Apertura y reglas del juego</b><span class="m">Cómo funcionan las células, los roles y la rúbrica.</span></div></div>
+        <div class="slot"><time>0:15</time><div><b>Lo que nos enseñó el corte anterior</b><span class="m">La matriz de retos: silos, nube y seguridad ausentes, entregables en papel.</span></div></div>
+        <div class="slot"><time>0:35</time><div><b>Anatomía de una solución moderna</b><span class="m">Recorrido de un dato real: del celular del cliente al modelo de IA, dónde vive y quién lo protege.</span><div class="chips"><span class="chip c-ia">IA</span><span class="chip c-infra">Infra</span><span class="chip c-seg">Seguridad</span></div></div></div>
+        <div class="slot pause"><time>1:15</time><div>Pausa</div></div>
+        <div class="slot"><time>1:25</time><div><b>Formación de células y elección del reto</b><span class="m">Un rol por persona; cada célula escoge uno de los cinco retos-tipo.</span></div></div>
+        <div class="slot"><time>1:45</time><div><b>Taller · Canvas del reto</b><span class="m">Usuario, problema, dato, decisión y métrica de éxito.</span><div class="chips"><span class="chip c-dat">Datos y producto</span></div></div></div>
+        <div class="slot"><time>2:30</time><div><b>Taller · Mapa del dato</b><span class="m">Por dónde entra, dónde se guarda, quién lo ve y qué parte va al modelo.</span><div class="chips"><span class="chip c-ia">IA</span><span class="chip c-seg">Seguridad</span></div></div></div>
+        <div class="slot"><time>2:55</time><div><b>Cierre</b><span class="m">Qué traer a la sesión 2.</span></div></div>
+      </div>
+      <div class="session">
+        <h3>Sesión 2 · 3 horas<small>Arquitectura, amenazas y plan del MVP</small></h3>
+        <div class="slot"><time>0:00</time><div><b>Arquitectura de referencia en AWS</b><span class="m">VPC, servidor o serverless, S3 y Amazon Bedrock. Del dibujo al código con Terraform.</span><div class="chips"><span class="chip c-infra">Infra</span><span class="chip c-ia">IA</span></div></div></div>
+        <div class="slot"><time>0:35</time><div><b>Taller · Diagrama de la célula</b><span class="m">El diagrama de su solución, al estilo de los arquitectos de AWS.</span></div></div>
+        <div class="slot pause"><time>1:10</time><div>Pausa</div></div>
+        <div class="slot"><time>1:20</time><div><b>Seguridad desde el diseño</b><span class="m">Modelo de amenazas en seis preguntas (STRIDE), datos personales (Ley 1581 de 2012), mínimo privilegio, secretos y cifrado.</span><div class="chips"><span class="chip c-seg">Seguridad</span></div></div></div>
+        <div class="slot"><time>1:55</time><div><b>IA responsable y costos</b><span class="m">Qué dato le entregas al modelo, alucinaciones, inyección de instrucciones, costo por uso y capa gratuita.</span><div class="chips"><span class="chip c-ia">IA</span></div></div></div>
+        <div class="slot"><time>2:15</time><div><b>Taller · Cinco amenazas, cinco controles y plan del MVP</b><span class="m">Qué se construye en el bootcamp 2 y en qué orden.</span></div></div>
+        <div class="slot"><time>2:40</time><div><b>Pitch relámpago</b><span class="m">Dos minutos por célula y retroalimentación de pares con la rúbrica.</span></div></div>
+      </div>
+    </div>
+    <div class="deliver"><b>Entregable del bootcamp 1: el plano</b><ul><li>Canvas del reto y mapa del dato.</li><li>Diagrama de arquitectura en AWS.</li><li>Cinco amenazas con su control y una estimación de costo mensual.</li><li>Plan del MVP: qué se construye en cada sprint del bootcamp 2.</li></ul></div>
+  </div>
+</section>
+
+<section class="sec">
+  <span class="label">Bootcamp 2</span>
+  <div class="boot">
+    <div class="boot-head"><span class="tag">PRÁCTICO · 6 h</span><h2>Construye: del plano al MVP en vivo</h2></div>
+    <p>Cuatro sprints, uno por área, y un demo day. Cada célula parte de su plano y del laboratorio de Terraform que ya hicieron en clase.</p>
+    <div class="sessions">
+      <div class="session">
+        <h3>Sesión 1 · 3 horas<small>Infraestructura e IA</small></h3>
+        <div class="slot"><time>0:00</time><div><b>Arranque</b><span class="m">Cuentas de AWS, alerta de presupuesto, repositorio con su .gitignore.</span></div></div>
+        <div class="slot"><time>0:15</time><div><b>Sprint 1 · Infraestructura como código</b><span class="m">Red, subredes, Security Groups y servidor o bucket con Terraform, desde el plano.</span><div class="chips"><span class="chip c-infra">Infra</span></div></div></div>
+        <div class="slot pause"><time>1:10</time><div>Pausa</div></div>
+        <div class="slot"><time>1:20</time><div><b>Sprint 2 · IA dentro del producto</b><span class="m">Un servicio que llama al modelo (Amazon Bedrock) con instrucciones de sistema y límites, conectado a la app.</span><div class="chips"><span class="chip c-ia">IA</span><span class="chip c-dat">Datos</span></div></div></div>
+        <div class="slot"><time>2:20</time><div><b>Prueba cruzada</b><span class="m">Otra célula intenta romperla: puertos abiertos, inyección de instrucciones, datos expuestos.</span><div class="chips"><span class="chip c-seg">Seguridad</span></div></div></div>
+        <div class="slot"><time>2:45</time><div><b>Ajustes y commit</b><span class="m">Todo queda en el repositorio, sin estado ni llaves.</span></div></div>
+      </div>
+      <div class="session">
+        <h3>Sesión 2 · 3 horas<small>Seguridad, medición y demo day</small></h3>
+        <div class="slot"><time>0:00</time><div><b>Sprint 3 · Blindaje</b><span class="m">HTTPS, IAM con mínimo privilegio, secretos en Parameter Store, CloudTrail, cerrar lo que no se usa.</span><div class="chips"><span class="chip c-seg">Seguridad</span><span class="chip c-infra">Infra</span></div></div></div>
+        <div class="slot"><time>0:45</time><div><b>Sprint 4 · Medir</b><span class="m">Una métrica de éxito y una alarma en CloudWatch: cómo sabemos que funciona.</span><div class="chips"><span class="chip c-dat">Datos</span></div></div></div>
+        <div class="slot pause"><time>1:05</time><div>Pausa</div></div>
+        <div class="slot"><time>1:15</time><div><b>Ensayo del pitch</b></div></div>
+        <div class="slot"><time>1:30</time><div><b>Demo day</b><span class="m">Seis minutos por célula: problema, demo en vivo, arquitectura, seguridad y siguiente paso.</span></div></div>
+        <div class="slot"><time>2:30</time><div><b>Jurado y retroalimentación</b><span class="m">Docentes de cada ruta, Esumer y, si se puede, una empresa invitada.</span></div></div>
+        <div class="slot"><time>2:50</time><div><b>terraform destroy y cierre</b><span class="m">Cero recursos encendidos, cero sorpresas en la factura.</span></div></div>
+      </div>
+    </div>
+    <div class="deliver"><b>Entregable del bootcamp 2: la obra</b><ul><li>URL en vivo durante el demo day.</li><li>Repositorio en GitHub con el código y la infraestructura (sin estado ni llaves).</li><li>Lista de seguridad cumplida y firmada por el rol de seguridad.</li><li>Video de dos minutos con la demo.</li></ul></div>
+  </div>
+</section>
+
+<section class="sec">
+  <span class="label">Evaluación</span>
+  <h2>Una rúbrica para los dos bootcamps</h2>
+  <p>La misma rúbrica sirve para la retroalimentación del bootcamp 1 y para la nota del demo day. Así cada célula sabe desde el primer día cómo la van a evaluar.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Criterio</th><th>Qué mira el jurado</th><th style="text-align:right">Puntos</th></tr></thead>
+    <tbody>
+      <tr><td><b>Valor para la empresa</b></td><td>El problema es claro y la solución lo resuelve para un usuario concreto.</td><td class="pts">15</td></tr>
+      <tr><td><b>Arquitectura e infraestructura</b></td><td>Funciona en la nube y se puede recrear con código.</td><td class="pts">20</td></tr>
+      <tr><td><b>IA útil y responsable</b></td><td>La IA aporta de verdad, con límites y cuidando qué datos recibe.</td><td class="pts">20</td></tr>
+      <tr><td><b>Seguridad</b></td><td>Controles reales sobre las amenazas que identificaron, no solo en la diapositiva.</td><td class="pts">20</td></tr>
+      <tr><td><b>Medición</b></td><td>Saben cómo medir si funciona y lo muestran.</td><td class="pts">10</td></tr>
+      <tr><td><b>Demo y comunicación</b></td><td>Demo en vivo y pitch claro, a tiempo, con todos los roles.</td><td class="pts">15</td></tr>
+      <tr><td><b>Total</b></td><td></td><td class="pts">100</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="sec two">
+  <div class="sec">
+    <span class="label">Logística</span>
+    <h2>Lo que hace falta</h2>
+    <ul class="list">
+      <li><span>Un portátil por estudiante, con VS Code, Terraform y la AWS CLI (ya instalados en el curso).</span></li>
+      <li><span>Cuenta de AWS por estudiante en capa gratuita, con alerta de presupuesto, o una cuenta institucional con un usuario por célula.</span></li>
+      <li><span>Amazon Bedrock no está en la capa gratuita, pero un MVP de demo con un modelo pequeño cuesta centavos de dólar por equipo.</span></li>
+      <li><span>Un docente por área presente o conectado: IA, nube y seguridad, más datos y programación si las rutas participan.</span></li>
+      <li><span>Para el demo day: proyector, buena conexión y, si es posible, una empresa del corte anterior como jurado invitado.</span></li>
+    </ul>
+  </div>
+  <div class="sec">
+    <span class="label">Por decidir con Esumer</span>
+    <h2>Preguntas abiertas</h2>
+    <ul class="list ask">
+      <li><span>Fechas exactas de las semanas 8 y 14, y si serán presenciales o virtuales.</span></li>
+      <li><span>Si se mezclan estudiantes de varias rutas en las mismas células.</span></li>
+      <li><span>Si usamos los cinco retos-tipo o retos nuevos de empresas para esta cohorte.</span></li>
+      <li><span>Cuentas de AWS individuales o una cuenta institucional.</span></li>
+      <li><span>Quiénes conforman el jurado y si el demo day puede abrirse a las empresas.</span></li>
+    </ul>
+  </div>
+</section>
+
+<footer>Propuesta preparada por Alejandro Barrera, docente de Cloud Computing, Redes y Ciberseguridad Esencial. Datos tomados de la Matriz de Retos Estud-IA del 25 de noviembre (56 retos, 42 empresas); los casos se citan por sector, sin datos de empresas ni de personas.</footer>
+</div>
