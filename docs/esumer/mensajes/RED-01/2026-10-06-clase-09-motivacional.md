@@ -1,18 +1,22 @@
 # WhatsApp RED-01 — Recordatorio clase 9 · 2026-10-06
-**Tema:** retomamos la práctica pendiente de la clase 8 (snapshot, daña y recupera tu web, clona con AMI) + Terraform: API, CLI, llave IAM, ciclo init/plan/apply/destroy, LAB pyme-vpc + EC2 desde código en VS Code.
+**Tema (anuncio):** despliegue moderno — de los clics a la CLI de AWS y a la infraestructura como código con Terraform: VPC + EC2 desde tu PC.
 
-🔥 *¡Grupo 1! Hoy le hacemos un "hackeo" a nuestro propio servidor*
+🚀 *¡Grupo 1! Hoy aprendemos a desplegar como se hace en el mundo real*
 
-¿Qué pasa si alguien daña tu página web? Hoy lo vamos a hacer *a propósito* 😈: le sacamos una foto a tu servidor (snapshot), lo dañamos… y lo recuperamos en minutos. Así es como las empresas se protegen de un desastre.
+Hasta ahora creamos todo en AWS a punta de clics. Hoy damos el salto al *despliegue moderno*:
 
-Y después damos el gran salto: toda la red y el servidor que armaron a clics los vamos a escribir como *código con Terraform*, y los lanzamos con *un solo comando* 🚀
+⌨️ *La CLI de AWS:* le hablas a AWS escribiendo comandos desde tu PC, sin entrar a la consola.
+🔑 *Tu llave de acceso:* conectamos tu computador a tu cuenta de AWS, de forma segura.
+📐 *Infraestructura como código:* tu red (VPC) y tu servidor (EC2) escritos en un archivo, y lanzados con *un solo comando* gracias a *Terraform*.
+
+Así trabajan hoy los equipos de nube en las empresas: lo que antes tomaba 35 clics, se crea, se cambia y se borra en minutos. 🤯
 
 📅 *HOY* · 💻 Virtual
 🔗 https://meet.google.com/pqy-nzti-dqg
 
 ✅ *Lleguen con:*
-• Su EC2 encendida y su página funcionando
 • *VS Code* abierto y *Terraform* instalado (lo hicimos en la clase 2)
 • La *AWS CLI* instalada: en PowerShell `winget install -e --id Amazon.AWSCLI`
+• Acceso a su consola de AWS
 
-Es de las clases más divertidas del curso. ¡No se la pierdan! 💪☁️
+¡Es una de las clases que más les va a servir para su perfil profesional! 💪☁️
