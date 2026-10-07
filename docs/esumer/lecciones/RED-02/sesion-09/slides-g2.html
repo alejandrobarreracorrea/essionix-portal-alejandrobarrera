@@ -1,0 +1,984 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- GENERADO por scripts/build-decks.py desde slides.html — no editar a mano: edita el canónico y regenera. -->
+<title>Sesión 9 · Grupo 2 · Cloud, Redes y Ciberseguridad — Esumer</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#ffffff; --line:#dfe5ee; --text:#0E2841; --muted:#44546A; --faint:#8B98A9;
+  --a1:#156082; --a2:#0F9ED5; --naranja:#E97132; --grad:linear-gradient(100deg,#156082,#0F9ED5);
+  --display:"Poppins",sans-serif; --body:"Inter",sans-serif; --mono:"JetBrains Mono",monospace; }
+* { box-sizing:border-box; margin:0; padding:0; }
+html,body { height:100%; }
+body { background:var(--bg); color:var(--text); font-family:var(--body); overflow:hidden;
+  background-image:radial-gradient(55% 45% at 80% -12%, rgba(15,158,213,.10), transparent 70%); }
+.slide { position:absolute; inset:0; display:none; flex-direction:column; justify-content:center;
+  padding:6vh clamp(30px,8vw,120px); }
+.slide.on { display:flex; }
+.k { font-family:var(--mono); font-size:clamp(.7rem,1.1vw,.85rem); letter-spacing:.08em; text-transform:uppercase; color:var(--a1); margin-bottom:18px; }
+h1 { font-family:var(--display); font-size:clamp(2rem,5.2vw,4.2rem); letter-spacing:-.02em; line-height:1.06; max-width:22ch; }
+h2 { font-family:var(--display); font-size:clamp(1.5rem,3.6vw,2.8rem); letter-spacing:-.02em; line-height:1.1; margin-bottom:26px; max-width:26ch; }
+.grad { background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.sub { color:var(--muted); font-size:clamp(1rem,1.8vw,1.4rem); max-width:52ch; margin-top:20px; line-height:1.5; }
+.rows { list-style:none; max-width:900px; }
+.rows li { display:flex; justify-content:space-between; align-items:baseline; gap:24px; padding:clamp(10px,1.6vh,16px) 0; border-top:1px solid var(--line); }
+.rows .t { font-family:var(--display); font-weight:600; font-size:clamp(1rem,1.9vw,1.5rem); }
+.rows .t small { display:block; font-family:var(--body); font-weight:400; color:var(--muted); font-size:clamp(.8rem,1.3vw,1rem); margin-top:2px; }
+.rows .m { font-family:var(--mono); color:var(--a2); font-size:clamp(.8rem,1.4vw,1.05rem); white-space:nowrap; }
+.big { font-family:var(--display); font-size:clamp(3rem,9vw,7.5rem); font-weight:700; letter-spacing:-.03em; line-height:1; }
+.act-chip { display:inline-block; background:var(--naranja); color:#fff; font-family:var(--mono);
+  font-size:.68rem; padding:.35em 1em; border-radius:999px; margin-right:10px; letter-spacing:.05em; vertical-align:middle; }
+
+.stack { display:flex; flex-direction:column; gap:9px; max-width:940px; margin-top:6px; }
+.layer { display:flex; align-items:center; gap:18px; border:1px solid var(--line); border-left:5px solid var(--a2);
+  border-radius:12px; padding:clamp(6px,1.1vh,11px) 18px; opacity:0; transform:translateY(12px);
+  transition:opacity .35s ease, transform .35s ease; }
+.layer.on { opacity:1; transform:none; }
+.layer .ln { font-family:var(--mono); font-size:.85rem; color:var(--a1); }
+.layer b { font-family:var(--display); font-size:clamp(.95rem,1.7vw,1.25rem); }
+.layer p { color:var(--muted); font-size:clamp(.78rem,1.3vw,.98rem); line-height:1.35; margin-top:1px; }
+.layer .lt { margin-left:auto; font-family:var(--mono); font-size:.72rem; color:var(--a2); white-space:nowrap; }
+.layer.l1 { border-left-color:#44546A; } .layer.l2 { border-left-color:#156082; }
+.layer.l3 { border-left-color:#0F9ED5; } .layer.l4 { border-left-color:#1FB5C9; }
+.layer.l5 { border-left-color:var(--naranja); }
+.layer.l6 { border:0; border-left:5px solid var(--naranja); background:rgba(233,113,50,.06); }
+
+.casa .layer { border-left-width:5px; }
+.casa .lt { margin-left:auto; font-family:var(--mono); font-size:.68rem; color:var(--faint); white-space:nowrap; }
+.casa .l3 .lt, .casa .l4 .lt, .casa .l5 .lt { color:var(--c2, #0F9ED5); font-weight:600; }
+.casa .hoy { outline:3px solid var(--naranja); outline-offset:2px; background:rgba(233,113,50,.05); }
+.hoy-tag { font-family:var(--mono); font-size:.65rem; color:#fff; background:var(--naranja); border-radius:999px; padding:.25em .8em; margin-left:10px; }
+.toolgrid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; max-width:1000px; margin-top:8px; }
+.tool { display:flex; align-items:center; gap:14px; border:1px solid var(--line); border-radius:14px; padding:12px 16px; }
+.tool .o { font-size:clamp(1.4rem,2.6vw,2rem); }
+.tool .arrow { font-family:var(--mono); color:var(--faint); font-size:1.1rem; }
+.tool b { font-family:var(--display); font-size:clamp(.9rem,1.5vw,1.1rem); display:block; }
+.tool small { color:var(--muted); font-size:clamp(.72rem,1.2vw,.88rem); line-height:1.3; display:block; }
+.tool .tech { margin-left:auto; text-align:right; }
+.tool .tech b { color:var(--c1, #156082); }
+.dl { display:flex; align-items:center; gap:22px; margin-top:18px; flex-wrap:wrap; }
+.dlbtn { display:inline-flex; align-items:center; gap:10px; background:var(--naranja); color:#fff;
+  font-family:var(--display); font-weight:700; font-size:clamp(1rem,1.9vw,1.35rem); text-decoration:none;
+  padding:.7em 1.5em; border-radius:12px; box-shadow:0 6px 18px rgba(233,113,50,.28); transition:transform .15s ease; }
+.dlbtn:hover { transform:translateY(-2px); }
+.dlbtn small { display:block; font-family:var(--mono); font-weight:400; font-size:.62rem; opacity:.9; margin-top:1px; }
+.dlqr { display:flex; align-items:center; gap:12px; }
+.dlqr svg { width:clamp(84px,10vw,120px); height:auto; border-radius:8px; }
+.dlqr span { font-family:var(--mono); font-size:.72rem; color:var(--faint); max-width:14ch; line-height:1.4; }
+.sim { display:flex; align-items:center; gap:14px; border:1px solid var(--line); border-left:5px solid var(--naranja);
+  border-radius:12px; padding:10px 18px; margin-bottom:18px; max-width:820px; }
+.sim .o { font-size:1.7rem; }
+.sim p { color:var(--muted); font-size:clamp(.85rem,1.4vw,1rem); }
+.sim p b { color:var(--text, #0E2841); }
+.check li::before { content:"☐  "; font-family:var(--mono); color:var(--naranja); }
+
+/* ---- casa animada (mapa de fases) ---- */
+.casa-slide { justify-content:flex-start; padding-top:clamp(30px,5vh,60px); }
+.house { max-width:720px; margin:14px auto 0; width:100%; }
+.roof {
+  width:0; height:0; margin:0 auto;
+  border-left:clamp(180px,26vw,360px) solid transparent;
+  border-right:clamp(180px,26vw,360px) solid transparent;
+  border-bottom:clamp(52px,7vh,80px) solid var(--naranja);
+  position:relative; opacity:0;
+}
+.roof span {
+  position:absolute; top:clamp(30px,4vh,48px); left:50%; transform:translateX(-50%);
+  white-space:nowrap; color:#fff; font-family:var(--display); font-weight:600;
+  font-size:clamp(.72rem,1.25vw,1rem); text-shadow:0 1px 3px rgba(0,0,0,.25);
+}
+.floor {
+  display:flex; align-items:center; gap:14px; padding:clamp(9px,1.5vh,15px) 22px;
+  border:1px solid var(--line); border-top:0; background:#fff; position:relative;
+  opacity:0; transform:translateY(26px);
+}
+.floor.fA { background:linear-gradient(90deg, rgba(15,158,213,.08), #fff); }
+.floor.fB { background:linear-gradient(90deg, rgba(21,96,130,.07), #fff); }
+.floor.base { border-radius:0 0 6px 6px; border-bottom-width:6px; border-bottom-color:var(--navy); }
+.floor .fi { font-size:clamp(1.3rem,2.4vw,1.9rem); flex:none; }
+.floor b { font-family:var(--display); font-weight:600; font-size:clamp(.9rem,1.6vw,1.2rem); }
+.floor i { margin-left:auto; font-family:var(--mono); font-style:normal; font-size:clamp(.66rem,1.15vw,.85rem); color:var(--faint); letter-spacing:.03em; }
+.floor.hoy { border-color:var(--naranja); z-index:2; }
+.floor.hoy i { color:var(--naranja); font-weight:600; }
+.floor.fD i, .floor.fB i, .floor.fA i { color:var(--c2, #0F9ED5); font-weight:600; }
+.here {
+  position:absolute; left:calc(100% + 14px); top:50%; transform:translateY(-50%);
+  font-family:var(--mono); font-size:clamp(.68rem,1.15vw,.85rem); color:#fff;
+  background:var(--naranja); padding:.3em .9em; border-radius:999px; white-space:nowrap;
+  opacity:0; animation:hereIn .5s ease 2.4s forwards, herePulse 1.8s ease 2.9s infinite;
+}
+/* entrada: construir de abajo (fF) hacia arriba, y el techo al final */
+.slide.on .floor { animation:floorUp .5s cubic-bezier(.2,.7,.3,1) forwards; }
+.slide.on .floor.fF { animation-delay:.1s; }
+.slide.on .floor.fE { animation-delay:.45s; }
+.slide.on .floor.fD { animation-delay:.8s; }
+.slide.on .floor.fC { animation-delay:1.1s; }
+.slide.on .floor.fB { animation-delay:1.4s; }
+.slide.on .floor.fA { animation-delay:1.7s; }
+.slide.on .roof { animation:roofDrop .55s cubic-bezier(.2,.7,.3,1) 2s forwards; }
+.slide.on .floor.hoy { animation:floorUp .5s cubic-bezier(.2,.7,.3,1) forwards, hoyGlow 2s ease 2.6s infinite; }
+.slide.on .floor.fF.hoy { animation-delay:.1s, 2.6s; }
+.slide.on .floor.fE.hoy { animation-delay:.45s, 2.9s; }
+@keyframes floorUp { to { opacity:1; transform:none; } }
+@keyframes roofDrop { from { opacity:0; transform:translateY(-30px); } to { opacity:1; transform:none; } }
+@keyframes hoyGlow { 0%,100% { box-shadow:0 0 0 0 rgba(233,113,50,0); } 50% { box-shadow:0 0 0 4px rgba(233,113,50,.18); } }
+@keyframes hereIn { to { opacity:1; } }
+@keyframes herePulse { 0%,100% { transform:translateY(-50%) scale(1); } 50% { transform:translateY(-50%) scale(1.06); } }
+@media (prefers-reduced-motion: reduce) {
+  .floor, .roof, .here { opacity:1 !important; transform:none !important; animation:none !important; }
+}
+@media (max-width:640px) { .here { position:static; display:inline-block; margin-left:8px; transform:none; } }
+
+/* ---- caja de herramientas animada ---- */
+.tools-slide { justify-content:flex-start; padding-top:clamp(28px,5vh,56px); }
+.toolbox { max-width:840px; margin:16px auto 0; width:100%; position:relative; }
+.tbox { font-size:clamp(2.4rem,6vw,4rem); text-align:center; margin-bottom:14px; opacity:0; transform:scale(.5) rotate(-12deg); }
+.slide.on .tbox { animation:tboxPop .6s cubic-bezier(.2,1.4,.4,1) .1s forwards; }
+.trow { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:16px;
+  padding:clamp(8px,1.4vh,13px) 20px; border:1px solid var(--line); border-radius:12px; margin-bottom:10px;
+  opacity:0; transform:translateY(20px); background:#fff; }
+.trow .obra { font-family:var(--display); font-weight:500; font-size:clamp(.82rem,1.5vw,1.12rem); color:var(--muted); }
+.trow .tech { font-family:var(--display); font-weight:700; font-size:clamp(.95rem,1.8vw,1.3rem); color:var(--c1, #156082); text-align:right; }
+.trow .link { width:clamp(40px,6vw,78px); height:2px; background:linear-gradient(90deg,var(--line),var(--naranja)); position:relative; }
+.trow .link::after { content:"→"; position:absolute; right:-4px; top:-11px; color:var(--naranja); font-family:var(--mono); font-size:.9rem;
+  opacity:0; }
+.slide.on .trow { animation:trowIn .5s cubic-bezier(.2,.7,.3,1) forwards; }
+.slide.on .trow .link::after { animation:arrowShine .6s ease forwards; }
+.slide.on .tr1 { animation-delay:.5s; } .slide.on .tr1 .link::after { animation-delay:.9s; }
+.slide.on .tr2 { animation-delay:.75s; } .slide.on .tr2 .link::after { animation-delay:1.15s; }
+.slide.on .tr3 { animation-delay:1s; }  .slide.on .tr3 .link::after { animation-delay:1.4s; }
+.slide.on .tr4 { animation-delay:1.25s; } .slide.on .tr4 .link::after { animation-delay:1.65s; }
+.slide.on .tr5 { animation-delay:1.5s; } .slide.on .tr5 .link::after { animation-delay:1.9s; }
+@keyframes tboxPop { to { opacity:1; transform:none; } }
+@keyframes trowIn { to { opacity:1; transform:none; } }
+@keyframes arrowShine { 0% { opacity:0; transform:translateX(-8px); } 100% { opacity:1; transform:none; } }
+@media (prefers-reduced-motion: reduce) { .tbox,.trow,.trow .link::after { opacity:1 !important; transform:none !important; animation:none !important; } }
+
+/* ---- ¿qué es un SO? — stack animado ---- */
+.os-slide { justify-content:flex-start; padding-top:clamp(26px,4.5vh,52px); }
+.osstack { max-width:760px; margin:12px auto 0; width:100%; }
+.oslayer { display:flex; align-items:center; gap:16px; border:1px solid var(--line); border-radius:12px;
+  padding:clamp(9px,1.5vh,15px) 20px; background:#fff; opacity:0; transform:translateX(-24px); }
+.oslayer .oi { font-size:clamp(1.5rem,2.8vw,2.2rem); flex:none; }
+.oslayer b { font-family:var(--display); font-weight:600; font-size:clamp(.9rem,1.6vw,1.2rem); }
+.oslayer p { color:var(--muted); font-size:clamp(.75rem,1.3vw,.95rem); line-height:1.35; margin-top:1px; }
+.oslayer.mid { border-color:var(--naranja); background:linear-gradient(90deg,rgba(233,113,50,.07),#fff); }
+.osarrow { text-align:center; font-family:var(--mono); font-size:.7rem; color:var(--faint); padding:5px 0; opacity:0; }
+.slide.on .oslayer.top { animation:osIn .5s ease .2s forwards; }
+.slide.on .oslayer.mid { animation:osIn .5s ease .9s forwards, osGlow 2.2s ease 1.6s infinite; }
+.slide.on .oslayer.bot { animation:osIn .5s ease 1.5s forwards; }
+.slide.on .osarrow { animation:osFade .4s ease forwards; }
+.slide.on .osarrow:nth-of-type(2) { animation-delay:.7s; }
+.slide.on .osarrow:nth-of-type(4) { animation-delay:1.3s; }
+@keyframes osIn { to{opacity:1;transform:none} }
+@keyframes osFade { to{opacity:1} }
+@keyframes osGlow { 0%,100%{box-shadow:0 0 0 0 rgba(233,113,50,0)} 50%{box-shadow:0 0 0 4px rgba(233,113,50,.15)} }
+/* ---- grid de sistemas operativos ---- */
+.osgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:900px; margin-top:8px; }
+.oscard { border:1px solid var(--line); border-radius:14px; padding:14px 16px; text-align:left; background:#fff;
+  opacity:0; transform:translateY(18px); }
+.oscard .oe { font-size:clamp(1.6rem,3vw,2.2rem); display:block; margin-bottom:4px; }
+.oscard b { font-family:var(--display); font-size:clamp(.95rem,1.7vw,1.2rem); }
+.oscard small { display:block; color:var(--muted); font-size:clamp(.72rem,1.2vw,.86rem); line-height:1.3; margin-top:3px; }
+.oscard.hi { border-color:var(--naranja); border-width:2px; background:linear-gradient(160deg,rgba(233,113,50,.08),#fff); }
+.oscard.goal { border-style:dashed; border-color:var(--c1, #156082); }
+.slide.on .oscard { animation:osCard .45s ease forwards; }
+.slide.on .oscard:nth-child(1){animation-delay:.15s} .slide.on .oscard:nth-child(2){animation-delay:.3s}
+.slide.on .oscard:nth-child(3){animation-delay:.45s} .slide.on .oscard:nth-child(4){animation-delay:.6s}
+.slide.on .oscard:nth-child(5){animation-delay:.75s} .slide.on .oscard:nth-child(6){animation-delay:.9s}
+@keyframes osCard { to{opacity:1;transform:none} }
+@media (max-width:640px){ .osgrid { grid-template-columns:1fr 1fr; } }
+@media (prefers-reduced-motion: reduce) { .oslayer,.osarrow,.oscard { opacity:1 !important; transform:none !important; animation:none !important; } }
+.src { position:absolute; bottom:3vh; left:clamp(30px,8vw,120px); right:clamp(30px,8vw,120px); font-family:var(--mono); font-size:.68rem; color:var(--faint); }
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:clamp(16px,3vw,40px); max-width:1000px; }
+.chipset { display:flex; gap:10px; flex-wrap:wrap; margin-top:24px; }
+.chip { font-family:var(--mono); font-size:clamp(.75rem,1.2vw,.95rem); padding:.5em 1.1em; border:1px solid var(--line); border-radius:999px; color:var(--muted); }
+.chip.hi { color:var(--naranja); border-color:rgba(233,113,50,.45); font-weight:600; }
+.q { font-family:var(--display); font-size:clamp(1.4rem,3vw,2.3rem); border-left:3px solid; border-image:var(--grad) 1; padding-left:22px; margin:14px 0; max-width:30ch; line-height:1.25; }
+.cover { padding:0; }
+.cover-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.cover-txt { position:absolute; left:clamp(24px,6vw,90px); bottom:4.5vh; z-index:2; max-width:36ch; }
+.cover-k { font-family:var(--mono); font-size:clamp(.6rem,.95vw,.78rem); letter-spacing:.07em; text-transform:uppercase; color:#7fd8f5; }
+.cover-h { color:#fff; font-family:var(--display); font-size:clamp(1.15rem,2.3vw,1.9rem); line-height:1.15; margin:8px 0 8px; }
+.cover-s { color:#c9d4e6; font-size:clamp(.78rem,1.15vw,.95rem); line-height:1.5; }
+.cover-logo { position:absolute; right:clamp(30px,6vw,90px); bottom:8vh; width:clamp(140px,16vw,230px); z-index:2; }
+.inst-footer { position:fixed; bottom:2.2vh; left:clamp(30px,8vw,120px); z-index:9; }
+.inst-footer img { height:clamp(30px,4.6vh,44px); display:block; }
+.cover ~ style, .cover .inst-footer { display:none; }
+.bar { position:fixed; top:0; left:0; height:3px; background:var(--grad); width:0; transition:width .25s ease; z-index:10; }
+.num { position:fixed; bottom:3vh; right:clamp(30px,8vw,120px); font-family:var(--mono); font-size:.8rem; color:var(--faint); z-index:10; }
+.nav-hint { position:fixed; bottom:3vh; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:.68rem; color:var(--faint); z-index:10; }
+.chart { max-width:520px; }
+.chart-title { font-family:var(--mono); font-size:.78rem; color:var(--muted); letter-spacing:.04em; text-transform:uppercase; margin-bottom:14px; }
+.chart-bars { display:flex; align-items:flex-end; gap:clamp(14px,2.5vw,30px); height:clamp(180px,34vh,320px); border-bottom:1px solid var(--line); padding-bottom:2px; }
+.cbar { flex:1; height:var(--h); background:linear-gradient(180deg, rgba(21,96,130,.55), rgba(21,96,130,.12)); border-radius:8px 8px 0 0; position:relative; }
+.cbar.hi { background:var(--grad); }
+.cbar.dim { background:linear-gradient(180deg, rgba(233,113,50,.30), rgba(233,113,50,.06)); border:1px dashed rgba(233,113,50,.55); border-bottom:0; }
+.cv { position:absolute; top:-26px; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:clamp(.7rem,1.2vw,.9rem); color:var(--text); white-space:nowrap; }
+.cy { position:absolute; bottom:-26px; left:50%; transform:translateX(-50%); font-family:var(--mono); font-size:.72rem; color:var(--faint); }
+.chart-note { margin-top:34px; font-family:var(--mono); font-size:.68rem; color:var(--faint); }
+.qrs { display:flex; gap:clamp(20px,4vw,54px); margin-top:24px; }
+.qr { display:flex; flex-direction:column; gap:10px; align-items:flex-start; }
+.qr svg { width:clamp(90px,11vw,150px); height:auto; border-radius:10px; }
+.slide .grid2 .qr svg { width:clamp(160px,20vw,260px); }
+.qr.qr-ticket svg { width:clamp(150px,18vw,220px); }
+.qr span { font-family:var(--mono); font-size:.72rem; color:var(--faint); line-height:1.5; }
+.qr span b { color:var(--a1); font-weight:500; }
+.demo { background:#0E2841; border:0; border-radius:18px; padding:clamp(18px,3vh,30px); max-width:820px; margin-top:10px; }
+.demo p { font-family:var(--mono); color:#39c8e8; font-size:clamp(.85rem,1.5vw,1.1rem); padding:6px 0; }
+ul.clean { list-style:none; max-width:880px; }
+ul.clean li { padding:clamp(8px,1.4vh,14px) 0; border-top:1px solid var(--line); color:var(--muted); font-size:clamp(.95rem,1.7vw,1.3rem); }
+ul.clean li b { color:var(--text); }
+ul.clean li:first-child { border-top:0; }
+.tag9 { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:1000px; margin-top:10px; }
+.t9 { border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:clamp(.75rem,1.25vw,.95rem); color:var(--muted); }
+.t9 b { color:var(--a1); font-family:var(--mono); margin-right:6px; }
+
+/* ---- visualizaciones didácticas de redes ---- */
+.viz { width:100%; max-width:1010px; margin:2px auto 0; }
+.viz svg { width:100%; height:auto; display:block; overflow:visible; }
+.slide.on .viz { animation:vizIn .55s cubic-bezier(.2,.7,.3,1) .12s both; }
+@keyframes vizIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
+.vcap { text-align:center; color:var(--muted); font-size:clamp(.85rem,1.45vw,1.08rem); line-height:1.45;
+  margin:12px auto 0; max-width:64ch; }
+.vcap b { color:var(--text); }
+.vlbl { font-family:"JetBrains Mono",monospace; fill:#8B98A9; font-size:12.5px; letter-spacing:.02em; }
+.vname { font-family:"JetBrains Mono",monospace; fill:#fff; font-size:12.5px; }
+.vzone { font-family:"Poppins",sans-serif; font-weight:700; }
+.vnode { font-family:"Poppins",sans-serif; font-weight:600; }
+@media (prefers-reduced-motion:reduce){ .viz *{animation:none!important} }
+
+.vexp { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:1010px; margin:10px auto 0; }
+.vexp .c { border:1px solid var(--line); border-top:3px solid var(--a2); border-radius:12px; padding:7px 13px 9px; background:#fff; }
+.vexp .c h4 { font-family:"Poppins",sans-serif; font-weight:700; font-size:clamp(.86rem,1.4vw,1.08rem); color:var(--a1); margin-bottom:3px; }
+.vexp .c p { font-size:clamp(.7rem,1.08vw,.84rem); color:var(--muted); line-height:1.28; margin:2px 0; }
+.vexp .c p b { color:var(--text); }
+.vexp .c .ej b { color:var(--a1); }
+@media (max-width:760px){ .vexp { grid-template-columns:1fr; } }
+.kit .c{padding:10px 16px 12px} .kit .c h4{font-size:clamp(1rem,1.6vw,1.25rem)} .kit .c p{font-size:clamp(.82rem,1.3vw,1.02rem);margin:4px 0}
+.viz.sm svg{ width:auto; height:clamp(240px,36vh,360px); max-width:100%; margin:0 auto; }
+</style></head><body>
+<div class="bar" id="bar"></div>
+<div class="num" id="num"></div>
+<div class="inst-footer" id="instf"><img src="../../../assets/logos-medellin.png" alt="Alcaldía de Medellín · SAPIENCIA · Esumer"></div>
+<div class="nav-hint">← → o click para avanzar</div>
+
+<!-- 1 · PORTADA -->
+<section class="slide on cover">
+  <img class="cover-bg" src="../../../assets/portada.png" alt="">
+  <div class="cover-txt">
+    <span class="cover-k">Estud-IA · Ruta TI · 2026-2 · Sesión 9 · clase virtual · RED-02</span>
+    <h1 class="cover-h">¿Dónde viven tus datos? Almacenamiento en la nube</h1>
+    <p class="cover-s">Bloque, archivos y objetos: todos los tipos de almacenamiento de AWS… y al final, tu página en S3 con candado HTTPS, lanzada con Terraform.<br>Alejandro Barrera · Cloud Architect</p>
+  </div>
+  <img class="cover-logo" src="../../../assets/estudia-blanco.png" alt="Estud-IA">
+</section>
+
+<!-- 2 · PLAN -->
+<section class="slide">
+  <span class="k">El plan de hoy · clase 9</span>
+  <h2>Objetivo de hoy: <span class="grad">saber dónde guardar cada dato</span> y publicar tu web en S3.</h2>
+  <ul class="rows">
+    <li><span class="t">Los 3 tipos de almacenamiento<small>bloque · archivos · objetos · el mapa de AWS</small></span><span class="m">concepto</span></li>
+    <li><span class="t">Bloque y archivos<small>EBS · Instance Store · EFS · FSx · ¿cuál escoges?</small></span><span class="m">concepto</span></li>
+    <li><span class="t">S3 a fondo<small>buckets y objetos · 11 nueves · clases y precios · seguridad</small></span><span class="m">concepto</span></li>
+    <li><span class="t">Tu web en S3 con HTTPS<small>CloudFront · certificado · bucket privado</small></span><span class="m">concepto</span></li>
+    <li><span class="t">LAB: S3 con la CLI y tu web con Terraform<small>permisos · aws s3 · terraform apply · prueba del 403 · destroy</small></span><span class="m">lab</span></li>
+  </ul>
+</section>
+
+
+<script>
+  window.NetScene=(function(){
+    var DPR=Math.min(window.devicePixelRatio||1,2);
+    var RM=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function cl(x){return x<0?0:x>1?1:x;}
+    var E={io:function(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;},out:function(t){return 1-Math.pow(1-t,3);},
+      back:function(t){if(t<=0)return 0;var a=1.70158,b=a+1;return 1+b*Math.pow(t-1,3)+a*Math.pow(t-1,2);}};
+    function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.quadraticCurveTo(x+w,y,x+w,y+r);c.lineTo(x+w,y+h-r);c.quadraticCurveTo(x+w,y+h,x+w-r,y+h);c.lineTo(x+r,y+h);c.quadraticCurveTo(x,y+h,x,y+h-r);c.lineTo(x,y+r);c.quadraticCurveTo(x,y,x+r,y);c.closePath();}
+    function txt(c,s,x,y,font,col,al,a){if(a===0)return;c.save();c.globalAlpha*=(a==null?1:a);c.font=font;c.fillStyle=col;c.textAlign=al||'left';c.textBaseline='alphabetic';c.fillText(s,x,y);c.restore();}
+    function house(c,x,y,w,body,roof,s){if(!(s>0))return;var h=w*.72;c.save();c.translate(x,y);c.scale(s,s);
+      c.fillStyle=body;c.fillRect(-w/2,-h,w,h);c.fillStyle=roof;c.beginPath();c.moveTo(-w/2-w*.14,-h+1);c.lineTo(0,-h-w*.58);c.lineTo(w/2+w*.14,-h+1);c.closePath();c.fill();
+      if(w>=14){c.fillStyle='rgba(255,255,255,.88)';c.fillRect(-w*.13,-h*.56,w*.26,h*.56);}c.restore();}
+    function rectProg(c,x,y,w,h,f,col,lw,dash,off){if(f<=0)return;c.save();c.strokeStyle=col;c.lineWidth=lw||2;c.setLineDash(dash||[9,6]);c.lineDashOffset=off||0;
+      var L=2*(w+h),d=f*L,pts=[[x,y],[x+w,y],[x+w,y+h],[x,y+h],[x,y]];c.beginPath();c.moveTo(x,y);
+      for(var k=0;k<4&&d>0;k++){var a=pts[k],b=pts[k+1],sl=Math.abs(b[0]-a[0])+Math.abs(b[1]-a[1]),u=Math.min(1,d/sl);c.lineTo(a[0]+(b[0]-a[0])*u,a[1]+(b[1]-a[1])*u);d-=sl;}
+      c.stroke();c.restore();}
+    function make(id,W,H,caps,draw){
+      var sec=document.getElementById(id),cv=sec.querySelector('canvas'),cap=sec.querySelector('.cap'),dots=sec.querySelector('.dots');
+      var ctx=cv.getContext('2d'),step=0,st=0,run=false,rid=0;
+      sec.querySelector('.scene').style.setProperty('--ar',W/H);
+      function size(){var w=cv.parentElement.clientWidth||1000,h=w*H/W;cv.style.height=h+'px';cv.width=Math.round(w*DPR);cv.height=Math.round(h*DPR);}
+      function setCap(){cap.innerHTML=caps[step];if(cap.animate&&!RM)cap.animate([{opacity:0,transform:'translateY(6px)'},{opacity:1,transform:'none'}],{duration:380,easing:'ease-out'});
+        dots.innerHTML=caps.map(function(_,k){return '<i class="'+(k<=step?'on':'')+'"></i>';}).join('');}
+      function frame(now){if(!sec.classList.contains('on')){run=false;return;}var t=(now-st)/1000;
+        ctx.setTransform(cv.width/W,0,0,cv.width/W,0,0);ctx.clearRect(0,0,W,H);
+        try{draw(ctx,{step:step,t:t,now:now/1000,E:E,p:function(k,dur,del){if(step>k)return 1;if(step<k)return 0;if(RM)return 1;return cl((t-(del||0))/(dur||1));}});}catch(err){if(!sec.__err){sec.__err=1;console.error('[escena '+id+' paso '+step+']',err);}}
+        rid=requestAnimationFrame(frame);}
+      sec.__enter=function(){step=0;st=performance.now();size();setCap();cancelAnimationFrame(rid);run=true;rid=requestAnimationFrame(frame);};
+      sec.__next=function(){if(step<caps.length-1){step++;st=performance.now();setCap();return true;}return false;};
+      window.addEventListener('resize',function(){if(sec.classList.contains('on'))size();});
+      cap.innerHTML=caps[0];dots.innerHTML=caps.map(function(_,k){return '<i class="'+(k===0?'on':'')+'"></i>';}).join('');
+    }
+    function person(c,x,y,sz,col,a){if(!(a>0))return;c.save();c.globalAlpha*=Math.min(1,a);c.fillStyle=col;c.beginPath();c.arc(x,y-sz*1.3,sz*.42,0,7);c.fill();rr(c,x-sz*.5,y-sz*.82,sz,sz*.82,sz*.3);c.fill();c.restore();}
+    function bubble(c,x,y,text,font,bg,fg,a){if(!(a>0))return;c.save();c.globalAlpha*=Math.min(1,a);c.font=font;var w=c.measureText(text).width+26,h=36;c.fillStyle=bg;rr(c,x-w/2,y-h,w,h,10);c.fill();c.beginPath();c.moveTo(x-8,y-1);c.lineTo(x,y+10);c.lineTo(x+8,y-1);c.fill();c.fillStyle=fg;c.textAlign='center';c.textBaseline='middle';c.fillText(text,x,y-h/2);c.restore();}
+    function laptop(c,x,y,w,col,a){if(!(a>0))return;c.save();c.globalAlpha*=Math.min(1,a);c.fillStyle='#0E2841';rr(c,x-w/2,y-w*.62,w,w*.62,4);c.fill();c.fillStyle=col;c.fillRect(x-w/2+4,y-w*.62+4,w-8,w*.62-8);c.fillStyle='#8B98A9';rr(c,x-w*.62,y,w*1.24,w*.08,3);c.fill();c.restore();}
+    function cloud(c,x,y,s,col,a){if(!(a>0))return;c.save();c.globalAlpha*=Math.min(1,a);c.fillStyle=col;[[-.5,.1,.42],[0,-.18,.55],[.5,.1,.42],[0,.22,.5]].forEach(function(k){c.beginPath();c.arc(x+k[0]*s,y+k[1]*s,k[2]*s,0,7);c.fill();});c.restore();}
+    function building(c,x,y,w,h,col,a){if(!(a>0))return;c.save();c.translate(x,y);c.scale(Math.max(a,0),Math.max(a,0));c.fillStyle=col;c.fillRect(-w/2,-h,w,h);c.fillStyle='rgba(255,255,255,.75)';for(var r=0;r<Math.floor(h/12);r++)for(var q=0;q<2;q++)c.fillRect(-w/2+w*(.18+q*.44),-h+5+r*12,w*.2,6);c.restore();}
+    function packet(c,x,y,col,a){if(!(a>0))return;c.save();c.globalAlpha*=Math.min(1,a);c.fillStyle=col;rr(c,x-14,y-10,28,20,3);c.fill();c.strokeStyle='rgba(255,255,255,.85)';c.lineWidth=1.5;c.beginPath();c.moveTo(x-12,y-8);c.lineTo(x,y+1);c.lineTo(x+12,y-8);c.stroke();c.restore();}
+    function along(pts,u){var L=0,seg=[];for(var i=0;i<pts.length-1;i++){var d=Math.hypot(pts[i+1][0]-pts[i][0],pts[i+1][1]-pts[i][1]);seg.push(d);L+=d;}var t=Math.max(0,Math.min(1,u))*L;for(var j=0;j<seg.length;j++){if(t<=seg[j]){var k=seg[j]?t/seg[j]:0;return [pts[j][0]+(pts[j+1][0]-pts[j][0])*k,pts[j][1]+(pts[j+1][1]-pts[j][1])*k];}t-=seg[j];}return pts[pts.length-1];}
+    return {make:make,E:E,rr:rr,txt:txt,house:house,rectProg:rectProg,person:person,bubble:bubble,laptop:laptop,cloud:cloud,building:building,packet:packet,along:along};
+  })();
+  </script>
+<script>
+  /* Viz: piezas visuales comunes (escenario oscuro, isometría, servidores, VMs) para las escenas de la sesión 7 */
+  window.Viz=(function(){
+    var C={bg0:'#08182a',bg1:'#123356',navy:'#0E2841',blue:'#0F9ED5',dblue:'#156082',ora:'#E97132',txt:'#EAF3FA',mut:'#9fb6c9',faint:'#5f7890',grn:'#34c38f',red:'#e5484d',yel:'#FFC928'};
+var LAND=[
+ [[-168,65],[-140,70],[-110,72],[-85,70],[-78,62],[-65,60],[-55,51],[-67,45],[-70,42],[-75,37],[-81,31],[-80,25],[-83,29],[-90,30],[-97,27],[-97,21],[-91,19],[-87,21],[-88,16],[-83,10],[-79,9],[-77.5,8],[-80,7],[-85,11],[-92,14.5],[-105,20],[-110,24],[-112,30],[-117,33],[-121,36],[-124,40],[-125,48],[-133,56],[-148,60],[-165,61]],
+ [[-120,70],[-80,72],[-65,80],[-90,82],[-120,77]],
+ [[-50,60],[-42,60],[-20,70],[-20,80],[-60,82],[-70,76],[-55,68]],
+ [[-24,64],[-13,65],[-15,66.5],[-22,66.4]],
+ [[-84.9,21.9],[-80,23.1],[-74.2,20.2],[-77.5,19.9],[-82,21.5]],
+ [[-74.4,19.8],[-68.4,18.6],[-71,17.6],[-74.4,18.4]],
+ [[-77.5,8],[-72,12],[-62,10.5],[-51,4],[-50,0],[-35,-6],[-38,-13],[-40,-22],[-48,-26],[-53,-34],[-58,-38],[-65,-42],[-68,-52],[-72,-50],[-74,-40],[-71,-30],[-70,-18],[-76,-14],[-81,-5],[-80,0],[-77,4]],
+ [[-10,36],[-9,43],[-2,44],[-4.5,48],[2,51],[8,54],[10,58],[5,62],[15,69],[28,71],[40,67],[40,60],[30,55],[40,48],[28,45],[26,40],[20,40],[16,38],[12,44],[8,44],[3,43],[-2,37]],
+ [[-5,50],[1,51],[0,54],[-3,58],[-6,57],[-5,54],[-3,52]],
+ [[-17,15],[-17,21],[-13,28],[-6,35],[10,37],[20,32],[32,31],[35,28],[43,12],[51,12],[42,-2],[40,-15],[35,-24],[27,-34],[18,-34],[12,-18],[13,-6],[9,4],[-5,5],[-12,7]],
+ [[44,-25],[47,-25],[50,-15],[49,-12],[44,-17]],
+ [[26,40],[36,36],[35,31],[44,13],[55,17],[57,24],[62,25],[67,24],[73,20],[77,8],[80,15],[88,22],[92,22],[98,16],[100,6],[104,1],[106,10],[109,12],[108,20],[117,23],[122,31],[119,38],[122,40],[129,35],[130,43],[140,48],[142,54],[135,55],[155,59],[163,60],[180,66],[180,71],[140,73],[110,77],[80,73],[70,68],[55,68],[45,66],[40,67],[40,60],[30,55],[40,48],[48,42],[50,37],[40,40]],
+ [[130,31],[135,34],[140,36],[142,40],[141,45],[145,44],[140,41],[139,35],[132,33]],
+ [[120,18],[122,18],[126,7],[122,7],[120,13]],
+ [[95,5],[105,-6],[115,-8],[125,-9],[120,-2],[118,5],[110,2],[100,2]],
+ [[109,1],[117,7],[119,1],[116,-4],[110,-3]],
+ [[131,-1],[141,-2.5],[150,-10],[143,-9],[138,-8],[132,-4]],
+ [[114,-22],[122,-18],[130,-12],[137,-12],[142,-11],[146,-19],[153,-26],[151,-34],[146,-39],[138,-35],[132,-32],[115,-35],[113,-26]],
+ [[172,-34],[178,-38],[174,-41],[167,-46],[171,-44]]
+];
+function inPoly(lon,lat,poly){var ins=false;for(var i=0,j=poly.length-1;i<poly.length;j=i++){var xi=poly[i][0],yi=poly[i][1],xj=poly[j][0],yj=poly[j][1];
+  if(((yi>lat)!==(yj>lat))&&(lon<(xj-xi)*(lat-yi)/(yj-yi)+xi))ins=!ins}return ins}
+function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]))return true;return false}
+    var DOTS=null;
+    function dots(){if(DOTS)return DOTS;DOTS=[];for(var y=84;y<=412;y+=7)for(var x=64;x<=936;x+=7){var lon=-170+(x-60)/880*360,lat=78-(y-70)/350*134;if(isLand(lon,lat))DOTS.push([x,y]);}return DOTS;}
+    function mp(lon,lat){return [60+(lon+170)/360*880,70+(78-lat)/134*350];}
+    function bg(c,W,H){var g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,C.bg1);g.addColorStop(1,C.bg0);c.fillStyle=g;c.fillRect(0,0,W,H);
+      c.save();c.strokeStyle='rgba(255,255,255,.035)';c.lineWidth=1;for(var x=0;x<=W;x+=40){c.beginPath();c.moveTo(x,0);c.lineTo(x,H);c.stroke();}for(var y=0;y<=H;y+=40){c.beginPath();c.moveTo(0,y);c.lineTo(W,y);c.stroke();}c.restore();}
+    function tx(c,s,x,y,sz,col,al,w,a,f){if(a===0)return;c.save();c.globalAlpha*=(a==null?1:a);c.font=(w||600)+' '+sz+'px '+(f||'Poppins,sans-serif');c.fillStyle=col;c.textAlign=al||'left';c.textBaseline='alphabetic';c.fillText(s,x,y);c.restore();}
+    function rr(c,x,y,w,h,r){NetScene.rr(c,x,y,w,h,r);}
+    function glow(c,col,b){c.shadowColor=col;c.shadowBlur=b;}
+    function pill(c,x,y,s,bgc,fg,a){c.save();c.globalAlpha*=a==null?1:a;c.font='600 12px Poppins,sans-serif';var w=c.measureText(s).width+22;c.fillStyle=bgc;rr(c,x,y,w,24,12);c.fill();c.fillStyle=fg;c.textBaseline='middle';c.fillText(s,x+11,y+12.5);c.restore();return w;}
+    function crumbs(c,list,cur){var x=22;list.forEach(function(s,i){var w=pill(c,x,14,s,i<cur?'rgba(15,158,213,.28)':(i===cur?C.ora:'rgba(255,255,255,.06)'),i<=cur?'#fff':C.faint,1);x+=w+6;if(i<list.length-1)tx(c,'›',x-3,31,14,C.faint,'center',600,1);x+=6;});}
+    function pulse(c,x,y,r,t,col,a){for(var k=0;k<2;k++){var u=((t+k*.9)%1.8)/1.8;c.save();c.globalAlpha*=(a==null?1:a)*(1-u);c.strokeStyle=col;c.lineWidth=2;c.beginPath();c.arc(x,y,r+u*r*2.2,0,7);c.stroke();c.restore();}
+      c.save();c.globalAlpha*=a==null?1:a;glow(c,col,14);c.fillStyle=col;c.beginPath();c.arc(x,y,r,0,7);c.fill();c.restore();}
+    function iso(c,x,y,w,d,h,cT,cL,cR,a){var cs=.866,sn=.5,F=[x,y],R=[x+w*cs,y-w*sn],L=[x-d*cs,y-d*sn],B=[x+w*cs-d*cs,y-w*sn-d*sn];c.save();c.globalAlpha*=a==null?1:a;
+      function poly(ps,col){c.fillStyle=col;c.beginPath();c.moveTo(ps[0][0],ps[0][1]);for(var i=1;i<ps.length;i++)c.lineTo(ps[i][0],ps[i][1]);c.closePath();c.fill();}
+      poly([F,L,[L[0],L[1]-h],[F[0],F[1]-h]],cL);poly([F,R,[R[0],R[1]-h],[F[0],F[1]-h]],cR);poly([[F[0],F[1]-h],[R[0],R[1]-h],[B[0],B[1]-h],[L[0],L[1]-h]],cT);c.restore();}
+    function server(c,x,y,w,h,t,seed,hl,a){c.save();c.globalAlpha*=a==null?1:a;var g=c.createLinearGradient(x,y,x,y+h);g.addColorStop(0,hl?'#3a2a1f':'#1d3a58');g.addColorStop(1,hl?'#2a1d15':'#132a42');c.fillStyle=g;rr(c,x,y,w,h,3);c.fill();
+      c.strokeStyle=hl?C.ora:'rgba(159,182,201,.35)';c.lineWidth=hl?2:1;c.stroke();for(var k=0;k<6;k++){c.fillStyle='rgba(255,255,255,.07)';c.fillRect(x+w*.3+k*w*.1,y+h*.3,w*.06,h*.4);}
+      for(var q=0;q<3;q++){var on=Math.sin(t*(3+((seed*7+q*3)%5))+seed*1.7+q)>-.2;c.fillStyle=on?(q===2?C.ora:C.grn):'rgba(255,255,255,.12)';c.beginPath();c.arc(x+8+q*7,y+h/2,2,0,7);c.fill();}c.restore();}
+    function rack(c,x,y,w,h,n,t,hl,a){c.save();c.globalAlpha*=a==null?1:a;c.fillStyle='#0b1a2b';rr(c,x,y,w,h,6);c.fill();c.strokeStyle='rgba(159,182,201,.4)';c.lineWidth=1.5;c.stroke();c.restore();
+      var sh=(h-16)/n;for(var i=0;i<n;i++)server(c,x+6,y+8+i*sh,w-12,sh-3,t,i+x,hl===i,a);}
+    function vm(c,x,y,w,h,title,sub,col,a,on){if(!(a>0))return;c.save();c.globalAlpha*=a;if(on)glow(c,col,22);var g=c.createLinearGradient(x,y,x,y+h);g.addColorStop(0,'rgba(255,255,255,.12)');g.addColorStop(1,'rgba(255,255,255,.04)');c.fillStyle=g;rr(c,x,y,w,h,10);c.fill();c.shadowBlur=0;
+      c.strokeStyle=col;c.lineWidth=on?2.5:1.5;c.stroke();c.fillStyle=col;rr(c,x,y,w,6,3);c.fill();c.restore();tx(c,title,x+w/2,y+h/2+(sub?-2:5),14,'#fff','center',700,a);if(sub)tx(c,sub,x+w/2,y+h/2+16,11,C.mut,'center',500,a,'"JetBrains Mono",monospace');}
+    function building(c,x,y,s,t,a,hl){iso(c,x,y,90*s,60*s,70*s,hl?'#5a3a24':'#2b4f74',hl?'#3a2618':'#16324f',hl?'#4a3020':'#1e4266',a);
+      for(var r=0;r<3;r++)for(var q=0;q<4;q++){var on=Math.sin(t*1.3+r*1.7+q*2.3+x)>0;c.save();c.globalAlpha*=(a==null?1:a)*(on?.85:.25);c.fillStyle=hl?C.ora:C.blue;var px=x+(12+q*18)*s*.866,py=y-(12+q*18)*s*.5-(18+r*18)*s;c.fillRect(px,py,6*s,8*s);c.restore();}
+      for(var f=0;f<2;f++){var fx=x+(28+f*34)*s*.866-30*s*.866,fy=y-(28+f*34)*s*.5-30*s*.5-70*s;c.save();c.globalAlpha*=a==null?1:a;c.translate(fx,fy);c.scale(1,.5);c.rotate(t*4+f);c.strokeStyle='rgba(234,243,250,.7)';c.lineWidth=2;for(var b=0;b<3;b++){c.rotate(2.094);c.beginPath();c.moveTo(0,0);c.lineTo(9*s,0);c.stroke();}c.restore();}}
+    function fiber(c,A,B,t,col,a){c.save();c.globalAlpha*=a==null?1:a;c.strokeStyle=col;c.lineWidth=2;c.setLineDash([6,8]);c.lineDashOffset=-t*30;c.beginPath();c.moveTo(A[0],A[1]);c.lineTo(B[0],B[1]);c.stroke();c.restore();}
+    function chip(c,x,y,w,h,col,label,a){c.save();c.globalAlpha*=a==null?1:a;glow(c,col,10);c.fillStyle=col;rr(c,x,y,w,h,4);c.fill();c.restore();if(label)tx(c,label,x+w/2,y+h/2+4,10,'#fff','center',700,a);}
+    return {C:C,dots:dots,mp:mp,bg:bg,tx:tx,pill:pill,crumbs:crumbs,pulse:pulse,iso:iso,server:server,rack:rack,vm:vm,building:building,fiber:fiber,chip:chip,glow:glow};
+  })();
+  </script>
+<style>
+    .scene{width:min(100%,1080px,calc(58vh * var(--ar)));margin:6px auto 0}
+    .scene canvas{display:block;width:100%;border-radius:14px;background:#f7f9fc;border:1px solid var(--line)}
+    .scbar{display:flex;align-items:center;gap:16px;margin:8px auto 0;width:min(100%,1080px)}
+    .scbar .cap{flex:1;font-size:clamp(.86rem,1.4vw,1.06rem);color:var(--muted);line-height:1.45;min-height:3em}
+    .scbar .cap b{color:var(--text)}
+    .scbar .dots{display:flex;gap:6px}
+    .scbar .dots i{width:10px;height:10px;border-radius:50%;background:var(--line);display:block;transition:background .3s}
+    .scbar .dots i.on{background:var(--naranja)}
+    .scbar .shint{font-family:var(--mono);font-size:.7rem;color:var(--faint);white-space:nowrap}
+  </style>
+<!-- 3 · LOS TRES SABORES DEL ALMACENAMIENTO -->
+<section class="slide" id="scS1">
+  <span class="k"><span class="act-chip">💾 ALMACENAMIENTO</span> ¿Dónde viven tus datos? · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">Los <span class="grad">3 tipos de almacenamiento</span> que existen</h2>
+  <div class="scene"><canvas aria-label="Almacenamiento en bloque, de archivos y de objetos: cómo guarda cada uno, cómo se conecta y su nombre en AWS"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scS1',1000,480,[
+    'Todo dato vive en uno de <b>3 tipos de almacenamiento</b>. <b>Bloque</b>: como el disco duro de tu PC, guarda pedacitos y escribe rapidísimo. <b>Archivos</b>: carpetas y archivos, como la carpeta compartida de la oficina. <b>Objetos</b>: una bodega gigante donde guardas cada archivo completo en una caja con etiqueta.',
+    '¿Cómo se usan? Al <b>bloque</b> lo conecta <b>un servidor</b> como si fuera su disco. Los <b>archivos</b> los abren <b>varios servidores a la vez</b> por la red. Los <b>objetos</b> se piden <b>por internet</b>, con una URL, desde un celular, un PC o un servidor.',
+    'En AWS se llaman así: <b>EBS</b> es el bloque (el disco de tu EC2), <b>EFS y FSx</b> son los archivos compartidos, y <b>S3</b> (con <b>Glacier</b>) son los objetos. Hoy los recorremos todos… y terminamos montando tu página en S3.'
+  ],function(c,s){
+    var V=Viz,E=s.E,st=s.step,t=s.t,M='"JetBrains Mono",monospace';V.bg(c,1000,480);
+    function f(d,u){return Math.max(0,Math.min(1,(t-d)/(u||.5)));}
+    var P=[[30,'#3b9ae1','BLOQUE','como el disco duro de tu PC','EBS'],[350,'#34c38f','ARCHIVOS','como la carpeta compartida','EFS · FSx'],[670,'#f08a4b','OBJETOS','como una bodega de casilleros','S3 · Glacier']];
+    P.forEach(function(p,i){var a=st===0?E.out(f(.2+i*.6)):1,x=p[0];if(!(a>0))return;
+      c.save();c.globalAlpha*=a;c.fillStyle='#0f2740';NetScene.rr(c,x,30,300,420,16);c.fill();c.strokeStyle=p[1];c.lineWidth=2.5;c.stroke();c.restore();
+      V.tx(c,p[2],x+150,66,20,p[1],'center',800,a);V.tx(c,p[3],x+150,90,13,'#cfe3f1','center',600,a);
+      if(i===0){var k=Math.floor(t*5)%40;for(var r=0;r<5;r++)for(var q=0;q<8;q++){var id=r*8+q;c.save();c.globalAlpha*=a;c.fillStyle=id===k?'#FFC928':(id<k?'rgba(59,154,225,.75)':'rgba(59,154,225,.25)');NetScene.rr(c,x+46+q*26,118+r*26,22,22,3);c.fill();c.restore();}
+        V.tx(c,'escribe pedacitos (bloques) donde quiera',x+150,262,11.5,'#9fd8f0','center',600,a);}
+      if(i===1){var L=[['📁 empresa/',0],['📁 ventas/',1],['📄 informe.xlsx',2],['📁 rrhh/',1],['📄 contratos.pdf',2],['📄 nomina.xlsx',2]],hl=Math.floor(t*1.2)%6;
+        L.forEach(function(l,j){if(j===hl){c.save();c.globalAlpha*=a*.35;c.fillStyle='#34c38f';NetScene.rr(c,x+40+l[1]*22,114+j*24,200-l[1]*22,22,4);c.fill();c.restore();}V.tx(c,l[0],x+48+l[1]*22,130+j*24,13,'#e6edf3','left',600,a,M);});
+        V.tx(c,'carpetas y archivos, con su ruta',x+150,282,11.5,'#9fe8c4','center',600,a);}
+      if(i===2){var B=['logo.png','video.mp4','factura.pdf','backup.zip','foto.jpg','index.html'],up=Math.floor(t*1.1)%6;
+        B.forEach(function(b,j){var bx=x+30+(j%3)*82,by=120+Math.floor(j/3)*72-(j===up?6:0);c.save();c.globalAlpha*=a;c.fillStyle=j===up?'#f08a4b':'#7a4a24';NetScene.rr(c,bx,by,74,54,6);c.fill();c.fillStyle='#fff8e6';NetScene.rr(c,bx+6,by+30,62,16,3);c.fill();c.restore();V.tx(c,b,bx+37,by+42,9,'#3a2518','center',700,a,M);V.tx(c,'📦',bx+37,by+24,16,'#fff','center',400,a);});
+        V.tx(c,'cada archivo completo, en su caja con etiqueta',x+150,282,11.5,'#ffd0b0','center',600,a);}
+      if(st>=1){var b=st===1?f(.2+i*.5):1,T=[['🖥️ ── 💽','un servidor lo usa','como su propio disco'],['🖥️🖥️🖥️ ── 🗂️','varios servidores','abren los mismos archivos'],['📱💻🖥️ ── 🌐 ── 📦','cualquiera lo pide','por internet, con una URL']][i];
+        V.tx(c,T[0],x+150,330,20,'#fff','center',400,b);V.tx(c,T[1],x+150,358,13,'#fff','center',800,b);V.tx(c,T[2],x+150,378,12,'#cfe3f1','center',600,b);}
+      if(st>=2){var d=E.back(f(.2+i*.4));if(d>0){c.save();c.globalAlpha*=Math.min(1,d);c.fillStyle=p[1];NetScene.rr(c,x+60,398,180,38,19);c.fill();c.restore();V.tx(c,p[4],x+150,424,18,'#0e2841','center',800,Math.min(1,d));}}
+    });
+  });
+  </script>
+</section>
+
+<!-- 4 · EL MAPA DE ALMACENAMIENTO DE AWS -->
+<section class="slide" id="scS2">
+  <span class="k"><span class="act-chip">🗺️ EL MAPA</span> Todos los servicios de almacenamiento de AWS · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">El mapa: <span class="grad">qué servicio para qué</span></h2>
+  <div class="scene"><canvas aria-label="Mapa de los servicios de almacenamiento de AWS agrupados en bloque, archivos, objetos y protección"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scS2',1000,480,[
+    '<b>Bloque</b>: el <b>Instance Store</b> es un disco pegado al servidor físico, rapidísimo pero <b>se borra al apagar</b>. <b>EBS</b> es el disco de tu EC2: <b>persiste</b> aunque la apagues.',
+    '<b>Archivos</b>: <b>EFS</b> es una carpeta compartida para servidores Linux que <b>crece sola</b>. <b>FSx</b> es la familia para casos especiales: carpetas de Windows, supercomputación o empresas con NetApp.',
+    '<b>Objetos</b>: <b>S3</b> es la bodega infinita que se usa por internet. <b>S3 Glacier</b> es el “archivo muerto”: cuesta centavos, pero recuperar algo puede tardar de minutos a horas.',
+    '<b>Proteger</b>: los <b>snapshots</b> y <b>AWS Backup</b> sacan fotos programadas de tus discos. <b>Storage Gateway</b> conecta la oficina de la empresa con la nube (almacenamiento <b>híbrido</b>).'
+  ],function(c,s){
+    var V=Viz,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    function f(d,u){return Math.max(0,Math.min(1,(t-d)/(u||.5)));}
+    var G=[['BLOQUE','#3b9ae1',[['Instance Store','disco pegado al fierro','rapidísimo · se BORRA al apagar'],['EBS','el disco de tu EC2 (gp3)','persiste · vive en 1 zona']]],
+           ['ARCHIVOS','#34c38f',[['EFS','carpeta compartida Linux','crece sola · varias zonas'],['FSx','Windows · Lustre · NetApp','para casos empresariales']]],
+           ['OBJETOS','#f08a4b',[['S3','bodega infinita por internet','11 nueves de durabilidad'],['S3 Glacier','el archivo muerto','centavos · tarda en recuperar']]],
+           ['PROTEGER','#a67af4',[['Snapshots · AWS Backup','fotos programadas','recuperas en minutos'],['Storage Gateway','oficina ↔ nube','almacenamiento híbrido']]]];
+    G.forEach(function(g,i){if(i>st)return;var a=i===st?E.out(f(.1)):1,x=18+i*246;
+      V.tx(c,g[0],x+113,44,15,g[1],'center',800,a);c.save();c.globalAlpha*=a;c.fillStyle=g[1];c.fillRect(x+30,54,166,3);c.restore();
+      g[2].forEach(function(it,j){var b=i===st?E.back(f(.3+j*.35,.5)):1,y=74+j*196;if(!(b>0))return;var al=Math.min(1,b);
+        c.save();c.globalAlpha*=al;c.fillStyle='#0f2740';NetScene.rr(c,x,y,226,176,14);c.fill();c.strokeStyle=g[1];c.lineWidth=2;c.stroke();c.restore();
+        V.tx(c,it[0],x+113,y+48,it[0].length>14?15:19,'#fff','center',800,al);V.tx(c,it[1],x+113,y+84,12.5,'#cfe3f1','center',600,al);
+        c.save();c.globalAlpha*=al*.25;c.fillStyle=g[1];NetScene.rr(c,x+14,y+110,198,44,10);c.fill();c.restore();V.tx(c,it[2],x+113,y+137,11.5,'#fff','center',700,al);});});
+  });
+  </script>
+</section>
+
+<!-- 5 · EBS A FONDO -->
+<section class="slide" id="scS3">
+  <span class="k"><span class="act-chip">💽 BLOQUE</span> EBS e Instance Store · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px"><span class="grad">EBS</span>: el disco duro de tu EC2</h2>
+  <div class="scene"><canvas aria-label="EBS: disco conectado a la EC2, vive en una zona, se mueve con snapshots, tipos de disco e Instance Store que se borra al apagar"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scS3',1000,480,[
+    'Tu EC2 <b>ya tiene un EBS</b>: es su disco de 8 GB donde vive Linux, NGINX y tu página. Está <b>conectado por la red</b> del data center, por eso si apagas la EC2 <b>tus datos siguen ahí</b>.',
+    'Un EBS <b>vive en UNA zona</b> (us-east-1a). Una EC2 de otra zona <b>no lo puede conectar</b>. ¿Cómo lo muevo? Con un <b>snapshot</b>: la foto viaja a S3 y desde ella creo un disco nuevo en la otra zona.',
+    'Hay <b>tipos de disco</b> según lo que necesites: <b>gp3</b> sirve para casi todo (es el tuyo), <b>io2</b> para bases de datos exigentes, <b>st1</b> para leer datos grandes en fila, <b>sc1</b> para datos fríos y baratos.',
+    'El <b>Instance Store</b> es un disco pegado al servidor físico: <b>rapidísimo</b>, pero si apagas la EC2… <b>se borra todo</b>. Solo sirve para datos temporales. Lo importante siempre va en <b>EBS</b>.'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t,M='"JetBrains Mono",monospace';V.bg(c,1000,480);
+    function f(d,u){return Math.max(0,Math.min(1,(t-d)/(u||.5)));}
+    function ec2(x,y,lab,a){c.save();c.globalAlpha*=a;c.fillStyle='#ed7100';NetScene.rr(c,x,y,110,70,10);c.fill();c.restore();V.tx(c,'🖥️ '+lab,x+55,y+42,14,'#fff','center',800,a);}
+    function disk(x,y,lab,col,a){c.save();c.globalAlpha*=a;c.fillStyle=col;NetScene.rr(c,x,y,120,60,30);c.fill();c.fillStyle='rgba(255,255,255,.25)';c.beginPath();c.ellipse(x+60,y+14,52,9,0,0,7);c.fill();c.restore();V.tx(c,lab,x+60,y+42,12,'#fff','center',800,a);}
+    if(st<=1){[[30,'us-east-1a'],[520,'us-east-1b']].forEach(function(z){c.save();c.strokeStyle='#147eba';c.setLineDash([6,5]);c.lineWidth=1.5;NetScene.rr(c,z[0],60,450,330,10);c.stroke();c.restore();V.tx(c,'Zona '+z[1],z[0]+16,84,13,'#6cb6e6','left',800,1);});
+      var a=E.out(f(.2));ec2(110,140,'tu EC2',a);disk(110,280,'EBS gp3 · 8 GB','#3b9ae1',E.out(f(.6)));
+      var w=f(.9);c.save();c.globalAlpha*=w;c.strokeStyle='#FFC928';c.lineWidth=3;c.setLineDash([6,5]);c.lineDashOffset=-t*30;c.beginPath();c.moveTo(165,210);c.lineTo(170,280);c.stroke();c.restore();
+      V.tx(c,'conectado por la red',250,250,12,'#FFC928','left',700,w);
+      if(st===0){V.tx(c,'adentro: Linux · NGINX · tu index.html',170,372,12,'#cfe3f1','center',600,f(1.4),M);}
+      if(st===1){ec2(640,140,'EC2 nueva',1);var x1=f(.4);c.save();c.globalAlpha*=x1;c.strokeStyle='#ff6b6b';c.lineWidth=3;c.setLineDash([8,6]);c.beginPath();c.moveTo(230,310);c.lineTo(640,190);c.stroke();c.restore();V.tx(c,'✗ otra zona: no se puede',450,236,14,'#ff9b9b','center',800,x1);
+        var u=f(1.6,1.2);if(u>0){c.save();c.fillStyle='#16324f';NetScene.rr(c,410,8,180,44,10);c.fill();c.strokeStyle='#f08a4b';c.stroke();c.restore();V.tx(c,'📸 snapshot → S3',500,36,13,'#ffd0b0','center',800,1);
+          var p=NetScene.along([[170,280],[500,52]],Math.min(1,u*2));if(u<.5){c.save();c.fillStyle='#FFC928';c.beginPath();c.arc(p[0],p[1],7,0,7);c.fill();c.restore();}
+          if(u>=.5){var q=NetScene.along([[500,52],[700,280]],Math.min(1,(u-.5)*2));c.save();c.fillStyle='#FFC928';c.beginPath();c.arc(q[0],q[1],7,0,7);c.fill();c.restore();}}
+        var n=E.out(f(3));disk(640,280,'EBS copia','#3b9ae1',n);c.save();c.globalAlpha*=n;c.strokeStyle='#34c38f';c.lineWidth=3;c.beginPath();c.moveTo(695,210);c.lineTo(700,280);c.stroke();c.restore();V.tx(c,'✓ listo en la zona b',700,372,13,'#9ff0c8','center',800,n);}
+      return;}
+    if(st===2){var T=[['gp3','para casi todo','el de tu EC2',.6,.35,'#3b9ae1'],['io2','bases de datos exigentes','el más rápido y caro',1,1,'#a67af4'],['st1','leer datos grandes en fila','logs, big data',.45,.2,'#34c38f'],['sc1','datos fríos','el más barato',.25,.1,'#5f7890']];
+      V.tx(c,'velocidad',470,52,12,'#9fd8f0','center',800,1);V.tx(c,'precio',770,52,12,'#ffd0b0','center',800,1);
+      T.forEach(function(k,i){var a=E.out(f(.2+i*.35)),y=80+i*96;c.save();c.globalAlpha*=a;c.fillStyle='#0f2740';NetScene.rr(c,30,y,940,80,12);c.fill();c.strokeStyle=k[5];c.lineWidth=2;c.stroke();c.restore();
+        V.tx(c,k[0],80,y+50,26,k[5],'center',800,a,M);V.tx(c,k[1],140,y+36,15,'#fff','left',800,a);V.tx(c,k[2],140,y+60,12,'#cfe3f1','left',600,a);
+        c.save();c.globalAlpha*=a;c.fillStyle='rgba(255,255,255,.08)';NetScene.rr(c,380,y+32,180,16,8);c.fill();c.fillStyle='#9fd8f0';NetScene.rr(c,380,y+32,180*k[3]*a,16,8);c.fill();
+        c.fillStyle='rgba(255,255,255,.08)';NetScene.rr(c,680,y+32,180,16,8);c.fill();c.fillStyle='#ffb98a';NetScene.rr(c,680,y+32,180*k[4]*a,16,8);c.fill();c.restore();});
+      return;}
+    /* st 3: instance store */
+    [[60,'EBS',true],[540,'Instance Store',false]].forEach(function(k,i){var x=k[0];c.save();c.fillStyle='#0f2740';NetScene.rr(c,x,60,400,330,14);c.fill();c.strokeStyle=k[2]?'#3b9ae1':'#f08a4b';c.lineWidth=2;c.stroke();c.restore();
+      V.tx(c,k[1],x+200,92,18,'#fff','center',800,1);var off=t>1.6;ec2(x+40,120,off?'apagada':'encendida',1);
+      if(k[2]){disk(x+40,240,'datos ✓','#3b9ae1',1);V.tx(c,'el disco va aparte, por la red',x+200,372,12.5,'#9ff0c8','center',700,1);}
+      else{var g=off?Math.max(0,1-(t-1.6)/1):1;disk(x+40,240,off&&g<=0?'vacío':'datos','#f08a4b',Math.max(.25,g));if(off&&g<=.5)V.tx(c,'💨 se borró todo',x+290,280,15,'#ff9b9b','center',800,1);V.tx(c,'el disco está DENTRO del fierro',x+200,372,12.5,'#ffd0b0','center',700,1);}
+      V.tx(c,off?'⏻ Stop':'',x+300,160,16,'#ff9b9b','center',800,f(1.4));});
+  });
+  </script>
+</section>
+<!-- 6 · EFS Y FSX -->
+<section class="slide" id="scS4">
+  <span class="k"><span class="act-chip">🗂️ ARCHIVOS</span> EFS y FSx · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px"><span class="grad">EFS y FSx</span>: la carpeta compartida de la nube</h2>
+  <div class="scene"><canvas aria-label="EFS compartido por varias EC2 en varias zonas, crece solo; familia FSx para Windows, Lustre y NetApp"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scS4',1000,480,[
+    '<b>EFS</b> es una <b>carpeta compartida</b>: tres servidores en tres zonas distintas la conectan al mismo tiempo. Si uno guarda un archivo, <b>los otros lo ven al instante</b>. Ideal cuando varios servidores atienden la misma página.',
+    'No hay que escoger tamaño: <b>EFS crece y se encoge solo</b>. Si guardas 2 GB pagas 2 GB; si guardas 200, pagas 200. Nada de quedarse sin espacio a las 3 de la mañana.',
+    '<b>FSx</b> es la familia para casos especiales: <b>Windows File Server</b> (la “unidad Z:” de la oficina, con usuarios de Windows), <b>Lustre</b> (supercomputación e IA) y <b>NetApp ONTAP</b> (empresas que ya usan NetApp).'
+  ],function(c,s){
+    var V=Viz,E=s.E,st=s.step,t=s.t,M='"JetBrains Mono",monospace';V.bg(c,1000,480);
+    function f(d,u){return Math.max(0,Math.min(1,(t-d)/(u||.5)));}
+    if(st<=1){var Z=['us-east-1a','us-east-1b','us-east-1c'];Z.forEach(function(z,i){var x=30+i*320;c.save();c.strokeStyle='#147eba';c.setLineDash([6,5]);NetScene.rr(c,x,30,300,150,10);c.stroke();c.restore();V.tx(c,'Zona '+z,x+14,52,12,'#6cb6e6','left',800,1);
+        c.save();c.fillStyle='#ed7100';NetScene.rr(c,x+95,70,110,60,10);c.fill();c.restore();V.tx(c,'🖥️ EC2 '+(i+1),x+150,106,14,'#fff','center',800,1);
+        var a=f(.3+i*.25);c.save();c.globalAlpha*=a;c.strokeStyle='#34c38f';c.lineWidth=3;c.setLineDash([7,6]);c.lineDashOffset=-t*30;c.beginPath();c.moveTo(x+150,130);c.lineTo(500,270);c.stroke();c.restore();});
+      var g=st===1?Math.min(1,.25+f(.3,3)*.75):.3,h=60+120*g;c.save();c.fillStyle='#123024';NetScene.rr(c,360,260,280,190,16);c.fill();c.strokeStyle='#34c38f';c.lineWidth=2.5;c.stroke();c.restore();
+      V.tx(c,'🗂️ EFS',500,294,20,'#fff','center',800,1);
+      if(st===0){var fl=f(1.4);V.tx(c,'📄 pedidos.csv',500,340,14,'#9fe8c4','center',700,fl,M);V.tx(c,'EC2 1 lo guarda → EC2 2 y 3 lo ven',500,370,12,'#cfe3f1','center',600,f(2));}
+      else{c.save();c.fillStyle='rgba(52,195,143,.2)';NetScene.rr(c,400,430-h,30,h,6);c.fill();c.fillStyle='#34c38f';NetScene.rr(c,400,430-h,30,h,6);c.globalAlpha=.6;c.fill();c.restore();
+        V.tx(c,(2+Math.round(198*f(.3,3)))+' GB',520,350,26,'#fff','center',800,1,M);V.tx(c,'pagas solo lo que usas',520,382,13,'#9fe8c4','center',700,1);}
+      return;}
+    var F=[['Windows File Server','la “unidad Z:” de la oficina','carpetas de Windows (SMB) con los usuarios de la empresa','#3b9ae1'],['Lustre','supercomputación e IA','miles de servidores leyendo datos a la vez','#a67af4'],['NetApp ONTAP','empresas que ya usan NetApp','se llevan su almacenamiento tal cual a la nube','#f08a4b']];
+    F.forEach(function(k,i){var a=E.back(f(.2+i*.4,.5));if(!(a>0))return;var al=Math.min(1,a),x=30+i*320;c.save();c.globalAlpha*=al;c.fillStyle='#0f2740';NetScene.rr(c,x,60,300,340,16);c.fill();c.strokeStyle=k[3];c.lineWidth=2.5;c.stroke();c.restore();
+      V.tx(c,'FSx for',x+150,110,14,'#cfe3f1','center',700,al);V.tx(c,k[0],x+150,140,19,'#fff','center',800,al);V.tx(c,k[1],x+150,200,14,k[3],'center',800,al);
+      var w=k[2].split(' ');var l1=[],l2=[];w.forEach(function(x,j){(j<w.length/2?l1:l2).push(x);});V.tx(c,l1.join(' '),x+150,250,12.5,'#cfe3f1','center',600,al);V.tx(c,l2.join(' '),x+150,270,12.5,'#cfe3f1','center',600,al);});
+  });
+  </script>
+</section>
+
+<!-- 7 · ¿CUÁL ESCOGES? -->
+<section class="slide" id="scQ">
+  <span class="k"><span class="act-chip">🎯 RETO</span> ¿Cuál escoges? · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">Juego: <span class="grad">¿qué almacenamiento usarías?</span></h2>
+  <div class="scene"><canvas aria-label="Cinco casos de una empresa y el servicio de almacenamiento correcto para cada uno"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scQ',1000,480,[
+    'Antes de que aparezca la respuesta, que respondan en el chat: <b>¿bloque, archivos u objetos?</b> Caso 1: la base de datos de la tienda, en su servidor.',
+    'Caso 2: tres servidores de la página necesitan las <b>mismas imágenes subidas</b> por los clientes.',
+    'Caso 3: las <b>fotos de los productos</b> de la tienda online, que verá cualquiera por internet.',
+    'Caso 4: las <b>facturas</b> que la ley obliga a guardar varios años, pero casi nadie consulta.',
+    'Caso 5: la carpeta de la oficina donde los empleados con <b>Windows</b> guardan sus documentos.'
+  ],function(c,s){
+    var V=Viz,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    function f(d,u){return Math.max(0,Math.min(1,(t-d)/(u||.5)));}
+    var Q=[['🛒 La base de datos de la tienda','EBS','bloque: rápido, para un servidor','#3b9ae1'],['🖼️ Imágenes compartidas por 3 servidores','EFS','archivos: varios servidores a la vez','#34c38f'],['📸 Fotos de productos para internet','S3','objetos: se piden por URL','#f08a4b'],['🧾 Facturas guardadas por años','S3 Glacier','objetos fríos: centavos por GB','#a67af4'],['🪟 Carpeta de la oficina en Windows','FSx Windows','archivos con usuarios de Windows','#3b9ae1']];
+    Q.forEach(function(q,i){if(i>st)return;var a=i===st?E.out(f(.1)):1,y=24+i*90,rv=i<st||t>2.2;c.save();c.globalAlpha*=a;c.fillStyle='#0f2740';NetScene.rr(c,30,y,940,78,12);c.fill();c.strokeStyle=rv?q[3]:'#2b4f74';c.lineWidth=2;c.stroke();c.restore();
+      V.tx(c,(i+1)+'. '+q[0],56,y+46,18,'#fff','left',800,a);
+      if(!rv){V.tx(c,'¿bloque, archivos u objetos? 🤔',940,y+46,14,'#FFC928','right',800,a*(.6+.4*Math.sin(t*4)));}
+      else{var b=i<st?1:E.back(f(2.2,.5));c.save();c.globalAlpha*=Math.min(1,b);c.fillStyle=q[3];NetScene.rr(c,540,y+14,170,50,25);c.fill();c.restore();V.tx(c,q[1],625,y+46,17,'#0e2841','center',800,Math.min(1,b));V.tx(c,q[2],725,y+46,11,'#cfe3f1','left',600,Math.min(1,b));}});
+  });
+  </script>
+</section>
+
+<!-- 8 · S3 A FONDO -->
+<section class="slide" id="scS5">
+  <span class="k"><span class="act-chip">🪣 S3</span> La bodega infinita · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px"><span class="grad">Amazon S3</span>: buckets, objetos y clases</h2>
+  <div class="scene"><canvas aria-label="S3: bucket con nombre único, objetos con llave, acceso por URL, durabilidad de 11 nueves y clases de almacenamiento con precio"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scS5',1000,480,[
+    'Un <b>bucket</b> es tu bodega: su nombre es <b>único en todo el mundo</b> (nadie más puede tener “mi-tienda-fotos”). Adentro guardas <b>objetos</b>: cada uno tiene una <b>llave</b> (su “ruta”, como fotos/2026/logo.png), el contenido y sus datos extra.',
+    'Cada objeto se pide <b>por internet</b>, con una URL o con la API (PUT para subir, GET para bajar). Por eso S3 sirve para páginas web, apps de celular, respaldos… <b>sin servidor</b>.',
+    'S3 guarda copias en <b>al menos 3 zonas</b>. Su durabilidad es de <b>11 nueves</b> (99,999999999 %): si guardas <b>10 millones de objetos</b>, en promedio perderías <b>uno cada 10.000 años</b>.',
+    'Y no todo cuesta igual: hay <b>clases</b>. Lo que usas a diario va en <b>Standard</b>; lo que casi no tocas, en <b>Infrequent Access</b>; lo que guardas por ley, en <b>Glacier</b>. Una <b>regla de ciclo de vida</b> lo mueve solo.'
+  ],function(c,s){
+    var V=Viz,E=s.E,st=s.step,t=s.t,M='"JetBrains Mono",monospace';V.bg(c,1000,480);
+    function f(d,u){return Math.max(0,Math.min(1,(t-d)/(u||.5)));}
+    function bucket(x,y,w,h,a){c.save();c.globalAlpha*=a;c.fillStyle='#3a2a12';c.beginPath();c.moveTo(x,y);c.lineTo(x+w,y);c.lineTo(x+w-30,y+h);c.lineTo(x+30,y+h);c.closePath();c.fill();c.strokeStyle='#f08a4b';c.lineWidth=3;c.stroke();c.fillStyle='#f08a4b';c.beginPath();c.ellipse(x+w/2,y,w/2,16,0,0,7);c.fill();c.restore();}
+    if(st===0){bucket(60,110,360,300,E.out(f(.1)));V.tx(c,'🪣 mi-tienda-fotos',240,160,18,'#fff','center',800,f(.4),M);V.tx(c,'(nombre único en el mundo)',240,186,12,'#ffd0b0','center',600,f(.6));
+      ['fotos/2026/logo.png','fotos/2026/camiseta.jpg','facturas/oct.pdf'].forEach(function(k,i){var a=f(.9+i*.3);c.save();c.globalAlpha*=a;c.fillStyle='#7a4a24';NetScene.rr(c,130,215+i*58,220,46,8);c.fill();c.restore();V.tx(c,'📦 '+k,240,244+i*58,12,'#fff','center',700,a,M);});
+      var b=f(2);c.save();c.globalAlpha*=b;c.fillStyle='#0f2740';NetScene.rr(c,500,130,450,240,14);c.fill();c.strokeStyle='#f08a4b';c.stroke();c.restore();
+      [['llave (key)','fotos/2026/logo.png','#FFC928'],['contenido','los bytes de la imagen','#e6edf3'],['metadatos','tipo: image/png · 48 KB','#9fd8f0']].forEach(function(r,i){V.tx(c,r[0],530,182+i*62,14,r[2],'left',800,b);V.tx(c,r[1],530,206+i*62,13,'#cfe3f1','left',600,b,M);});
+      V.tx(c,'un objeto =',725,160,12,'#ffd0b0','center',700,b);return;}
+    if(st===1){bucket(380,200,240,200,1);V.tx(c,'🪣 S3',500,250,18,'#fff','center',800,1);
+      var D=[['📱',120,90],['💻',120,240],['🖥️',120,390],['🌐',880,240]];D.forEach(function(d,i){var a=f(.2+i*.3);V.tx(c,d[0],d[1],d[2]+12,40,'#fff','center',400,a);
+        var u=((t*.5)+i*.25)%1;var p=NetScene.along([[d[1]+(i===3?-30:30),d[2]],[500,300]],u);if(a>0){c.save();c.globalAlpha*=a;c.fillStyle=i===3?'#34c38f':'#FFC928';c.beginPath();c.arc(p[0],p[1],6,0,7);c.fill();c.restore();}});
+      V.tx(c,'GET https://…/fotos/2026/logo.png',500,70,15,'#FFC928','center',700,f(1.2),M);V.tx(c,'PUT = subir · GET = bajar · DELETE = borrar',500,100,13,'#cfe3f1','center',600,f(1.6));
+      V.tx(c,'sin servidor que mantener',500,450,14,'#9ff0c8','center',800,f(2.2));return;}
+    if(st===2){['us-east-1a','us-east-1b','us-east-1c'].forEach(function(z,i){var x=60+i*310,a=f(.2+i*.4);c.save();c.globalAlpha*=a;c.strokeStyle='#147eba';c.setLineDash([6,5]);NetScene.rr(c,x,70,260,200,10);c.stroke();c.restore();V.tx(c,'Zona '+z,x+14,92,12,'#6cb6e6','left',800,a);bucket(x+60,140,140,100,a);V.tx(c,'copia '+(i+1),x+130,180,13,'#fff','center',800,a);});
+      V.tx(c,'99,999999999 %',500,340,40,'#FFC928','center',800,f(1.6),M);V.tx(c,'10 millones de objetos → pierdes 1 cada 10.000 años (en promedio)',500,390,15,'#fff','center',700,f(2.2));return;}
+    var K=[['S3 Standard','uso diario','0,023','milisegundos',1],['Standard-IA','casi no se usa','0,0125','milisegundos',.54],['One Zone-IA','copia en 1 sola zona','0,010','milisegundos',.43],['Glacier Instant','archivo, acceso rápido','0,004','milisegundos',.17],['Glacier Flexible','archivo','0,0036','minutos a horas',.16],['Glacier Deep Archive','guardar por ley','0,00099','hasta 12 horas',.04]];
+    V.tx(c,'USD por GB al mes (us-east-1)',520,26,12,'#ffd0b0','left',700,1);V.tx(c,'recuperar',870,26,12,'#9fd8f0','center',700,1);
+    K.forEach(function(k,i){var a=E.out(f(.15+i*.25)),y=44+i*62;V.tx(c,k[0],40,y+26,15,'#fff','left',800,a);V.tx(c,k[1],40,y+46,11.5,'#cfe3f1','left',600,a);
+      c.save();c.globalAlpha*=a;c.fillStyle='rgba(255,255,255,.07)';NetScene.rr(c,260,y+14,340,22,6);c.fill();c.fillStyle='#f08a4b';NetScene.rr(c,260,y+14,Math.max(6,340*k[4]*a),22,6);c.fill();c.restore();
+      V.tx(c,'$'+k[2],620,y+31,14,'#FFC928','left',800,a,M);V.tx(c,k[3],870,y+31,12.5,'#9fd8f0','center',700,a);});
+    V.tx(c,'regla de ciclo de vida:  30 días → Standard-IA  ·  90 días → Glacier',500,428,13,'#9ff0c8','center',800,f(2));
+  });
+  </script>
+</section>
+<!-- 9 · S3 SEGURO -->
+<section class="slide" id="scS6">
+  <span class="k"><span class="act-chip">🔐 SEGURIDAD</span> S3 seguro por defecto · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">Un bucket <span class="grad">con candado</span></h2>
+  <div class="scene"><canvas aria-label="Seguridad de S3: privado por defecto con bloqueo de acceso público, política del bucket, cifrado y versionado"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scS6',1000,480,[
+    'Todo bucket nace <b>privado</b>, con el <b>bloqueo de acceso público</b> encendido. Muchas filtraciones de datos en el mundo pasaron por buckets que alguien dejó <b>públicos</b> por error. Regla: el candado <b>no se quita</b>.',
+    'Entonces, ¿quién entra? Lo dice la <b>política del bucket</b>: un documento que dice <b>quién</b> puede hacer <b>qué</b>. Ejemplo: “solo CloudFront puede <b>leer</b> mis archivos”. Nadie más.',
+    'Todo lo que guardas queda <b>cifrado</b> automáticamente (SSE-S3): si alguien se robara el disco físico, vería solo basura.',
+    'Con el <b>versionado</b> encendido, si alguien <b>borra o daña</b> un archivo, AWS guarda la versión anterior y la <b>recuperas</b>. Es la papelera de reciclaje de S3.'
+  ],function(c,s){
+    var V=Viz,E=s.E,st=s.step,t=s.t,M='"JetBrains Mono",monospace';V.bg(c,1000,480);
+    function f(d,u){return Math.max(0,Math.min(1,(t-d)/(u||.5)));}
+    c.save();c.fillStyle='#3a2a12';NetScene.rr(c,60,120,280,260,18);c.fill();c.strokeStyle='#f08a4b';c.lineWidth=3;c.stroke();c.restore();V.tx(c,'🪣 mi-web',200,170,20,'#fff','center',800,1,M);
+    V.tx(c,st>=2?'📦 index.html  🔒':'📦 index.html',200,250,15,'#ffd0b0','center',700,1,M);
+    if(st===0){var a=E.back(f(.3));V.tx(c,'🔒',200,330,56*Math.min(1,a)+1,'#fff','center',400,Math.min(1,a));
+      V.tx(c,'Bloqueo de acceso público: ACTIVADO',650,170,18,'#9ff0c8','center',800,f(.8));
+      ['🙅 un desconocido de internet','🙅 otro usuario de AWS','🙅 un robot que busca buckets abiertos'].forEach(function(r,i){V.tx(c,r,650,230+i*44,15,'#ff9b9b','center',700,f(1.2+i*.3));});return;}
+    if(st===1){var a=f(.2);c.save();c.globalAlpha*=a;c.fillStyle='#0b1a2b';NetScene.rr(c,420,70,540,300,12);c.fill();c.restore();
+      ['{','  "Effect": "Allow",','  "Principal": { "Service": "cloudfront" },','  "Action": "s3:GetObject",','  "Resource": "mi-web/*"','}'].forEach(function(l,i){V.tx(c,l,450,110+i*36,15,i===2?'#FFC928':(i===3?'#9ff0c8':'#e6edf3'),'left',600,f(.4+i*.15),M);});
+      V.tx(c,'← quién',870,182,13,'#FFC928','left',800,f(1.4));V.tx(c,'← qué puede hacer',800,218,13,'#9ff0c8','left',800,f(1.6));return;}
+    if(st===2){var u=f(.3,1.2);V.tx(c,'Hola desde S3',650,170,22,'#fff','center',800,1,M);V.tx(c,'↓ cifrado AES-256',650,220,14,'#FFC928','center',800,u);
+      var g='';var cs='x9#Kq2@z!Lm7$wP';for(var i=0;i<14;i++)g+=cs[(i*7+Math.floor(t*6))%cs.length];V.tx(c,g,650,280,24,'#ff9b9b','center',700,u,M);V.tx(c,'esto es lo que vería un ladrón del disco',650,330,13,'#cfe3f1','center',600,f(1.4));return;}
+    var V1=[['v1','Hola 👋','10:02','#34c38f'],['v2','Hola, bienvenidos','11:15','#34c38f'],['v3','HACKEADO 😈','11:40','#ff6b6b']],dn=t>2.4;
+    V1.forEach(function(v,i){var a=f(.2+i*.5),y=90+i*80;c.save();c.globalAlpha*=a;c.fillStyle='#0f2740';NetScene.rr(c,440,y,500,62,10);c.fill();c.strokeStyle=v[3];c.lineWidth=2;c.stroke();c.restore();
+      V.tx(c,v[0]+' · '+v[2],460,y+38,14,'#9fd8f0','left',800,a,M);V.tx(c,v[1],640,y+38,16,'#fff','left',700,a);});
+    V.tx(c,'↩ restaurar v2',690,366,18,'#9ff0c8','center',800,f(2.4));V.tx(c,dn?'✓ tu página volvió':'',690,400,14,'#9ff0c8','center',800,f(2.8));
+  });
+  </script>
+</section>
+
+<!-- 10 · TU WEB EN S3 CON HTTPS -->
+<section class="slide" id="scS7">
+  <span class="k"><span class="act-chip">🌐 TU WEB</span> S3 + CloudFront + certificado · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">Tu página en S3, <span class="grad">con candado HTTPS</span></h2>
+  <div class="scene"><canvas aria-label="Arquitectura: visitante, CloudFront con certificado HTTPS, Origin Access Control y bucket S3 privado; el acceso directo al bucket da 403"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scS7',1000,480,[
+    'La forma <b>vieja</b>: hacer el bucket <b>público</b> y servir la página desde él. Funciona… pero queda abierto a todo internet y <b>sin HTTPS</b>: el navegador dice “<b>No seguro</b>”.',
+    'La forma <b>moderna</b>: el bucket sigue <b>privado</b>. Delante va <b>CloudFront</b>, la red de entrega de AWS (más de 600 puntos en el mundo), que habla <b>HTTPS</b>. Con una credencial especial (<b>OAC</b>) es el <b>único</b> que puede leer el bucket.',
+    '¿Y el <b>certificado</b>? Es el “documento de identidad” de la página: el candado 🔒 del navegador. <b>Cifra</b> el viaje y <b>demuestra</b> que la página es quien dice ser. CloudFront ya trae uno para <b>*.cloudfront.net</b>; con dominio propio, <b>ACM</b> lo da <b>gratis</b>.',
+    'La prueba de fuego en el laboratorio: por <b>CloudFront</b> tu página abre con candado (<b>200</b>); directo al <b>bucket</b>, <b>AccessDenied (403)</b>. Así sabes que quedó bien.'
+  ],function(c,s){
+    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t,M='"JetBrains Mono",monospace';V.bg(c,1000,480);
+    function f(d,u){return Math.max(0,Math.min(1,(t-d)/(u||.5)));}
+    function bkt(x,y,a,lock){c.save();c.globalAlpha*=a;c.fillStyle='#3a2a12';NetScene.rr(c,x,y,190,150,16);c.fill();c.strokeStyle='#f08a4b';c.lineWidth=2.5;c.stroke();c.restore();V.tx(c,'🪣 S3',x+95,y+50,20,'#fff','center',800,a);V.tx(c,'index.html',x+95,y+82,13,'#ffd0b0','center',700,a,M);if(lock)V.tx(c,'🔒 privado',x+95,y+120,14,'#9ff0c8','center',800,a);}
+    function browser(x,y,url,secure,a){c.save();c.globalAlpha*=a;c.fillStyle='#fff';NetScene.rr(c,x,y,250,150,10);c.fill();c.fillStyle='#e8eaed';NetScene.rr(c,x+10,y+12,230,26,13);c.fill();c.restore();
+      V.tx(c,(secure?'🔒 ':'⚠️ No seguro · ')+url,x+22,y+30,10.5,secure?'#037f0c':'#d02b2b','left',700,a);V.tx(c,'Hola desde S3',x+125,y+92,16,'#0e2841','center',800,a);}
+    if(st===0){browser(60,150,'http://mi-web.s3-website…',false,E.out(f(.2)));bkt(700,150,E.out(f(.6)),false);V.tx(c,'🌍 PÚBLICO',795,330,14,'#ff9b9b','center',800,f(1));
+      var a=f(1.2);c.save();c.globalAlpha*=a;c.strokeStyle='#ff6b6b';c.lineWidth=3;c.setLineDash([8,6]);c.beginPath();c.moveTo(310,225);c.lineTo(700,225);c.stroke();c.restore();V.tx(c,'sin cifrar · abierto a todos',505,210,13,'#ff9b9b','center',800,a);
+      V.tx(c,'✗ la forma vieja',500,420,18,'#ff9b9b','center',800,f(1.8));return;}
+    browser(30,160,'https://d1abc.cloudfront.net',true,1);
+    c.save();c.fillStyle='#2a1b4a';NetScene.rr(c,370,150,220,170,16);c.fill();c.strokeStyle='#a67af4';c.lineWidth=2.5;c.stroke();c.restore();V.tx(c,'☁️ CloudFront',480,196,18,'#fff','center',800,1);V.tx(c,'HTTPS + certificado',480,226,12.5,'#c9b6ff','center',700,1);V.tx(c,'600+ puntos en el mundo',480,250,12,'#cfe3f1','center',600,1);
+    bkt(770,160,1,true);
+    var oac=st>=1?f(st===1?.6:0):1;V.tx(c,'🪪 OAC',680,212,13,'#FFC928','center',800,oac);
+    c.save();c.globalAlpha*=oac;c.strokeStyle='#FFC928';c.lineWidth=2.5;c.setLineDash([6,5]);c.lineDashOffset=-t*30;c.beginPath();c.moveTo(590,235);c.lineTo(770,235);c.stroke();c.strokeStyle='#34c38f';c.beginPath();c.moveTo(280,235);c.lineTo(370,235);c.stroke();c.restore();
+    if(st===1){V.tx(c,'✓ la forma moderna: el bucket nunca se abre',500,420,17,'#9ff0c8','center',800,f(1.2));return;}
+    if(st===2){var a=f(.3);c.save();c.globalAlpha*=a;c.fillStyle='#0f2740';NetScene.rr(c,180,340,640,120,14);c.fill();c.strokeStyle='#FFC928';c.lineWidth=2;c.stroke();c.restore();
+      V.tx(c,'📜 Certificado de *.cloudfront.net',500,372,15,'#FFC928','center',800,a);V.tx(c,'emitido por una autoridad de confianza · cifra el viaje (TLS)',500,400,12.5,'#fff','center',600,a);V.tx(c,'¿dominio propio (www.mitienda.com)? → certificado gratis con ACM, en us-east-1',500,428,12,'#cfe3f1','center',600,a);return;}
+    var p=f(.3),q=f(1.6);V.tx(c,'✓ por CloudFront → 200 🔒',155,350,15,'#9ff0c8','center',800,p);
+    c.save();c.globalAlpha*=q;c.strokeStyle='#ff6b6b';c.lineWidth=3;c.setLineDash([8,6]);c.beginPath();c.moveTo(290,330);c.quadraticCurveTo(540,450,800,320);c.stroke();c.restore();
+    V.tx(c,'✗ directo al bucket → AccessDenied (403)',600,440,15,'#ff9b9b','center',800,q);
+  });
+  </script>
+</section>
+
+<!-- 11 · LAB 0: PERMISOS -->
+<section class="slide" id="labS0">
+  <span class="k"><span class="act-chip">🧪 PASO 0</span> Dale permisos de S3 y CloudFront a tu llave</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">Tu usuario <span class="grad">terraform-lab</span> necesita 2 permisos más</h2>
+  <style>.term.lab{max-height:52vh;overflow:auto;font-size:clamp(.7rem,1vw,.88rem)}.term.lab p{white-space:pre-wrap;word-break:break-all;min-height:1.35em}.term.lab p.hl b{color:#FFC928;font-weight:600;background:rgba(255,201,40,.14);border-radius:4px;padding:0 3px}.term.lab p.note{color:#9fb3c8;font-size:.85em}.term.lab .cur{display:inline-block;width:.6em;background:#39c8e8;animation:blk 1s steps(1) infinite}@keyframes blk{50%{opacity:0}}
+  .cmdlist{list-style:none;display:flex;flex-direction:column;gap:6px;font-size:clamp(.78rem,1.1vw,.95rem)}.cmdlist li{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}.cmdlist code{font-family:var(--mono);color:var(--a1);font-weight:600;font-size:.92em}</style>
+  <ul class="cmdlist" style="max-width:1100px">
+    <li><span>Consola → <b>IAM</b> → <b>Usuarios</b> → <b>terraform-lab</b></span><span>el usuario “robot” que creaste la clase pasada</span></li>
+    <li><span>Pestaña <b>Permisos</b> → <b>Agregar permisos</b> → <b>Adjuntar políticas directamente</b></span><span>igual que la vez anterior</span></li>
+    <li><span>Marca <code>AmazonS3FullAccess</code> y <code>CloudFrontFullAccess</code></span><span>S3 para el bucket · CloudFront para el candado HTTPS</span></li>
+    <li><span><b>Siguiente</b> → <b>Agregar permisos</b></span><span>no hace falta una llave nueva: la de tu PC sigue sirviendo</span></li>
+  </ul>
+  <p class="sub" style="margin-top:12px">¿Por qué no lo tenía? Por <b>mínimo privilegio</b>: la llave solo tenía lo que usábamos (EC2). Hoy usamos S3 y CloudFront, así que se los damos. Sin esto, Terraform responde <b>AccessDenied</b>.</p>
+</section>
+
+<!-- 12 · LAB 1: S3 CON LA CLI -->
+<section class="slide" id="labS1">
+  <span class="k"><span class="act-chip">🧪 PASO 1</span> S3 con la CLI: crea, sube, comparte y borra</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">Tu primer bucket, <span class="grad">a punta de comandos</span></h2>
+  <script>
+  window.typeTerm=window.typeTerm||function(sec,box,L){var T=[];function esc(x){return x.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+    function at(ms,fn){T.push(setTimeout(fn,ms));}
+    sec.__enter=function(){T.forEach(clearTimeout);T=[];box.innerHTML='';var d=300;
+      L.forEach(function(l){var el=document.createElement('p');if(l[0]!=='cmd')el.className=l[0];
+        if(l[0]==='cmd'){at(d,function(){box.appendChild(el);box.scrollTop=box.scrollHeight;});for(var i=1;i<=l[1].length;i++)(function(k){at(d+k*24,function(){el.innerHTML=esc(l[1].slice(0,k))+'<span class="cur">&nbsp;</span>';});})(i);d+=l[1].length*24+380;at(d-10,function(){el.innerHTML=esc(l[1]);});}
+        else{at(d,function(){el.innerHTML=l[0]==='out'?esc(l[1]):l[1];el.style.opacity=0;box.appendChild(el);box.scrollTop=box.scrollHeight;el.animate([{opacity:0},{opacity:1}],{duration:300,fill:'forwards'});});d+=l[0]==='note'?800:300;}});};};
+  </script>
+  <div class="grid2" style="align-items:start">
+    <div class="demo term lab" id="labS1t" style="min-height:300px"></div>
+    <ul class="cmdlist">
+      <li><code>$b = "prueba-cli-" + (Get-Random)</code><span>un nombre único para tu bucket</span></li>
+      <li><code>aws s3 mb "s3://$b"</code><span><b>m</b>ake <b>b</b>ucket: crea la bodega</span></li>
+      <li><code>aws s3 cp hola.txt "s3://$b/"</code><span>sube un objeto</span></li>
+      <li><code>aws s3 ls "s3://$b/"</code><span>lista lo que hay adentro</span></li>
+      <li><code>aws s3 presign … --expires-in 300</code><span>un <b>enlace temporal</b>: ábrelo, en 5 minutos deja de servir</span></li>
+      <li><code>aws s3 rb "s3://$b" --force</code><span><b>r</b>emove <b>b</b>ucket: borra todo</span></li>
+    </ul>
+  </div>
+  <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: abre el enlace del <b>presign</b> en tu navegador. ¿Qué ves? ¿Y si lo abres después de 5 minutos?</p>
+  <script>
+  typeTerm(document.getElementById('labS1'),document.getElementById('labS1t'),[
+    ['cmd','PS> $b = "prueba-cli-" + (Get-Random); $b'],['hl','<b>prueba-cli-1847291530</b>'],
+    ['cmd','PS> aws s3 mb "s3://$b"'],['hl','make_bucket: <b>prueba-cli-1847291530</b>'],
+    ['cmd','PS> Set-Content hola.txt "Hola desde la CLI"; aws s3 cp hola.txt "s3://$b/"'],['out','upload: .\\hola.txt to s3://prueba-cli-1847291530/hola.txt'],
+    ['cmd','PS> aws s3 ls "s3://$b/"'],['out','2026-10-07 18:42:10         19 hola.txt'],
+    ['cmd','PS> aws s3 presign "s3://$b/hola.txt" --expires-in 300'],['hl','https://prueba-cli-1847291530.s3.amazonaws.com/hola.txt?<b>X-Amz-Signature=…</b>'],['note','  ↑ ábrelo: funciona 5 minutos y luego dice AccessDenied'],
+    ['cmd','PS> aws s3 rb "s3://$b" --force'],['out','delete: s3://prueba-cli-1847291530/hola.txt'],['hl','remove_bucket: <b>prueba-cli-1847291530</b>']]);
+  </script>
+</section>
+
+<!-- 13 · LAB 2: TU WEB CON TERRAFORM -->
+<section class="slide" id="labS2">
+  <span class="k"><span class="act-chip">🧪 PASO 2</span> Tu web en S3 con HTTPS, desde Terraform</span>
+  <h2 style="font-size:clamp(1.15rem,2.3vw,1.6rem)">Copia, guarda y <span class="grad">terraform apply</span></h2>
+  <style>
+  .snips{display:flex;flex-direction:column;gap:10px;max-height:58vh;overflow:auto}
+  .snip{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0b1a2b}
+  .snip .top{display:flex;justify-content:space-between;align-items:center;gap:8px;background:#10243a;padding:6px 10px;font-size:.78rem;color:#9fd8f0;font-weight:700}
+  .snip button{font:700 .76rem Poppins,sans-serif;border:0;border-radius:999px;padding:5px 12px;background:#ff9900;color:#0e2841;cursor:pointer;white-space:nowrap}
+  .snip button.ok{background:#34c38f;color:#fff}
+  .snip button:focus-visible{outline:2px solid #FFC928;outline-offset:2px}
+  .snip pre{margin:0;padding:8px 10px;font:500 clamp(.6rem,.8vw,.74rem)/1.45 var(--mono);color:#e6edf3;white-space:pre;overflow:auto;max-height:26vh;font-variant-ligatures:none}
+</style>
+<script>
+window.wireSnips=window.wireSnips||function(sec){sec.querySelectorAll('.snip').forEach(function(sn){var b=sn.querySelector('button'),txt=sn.querySelector('pre').textContent;
+  sn.addEventListener('click',function(e){e.stopPropagation();});
+  b.onclick=function(){function ok(){b.textContent='✓ Copiado';b.classList.add('ok');setTimeout(function(){b.textContent='📋 Copiar';b.classList.remove('ok');},1800);}
+    function fb(){var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(_){}ta.remove();ok();}
+    if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(txt).then(ok,fb);else fb();};});};
+</script>
+
+  <div class="grid2" style="align-items:start;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)">
+    <ul class="cmdlist">
+      <li><span><code>mkdir $HOME\mi-web-s3</code><br><code>code $HOME\mi-web-s3</code></span><span>carpeta nueva, abierta en VS Code</span></li>
+      <li><span>Crea <b>main.tf</b> e <b>index.html</b> con los bloques de la derecha</span><span>cambia <b>TU NOMBRE</b> en index.html · Ctrl+S</span></li>
+      <li><span><code>terraform init</code><br><code>terraform apply</code></span><span>Plan: <b>6 to add</b> → yes · CloudFront tarda <b>3–5 min</b></span></li>
+      <li><span>Abre <b>tu_web_https</b></span><span>tu página, con candado 🔒</span></li>
+      <li><span>Abre <b>directo_al_bucket</b></span><span>debe decir <b>AccessDenied</b> ✓</span></li>
+      <li><span>Cambia algo en index.html → Ctrl+S → <b>terraform apply</b></span><span><b>1 to change</b> · recarga la página</span></li>
+    </ul>
+    <div class="snips">
+      <div class="snip"><div class="top"><span>main.tf  (crea el archivo, pega y guarda)</span><button type="button">📋 Copiar</button></div><pre># =====================================================================
+#  Tu página web en S3 con HTTPS · Esumer · Cloud Computing, Redes y Ciberseguridad
+#  Bucket S3 PRIVADO + CloudFront (certificado HTTPS) + Origin Access Control.
+#  Nadie entra directo al bucket: solo CloudFront puede leerlo.
+#
+#  Uso (en la terminal de VS Code, carpeta con main.tf e index.html):
+#    terraform init
+#    terraform apply      (CloudFront tarda 3-5 minutos en quedar listo)
+#    terraform destroy    (al final; borrar CloudFront también tarda unos minutos)
+# =====================================================================
+
+terraform {
+  required_providers {
+    aws = { source = &quot;hashicorp/aws&quot;, version = &quot;~&gt; 6.0&quot; }
+  }
+}
+
+provider &quot;aws&quot; {
+  region = &quot;us-east-1&quot;
+}
+
+# ---------- 1 · El bucket: la bodega de objetos (nombre único en el mundo)
+resource &quot;aws_s3_bucket&quot; &quot;web&quot; {
+  bucket_prefix = &quot;mi-web-&quot; # AWS le agrega un sufijo para que sea único
+  force_destroy = true      # permite borrarlo aunque tenga archivos (solo para el lab)
+  tags          = { Name = &quot;mi-web-s3&quot; }
+}
+
+# ---------- 2 · Candado: bloqueo de acceso público (el bucket queda privado)
+resource &quot;aws_s3_bucket_public_access_block&quot; &quot;web&quot; {
+  bucket                  = aws_s3_bucket.web.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+# ---------- 3 · El objeto: tu página (sale del archivo index.html de esta carpeta)
+resource &quot;aws_s3_object&quot; &quot;index&quot; {
+  bucket       = aws_s3_bucket.web.id
+  key          = &quot;index.html&quot;
+  source       = &quot;index.html&quot;
+  etag         = filemd5(&quot;index.html&quot;) # si cambias el archivo, Terraform lo vuelve a subir
+  content_type = &quot;text/html; charset=utf-8&quot;
+}
+
+# ---------- 4 · La credencial de CloudFront para leer el bucket (OAC)
+resource &quot;aws_cloudfront_origin_access_control&quot; &quot;oac&quot; {
+  name                              = &quot;oac-${aws_s3_bucket.web.id}&quot;
+  origin_access_control_origin_type = &quot;s3&quot;
+  signing_behavior                  = &quot;always&quot;
+  signing_protocol                  = &quot;sigv4&quot;
+}
+
+# ---------- 5 · CloudFront: la vitrina con candado (HTTPS + certificado)
+resource &quot;aws_cloudfront_distribution&quot; &quot;cdn&quot; {
+  enabled             = true
+  default_root_object = &quot;index.html&quot;
+  price_class         = &quot;PriceClass_100&quot;
+  comment             = &quot;Mi web en S3 con HTTPS&quot;
+
+  origin {
+    domain_name              = aws_s3_bucket.web.bucket_regional_domain_name
+    origin_id                = &quot;s3-mi-web&quot;
+    origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
+  }
+
+  default_cache_behavior {
+    target_origin_id       = &quot;s3-mi-web&quot;
+    viewer_protocol_policy = &quot;redirect-to-https&quot; # http -&gt; https siempre
+    allowed_methods        = [&quot;GET&quot;, &quot;HEAD&quot;]
+    cached_methods         = [&quot;GET&quot;, &quot;HEAD&quot;]
+    cache_policy_id        = &quot;4135ea2d-6df8-44a3-9df3-4b5a84be39ad&quot; # CachingDisabled: ves tus cambios al instante (en producción se usa caché)
+  }
+
+  restrictions {
+    geo_restriction { restriction_type = &quot;none&quot; }
+  }
+
+  viewer_certificate {
+    cloudfront_default_certificate = true # certificado HTTPS de *.cloudfront.net
+  }
+}
+
+# ---------- 6 · Permiso: SOLO esta distribución de CloudFront puede leer el bucket
+data &quot;aws_iam_policy_document&quot; &quot;solo_cloudfront&quot; {
+  statement {
+    actions   = [&quot;s3:GetObject&quot;]
+    resources = [&quot;${aws_s3_bucket.web.arn}/*&quot;]
+    principals {
+      type        = &quot;Service&quot;
+      identifiers = [&quot;cloudfront.amazonaws.com&quot;]
+    }
+    condition {
+      test     = &quot;StringEquals&quot;
+      variable = &quot;AWS:SourceArn&quot;
+      values   = [aws_cloudfront_distribution.cdn.arn]
+    }
+  }
+}
+
+resource &quot;aws_s3_bucket_policy&quot; &quot;web&quot; {
+  bucket     = aws_s3_bucket.web.id
+  policy     = data.aws_iam_policy_document.solo_cloudfront.json
+  depends_on = [aws_s3_bucket_public_access_block.web]
+}
+
+# ---------- 7 · Lo que Terraform te muestra al terminar
+output &quot;tu_web_https&quot; {
+  value = &quot;https://${aws_cloudfront_distribution.cdn.domain_name}&quot;
+}
+
+output &quot;directo_al_bucket&quot; {
+  value       = &quot;https://${aws_s3_bucket.web.bucket_regional_domain_name}/index.html&quot;
+  description = &quot;Ábrelo: debe dar AccessDenied (403). El bucket es privado.&quot;
+}
+</pre></div>
+      <div class="snip"><div class="top"><span>index.html  (cambia TU NOMBRE y guarda)</span><button type="button">📋 Copiar</button></div><pre>&lt;!doctype html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;title&gt;Mi web en S3&lt;/title&gt;
+  &lt;style&gt;
+    body { margin:0; min-height:100vh; display:grid; place-items:center; font-family:system-ui,sans-serif;
+           background:linear-gradient(135deg,#0e2841,#1d4f80); color:#fff; text-align:center; }
+    h1 { font-size:2.6rem; margin:0 0 .4rem; }
+    p  { font-size:1.15rem; opacity:.9; }
+    .candado { font-size:4rem; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;main&gt;
+    &lt;div class=&quot;candado&quot;&gt;🔒&lt;/div&gt;
+    &lt;h1&gt;Hola desde S3 + CloudFront&lt;/h1&gt;
+    &lt;p&gt;Esta página vive en un bucket privado y llega a ti por HTTPS.&lt;/p&gt;
+    &lt;p&gt;&lt;b&gt;Hecha por:&lt;/b&gt; TU NOMBRE&lt;/p&gt;
+  &lt;/main&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre></div>
+      <div class="snip"><div class="top"><span>En la terminal de VS Code</span><button type="button">📋 Copiar</button></div><pre>terraform init
+terraform apply</pre></div>
+    </div>
+  </div>
+  <script>wireSnips(document.getElementById('labS2'));</script>
+</section>
+
+<!-- 14 · LAB 3: PRUEBA Y DESTROY -->
+<section class="slide" id="labS3">
+  <span class="k"><span class="act-chip">🧪 PASO 3</span> La prueba del candado y el destroy</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">¿Quedó <span class="grad">bien protegida</span>?</h2>
+  <div class="grid2" style="align-items:start">
+    <div class="demo term lab" id="labS3t" style="min-height:300px"></div>
+    <ul class="cmdlist">
+      <li><span><b>tu_web_https</b> en el navegador</span><span>🔒 + tu página → <b>200</b></span></li>
+      <li><span><b>directo_al_bucket</b> en el navegador</span><span><b>AccessDenied</b> → el bucket es privado ✓</span></li>
+      <li><code>aws s3 ls</code><span>ahí está tu bucket <b>mi-web-…</b></span></li>
+      <li><code>terraform destroy</code><span>borra los 6 recursos (CloudFront tarda unos minutos)</span></li>
+    </ul>
+  </div>
+  <p class="sub" style="margin-top:10px">Checkpoint ✅ al chat: pantallazo de tu página con el <b>candado</b> y del <b>AccessDenied</b>.</p>
+  <script>
+  typeTerm(document.getElementById('labS3'),document.getElementById('labS3t'),[
+    ['cmd','PS C:\\Users\\tú\\mi-web-s3> terraform apply'],['out','aws_s3_bucket.web: Creation complete [id=mi-web-2026100718…]'],['out','aws_cloudfront_distribution.cdn: Still creating... [3m0s elapsed]'],
+    ['hl','<b>Apply complete! Resources: 6 added, 0 changed, 0 destroyed.</b>'],['out','Outputs:'],['hl','tu_web_https = "<b>https://d1abc23xyz.cloudfront.net</b>"'],['out','directo_al_bucket = "https://mi-web-…s3.us-east-1.amazonaws.com/index.html"'],
+    ['note','  ↑ abre las dos: la primera con 🔒, la segunda → AccessDenied'],
+    ['cmd','PS C:\\Users\\tú\\mi-web-s3> terraform destroy'],['hl','<b>Destroy complete! Resources: 6 destroyed.</b>']]);
+  </script>
+</section>
+
+<!-- 15 · CIERRE -->
+<section class="slide">
+  <span class="k"><span class="act-chip">✅ CIERRE</span> Deja la casa en orden</span>
+  <h2>Antes de irte: <span class="grad">cero recursos sueltos</span></h2>
+  <ul class="clean check">
+    <li><b>terraform destroy</b> → <b>6 destroyed</b> (en S3 ya no aparece mi-web-…)</li>
+    <li>El bucket de la CLI también se fue: <b>aws s3 ls</b> no lo muestra</li>
+    <li>Tu carpeta <b>mi-web-s3</b> queda en tu PC: la próxima vez solo haces <b>terraform apply</b></li>
+    <li>¿Lo subes a GitHub? Con tu <b>.gitignore</b>: nunca el <b>terraform.tfstate</b> ni la carpeta <b>.terraform</b></li>
+  </ul>
+</section>
+
+<section class="slide">
+  <span class="k">Para la próxima clase</span>
+  <h2>Su misión</h2>
+  <ul class="clean">
+    <li>1 · Pantallazo de tu página en <b>https://…cloudfront.net</b> con el <b>candado</b> 🔒 y tu nombre</li>
+    <li>2 · Pantallazo del <b>AccessDenied</b> al entrar directo al bucket</li>
+    <li>3 · En tu bitácora: diferencia entre <b>bloque, archivos y objetos</b>, y ¿para qué sirve <b>Glacier</b>? (una frase cada uno)</li>
+  </ul>
+  <p class="sub" style="margin-top:24px">Hoy aprendieron a escoger dónde vive cada dato… y su página ya vive en S3, protegida y con candado. 🔒☁️</p>
+  <div class="qrs">
+    <div class="qr qr-ticket"><svg xmlns="http://www.w3.org/2000/svg" width="228" height="228" class="segno"><g transform="scale(4)"><path fill="#fff" d="M0 0h57v57h-57z"/><path class="qrline" stroke="#0e2841" d="M2 2.5h7m3 0h1m2 0h7m1 0h2m7 0h5m1 0h1m1 0h2m1 0h2m3 0h7m-53 1h1m5 0h1m1 0h1m1 0h1m2 0h1m2 0h1m1 0h4m4 0h1m7 0h5m2 0h3m2 0h1m5 0h1m-53 1h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h3m2 0h2m4 0h1m1 0h2m2 0h2m1 0h1m1 0h2m1 0h1m2 0h1m2 0h1m2 0h1m1 0h3m1 0h1m-53 1h1m1 0h3m1 0h1m1 0h1m3 0h7m1 0h1m1 0h1m3 0h3m2 0h3m2 0h2m2 0h1m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m-53 1h1m1 0h3m1 0h1m4 0h1m2 0h1m1 0h1m1 0h1m2 0h2m1 0h9m3 0h2m2 0h3m3 0h1m1 0h3m1 0h1m-53 1h1m5 0h1m4 0h2m5 0h1m5 0h1m3 0h1m2 0h2m2 0h2m1 0h1m3 0h1m3 0h1m5 0h1m-53 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-45 1h2m1 0h1m1 0h2m2 0h2m2 0h1m1 0h2m3 0h1m1 0h7m1 0h5m1 0h1m-45 1h1m5 0h1m1 0h2m1 0h1m6 0h1m1 0h1m3 0h5m5 0h4m1 0h1m2 0h1m1 0h3m2 0h3m-52 1h1m3 0h1m2 0h1m1 0h1m2 0h1m2 0h1m3 0h1m2 0h1m3 0h2m2 0h13m1 0h1m1 0h2m2 0h2m-52 1h2m4 0h3m2 0h1m3 0h1m2 0h1m2 0h1m1 0h1m1 0h2m5 0h1m1 0h2m2 0h3m2 0h1m2 0h1m1 0h2m-50 1h1m1 0h2m1 0h1m3 0h1m2 0h1m1 0h1m3 0h1m1 0h1m2 0h2m2 0h6m4 0h1m1 0h2m3 0h3m2 0h1m-46 1h3m2 0h1m2 0h3m1 0h3m1 0h1m1 0h1m1 0h2m3 0h5m1 0h4m1 0h7m1 0h4m-52 1h5m2 0h5m2 0h4m1 0h1m1 0h3m1 0h1m1 0h2m1 0h1m2 0h1m1 0h1m1 0h1m1 0h2m1 0h2m1 0h1m1 0h2m2 0h2m-53 1h4m2 0h1m1 0h2m2 0h1m1 0h2m1 0h1m7 0h1m1 0h1m1 0h1m3 0h1m1 0h5m1 0h1m7 0h3m-52 1h2m5 0h2m1 0h1m1 0h2m3 0h2m1 0h7m2 0h2m3 0h1m7 0h1m6 0h4m-51 1h1m1 0h1m1 0h3m7 0h2m2 0h1m2 0h2m1 0h3m2 0h1m1 0h4m6 0h1m2 0h6m-52 1h1m3 0h2m1 0h1m1 0h2m3 0h1m4 0h1m5 0h1m1 0h6m2 0h1m4 0h4m1 0h1m1 0h2m2 0h2m-51 1h1m2 0h2m1 0h1m1 0h2m2 0h2m1 0h3m1 0h3m2 0h1m1 0h2m2 0h1m2 0h2m6 0h1m4 0h2m2 0h1m-51 1h3m2 0h3m1 0h1m1 0h2m1 0h1m1 0h4m1 0h3m1 0h1m1 0h1m1 0h4m3 0h4m1 0h1m1 0h2m1 0h2m1 0h1m-52 1h3m1 0h3m3 0h1m4 0h3m3 0h1m1 0h1m1 0h2m1 0h4m1 0h5m6 0h5m1 0h1m-51 1h1m4 0h1m1 0h5m3 0h1m1 0h2m2 0h3m2 0h1m1 0h7m1 0h1m1 0h1m1 0h1m1 0h7m2 0h1m-52 1h1m3 0h3m1 0h1m3 0h1m1 0h1m3 0h3m1 0h3m1 0h2m1 0h1m1 0h5m2 0h1m2 0h1m1 0h2m1 0h4m-48 1h3m2 0h1m2 0h1m3 0h1m1 0h1m2 0h4m1 0h1m4 0h1m2 0h2m1 0h1m1 0h9m2 0h1m2 0h2m-52 1h1m2 0h5m2 0h4m3 0h1m1 0h3m1 0h5m2 0h2m2 0h2m2 0h3m2 0h6m1 0h2m-53 1h2m1 0h2m3 0h2m1 0h1m2 0h1m6 0h2m1 0h1m3 0h4m1 0h1m1 0h3m1 0h1m1 0h4m3 0h2m-48 1h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h2m4 0h2m1 0h2m1 0h1m1 0h1m1 0h2m1 0h4m1 0h1m1 0h3m3 0h1m1 0h1m1 0h1m-49 1h2m1 0h2m3 0h1m2 0h2m1 0h1m1 0h2m1 0h4m1 0h1m3 0h4m1 0h3m5 0h1m2 0h1m3 0h3m-51 1h10m2 0h3m1 0h1m1 0h1m5 0h7m2 0h2m1 0h1m4 0h1m2 0h7m-51 1h2m3 0h1m3 0h2m2 0h1m1 0h2m1 0h1m1 0h1m1 0h2m1 0h2m3 0h4m1 0h3m3 0h3m1 0h1m1 0h2m1 0h1m1 0h1m-53 1h2m1 0h1m2 0h1m2 0h1m1 0h1m2 0h1m3 0h6m1 0h3m4 0h2m1 0h3m2 0h2m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m-53 1h1m3 0h1m3 0h2m3 0h2m1 0h1m1 0h2m5 0h1m3 0h1m1 0h3m5 0h6m1 0h1m1 0h2m1 0h2m-51 1h3m1 0h1m2 0h4m1 0h1m1 0h1m1 0h3m2 0h1m3 0h1m1 0h2m4 0h5m1 0h2m2 0h3m1 0h4m-53 1h1m1 0h1m2 0h1m3 0h2m3 0h1m1 0h4m1 0h6m1 0h1m1 0h7m1 0h7m2 0h4m1 0h1m-53 1h4m1 0h2m4 0h3m2 0h1m2 0h3m2 0h3m1 0h2m1 0h3m1 0h6m4 0h1m2 0h3m-51 1h1m1 0h1m1 0h2m1 0h2m1 0h2m3 0h1m2 0h1m2 0h2m1 0h3m2 0h1m1 0h3m1 0h1m2 0h1m1 0h1m3 0h1m1 0h1m1 0h2m1 0h1m-51 1h1m1 0h1m1 0h2m1 0h7m1 0h2m1 0h1m1 0h3m2 0h1m1 0h1m3 0h3m1 0h5m1 0h6m1 0h2m1 0h1m-50 1h2m3 0h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h3m3 0h6m4 0h1m2 0h4m2 0h8m-51 1h2m1 0h3m5 0h3m1 0h2m1 0h1m1 0h1m1 0h1m1 0h2m1 0h1m1 0h1m2 0h1m2 0h3m2 0h3m-45 1h1m2 0h1m5 0h1m5 0h2m1 0h1m1 0h1m3 0h1m1 0h5m3 0h1m2 0h1m1 0h1m1 0h3m3 0h2m1 0h2m-52 1h2m1 0h1m1 0h4m1 0h1m1 0h3m2 0h1m4 0h4m3 0h2m3 0h3m1 0h1m6 0h2m3 0h1m1 0h1m-53 1h3m1 0h2m2 0h3m3 0h4m1 0h1m3 0h3m1 0h1m1 0h3m1 0h1m1 0h1m4 0h1m1 0h3m1 0h6m-52 1h2m1 0h5m2 0h2m1 0h3m2 0h1m2 0h7m1 0h3m1 0h1m2 0h1m6 0h2m1 0h2m4 0h1m-52 1h2m4 0h1m1 0h1m2 0h2m1 0h2m2 0h4m2 0h3m2 0h1m1 0h1m1 0h2m1 0h7m2 0h4m1 0h1m-49 1h1m2 0h1m1 0h1m1 0h2m1 0h2m1 0h1m1 0h1m1 0h2m2 0h5m2 0h1m1 0h1m2 0h4m1 0h2m1 0h6m-42 1h2m2 0h1m3 0h1m1 0h2m4 0h1m3 0h4m1 0h6m2 0h4m3 0h3m1 0h1m-53 1h7m3 0h1m4 0h2m2 0h3m2 0h1m1 0h1m1 0h1m2 0h6m1 0h1m4 0h2m1 0h1m1 0h1m-49 1h1m5 0h1m5 0h3m1 0h3m2 0h1m1 0h2m3 0h1m1 0h3m1 0h2m1 0h1m1 0h1m2 0h3m3 0h2m1 0h1m-52 1h1m1 0h3m1 0h1m4 0h3m3 0h1m2 0h3m1 0h6m1 0h2m1 0h3m3 0h1m3 0h5m2 0h2m-53 1h1m1 0h3m1 0h1m2 0h2m1 0h1m1 0h2m2 0h1m2 0h1m3 0h1m2 0h1m1 0h1m2 0h1m2 0h2m3 0h5m1 0h1m4 0h1m-53 1h1m1 0h3m1 0h1m3 0h1m2 0h1m2 0h1m2 0h2m1 0h2m1 0h3m1 0h1m3 0h2m2 0h5m3 0h1m2 0h1m2 0h2m-53 1h1m5 0h1m3 0h1m1 0h2m3 0h2m3 0h1m1 0h1m3 0h1m4 0h2m1 0h4m1 0h1m1 0h8m1 0h1m-53 1h7m1 0h1m1 0h2m5 0h2m4 0h2m2 0h1m1 0h2m2 0h1m1 0h2m1 0h1m3 0h2m2 0h4"/></g></svg>
+
+<span>🎟️ Ticket de salida<br><b>tu asistencia de hoy</b><br>escanea al cierre</span></div>
+    <div class="qr"><svg xmlns="http://www.w3.org/2000/svg" width="132" height="132" class="segno"><g transform="scale(4)"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#0a0a0e" d="M2 2.5h7m1 0h1m2 0h1m2 0h1m1 0h5m1 0h7m-29 1h1m5 0h1m1 0h2m2 0h3m3 0h1m3 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m4 0h1m1 0h1m1 0h2m1 0h1m3 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h1m2 0h5m4 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m2 0h1m2 0h1m1 0h3m2 0h1m2 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m2 0h1m1 0h4m3 0h2m2 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h2m7 0h3m-20 1h1m1 0h2m1 0h3m1 0h2m1 0h1m1 0h1m1 0h2m4 0h1m2 0h1m1 0h2m-29 1h1m1 0h1m2 0h1m3 0h3m2 0h1m1 0h4m1 0h4m3 0h1m-29 1h1m5 0h6m1 0h2m3 0h1m1 0h5m1 0h2m-26 1h1m2 0h1m2 0h6m1 0h2m1 0h1m1 0h1m1 0h3m3 0h1m-29 1h3m2 0h3m3 0h1m1 0h3m1 0h1m1 0h1m5 0h2m-23 1h1m3 0h5m1 0h3m2 0h1m2 0h2m2 0h3m-28 1h1m2 0h1m1 0h1m1 0h2m1 0h3m5 0h2m2 0h2m1 0h3m-27 1h1m1 0h2m3 0h1m1 0h1m2 0h1m1 0h1m6 0h2m2 0h1m-27 1h3m2 0h4m3 0h3m2 0h4m2 0h2m1 0h1m-27 1h1m2 0h1m2 0h3m1 0h2m2 0h1m1 0h1m2 0h1m2 0h1m1 0h3m-28 1h1m3 0h1m1 0h1m2 0h1m2 0h4m1 0h1m4 0h2m2 0h1m-23 1h2m1 0h1m1 0h3m3 0h1m1 0h1m4 0h1m3 0h1m-26 1h1m1 0h2m1 0h1m2 0h2m2 0h1m1 0h3m1 0h8m-19 1h1m1 0h3m3 0h3m1 0h1m3 0h5m-29 1h7m1 0h3m3 0h1m1 0h1m1 0h3m1 0h1m1 0h2m1 0h1m-28 1h1m5 0h1m1 0h1m2 0h1m1 0h1m4 0h1m1 0h1m3 0h2m1 0h2m-29 1h1m1 0h3m1 0h1m3 0h1m1 0h1m2 0h1m1 0h1m2 0h5m1 0h3m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h1m2 0h5m1 0h3m2 0h2m2 0h1m-29 1h1m1 0h3m1 0h1m1 0h3m1 0h1m3 0h1m6 0h1m2 0h1m1 0h1m-29 1h1m5 0h1m3 0h2m1 0h4m3 0h4m1 0h1m1 0h1m-28 1h7m1 0h1m2 0h1m2 0h2m2 0h5m2 0h1m1 0h1"/></g></svg>
+
+<span>LinkedIn<br><b>/in/alejobarrera</b></span></div>
+    <div class="qr"><svg xmlns="http://www.w3.org/2000/svg" width="132" height="132" class="segno"><g transform="scale(4)"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#0a0a0e" d="M2 2.5h7m6 0h1m8 0h7m-29 1h1m5 0h1m4 0h3m1 0h1m3 0h1m2 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m2 0h2m2 0h4m1 0h1m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m3 0h1m2 0h2m3 0h1m3 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m3 0h1m1 0h1m3 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m1 0h2m1 0h2m3 0h1m2 0h2m1 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-20 1h1m1 0h1m2 0h2m1 0h1m2 0h1m-20 1h1m2 0h1m1 0h1m1 0h1m3 0h1m5 0h1m1 0h2m1 0h2m1 0h1m-25 1h1m1 0h2m2 0h1m1 0h1m2 0h1m1 0h1m1 0h2m2 0h8m-29 1h4m1 0h2m4 0h1m1 0h2m6 0h1m4 0h1m1 0h1m-29 1h1m3 0h2m2 0h2m7 0h1m1 0h3m3 0h1m1 0h2m-29 1h3m1 0h1m1 0h2m1 0h2m1 0h1m4 0h1m2 0h1m2 0h1m1 0h1m2 0h1m-28 1h2m4 0h1m4 0h4m2 0h1m3 0h1m1 0h1m1 0h1m1 0h1m-28 1h2m1 0h3m1 0h2m3 0h1m1 0h1m1 0h1m2 0h3m1 0h1m3 0h1m-29 1h5m2 0h3m2 0h1m1 0h1m2 0h1m3 0h1m1 0h1m1 0h1m-26 1h1m1 0h2m2 0h3m1 0h2m3 0h1m2 0h4m5 0h2m-29 1h1m1 0h2m4 0h2m2 0h3m1 0h1m1 0h1m3 0h5m1 0h1m-23 1h1m1 0h2m4 0h1m1 0h2m5 0h3m2 0h1m-27 1h4m2 0h2m1 0h1m2 0h1m2 0h4m2 0h1m1 0h1m1 0h2m-29 1h5m1 0h2m2 0h1m4 0h3m2 0h5m2 0h2m-21 1h3m1 0h2m1 0h6m3 0h1m1 0h1m1 0h1m-29 1h7m2 0h2m2 0h1m1 0h2m1 0h3m1 0h1m1 0h1m3 0h1m-29 1h1m5 0h1m2 0h1m2 0h1m2 0h1m3 0h2m3 0h2m1 0h1m-28 1h1m1 0h3m1 0h1m1 0h4m1 0h1m2 0h1m2 0h6m-25 1h1m1 0h3m1 0h1m2 0h2m1 0h1m4 0h2m4 0h1m1 0h3m-28 1h1m1 0h3m1 0h1m3 0h2m1 0h1m1 0h1m2 0h4m4 0h3m-29 1h1m5 0h1m1 0h2m4 0h4m2 0h4m1 0h1m1 0h2m-29 1h7m3 0h1m1 0h2m3 0h1m1 0h3m2 0h1m2 0h1"/></g></svg>
+
+<span>Web<br><b>alejandrobarrera.net</b></span></div>
+    <div class="qr"><svg xmlns="http://www.w3.org/2000/svg" width="116" height="116" class="segno"><g transform="scale(4)"><path fill="#fff" d="M0 0h29v29h-29z"/><path class="qrline" stroke="#0a0a0e" d="M2 2.5h7m2 0h2m3 0h1m3 0h7m-25 1h1m5 0h1m1 0h1m2 0h2m1 0h1m1 0h1m1 0h1m5 0h1m-25 1h1m1 0h3m1 0h1m1 0h1m3 0h1m1 0h2m2 0h1m1 0h3m1 0h1m-25 1h1m1 0h3m1 0h1m1 0h1m3 0h3m1 0h1m1 0h1m1 0h3m1 0h1m-25 1h1m1 0h3m1 0h1m4 0h1m1 0h1m2 0h1m1 0h1m1 0h3m1 0h1m-25 1h1m5 0h1m2 0h2m2 0h2m3 0h1m5 0h1m-25 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-17 1h1m2 0h2m3 0h1m-17 1h1m5 0h1m1 0h1m1 0h1m2 0h6m2 0h3m-24 1h1m4 0h1m1 0h1m3 0h1m2 0h2m3 0h5m-20 1h1m1 0h6m1 0h1m1 0h2m1 0h2m1 0h1m1 0h2m-25 1h1m2 0h1m3 0h5m2 0h1m2 0h2m1 0h2m2 0h1m-25 1h2m4 0h3m3 0h1m2 0h2m1 0h2m4 0h1m-25 1h1m2 0h3m2 0h1m4 0h1m1 0h2m2 0h1m3 0h1m-24 1h1m2 0h2m1 0h3m2 0h5m1 0h1m1 0h3m1 0h2m-25 1h1m1 0h2m3 0h1m1 0h1m1 0h1m5 0h1m1 0h1m1 0h2m1 0h1m-25 1h1m2 0h1m1 0h2m3 0h2m1 0h2m1 0h5m1 0h1m-15 1h1m1 0h1m1 0h2m2 0h1m3 0h1m-21 1h7m3 0h2m1 0h1m2 0h1m1 0h1m1 0h1m3 0h1m-25 1h1m5 0h1m3 0h1m1 0h1m1 0h3m3 0h1m-21 1h1m1 0h3m1 0h1m2 0h1m2 0h1m2 0h6m1 0h3m-25 1h1m1 0h3m1 0h1m3 0h1m3 0h2m1 0h2m4 0h2m-25 1h1m1 0h3m1 0h1m2 0h1m1 0h2m2 0h1m1 0h1m3 0h2m1 0h1m-25 1h1m5 0h1m4 0h1m3 0h2m1 0h3m3 0h1m-25 1h7m1 0h1m1 0h1m1 0h3m1 0h3m2 0h1m2 0h1"/></g></svg>
+
+<span>Comunidad<br><b>iaopslatam.com</b></span></div>
+</section>
+
+
+<script>
+var slides = document.querySelectorAll(".slide"), i = 0;
+function go(n) {
+  i = Math.max(0, Math.min(slides.length - 1, n));
+  slides.forEach(function(s, k){ s.classList.toggle("on", k === i); });
+  document.getElementById("bar").style.width = ((i + 1) / slides.length * 100) + "%";
+  document.getElementById("num").textContent = (i + 1) + " / " + slides.length;
+  document.querySelector(".nav-hint").style.display = i === 0 ? "" : "none";
+  document.getElementById("instf").style.display = i === 0 ? "none" : "";
+  if (slides[i].__enter) slides[i].__enter();
+}
+function fwd() {
+  if (slides[i].__next && slides[i].__next()) return;
+  var hid = slides[i].querySelector(".layer:not(.on)");
+  if (hid) { hid.classList.add("on"); return; }
+  go(i + 1);
+}
+document.addEventListener("keydown", function(e){
+  if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") fwd();
+  if (e.key === "ArrowLeft" || e.key === "PageUp") go(i - 1);
+  if (e.key === "Home") go(0);
+});
+
+document.addEventListener("click", function(e){ if (e.clientX > innerWidth * 0.25) { fwd(); } else { go(i - 1); } });
+go(0);
+</script></body></html>
