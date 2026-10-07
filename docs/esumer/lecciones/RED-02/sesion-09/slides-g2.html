@@ -445,7 +445,7 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
     'Llega el archivo <b>pedidos.xlsx</b> (12 KB). No cabe en un solo puesto (cada uno es de 4 KB), así que el sistema lo <b>parte en 3 pedacitos</b>… y cada pedacito se parquea en <b>el primer puesto libre</b> que encuentre: el <b>5</b>, el <b>6</b> y el <b>23</b>. No tienen que quedar juntos.',
     '¿Y por qué puestos de <b>4 KB</b> y no de otro tamaño? Piensa en el parqueadero: si los puestos fueran <b>gigantes</b> (como para un bus), una moto ocuparía un puesto entero y se <b>desperdicia espacio</b>. Si fueran <b>diminutos</b>, un carro necesitaría muchos puestos y el vigilante tendría un cuaderno <b>enorme</b>. <b>4 KB</b> es el punto medio, y además es justo el tamaño con el que la memoria RAM y el sistema operativo mueven los datos: todos “hablan” en pedazos de 4 KB.',
     '¿Cómo los encuentra después? El sistema tiene un <b>vigilante con un cuaderno</b> (el <b>índice</b>): “pedidos.xlsx está en los puestos <b>5, 6 y 23</b>”. Para leerlo va <b>directo</b> a esos puestos, sin recorrer todo el parqueadero. Por eso el bloque es <b>rapidísimo</b>.',
-    'Laura <b>cambia un pedido</b>. ¿Hay que mover todo el archivo? No: solo sale el pedacito del <b>puesto 6</b> y entra el nuevo. Reescribir <b>un solo bloque</b> es muy rápido; por eso las <b>bases de datos</b> (que cambian datos pequeñitos todo el tiempo) viven en bloque.',
+    'Un cliente pide cambiar la talla: Laura edita el <b>pedido #57</b>, que está en el <b>pedazo 2</b> (puesto 6). ¿Hay que reescribir todo el archivo? <b>No</b>: solo sale el carrito del puesto 6 y entra uno <b>nuevo</b> con el cambio. Los pedazos 1 y 3 <b>ni se mueven</b>. Se escribieron <b>4 KB</b> en vez de 12. Por eso las <b>bases de datos</b>, que cambian datos pequeñitos miles de veces al día, viven en bloque.',
     'Este disco se conecta a <b>un solo servidor</b>, como una memoria USB: la conectas a un PC a la vez. Ese servidor le pone su <b>formato</b> (NTFS en Windows, ext4 en Linux) y lo ve como su <b>C:</b> o su <b>/</b>.',
     'En AWS, ese disco se llama <b>EBS</b>: es el <b>disco de la EC2</b> de Laura (y de la tuya: el de 8 GB donde viven Linux, NGINX y tu página). Úsalo para: el sistema operativo, <b>bases de datos</b> y programas que escriben mucho y rápido.'
   ],function(c,s){
@@ -491,12 +491,24 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
       V.tx(c,'📒 cuaderno del vigilante (índice)',230,104,15,'#5a3a24','center',800,1);
       [['pedidos.xlsx','5 · 6 · 23','#b45309'],['clientes.csv','0 · 1 · 2','#3a2518'],['sistema Linux','40 · 41 · 42','#3a2518']].forEach(function(r,i){V.tx(c,r[0],62,152+i*30,14,r[2],'left',800,1,M);V.tx(c,'→ '+r[1],250,152+i*30,14,r[2],'left',800,1,M);});
       V.tx(c,'leer pedidos = ir directo a 5, 6 y 23 ⚡',230,340,15,'#9ff0c8','center',800,f(2.6));V.tx(c,'sin recorrer todo el parqueadero',230,368,13,'#cfe3f1','center',600,f(2.8));return;}
-    if(st===4){var ed=t>1.4?6:null;var pc={5:'1',6:t>1.4?'2✎':'2',23:'3'};lot(pc,null,ed);
-      c.save();c.fillStyle='#0f2740';NetScene.rr(c,40,70,380,220,14);c.fill();c.strokeStyle='#34c38f';c.lineWidth=2;c.stroke();c.restore();
-      V.tx(c,'✏️ Laura cambia un pedido',230,110,17,'#fff','center',800,1);V.tx(c,'(está en el pedacito 2)',230,136,13,'#cfe3f1','center',600,1);
-      if(t>.6&&t<1.4){var u=(t-.6)/.8;var d=cell(6);V.tx(c,'🔄',d[0]+25,d[1]-6-u*10,20,'#fff','center',400,1);}
-      V.tx(c,'solo se cambia el puesto 6',230,190,17,'#9ff0c8','center',800,f(1.6));V.tx(c,'1 bloque de 3 · el resto ni se toca',230,218,13,'#cfe3f1','center',600,f(1.9));
-      V.tx(c,'por eso las bases de datos viven en bloque',230,330,15,'#FFC928','center',800,f(2.4));return;}
+    if(st===4){
+      /* fase: 0-1.2 hoja · 1.2-2.4 edición · 2.4-3.6 sale carro viejo · 3.6-4.8 entra el nuevo */
+      var out=f(2.4,1.2),inn=f(3.6,1.2);var pc={5:'1',23:'3'};if(out<=0)pc[6]='2';lot(pc);
+      var d6=cell(6),cx=d6[0]+6,cy=d6[1]+5;
+      if(out>0&&out<1){var y=cy-out*90;c.save();c.globalAlpha*=1-out*.6;c.fillStyle='#3b9ae1';NetScene.rr(c,cx,y,CW-18,CH-16,7);c.fill();c.restore();V.tx(c,'2 viejo',cx+19,y-6,10,'#9fd8f0','center',800,1);}
+      if(inn>0){var y2=cy-90+90*E.out(inn);c.save();c.fillStyle='#34c38f';NetScene.rr(c,cx,y2,CW-18,CH-16,7);c.fill();c.restore();V.tx(c,'2',cx+19,y2+18,12,'#0e2841','center',800,1);if(inn>=1)V.tx(c,'nuevo',cx+19,cy-8,10,'#9ff0c8','center',800,1);}
+      [5,23].forEach(function(n){var d=cell(n);if(t>2.4)V.tx(c,'quieto',d[0]+25,d[1]-6,10,'#cfe3f1','center',700,1);});
+      /* la hoja de pedidos partida en 3 */
+      var R=[['1','pedidos 1 a 40','#3b9ae1'],['2','pedidos 41 a 80','#3b9ae1'],['3','pedidos 81 a 120','#3b9ae1']];
+      V.tx(c,'📊 pedidos.xlsx partido en 3 pedazos',230,62,14,'#fff','center',800,1);
+      R.forEach(function(r,k){var y=78+k*78,hl=k===1&&t>1.2;c.save();c.fillStyle='#0f2740';NetScene.rr(c,40,y,380,66,10);c.fill();c.strokeStyle=hl?(inn>=1?'#34c38f':'#FFC928'):'#2b4f74';c.lineWidth=hl?3:1.5;c.stroke();c.fillStyle=k===1&&inn>=1?'#34c38f':r[2];NetScene.rr(c,52,y+14,38,38,7);c.fill();c.restore();
+        V.tx(c,r[0],71,y+39,15,'#0e2841','center',800,1);V.tx(c,'pedazo '+r[0]+' · '+r[1],104,y+30,13,'#fff','left',800,1);
+        V.tx(c,k===1?(t>1.2?'#57  Camiseta talla M → L':'#57  Camiseta talla M'):(k===0?'#12  Gorra negra':'#98  Buzo azul'),104,y+52,12,k===1&&t>1.2?'#FFC928':'#cfe3f1','left',700,1,M);});
+      V.tx(c,'✏️ Laura cambia el pedido #57 (está en el pedazo 2)',230,330,13,'#FFC928','center',800,f(1.2));
+      /* contador */
+      var w=f(4.6);c.save();c.globalAlpha*=w;c.fillStyle='rgba(255,255,255,.08)';NetScene.rr(c,60,360,340,20,10);c.fill();c.fillStyle='#34c38f';NetScene.rr(c,60,360,340/3,20,10);c.fill();c.restore();
+      V.tx(c,'se escribieron 4 KB de 12 KB',230,404,14,'#9ff0c8','center',800,w);V.tx(c,'→ por eso las bases de datos viven en bloque',230,430,13,'#fff','center',700,f(5));
+      return;}
     if(st===5){function srv(x,y,l,a){c.save();c.globalAlpha*=a;c.fillStyle='#ed7100';NetScene.rr(c,x,y,160,80,12);c.fill();c.restore();V.tx(c,'🖥️ '+l,x+80,y+48,15,'#fff','center',800,a);}
       srv(110,60,'servidor A',1);srv(730,60,'servidor B',E.out(f(1.4)));ssd(410,250,180,1);
       var a=f(.4);c.save();c.globalAlpha*=a;c.strokeStyle='#34c38f';c.lineWidth=4;c.beginPath();c.moveTo(190,140);c.lineTo(430,255);c.stroke();c.restore();V.tx(c,'✓ conectado',260,230,14,'#9ff0c8','center',800,a);
