@@ -283,7 +283,7 @@ ul.clean li:first-child { border-top:0; }
     <li><span class="t">Capítulo 2 · Archivos<small>la carpeta compartida · permisos · EFS y FSx</small></span><span class="m">concepto</span></li>
     <li><span class="t">Capítulo 3 · Objetos<small>la bodega por internet · S3 · clases y precios · seguridad</small></span><span class="m">concepto</span></li>
     <li><span class="t">El final: el mapa, el reto y la web de Laura<small>¿cuál escoges? · CloudFront + certificado HTTPS</small></span><span class="m">concepto</span></li>
-    <li><span class="t">LAB A · Consola: tu web a clics, como el mockup de FONEEDAM<small>bucket público · política · enlace directo · 403 sin /index.html · borrar</small></span><span class="m">lab</span></li>
+    <li><span class="t">LAB A · Consola: tu web a clics, con enlace directo<small>bucket público · política · enlace directo · 403 sin /index.html · borrar</small></span><span class="m">lab</span></li>
     <li><span class="t">LAB B · Terraform: la forma correcta<small>permisos · aws s3 · CloudFront + bucket privado · prueba del 403 · destroy</small></span><span class="m">lab</span></li>
   </ul>
 </section>
@@ -962,9 +962,9 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   NetScene.make('scS7',1000,480,[
     'El último deseo de Laura: {@.2}<b>su página web en S3</b>, {@.6}con candado. {@1.0}Entre el navegador del cliente y la bodega hay un camino, y hay {@1.4}<b>3 formas</b> de recorrerlo. {@1.8}Veamos cuál le conviene.',
     '<b>Forma 1 · el sitio web de S3.</b> {@.3}La dirección empieza por <b>http</b>, sin “s”: {@.8}el navegador dice <b>“No es seguro”</b>. {@1.4}El pedido viaja <b>en texto claro</b>: {@2.0}cualquiera conectado al mismo wifi <b>puede leerlo</b>. {@2.8}Y para que funcione, la bodega tiene que estar <b>abierta a todo internet</b>.',
-    '<b>Forma 2 · el enlace directo de S3</b> (así está el mockup de FONEEDAM). {@.3}Ahora sí hay <b>candado</b>: {@.8}el viaje va <b>cifrado</b> y el espía solo ve basura. {@1.6}Pero la bodega <b>sigue abierta</b> a todo internet, {@2.4}hay que escribir <b>/index.html</b> al final {@3.0}y si Laura usa su dominio <b>tiendalaura.com</b>, {@3.6}el navegador muestra un <b>error de certificado</b>: el candado es de Amazon, no de ella.',
+    '<b>Forma 2 · el enlace directo de S3</b>. {@.3}Ahora sí hay <b>candado</b>: {@.8}el viaje va <b>cifrado</b> y el espía solo ve basura. {@1.6}Pero la bodega <b>sigue abierta</b> a todo internet, {@2.4}hay que escribir <b>/index.html</b> al final {@3.0}y si Laura usa su dominio <b>tiendalaura.com</b>, {@3.6}el navegador muestra un <b>error de certificado</b>: el candado es de Amazon, no de ella.',
     '<b>Forma 3 · CloudFront + bodega privada</b> (nuestro laboratorio). {@.3}Delante de la bodega se pone <b>CloudFront</b>, {@.9}con un <b>certificado a nombre de Laura</b> (gratis con ACM). {@1.5}La bodega <b>se cierra con candado</b>, {@2.0}y CloudFront entra con una <b>llave especial (OAC)</b>. {@2.6}Además copia la página en <b>más de 600 puntos</b> del mundo. {@3.2}Si un robot intenta entrar directo a la bodega… <b>403: acceso negado</b>.',
-    'Comparemos las 3. {@.3}Solo la <b>forma 3</b> cumple todo: {@.6}candado, {@1.0}bodega privada, {@1.4}dominio propio, {@1.8}abre sin /index.html {@2.2}y es rápida en todo el mundo. {@2.8}<b>Amplify Hosting</b> y <b>Vercel</b> (lo que usamos en FONEEDAM) hacen esta misma forma 3 por ti.',
+    'Comparemos las 3. {@.3}Solo la <b>forma 3</b> cumple todo: {@.6}candado, {@1.0}bodega privada, {@1.4}dominio propio, {@1.8}abre sin /index.html {@2.2}y es rápida en todo el mundo. {@2.8}<b>Amplify Hosting</b> y <b>Vercel</b> hacen esta misma forma 3 por ti.',
     'La prueba de fuego en el laboratorio: {@.3}por <b>CloudFront</b> tu página abre con candado (<b>200</b>); {@1.4}directo a la <b>bodega</b>, <b>AccessDenied (403)</b>. {@2.4}Si ves las dos cosas, quedó perfecta.'
   ],function(c,s){
     var V=Viz,E=s.E,st=s.step,t=s.t,M='"JetBrains Mono",monospace',P='Poppins,sans-serif';V.bg(c,1000,480);
@@ -1035,7 +1035,7 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
       road(A,MID,[800,250],'rgba(166,122,244,.6)',1,true);var u=(t*.42)%1;packet(A,MID,[800,250],u,'lock',ease(.8));packet([800,262],[570,330],[350,262],(u+.5)%1,'lock',ease(.8));
       spy(570,410,'“x9#Kq@z!Lm7$wP…” 🤷',true,ease(.8));
       chip(70,380,'🔒 candado ✓','rgba(52,195,143,.15)','#9ff0c8',ease(.3));chip(70,416,'⚠ /index.html obligatorio','rgba(255,201,40,.13)',WARN,ease(2.4));chip(70,452-0,'⛔ sin dominio propio','rgba(255,107,107,.15)','#ffb0b0',ease(3.6));
-      chip(570,58,'2 · enlace directo de S3  ·  como el mockup de FONEEDAM','rgba(255,201,40,.13)',WARN,ease(.2),true);return;}
+      chip(570,58,'2 · enlace directo de S3','rgba(255,201,40,.13)',WARN,ease(.2),true);return;}
     /* ---------- paso 3: forma 3 ---------- */
     if(st===3){var cfa=ease(.3),cert=ease(.9),cl=ease(1.5,.8),oac=ease(2.0),edge=ease(2.6);
       browser(30,150,280,210,'https://tiendalaura.com','secure',1,true);
@@ -1060,7 +1060,7 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
       rows.forEach(function(r,j){var a=ease(r[2]),y=110+j*52;c.save();c.globalAlpha*=a;c.fillStyle='rgba(255,255,255,.04)';NetScene.rr(c,30,y-26,940,44,10);c.fill();c.restore();V.tx(c,r[0],50,y+2,14,'#fff','left',700,a);
         r[1].forEach(function(ok,i){var x=440+i*218,sc=E.back(f(r[2]+.1+i*.08,.45));if(!(sc>0))return;c.save();c.globalAlpha*=Math.min(1,sc);c.translate(x,y-4);c.scale(sc,sc);c.fillStyle=ok?'rgba(52,195,143,.2)':'rgba(255,107,107,.18)';c.beginPath();c.arc(0,0,14,0,7);c.fill();
           c.strokeStyle=ok?GOOD:BAD;c.lineWidth=3;c.lineCap='round';c.beginPath();if(ok){c.moveTo(-6,0);c.lineTo(-1,5);c.lineTo(7,-5);}else{c.moveTo(-5,-5);c.lineTo(5,5);c.moveTo(5,-5);c.lineTo(-5,5);}c.stroke();c.restore();});});
-      chip(500,404,'Amplify Hosting y Vercel (FONEEDAM) hacen la forma 3 por ti','rgba(166,122,244,.15)','#d8c7ff',ease(2.8),true);return;}
+      chip(500,404,'Amplify Hosting y Vercel hacen la forma 3 por ti','rgba(166,122,244,.15)','#d8c7ff',ease(2.8),true);return;}
     /* ---------- paso 5: la prueba del laboratorio ---------- */
     var a1=ease(.3),a2=ease(1.4);browser(60,90,380,250,'https://d1abc23xyz.cloudfront.net','secure',a1,true);chip(250,360,'✓ 200 · con candado','rgba(52,195,143,.18)','#9ff0c8',a1,true);
     if(a2>0){c.save();c.globalAlpha*=a2;shadow(function(){c.fillStyle='#f6f8fb';NetScene.rr(c,560,90,380,250,14);c.fill();},28);c.fillStyle='#e5e9f0';NetScene.rr(c,560,90,380,34,14);c.fill();c.fillRect(560,110,380,14);c.restore();
@@ -1138,16 +1138,16 @@ window.wireSnips=window.wireSnips||function(sec){sec.querySelectorAll('.snip').f
     function fb(){var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(_){}ta.remove();ok();}
     if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(txt).then(ok,fb);else fb();};});};
 </script>
-<!-- 12b · LAB CONSOLA: TU WEB EN S3 A CLICS (COMO EL MOCKUP DE FONEEDAM) -->
+<!-- 12b · LAB CONSOLA: TU WEB EN S3 A CLICS (FORMA 2) -->
 <section class="slide" id="labC">
-  <span class="k"><span class="act-chip">🧪 LAB A · CONSOLA</span> Tu web en S3 a clics, como el mockup de FONEEDAM · clic o → para avanzar</span>
+  <span class="k"><span class="act-chip">🧪 LAB A · CONSOLA</span> Tu web en S3 a clics, forma 2 · clic o → para avanzar</span>
   <h2 style="font-size:clamp(1.15rem,2.3vw,1.6rem);margin-bottom:4px">Forma 2 a mano: <span class="grad">bucket público + enlace directo</span></h2>
   <div class="scene"><canvas aria-label="Laboratorio en la consola de S3: crear bucket, desbloquear acceso público, subir index.html, política de lectura pública, abrir el enlace con /index.html y borrar todo"></canvas></div>
   <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
   <script>
   NetScene.make('labC',1000,480,[
     '<b>Paso 1 · Crear el bucket.</b> {@.3}Consola → busca <b>S3</b> → <b>Crear bucket</b>. {@1.2}Nombre único en el mundo, por ejemplo <b>web-laura-TUNOMBRE-123</b>, {@2.2}región <b>us-east-1 (Norte de Virginia)</b>.',
-    '<b>Paso 2 · Quitar el candado (solo para este lab).</b> {@.3}Baja a <b>“Configuración de bloqueo de acceso público”</b> {@1.2}y <b>desmarca “Bloquear todo el acceso público”</b>. {@2.2}AWS te pide confirmar: marca <b>“Reconozco…”</b> {@3.0}→ <b>Crear bucket</b>. Esto es exactamente lo que se hizo en el mockup de FONEEDAM.',
+    '<b>Paso 2 · Quitar el candado (solo para este lab).</b> {@.3}Baja a <b>“Configuración de bloqueo de acceso público”</b> {@1.2}y <b>desmarca “Bloquear todo el acceso público”</b>. {@2.2}AWS te pide confirmar: marca <b>“Reconozco…”</b> {@3.0}→ <b>Crear bucket</b>.',
     '<b>Paso 3 · Subir la página.</b> {@.3}Entra al bucket → <b>Cargar</b> → <b>Agregar archivos</b> {@1.2}→ escoge tu <b>index.html</b> (el de la clase, con tu nombre) {@2.2}→ <b>Cargar</b>. Ya está adentro… pero todavía nadie puede verla.',
     '<b>Paso 4 · La política pública.</b> {@.3}Pestaña <b>Permisos</b> → <b>Política del bucket</b> → <b>Editar</b>. {@1.2}Pega la política que te paso por el chat: <b>“Principal”: “*”</b> {@2.2}significa <b>cualquier persona de internet</b> puede leer. {@3.0}<b>Guardar cambios</b>. Aparece la etiqueta roja <b>“Público”</b>.',
     '<b>Paso 5 · Ábrela.</b> {@.3}Clic en <b>index.html</b> → copia la <b>URL del objeto</b>. {@1.2}Ábrela: <b>¡candado y tu página!</b> {@2.2}Ahora borra <b>/index.html</b> del final y recarga: {@3.0}<b>403 AccessDenied</b>. Esa es la forma 2: funciona, pero con sus límites.',
@@ -1190,7 +1190,7 @@ window.wireSnips=window.wireSnips||function(sec){sec.querySelectorAll('.snip').f
       var wa=ea(1.8);if(wa>0){c.save();c.globalAlpha*=wa;c.fillStyle='#fffbeb';R(c,BX+36,BY+266,BW-72,70,8);c.fill();c.strokeStyle='#d97706';c.lineWidth=1.5;c.stroke();c.restore();
         tx('⚠️ Desactivar el bloqueo de todo el acceso público podría hacer que este bucket y sus objetos se vuelvan públicos.',BX+50,BY+288,10.5,'#7c2d12','left',600);chk(BX+50,BY+302,t>3,'Reconozco que la configuración actual podría hacer que este bucket y sus objetos se vuelvan públicos.');}
       btn(BX+BW-140,BY+BH-46,120,'Crear bucket',true,t>3.5&&t<3.8);
-      K.chip(c,BX+BW-200,BY+112,'⚠ como el mockup de FONEEDAM','#ff6b6b',ea(3.2),true);
+      K.chip(c,BX+BW-200,BY+112,'⚠ el bucket quedará público','#ff6b6b',ea(3.2),true);
       cursor([[700,470],[86,186],[86,186],[96,342],[96,342],[880,440],[880,440]],[0,1,1.3,2.9,3.1,3.5,9],(t>1.2&&t<1.35)||(t>3&&t<3.15)||(t>3.5&&t<3.8));return;}
     /* ---------- paso 3 ---------- */
     if(st===2){chrome('us-east-1.console.aws.amazon.com/s3/upload/web-laura-tunombre-123');header();body();crumb('Amazon S3  ›  Buckets  ›  web-laura-tunombre-123  ›  Cargar');tx('Cargar',BX+20,BY+146,19,'#000716','left',800);

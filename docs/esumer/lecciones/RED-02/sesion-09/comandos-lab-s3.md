@@ -17,7 +17,7 @@ aws s3 rb "s3://$b" --force
 ```
 > El enlace del `presign` funciona 5 minutos; después dice AccessDenied.
 
-**LAB A · Consola: tu web a clics, como el mockup de FONEEDAM (forma 2: bucket público + enlace directo)**
+**LAB A · Consola: tu web a clics, con enlace directo (forma 2: bucket público + enlace directo)**
 1. Consola → **S3** → **Crear bucket** → nombre `web-laura-TUNOMBRE-123` · región **us-east-1**.
 2. En *Configuración de bloqueo de acceso público*: **desmarca “Bloquear todo el acceso público”** → marca “Reconozco…” → **Crear bucket**.
 3. Entra al bucket → **Cargar** → **Agregar archivos** → `index.html` → **Cargar**.
