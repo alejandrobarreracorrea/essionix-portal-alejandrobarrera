@@ -730,6 +730,68 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   });
   </script>
 </section>
+<!-- 8b · ¿POR QUÉ UNA CLASE CUESTA MÁS QUE OTRA? -->
+<section class="slide" id="scS5b">
+  <span class="k"><span class="act-chip">📖 CAPÍTULO 3 · OBJETOS</span> ¿Por qué una cuesta más que otra? · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">¿Qué paga Laura <span class="grad">en cada clase</span>?</h2>
+  <div class="scene"><canvas aria-label="Por qué cambia el precio de S3: número de copias en zonas, almacenamiento caliente o frío, y cobro por sacar los datos con mínimo de días"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('scS5b',1000,480,[
+    'El precio de cada clase depende de <b>3 cosas</b> de la infraestructura de AWS: {@.2}<b>cuántas copias</b> guardan de tus datos, {@.8}si el disco está <b>despierto o dormido</b>, y {@1.4}<b>cuánto te cobran por sacar</b> los datos. Veámoslas una por una con las fotos de Laura.',
+    '<b>1 · Las copias.</b> {@.2}<b>Standard</b> guarda tus fotos en <b>3 zonas</b> (3 data centers separados). {@1.2}<b>One Zone-IA</b> guarda solo en <b>1 zona</b>: menos discos, menos edificios… {@1.8}<b>más barato</b>. {@2.4}¿El riesgo? Si esa zona sufre un incendio o una inundación, {@2.8}<b>las fotos se pierden</b>. Úsalo solo para copias que puedas volver a crear.',
+    '<b>2 · Despierto o dormido.</b> {@.2}En <b>Standard</b> tus fotos están en discos <b>encendidos</b>, listos: las ves en milisegundos. {@1.4}En <b>Glacier Flexible y Deep Archive</b> los datos se guardan en almacenamiento <b>frío</b>: equipos dormidos que gastan casi nada de energía (AWS no publica cómo; se cree que en cintas o discos apagados). {@2.4}Pedir un archivo es <b>despertarlo</b>: {@2.8}tarda de <b>minutos a 12 horas</b>.',
+    '<b>3 · El arriendo y el domicilio.</b> {@.2}En <b>Standard</b> pagas más “arriendo” por guardar, pero <b>sacar es gratis</b>. {@1}En las clases <b>IA</b> y <b>Glacier</b> el arriendo es barato, pero <b>cada GB que sacas cuesta</b> {@1.6}y hay un <b>tiempo mínimo</b> (30, 90 o 180 días). {@2.2}Mira la cuenta de Laura con 100 GB de fotos viejas: {@3}si casi no las abre, IA le ahorra; {@3.8}si las abre todas cada mes, <b>sale casi igual</b>.',
+    'En resumen: {@.2}más copias, más despierto y sacar gratis <b>= más caro</b>. {@1}Menos copias, más dormido y cobro por sacar <b>= más barato</b>. {@1.8}Por eso la pregunta de arquitecto es: <b>¿qué tan seguido voy a abrir este dato?</b>'
+  ],function(c,s){
+    var V=Viz,E=s.E,st=s.step,t=s.t,M='"JetBrains Mono",monospace';V.bg(c,1000,480);
+    function f(d,u){return Math.max(0,Math.min(1,(t-d)/(u||.5)));}
+    function zone(x,y,w,h,lab,a,fire){c.save();c.globalAlpha*=a;c.strokeStyle='#147eba';c.setLineDash([6,5]);c.lineWidth=1.5;NetScene.rr(c,x,y,w,h,10);c.stroke();c.restore();V.tx(c,lab,x+12,y+20,11,'#6cb6e6','left',800,a);
+      if(fire>0){for(var k=0;k<5;k++){var fx=x+20+k*(w-40)/4,fy=y+h-10;V.tx(c,'🔥',fx,fy-Math.abs(Math.sin(t*6+k))*8,26,'#fff','center',400,fire);}}}
+    function photo(x,y,a,col){c.save();c.globalAlpha*=a;c.fillStyle=col||'#f08a4b';NetScene.rr(c,x,y,46,36,6);c.fill();c.restore();V.tx(c,'🖼️',x+23,y+25,16,'#fff','center',400,a);}
+    if(st===0){var L=[['📦','cuántas copias','3 zonas o 1 zona','#3b9ae1'],['😴','despierto o dormido','listo ya o hay que esperar','#a67af4'],['🚚','cuánto cuesta sacar','gratis o se cobra por GB','#f08a4b']];
+      L.forEach(function(k,i){var a=E.back(f(.2+i*.6)),x=40+i*320;if(!(a>0))return;var al=Math.min(1,a);c.save();c.globalAlpha*=al;c.fillStyle='#0f2740';NetScene.rr(c,x,90,280,250,16);c.fill();c.strokeStyle=k[3];c.lineWidth=2.5;c.stroke();c.restore();
+        V.tx(c,k[0],x+140,170,54,'#fff','center',400,al);V.tx(c,(i+1)+' · '+k[1],x+140,230,18,'#fff','center',800,al);V.tx(c,k[2],x+140,262,13,'#cfe3f1','center',600,al);});
+      V.tx(c,'el precio de S3 = estas 3 cosas',500,400,17,'#FFC928','center',800,f(2));return;}
+    if(st===1){V.tx(c,'S3 Standard · 3 zonas',260,40,15,'#fff','center',800,f(.2));
+      ['a','b','c'].forEach(function(z,i){var a=f(.2+i*.3);zone(40+i*150,60,130,150,'zona '+z,a,0);photo(82+i*150,120,f(.5+i*.3));});
+      V.tx(c,'$0,023 / GB',260,240,20,'#FFC928','center',800,f(1),M);
+      var o=f(1.2),fire=f(2.4,.6);V.tx(c,'One Zone-IA · 1 zona',760,40,15,'#fff','center',800,o);zone(695,60,130,150,'zona a',o,fire);photo(737,120,o*(1-f(2.8,.6)));
+      V.tx(c,'$0,010 / GB',760,240,20,'#9ff0c8','center',800,f(1.8),M);V.tx(c,'menos discos y edificios = más barato',760,268,12,'#9ff0c8','center',700,f(1.8));
+      if(fire>0){V.tx(c,'si esa zona se incendia…',760,310,15,'#ff9b9b','center',800,fire);V.tx(c,'💥 las fotos se pierden',760,336,15,'#ff9b9b','center',800,f(2.8));
+        V.tx(c,'en Standard, si una zona se incendia, quedan 2 copias ✓',260,310,13,'#9ff0c8','center',700,f(2.8));}
+      return;}
+    if(st===2){var a=f(.2);c.save();c.globalAlpha*=a;c.fillStyle='#0f2740';NetScene.rr(c,40,50,420,300,14);c.fill();c.strokeStyle='#f08a4b';c.lineWidth=2;c.stroke();c.restore();
+      V.tx(c,'☀️ CALIENTE · Standard',250,82,16,'#ffd0b0','center',800,a);
+      for(var k=0;k<3;k++){var cx=130+k*120,cy=170;c.save();c.globalAlpha*=a;c.fillStyle='#16324f';c.beginPath();c.arc(cx,cy,40,0,7);c.fill();c.strokeStyle='#f08a4b';c.lineWidth=3;c.beginPath();c.arc(cx,cy,30,t*6+k,t*6+k+4);c.stroke();c.restore();V.tx(c,'⚡',cx,cy+6,16,'#FFC928','center',400,a);}
+      V.tx(c,'discos encendidos, girando',250,250,13,'#cfe3f1','center',600,a);V.tx(c,'📱 pides la foto → la ves en milisegundos',250,290,14,'#9ff0c8','center',800,f(.8));
+      var b=f(1.4);c.save();c.globalAlpha*=b;c.fillStyle='#0b1222';NetScene.rr(c,540,50,420,300,14);c.fill();c.strokeStyle='#a67af4';c.lineWidth=2;c.stroke();c.restore();
+      V.tx(c,'❄️ FRÍO · Glacier Flexible / Deep',750,82,16,'#c9b6ff','center',800,b);
+      for(var k=0;k<3;k++){var cx=630+k*120,cy=170;c.save();c.globalAlpha*=b;c.fillStyle='#1a1f2e';NetScene.rr(c,cx-45,cy-30,90,60,8);c.fill();c.strokeStyle='#5f6b7a';c.stroke();c.restore();V.tx(c,'💤',cx,cy+8,22,'#fff','center',400,b);}
+      V.tx(c,'equipos dormidos: casi no gastan energía',750,250,13,'#cfe3f1','center',600,b);
+      var w=f(2.4);if(w>0){var hrs=Math.min(12,Math.floor(f(2.8,2.5)*12));V.tx(c,'⏰ despertando tu archivo… '+(hrs<1?'minutos':hrs+' h'),750,292,14,'#FFC928','center',800,w);}
+      V.tx(c,'energía y equipos: lo que más cuesta en un data center',500,410,15,'#fff','center',800,f(3.2));V.tx(c,'(AWS no publica cómo es Glacier por dentro: se cree que usa cintas o discos apagados)',500,438,11.5,'#9fb3c8','center',600,f(3.4));return;}
+    if(st===3){var R=[['Standard','$0,023','gratis','—','#f08a4b'],['Standard-IA','$0,0125','$0,01/GB','30 días','#3b9ae1'],['Glacier Instant','$0,004','$0,03/GB','90 días','#a67af4'],['Deep Archive','$0,00099','$0,02/GB','180 días','#5f7890']];
+      V.tx(c,'clase',60,52,12,'#9fb3c8','left',800,f(.2));V.tx(c,'🏠 arriendo/GB',310,52,12,'#9fb3c8','center',800,f(.2));V.tx(c,'🚚 sacar/GB',470,52,12,'#9fb3c8','center',800,f(1));V.tx(c,'⏳ mínimo',610,52,12,'#9fb3c8','center',800,f(1.6));
+      R.forEach(function(r,i){var y=72+i*44,a=f(.2+i*.15);c.save();c.globalAlpha*=a;c.fillStyle='#0f2740';NetScene.rr(c,40,y,640,36,8);c.fill();c.fillStyle=r[4];c.fillRect(40,y,6,36);c.restore();
+        V.tx(c,r[0],60,y+24,14,'#fff','left',800,a);V.tx(c,r[1],310,y+24,14,'#FFC928','center',800,a,M);V.tx(c,r[2],470,y+24,14,i?'#ff9b9b':'#9ff0c8','center',800,f(1),M);V.tx(c,r[3],610,y+24,14,'#cfe3f1','center',700,f(1.6));});
+      var b=f(2.2);c.save();c.globalAlpha*=b;c.fillStyle='#0b1a2b';NetScene.rr(c,710,60,270,330,14);c.fill();c.strokeStyle='#FFC928';c.stroke();c.restore();
+      V.tx(c,'🧾 Laura · 100 GB de fotos viejas',845,88,12.5,'#FFC928','center',800,b);
+      V.tx(c,'Standard:  $2,30 / mes',730,124,13,'#fff','left',700,b,M);
+      var x1=f(3);V.tx(c,'Si abre 5 GB al mes',730,170,12.5,'#9ff0c8','left',800,x1);V.tx(c,'IA: $1,25 + $0,05 = $1,30',730,194,13,'#fff','left',700,x1,M);V.tx(c,'✓ ahorra casi la mitad',730,218,12.5,'#9ff0c8','left',800,x1);
+      var x2=f(3.8);V.tx(c,'Si abre los 100 GB cada mes',730,264,12.5,'#ff9b9b','left',800,x2);V.tx(c,'IA: $1,25 + $1,00 = $2,25',730,288,13,'#fff','left',700,x2,M);V.tx(c,'≈ igual que Standard',730,312,12.5,'#ff9b9b','left',800,x2);
+      V.tx(c,'precios aproximados en us-east-1',845,372,10.5,'#9fb3c8','center',600,b);
+      V.tx(c,'el arriendo es barato… pero el domicilio se cobra',360,320,15,'#FFC928','center',800,f(2.2));return;}
+    var A=[['más copias (3 zonas)','#f08a4b'],['siempre despierto','#f08a4b'],['sacar gratis','#f08a4b']],B=[['menos copias (1 zona)','#9ff0c8'],['dormido (frío)','#9ff0c8'],['cobro por sacar + mínimo','#9ff0c8']];
+    var a=f(.2),b=f(1);c.save();c.globalAlpha*=a;c.fillStyle='#3a2a12';NetScene.rr(c,40,60,440,240,16);c.fill();c.strokeStyle='#f08a4b';c.lineWidth=2.5;c.stroke();c.restore();
+    V.tx(c,'💰 MÁS CARO',260,104,22,'#ffd0b0','center',800,a);A.forEach(function(k,i){V.tx(c,'+ '+k[0],80,150+i*40,16,'#fff','left',700,a);});
+    c.save();c.globalAlpha*=b;c.fillStyle='#123024';NetScene.rr(c,520,60,440,240,16);c.fill();c.strokeStyle='#34c38f';c.lineWidth=2.5;c.stroke();c.restore();
+    V.tx(c,'🪙 MÁS BARATO',740,104,22,'#9ff0c8','center',800,b);B.forEach(function(k,i){V.tx(c,'− '+k[0],560,150+i*40,16,'#fff','left',700,b);});
+    V.tx(c,'la pregunta de arquitecto:',500,360,15,'#cfe3f1','center',700,f(1.8));V.tx(c,'¿qué tan seguido voy a abrir este dato? 🤔',500,400,22,'#FFC928','center',800,f(1.8));
+  });
+  </script>
+</section>
+
 <!-- 9 · S3 SEGURO -->
 <section class="slide" id="scS6">
   <span class="k"><span class="act-chip">📖 CAPÍTULO 3 · OBJETOS</span> La bodega con candado · clic o → para avanzar</span>
