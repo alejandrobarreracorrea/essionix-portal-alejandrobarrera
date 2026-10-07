@@ -306,7 +306,7 @@ ul.clean li:first-child { border-top:0; }
       c.stroke();c.restore();}
     function make(id,W,H,caps,draw){
       var sec=document.getElementById(id),cv=sec.querySelector('canvas'),cap=sec.querySelector('.cap'),dots=sec.querySelector('.dots');
-      var ctx=cv.getContext('2d'),step=0,st=0,run=false,rid=0;
+      var ctx=cv.getContext('2d'),step=0,st=0,run=false,rid=0,snap=null,snapT=0;
       sec.querySelector('.scene').style.setProperty('--ar',W/H);
       function size(){var w=cv.parentElement.clientWidth||1000,h=w*H/W;cv.style.height=h+'px';cv.width=Math.round(w*DPR);cv.height=Math.round(h*DPR);}
       /* Narración sincronizada: el texto se ilumina palabra por palabra al ritmo de lectura y la animación avanza al mismo paso.
@@ -322,12 +322,15 @@ ul.clean li:first-child { border-top:0; }
       function setCap(){prep();if(cap.animate&&!RM)cap.animate([{opacity:0,transform:'translateY(6px)'},{opacity:1,transform:'none'}],{duration:300,easing:'ease-out'});
         dots.innerHTML=caps.map(function(_,k){return '<i class="'+(k<=step?'on':'')+'"></i>';}).join('');}
       function frame(now){if(!sec.classList.contains('on')){run=false;return;}var el=(now-st)/1000,t=animT(el);paint(el);
-        ctx.setTransform(cv.width/W,0,0,cv.width/W,0,0);ctx.clearRect(0,0,W,H);
+        ctx.setTransform(cv.width/W,0,0,cv.width/W,0,0);ctx.clearRect(0,0,W,H);ctx.shadowColor='rgba(2,8,20,.45)';ctx.shadowBlur=18;ctx.shadowOffsetY=6;
         try{draw(ctx,{step:step,t:t,now:now/1000,E:E,p:function(k,dur,del){if(step>k)return 1;if(step<k)return 0;if(RM)return 1;return cl((t-(del||0))/(dur||1));}});}catch(err){if(!sec.__err){sec.__err=1;console.error('[escena '+id+' paso '+step+']',err);}}
+        ctx.shadowBlur=0;ctx.shadowColor='transparent';ctx.shadowOffsetY=0;
+        if(snap){var age=(now-snapT)/1000;if(age<.55&&!RM){ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.globalAlpha=1-E.io(age/.55);ctx.drawImage(snap,0,0);ctx.restore();}else snap=null;}
         rid=requestAnimationFrame(frame);}
+      function grab(){try{snap=document.createElement('canvas');snap.width=cv.width;snap.height=cv.height;snap.getContext('2d').drawImage(cv,0,0);snapT=performance.now();}catch(_){snap=null;}}
       sec.__enter=function(){step=0;st=performance.now();size();setCap();cancelAnimationFrame(rid);run=true;rid=requestAnimationFrame(frame);};
       sec.__next=function(){var el=(performance.now()-st)/1000;if(el<readDur-.3&&!RM){st=performance.now()-readDur*1000;return true;}
-        if(step<caps.length-1){step++;st=performance.now();setCap();return true;}return false;};
+        if(step<caps.length-1){grab();step++;st=performance.now();setCap();return true;}return false;};
       window.addEventListener('resize',function(){if(sec.classList.contains('on'))size();});
       prep();dots.innerHTML=caps.map(function(_,k){return '<i class="'+(k===0?'on':'')+'"></i>';}).join('');
     }
@@ -372,9 +375,11 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
     var DOTS=null;
     function dots(){if(DOTS)return DOTS;DOTS=[];for(var y=84;y<=412;y+=7)for(var x=64;x<=936;x+=7){var lon=-170+(x-60)/880*360,lat=78-(y-70)/350*134;if(isLand(lon,lat))DOTS.push([x,y]);}return DOTS;}
     function mp(lon,lat){return [60+(lon+170)/360*880,70+(78-lat)/134*350];}
-    function bg(c,W,H){var g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,C.bg1);g.addColorStop(1,C.bg0);c.fillStyle=g;c.fillRect(0,0,W,H);
-      c.save();c.strokeStyle='rgba(255,255,255,.035)';c.lineWidth=1;for(var x=0;x<=W;x+=40){c.beginPath();c.moveTo(x,0);c.lineTo(x,H);c.stroke();}for(var y=0;y<=H;y+=40){c.beginPath();c.moveTo(0,y);c.lineTo(W,y);c.stroke();}c.restore();}
-    function tx(c,s,x,y,sz,col,al,w,a,f){if(a===0)return;c.save();c.globalAlpha*=(a==null?1:a);c.font=(w||600)+' '+sz+'px '+(f||'Poppins,sans-serif');c.fillStyle=col;c.textAlign=al||'left';c.textBaseline='alphabetic';c.fillText(s,x,y);c.restore();}
+    function bg(c,W,H){c.save();c.shadowBlur=0;c.shadowColor='transparent';var g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,'#10294a');g.addColorStop(1,'#060f1d');c.fillStyle=g;c.fillRect(0,0,W,H);
+      var T=performance.now()/1000;[[W*.18+Math.sin(T*.13)*40,H*.15,W*.55,'rgba(15,158,213,.16)'],[W*.86+Math.cos(T*.11)*40,H*.95,W*.6,'rgba(233,113,50,.10)']].forEach(function(o){var r=c.createRadialGradient(o[0],o[1],0,o[0],o[1],o[2]);r.addColorStop(0,o[3]);r.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=r;c.fillRect(0,0,W,H);});
+      for(var k=0;k<26;k++){var px=(k*137.5%W+T*(6+k%5*3))%W,py=(k*71.3%H+Math.sin(T*.4+k)*10+H)%H;c.globalAlpha=.10+.12*Math.sin(T*.7+k);c.fillStyle='#cfe8ff';c.beginPath();c.arc(px,py,1+k%3*.6,0,7);c.fill();}
+      c.globalAlpha=1;var v=c.createRadialGradient(W/2,H/2,H*.35,W/2,H/2,W*.75);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,'rgba(0,0,0,.35)');c.fillStyle=v;c.fillRect(0,0,W,H);c.restore();}
+    function tx(c,s,x,y,sz,col,al,w,a,f){if(a===0)return;c.save();c.shadowBlur=0;c.shadowColor='transparent';c.globalAlpha*=(a==null?1:a);c.font=(w||600)+' '+sz+'px '+(f||'Poppins,sans-serif');c.fillStyle=col;c.textAlign=al||'left';c.textBaseline='alphabetic';c.fillText(s,x,y);c.restore();}
     function rr(c,x,y,w,h,r){NetScene.rr(c,x,y,w,h,r);}
     function glow(c,col,b){c.shadowColor=col;c.shadowBlur=b;}
     function pill(c,x,y,s,bgc,fg,a){c.save();c.globalAlpha*=a==null?1:a;c.font='600 12px Poppins,sans-serif';var w=c.measureText(s).width+22;c.fillStyle=bgc;rr(c,x,y,w,24,12);c.fill();c.fillStyle=fg;c.textBaseline='middle';c.fillText(s,x+11,y+12.5);c.restore();return w;}
@@ -401,7 +406,7 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   </script>
 <style>
     .scene{width:min(100%,1080px,calc(58vh * var(--ar)));margin:6px auto 0}
-    .scene canvas{display:block;width:100%;border-radius:14px;background:#f7f9fc;border:1px solid var(--line)}
+    .scene canvas{display:block;width:100%;border-radius:16px;background:#060f1d;border:1px solid rgba(15,40,65,.25);box-shadow:0 22px 60px -18px rgba(14,40,65,.45),0 4px 14px rgba(14,40,65,.12)}
     .scbar{display:flex;align-items:center;gap:16px;margin:8px auto 0;width:min(100%,1080px)}
     .scbar .cap{flex:1;font-size:clamp(.86rem,1.4vw,1.06rem);color:var(--muted);line-height:1.45;min-height:3em}
     .scbar .cap b{color:var(--text)}
@@ -882,35 +887,119 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
 <!-- 10 · TU WEB EN S3 CON HTTPS -->
 <section class="slide" id="scS7">
   <span class="k"><span class="act-chip">📖 EL ÚLTIMO DESEO</span> La web de Laura, con candado · clic o → para avanzar</span>
-  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">Tu página en S3, <span class="grad">con candado HTTPS</span></h2>
-  <div class="scene"><canvas aria-label="Arquitectura: visitante, CloudFront con certificado HTTPS, Origin Access Control y bucket S3 privado; el acceso directo al bucket da 403"></canvas></div>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">3 formas de publicar la página, <span class="grad">solo una perfecta</span></h2>
+  <div class="scene"><canvas aria-label="Tres formas de publicar una página en S3: sitio web por http, enlace directo con candado pero bucket público, y CloudFront con certificado y bucket privado; comparación y prueba del 403"></canvas></div>
   <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
   <script>
   NetScene.make('scS7',1000,480,[
-    'El último deseo de Laura: <b>su página web en S3, con candado</b>. Hay dos formas. La <b>vieja</b>: {@0.6}hacer el bucket <b>público</b> y servir la página desde él. Funciona… {@1.2}pero queda abierto a todo internet y <b>sin HTTPS</b>: {@1.8}el navegador dice “<b>No seguro</b>”.',
-    'La forma <b>moderna</b>: el bucket sigue <b>privado</b>. Delante va <b>CloudFront</b>, la red de entrega de AWS (más de 600 puntos en el mundo), que habla <b>HTTPS</b>. Con una credencial especial {@0.6}(<b>OAC</b>) {@1.2}es el <b>único</b> que puede leer el bucket.',
-    '{@0.3}¿Y el <b>certificado</b>? Es el “documento de identidad” de la página: el candado 🔒 del navegador. <b>Cifra</b> el viaje y <b>demuestra</b> que la página es quien dice ser. CloudFront ya trae uno para <b>*.cloudfront.net</b>; con dominio propio, <b>ACM</b> lo da <b>gratis</b>.',
-    'La prueba de fuego en el laboratorio: {@0.3}por <b>CloudFront</b> tu página abre con candado (<b>200</b>); {@1.6}directo al <b>bucket</b>, <b>AccessDenied (403)</b>. Así sabes que quedó bien.'
+    'El último deseo de Laura: {@.2}<b>su página web en S3</b>, {@.6}con candado. {@1.0}Entre el navegador del cliente y la bodega hay un camino, y hay {@1.4}<b>3 formas</b> de recorrerlo. {@1.8}Veamos cuál le conviene.',
+    '<b>Forma 1 · el sitio web de S3.</b> {@.3}La dirección empieza por <b>http</b>, sin “s”: {@.8}el navegador dice <b>“No es seguro”</b>. {@1.4}El pedido viaja <b>en texto claro</b>: {@2.0}cualquiera conectado al mismo wifi <b>puede leerlo</b>. {@2.8}Y para que funcione, la bodega tiene que estar <b>abierta a todo internet</b>.',
+    '<b>Forma 2 · el enlace directo de S3</b> (así está el mockup de FONEEDAM). {@.3}Ahora sí hay <b>candado</b>: {@.8}el viaje va <b>cifrado</b> y el espía solo ve basura. {@1.6}Pero la bodega <b>sigue abierta</b> a todo internet, {@2.4}hay que escribir <b>/index.html</b> al final {@3.0}y si Laura usa su dominio <b>tiendalaura.com</b>, {@3.6}el navegador muestra un <b>error de certificado</b>: el candado es de Amazon, no de ella.',
+    '<b>Forma 3 · CloudFront + bodega privada</b> (nuestro laboratorio). {@.3}Delante de la bodega se pone <b>CloudFront</b>, {@.9}con un <b>certificado a nombre de Laura</b> (gratis con ACM). {@1.5}La bodega <b>se cierra con candado</b>, {@2.0}y CloudFront entra con una <b>llave especial (OAC)</b>. {@2.6}Además copia la página en <b>más de 600 puntos</b> del mundo. {@3.2}Si un robot intenta entrar directo a la bodega… <b>403: acceso negado</b>.',
+    'Comparemos las 3. {@.3}Solo la <b>forma 3</b> cumple todo: {@.6}candado, {@1.0}bodega privada, {@1.4}dominio propio, {@1.8}abre sin /index.html {@2.2}y es rápida en todo el mundo. {@2.8}<b>Amplify Hosting</b> y <b>Vercel</b> (lo que usamos en FONEEDAM) hacen esta misma forma 3 por ti.',
+    'La prueba de fuego en el laboratorio: {@.3}por <b>CloudFront</b> tu página abre con candado (<b>200</b>); {@1.4}directo a la <b>bodega</b>, <b>AccessDenied (403)</b>. {@2.4}Si ves las dos cosas, quedó perfecta.'
   ],function(c,s){
-    var V=Viz,C=V.C,E=s.E,st=s.step,t=s.t,M='"JetBrains Mono",monospace';V.bg(c,1000,480);
-    function f(d,u){return Math.max(0,Math.min(1,(t-d)/(u||.5)));}
-    function bkt(x,y,a,lock){c.save();c.globalAlpha*=a;c.fillStyle='#3a2a12';NetScene.rr(c,x,y,190,150,16);c.fill();c.strokeStyle='#f08a4b';c.lineWidth=2.5;c.stroke();c.restore();V.tx(c,'🪣 S3',x+95,y+50,20,'#fff','center',800,a);V.tx(c,'index.html',x+95,y+82,13,'#ffd0b0','center',700,a,M);if(lock)V.tx(c,'🔒 privado',x+95,y+120,14,'#9ff0c8','center',800,a);}
-    function browser(x,y,url,secure,a){c.save();c.globalAlpha*=a;c.fillStyle='#fff';NetScene.rr(c,x,y,250,150,10);c.fill();c.fillStyle='#e8eaed';NetScene.rr(c,x+10,y+12,230,26,13);c.fill();c.restore();
-      V.tx(c,(secure?'🔒 ':'⚠️ No seguro · ')+url,x+22,y+30,10.5,secure?'#037f0c':'#d02b2b','left',700,a);V.tx(c,'Hola desde S3',x+125,y+92,16,'#0e2841','center',800,a);}
-    if(st===0){browser(60,150,'http://mi-web.s3-website…',false,E.out(f(.2)));bkt(700,150,E.out(f(.6)),false);V.tx(c,'🌍 PÚBLICO',795,330,14,'#ff9b9b','center',800,f(1));
-      var a=f(1.2);c.save();c.globalAlpha*=a;c.strokeStyle='#ff6b6b';c.lineWidth=3;c.setLineDash([8,6]);c.beginPath();c.moveTo(310,225);c.lineTo(700,225);c.stroke();c.restore();V.tx(c,'sin cifrar · abierto a todos',505,210,13,'#ff9b9b','center',800,a);
-      V.tx(c,'✗ la forma vieja',500,420,18,'#ff9b9b','center',800,f(1.8));return;}
-    browser(30,160,'https://d1abc.cloudfront.net',true,1);
-    c.save();c.fillStyle='#2a1b4a';NetScene.rr(c,370,150,220,170,16);c.fill();c.strokeStyle='#a67af4';c.lineWidth=2.5;c.stroke();c.restore();V.tx(c,'☁️ CloudFront',480,196,18,'#fff','center',800,1);V.tx(c,'HTTPS + certificado',480,226,12.5,'#c9b6ff','center',700,1);V.tx(c,'600+ puntos en el mundo',480,250,12,'#cfe3f1','center',600,1);
-    bkt(770,160,1,true);
-    var oac=st>=1?f(st===1?.6:0):1;V.tx(c,'🪪 OAC',680,212,13,'#FFC928','center',800,oac);
-    c.save();c.globalAlpha*=oac;c.strokeStyle='#FFC928';c.lineWidth=2.5;c.setLineDash([6,5]);c.lineDashOffset=-t*30;c.beginPath();c.moveTo(590,235);c.lineTo(770,235);c.stroke();c.strokeStyle='#34c38f';c.beginPath();c.moveTo(280,235);c.lineTo(370,235);c.stroke();c.restore();
-    if(st===1){V.tx(c,'✓ la forma moderna: el bucket nunca se abre',500,420,17,'#9ff0c8','center',800,f(1.2));return;}
-    if(st===2){var a=f(.3);c.save();c.globalAlpha*=a;c.fillStyle='#0f2740';NetScene.rr(c,180,340,640,120,14);c.fill();c.strokeStyle='#FFC928';c.lineWidth=2;c.stroke();c.restore();
-      V.tx(c,'📜 Certificado de *.cloudfront.net',500,372,15,'#FFC928','center',800,a);V.tx(c,'emitido por una autoridad de confianza · cifra el viaje (TLS)',500,400,12.5,'#fff','center',600,a);V.tx(c,'¿dominio propio (www.mitienda.com)? → certificado gratis con ACM, en us-east-1',500,428,12,'#cfe3f1','center',600,a);return;}
-    var p=f(.3),q=f(1.6);V.tx(c,'✓ por CloudFront → 200 🔒',155,350,15,'#9ff0c8','center',800,p);
-    c.save();c.globalAlpha*=q;c.strokeStyle='#ff6b6b';c.lineWidth=3;c.setLineDash([8,6]);c.beginPath();c.moveTo(290,330);c.quadraticCurveTo(540,450,800,320);c.stroke();c.restore();
-    V.tx(c,'✗ directo al bucket → AccessDenied (403)',600,440,15,'#ff9b9b','center',800,q);
+    var V=Viz,E=s.E,st=s.step,t=s.t,M='"JetBrains Mono",monospace',P='Poppins,sans-serif';V.bg(c,1000,480);
+    function f(d,u){return Math.max(0,Math.min(1,(t-d)/(u||.6)));}
+    function ease(d,u){return E.io(f(d,u));}
+    var GOOD='#34c38f',BAD='#ff6b6b',WARN='#FFC928',CF='#a67af4',S3C='#f08a4b';
+    /* ---------- piezas premium ---------- */
+    function shadow(fn,blur,col){c.save();c.shadowColor=col||'rgba(0,0,0,.45)';c.shadowBlur=blur||24;c.shadowOffsetY=8;fn();c.restore();}
+    function lock(x,y,sz,closed,col,a){if(!(a>0))return;var op=closed==null?1:closed;c.save();c.globalAlpha*=a;c.translate(x,y);
+      c.strokeStyle=col;c.lineWidth=sz*.16;c.lineCap='round';c.beginPath();var lift=(1-op)*sz*.38;c.arc(0,-sz*.18-lift,sz*.32,Math.PI,(1-op)*-.6+0,false);c.lineTo(sz*.32,-sz*.18-lift+(op>.5?0:0));
+      c.moveTo(-sz*.32,-sz*.18-lift);c.lineTo(-sz*.32,-sz*.05);c.stroke();
+      var g=c.createLinearGradient(0,-sz*.1,0,sz*.55);g.addColorStop(0,col);g.addColorStop(1,'rgba(0,0,0,.25)');c.fillStyle=col;NetScene.rr(c,-sz*.5,-sz*.08,sz,sz*.62,sz*.12);c.fill();
+      c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.arc(0,sz*.18,sz*.09,0,7);c.fill();c.fillRect(-sz*.035,sz*.2,sz*.07,sz*.14);c.restore();}
+    function browser(x,y,w,h,url,state,a,page){if(!(a>0))return;c.save();c.globalAlpha*=a;
+      shadow(function(){c.fillStyle='#f6f8fb';NetScene.rr(c,x,y,w,h,14);c.fill();},28);
+      c.fillStyle='#e5e9f0';NetScene.rr(c,x,y,w,34,14);c.fill();c.fillRect(x,y+20,w,14);
+      ['#ff5f57','#febc2e','#28c840'].forEach(function(k,i){c.fillStyle=k;c.beginPath();c.arc(x+16+i*14,y+17,4.5,0,7);c.fill();});
+      c.fillStyle='#fff';NetScene.rr(c,x+64,y+8,w-76,19,9.5);c.fill();
+      var lc=state==='secure'?'#16a34a':(state==='error'?'#dc2626':'#b45309');
+      if(state==='secure')lock(x+76,y+18,10,1,lc,1);else{c.fillStyle=lc;c.font='800 11px '+P;c.fillText('⚠',x+70,y+22);}
+      c.restore();V.tx(c,url,x+(state==='secure'?86:84),y+22,9.5,state==='insecure'?'#b45309':(state==='error'?'#dc2626':'#334155'),'left',600,a,M);
+      if(state==='insecure'){c.save();c.globalAlpha*=a;c.fillStyle='rgba(180,83,9,.12)';NetScene.rr(c,x+12,y+42,112,20,10);c.fill();c.restore();V.tx(c,'⚠ No es seguro',x+20,y+56,10.5,'#b45309','left',800,a);}
+      if(state==='error'){c.save();c.globalAlpha*=a;c.fillStyle='#fef2f2';NetScene.rr(c,x+12,y+42,w-24,h-54,10);c.fill();c.restore();
+        V.tx(c,'⛔ La conexión no es privada',x+w/2,y+h/2,14,'#dc2626','center',800,a);V.tx(c,'NET::ERR_CERT_COMMON_NAME_INVALID',x+w/2,y+h/2+22,9.5,'#7f1d1d','center',600,a,M);return;}
+      if(page===false)return;
+      /* mini página de Laura */
+      var py=y+(state==='insecure'?70:46);c.save();c.globalAlpha*=a;var g=c.createLinearGradient(x,py,x+w,py);g.addColorStop(0,'#0e2841');g.addColorStop(1,'#1d4f80');c.fillStyle=g;NetScene.rr(c,x+12,py,w-24,38,8);c.fill();c.restore();
+      V.tx(c,'👕 Tienda de Laura',x+24,py+24,12.5,'#fff','left',800,a);
+      for(var k=0;k<3;k++){var cx=x+14+k*((w-28)/3),cw=(w-28)/3-8;c.save();c.globalAlpha*=a;c.fillStyle='#fff';NetScene.rr(c,cx+2,py+48,cw,h-(py-y)-60,8);c.fill();c.fillStyle=['#fde2cf','#dbeafe','#dcfce7'][k];NetScene.rr(c,cx+8,py+54,cw-12,(h-(py-y)-60)*.55,6);c.fill();c.restore();
+        V.tx(c,['👕','🧢','🧥'][k],cx+2+cw/2,py+54+(h-(py-y)-60)*.36,18,'#000','center',400,a);c.save();c.globalAlpha*=a;c.fillStyle='#cbd5e1';NetScene.rr(c,cx+10,y+h-22,cw-24,6,3);c.fill();c.restore();}}
+    function bucket(x,y,sz,closed,a,label){if(!(a>0))return;c.save();c.globalAlpha*=a;
+      shadow(function(){var g=c.createLinearGradient(x-sz/2,0,x+sz/2,0);g.addColorStop(0,'#c2410c');g.addColorStop(.5,S3C);g.addColorStop(1,'#9a3412');c.fillStyle=g;
+        c.beginPath();c.moveTo(x-sz/2,y);c.lineTo(x+sz/2,y);c.lineTo(x+sz*.38,y+sz*.9);c.quadraticCurveTo(x,y+sz*1.02,x-sz*.38,y+sz*.9);c.closePath();c.fill();},22);
+      c.fillStyle='#fdba74';c.beginPath();c.ellipse(x,y,sz/2,sz*.13,0,0,7);c.fill();c.fillStyle='rgba(0,0,0,.25)';c.beginPath();c.ellipse(x,y+2,sz*.42,sz*.08,0,0,7);c.fill();c.restore();
+      V.tx(c,'S3',x,y+sz*.5,sz*.24,'#fff','center',800,a,P);if(label)V.tx(c,label,x,y+sz*1.15,11.5,'#ffd0b0','center',700,a);
+      if(closed!=null)lock(x+sz*.42,y+sz*.62,sz*.32,closed,closed>.5?GOOD:BAD,a);}
+    function cfront(x,y,r,a){if(!(a>0))return;c.save();c.globalAlpha*=a;shadow(function(){var g=c.createLinearGradient(x-r,y-r,x+r,y+r);g.addColorStop(0,'#c4a5ff');g.addColorStop(1,'#6d28d9');c.fillStyle=g;
+        c.beginPath();for(var k=0;k<6;k++){var an=Math.PI/3*k-Math.PI/2;c[k?'lineTo':'moveTo'](x+Math.cos(an)*r,y+Math.sin(an)*r);}c.closePath();c.fill();},26,'rgba(109,40,217,.55)');c.restore();
+      V.tx(c,'☁',x,y+8,r*.7,'#fff','center',400,a);V.tx(c,'CloudFront',x,y+r+20,12.5,'#d8c7ff','center',800,a);}
+    function bez(p0,p1,p2,u){var a=1-u;return [a*a*p0[0]+2*a*u*p1[0]+u*u*p2[0],a*a*p0[1]+2*a*u*p1[1]+u*u*p2[1]];}
+    function road(p0,p1,p2,col,a,dash){if(!(a>0))return;c.save();c.globalAlpha*=a;c.strokeStyle=col;c.lineWidth=2;if(dash){c.setLineDash([7,8]);c.lineDashOffset=-t*18;}c.beginPath();c.moveTo(p0[0],p0[1]);c.quadraticCurveTo(p1[0],p1[1],p2[0],p2[1]);c.stroke();c.restore();}
+    function packet(p0,p1,p2,u,kind,a){if(!(a>0)||u<0||u>1)return;for(var k=7;k>=0;k--){var q=bez(p0,p1,p2,Math.max(0,u-k*.018));c.save();c.globalAlpha*=a*(k?(.32-k*.04):1);
+        if(!k){var col=kind==='clear'?'#fbbf24':(kind==='ok'?GOOD:CF);c.shadowColor=col;c.shadowBlur=16;c.fillStyle=col;NetScene.rr(c,q[0]-22,q[1]-11,44,22,11);c.fill();c.shadowBlur=0;}
+        else{c.fillStyle=kind==='clear'?'#fbbf24':CF;c.beginPath();c.arc(q[0],q[1],6-k*.5,0,7);c.fill();}c.restore();
+        if(!k){if(kind==='clear')V.tx(c,'pedido',q[0],q[1]+4,9.5,'#3a2518','center',800,a);else lock(q[0],q[1]+1,11,1,'#fff',a);}}}
+    function chip(x,y,text,bg,fg,a,center){if(!(a>0))return;c.save();c.globalAlpha*=a;c.font='800 12px '+P;var w=c.measureText(text).width+26;var xx=center?x-w/2:x;c.fillStyle=bg;NetScene.rr(c,xx,y,w,28,14);c.fill();c.restore();V.tx(c,text,xx+13,y+19,12,fg,'left',800,a);}
+    function spy(x,y,txt,good,a){if(!(a>0))return;V.tx(c,'🕵️',x,y,30,'#fff','center',400,a);V.tx(c,'alguien en el mismo wifi',x,y+22,10.5,'#cfe3f1','center',600,a);
+      var b=Math.min(1,a);c.save();c.globalAlpha*=b;c.fillStyle=good?'rgba(52,195,143,.15)':'rgba(255,107,107,.15)';NetScene.rr(c,x-96,y-78,192,40,12);c.fill();c.strokeStyle=good?GOOD:BAD;c.lineWidth=1.5;c.stroke();c.restore();
+      V.tx(c,txt,x,y-53,12,good?'#9ff0c8':'#ffb0b0','center',800,b,M);}
+    var A=[350,250],B=[790,250],MID=[570,150];
+    /* ---------- paso 0: el escenario ---------- */
+    if(st===0){browser(40,140,300,220,'tiendalaura.com','secure',ease(.2),true);bucket(860,190,120,null,ease(.6),'la bodega de Laura');
+      road(A,MID,[800,250],'rgba(159,182,201,.55)',f(1),true);
+      [['1 · sitio web de S3',BAD],['2 · enlace directo de S3',WARN],['3 · CloudFront + bodega privada',GOOD]].forEach(function(k,i){chip(500,330+i*40,k[0],'rgba(255,255,255,.06)',k[1],ease(1.4+i*.4),true);});
+      V.tx(c,'¿cómo llega la página al cliente?',570,110,15,'#fff','center',800,f(1));return;}
+    /* ---------- paso 1: forma 1 ---------- */
+    if(st===1){browser(40,140,300,220,'http://tienda-laura.s3-website-us-east-1…','insecure',1,true);
+      bucket(860,190,120,f(2.8)>0?0:null,1,'');chip(860,350,'🌍 abierta a todo internet','rgba(255,107,107,.15)','#ffb0b0',ease(2.8),true);
+      road(A,MID,[800,250],'rgba(251,191,36,.6)',1,true);
+      var u=(t*.42)%1;packet(A,MID,[800,250],u,'clear',f(1.4));packet([800,262],[570,330],[350,262],(u+.5)%1,'clear',f(1.4));
+      spy(570,410,'“pedido #57: talla L…”',false,ease(2));
+      chip(570,58,'1 · sitio web de S3  ·  http','rgba(255,107,107,.15)','#ffb0b0',ease(.3),true);return;}
+    /* ---------- paso 2: forma 2 ---------- */
+    if(st===2){var err=ease(3.6);
+      browser(40,140,300,220,'https://tienda-laura.s3.amazonaws.com/index.html','secure',1-err*.9,true);
+      if(err>0)browser(40,140,300,220,'https://tiendalaura.com','error',err,false);
+      bucket(860,190,120,0,1,'');chip(860,350,'🌍 sigue abierta','rgba(255,107,107,.15)','#ffb0b0',ease(1.6),true);
+      road(A,MID,[800,250],'rgba(166,122,244,.6)',1,true);var u=(t*.42)%1;packet(A,MID,[800,250],u,'lock',ease(.8));packet([800,262],[570,330],[350,262],(u+.5)%1,'lock',ease(.8));
+      spy(570,410,'“x9#Kq@z!Lm7$wP…” 🤷',true,ease(.8));
+      chip(70,380,'🔒 candado ✓','rgba(52,195,143,.15)','#9ff0c8',ease(.3));chip(70,416,'⚠ /index.html obligatorio','rgba(255,201,40,.13)',WARN,ease(2.4));chip(70,452-0,'⛔ sin dominio propio','rgba(255,107,107,.15)','#ffb0b0',ease(3.6));
+      chip(570,58,'2 · enlace directo de S3  ·  como el mockup de FONEEDAM','rgba(255,201,40,.13)',WARN,ease(.2),true);return;}
+    /* ---------- paso 3: forma 3 ---------- */
+    if(st===3){var cfa=ease(.3),cert=ease(.9),cl=ease(1.5,.8),oac=ease(2.0),edge=ease(2.6);
+      browser(30,150,280,210,'https://tiendalaura.com','secure',1,true);
+      cfront(520,250,54,cfa);bucket(880,195,110,cl,1,'');chip(880,346,cl>.5?'🔒 privada':'','rgba(52,195,143,.15)','#9ff0c8',cl,true);
+      /* certificado */
+      if(cert>0){c.save();c.globalAlpha*=cert;shadow(function(){c.fillStyle='#fffbeb';NetScene.rr(c,430,96-12*(1-cert),180,64,10);c.fill();},18);c.strokeStyle='#d97706';c.lineWidth=1.5;NetScene.rr(c,436,102-12*(1-cert),168,52,7);c.stroke();c.restore();
+        V.tx(c,'📜 certificado',520,122-12*(1-cert),11.5,'#92400e','center',800,cert);V.tx(c,'www.tiendalaura.com · ACM',520,142-12*(1-cert),10.5,'#78350f','center',700,cert,M);}
+      road([310,255],[410,232],[466,250],'rgba(52,195,143,.7)',cfa,true);road([574,250],[680,232],[822,240],'rgba(166,122,244,.7)',oac,true);
+      if(oac>0){V.tx(c,'🔑 OAC',700,220,13,WARN,'center',800,oac);}
+      var u=(t*.5)%1;packet([310,255],[410,232],[466,250],u,'ok',cfa);packet([574,250],[680,232],[822,240],u,'lock',oac);
+      /* puntos del mundo */
+      if(edge>0){for(var k=0;k<14;k++){var an=Math.PI*(1.08+k*.06),rx=520+Math.cos(an)*230,ry=430+Math.sin(an)*120;var pul=.5+.5*Math.sin(t*3+k);c.save();c.globalAlpha*=edge*(.5+.5*pul);c.fillStyle=CF;c.shadowColor=CF;c.shadowBlur=10;c.beginPath();c.arc(rx,ry,3.5,0,7);c.fill();c.restore();}
+        V.tx(c,'600+ puntos en el mundo',520,446,12,'#d8c7ff','center',800,edge);}
+      /* robot directo */
+      var r=f(3.2,1.4);if(r>0){V.tx(c,'🤖',720,420,26,'#fff','center',400,Math.min(1,r*3));var rb=r<.6?r/.6:1-(r-.6)/.4*.6;var q=[720+(840-720)*rb,410+(300-410)*rb];c.save();c.fillStyle=BAD;c.shadowColor=BAD;c.shadowBlur=14;c.beginPath();c.arc(q[0],q[1],7,0,7);c.fill();c.restore();
+        if(r>.55)chip(610,330,'403 · acceso negado','rgba(255,107,107,.18)','#ffb0b0',Math.min(1,(r-.55)*4),true);}
+      chip(520,40,'3 · CloudFront + bodega privada','rgba(52,195,143,.15)','#9ff0c8',ease(.1),true);return;}
+    /* ---------- paso 4: comparación ---------- */
+    if(st===4){var cols=[['1 · sitio web S3',BAD],['2 · enlace directo',WARN],['3 · CloudFront',GOOD]],rows=[['candado HTTPS',[0,1,1],.6],['bodega privada',[0,0,1],1.0],['dominio propio con candado',[0,0,1],1.4],['abre sin /index.html',[1,0,1],1.8],['rápida en todo el mundo',[0,0,1],2.2]];
+      var g3=ease(.3);c.save();c.globalAlpha*=g3;c.shadowColor=GOOD;c.shadowBlur=26;c.fillStyle='rgba(52,195,143,.10)';NetScene.rr(c,756,40,210,330,16);c.fill();c.restore();
+      cols.forEach(function(k,i){V.tx(c,k[0],440+i*218,72,14,k[1],'center',800,1);});
+      rows.forEach(function(r,j){var a=ease(r[2]),y=110+j*52;c.save();c.globalAlpha*=a;c.fillStyle='rgba(255,255,255,.04)';NetScene.rr(c,30,y-26,940,44,10);c.fill();c.restore();V.tx(c,r[0],50,y+2,14,'#fff','left',700,a);
+        r[1].forEach(function(ok,i){var x=440+i*218,sc=E.back(f(r[2]+.1+i*.08,.45));if(!(sc>0))return;c.save();c.globalAlpha*=Math.min(1,sc);c.translate(x,y-4);c.scale(sc,sc);c.fillStyle=ok?'rgba(52,195,143,.2)':'rgba(255,107,107,.18)';c.beginPath();c.arc(0,0,14,0,7);c.fill();
+          c.strokeStyle=ok?GOOD:BAD;c.lineWidth=3;c.lineCap='round';c.beginPath();if(ok){c.moveTo(-6,0);c.lineTo(-1,5);c.lineTo(7,-5);}else{c.moveTo(-5,-5);c.lineTo(5,5);c.moveTo(5,-5);c.lineTo(-5,5);}c.stroke();c.restore();});});
+      chip(500,404,'Amplify Hosting y Vercel (FONEEDAM) hacen la forma 3 por ti','rgba(166,122,244,.15)','#d8c7ff',ease(2.8),true);return;}
+    /* ---------- paso 5: la prueba del laboratorio ---------- */
+    var a1=ease(.3),a2=ease(1.4);browser(60,90,380,250,'https://d1abc23xyz.cloudfront.net','secure',a1,true);chip(250,360,'✓ 200 · con candado','rgba(52,195,143,.18)','#9ff0c8',a1,true);
+    if(a2>0){c.save();c.globalAlpha*=a2;shadow(function(){c.fillStyle='#f6f8fb';NetScene.rr(c,560,90,380,250,14);c.fill();},28);c.fillStyle='#e5e9f0';NetScene.rr(c,560,90,380,34,14);c.fill();c.fillRect(560,110,380,14);c.restore();
+      V.tx(c,'mi-web-….s3.us-east-1.amazonaws.com/index.html',580,112,9.5,'#334155','left',600,a2,M);
+      ['<Error>','  <Code>AccessDenied</Code>','  <Message>Access Denied</Message>','</Error>'].forEach(function(l,i){V.tx(c,l,590,170+i*26,13,i===1?'#dc2626':'#475569','left',700,a2,M);});
+      chip(750,360,'✓ 403 · la bodega está cerrada','rgba(52,195,143,.18)','#9ff0c8',a2,true);}
+    V.tx(c,'las dos cosas = quedó perfecta 🎉',500,440,17,WARN,'center',800,ease(2.4));
   });
   </script>
 </section>
