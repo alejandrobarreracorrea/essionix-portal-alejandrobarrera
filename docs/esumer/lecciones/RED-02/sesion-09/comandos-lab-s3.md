@@ -17,6 +17,32 @@ aws s3 rb "s3://$b" --force
 ```
 > El enlace del `presign` funciona 5 minutos; después dice AccessDenied.
 
+**LAB A · Consola: tu web a clics, como el mockup de FONEEDAM (forma 2: bucket público + enlace directo)**
+1. Consola → **S3** → **Crear bucket** → nombre `web-laura-TUNOMBRE-123` · región **us-east-1**.
+2. En *Configuración de bloqueo de acceso público*: **desmarca “Bloquear todo el acceso público”** → marca “Reconozco…” → **Crear bucket**.
+3. Entra al bucket → **Cargar** → **Agregar archivos** → `index.html` → **Cargar**.
+4. **Permisos** → **Política del bucket** → **Editar** → pega (cambia el nombre) → **Guardar cambios**:
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Sid": "LecturaPublica",
+    "Effect": "Allow",
+    "Principal": "*",
+    "Action": "s3:GetObject",
+    "Resource": "arn:aws:s3:::web-laura-TUNOMBRE-123/*"
+  }]
+}
+```
+5. Clic en `index.html` → copia la **URL del objeto** → ábrela (🔒 200). Bórrale `/index.html` y recarga → **403 AccessDenied**.
+6. **Limpieza:** selecciona el bucket → **Vaciar** (escribe *borrar de forma permanente*) → **Eliminar** (escribe el nombre).
+
+> Por qué “forma 2”: tiene candado, pero el bucket queda público, hay que escribir /index.html y no sirve con dominio propio. La forma correcta es el LAB B (Terraform: CloudFront + bucket privado).
+
+---
+
+**LAB B · Terraform (forma 3)**
+
 **Paso 2 · Tu web en S3 con HTTPS (Terraform)**
 ```powershell
 mkdir $HOME\mi-web-s3

@@ -283,7 +283,8 @@ ul.clean li:first-child { border-top:0; }
     <li><span class="t">Capítulo 2 · Archivos<small>la carpeta compartida · permisos · EFS y FSx</small></span><span class="m">concepto</span></li>
     <li><span class="t">Capítulo 3 · Objetos<small>la bodega por internet · S3 · clases y precios · seguridad</small></span><span class="m">concepto</span></li>
     <li><span class="t">El final: el mapa, el reto y la web de Laura<small>¿cuál escoges? · CloudFront + certificado HTTPS</small></span><span class="m">concepto</span></li>
-    <li><span class="t">LAB: S3 con la CLI y tu web con Terraform<small>permisos · aws s3 · terraform apply · prueba del 403 · destroy</small></span><span class="m">lab</span></li>
+    <li><span class="t">LAB A · Consola: tu web a clics, como el mockup de FONEEDAM<small>bucket público · política · enlace directo · 403 sin /index.html · borrar</small></span><span class="m">lab</span></li>
+    <li><span class="t">LAB B · Terraform: la forma correcta<small>permisos · aws s3 · CloudFront + bucket privado · prueba del 403 · destroy</small></span><span class="m">lab</span></li>
   </ul>
 </section>
 
@@ -1121,11 +1122,7 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   </script>
 </section>
 
-<!-- 13 · LAB 2: TU WEB CON TERRAFORM -->
-<section class="slide" id="labS2">
-  <span class="k"><span class="act-chip">🧪 PASO 2</span> Tu web en S3 con HTTPS, desde Terraform</span>
-  <h2 style="font-size:clamp(1.15rem,2.3vw,1.6rem)">Copia, guarda y <span class="grad">terraform apply</span></h2>
-  <style>
+<style>
   .snips{display:flex;flex-direction:column;gap:10px;max-height:58vh;overflow:auto}
   .snip{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#0b1a2b}
   .snip .top{display:flex;justify-content:space-between;align-items:center;gap:8px;background:#10243a;padding:6px 10px;font-size:.78rem;color:#9fd8f0;font-weight:700}
@@ -1141,6 +1138,159 @@ window.wireSnips=window.wireSnips||function(sec){sec.querySelectorAll('.snip').f
     function fb(){var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(_){}ta.remove();ok();}
     if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(txt).then(ok,fb);else fb();};});};
 </script>
+<!-- 12b · LAB CONSOLA: TU WEB EN S3 A CLICS (COMO EL MOCKUP DE FONEEDAM) -->
+<section class="slide" id="labC">
+  <span class="k"><span class="act-chip">🧪 LAB A · CONSOLA</span> Tu web en S3 a clics, como el mockup de FONEEDAM · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.15rem,2.3vw,1.6rem);margin-bottom:4px">Forma 2 a mano: <span class="grad">bucket público + enlace directo</span></h2>
+  <div class="scene"><canvas aria-label="Laboratorio en la consola de S3: crear bucket, desbloquear acceso público, subir index.html, política de lectura pública, abrir el enlace con /index.html y borrar todo"></canvas></div>
+  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
+  <script>
+  NetScene.make('labC',1000,480,[
+    '<b>Paso 1 · Crear el bucket.</b> {@.3}Consola → busca <b>S3</b> → <b>Crear bucket</b>. {@1.2}Nombre único en el mundo, por ejemplo <b>web-laura-TUNOMBRE-123</b>, {@2.2}región <b>us-east-1 (Norte de Virginia)</b>.',
+    '<b>Paso 2 · Quitar el candado (solo para este lab).</b> {@.3}Baja a <b>“Configuración de bloqueo de acceso público”</b> {@1.2}y <b>desmarca “Bloquear todo el acceso público”</b>. {@2.2}AWS te pide confirmar: marca <b>“Reconozco…”</b> {@3.0}→ <b>Crear bucket</b>. Esto es exactamente lo que se hizo en el mockup de FONEEDAM.',
+    '<b>Paso 3 · Subir la página.</b> {@.3}Entra al bucket → <b>Cargar</b> → <b>Agregar archivos</b> {@1.2}→ escoge tu <b>index.html</b> (el de la clase, con tu nombre) {@2.2}→ <b>Cargar</b>. Ya está adentro… pero todavía nadie puede verla.',
+    '<b>Paso 4 · La política pública.</b> {@.3}Pestaña <b>Permisos</b> → <b>Política del bucket</b> → <b>Editar</b>. {@1.2}Pega la política que te paso por el chat: <b>“Principal”: “*”</b> {@2.2}significa <b>cualquier persona de internet</b> puede leer. {@3.0}<b>Guardar cambios</b>. Aparece la etiqueta roja <b>“Público”</b>.',
+    '<b>Paso 5 · Ábrela.</b> {@.3}Clic en <b>index.html</b> → copia la <b>URL del objeto</b>. {@1.2}Ábrela: <b>¡candado y tu página!</b> {@2.2}Ahora borra <b>/index.html</b> del final y recarga: {@3.0}<b>403 AccessDenied</b>. Esa es la forma 2: funciona, pero con sus límites.',
+    '<b>Paso 6 · Limpieza.</b> {@.3}Un bucket público no se deja olvidado. {@1.0}Selecciónalo → <b>Vaciar</b> → escribe <b>borrar de forma permanente</b>. {@2.0}Luego <b>Eliminar</b> → escribe el nombre del bucket. {@2.8}Ahora sí: hagamos <b>la forma 3</b>, la correcta, con Terraform.'
+  ],function(c,s){
+    var V=Viz,K=Kit,E=s.E,st=s.step,t=s.t,M='"JetBrains Mono",monospace',F='"Open Sans","Helvetica Neue",Arial,sans-serif';V.bg(c,1000,480);c.shadowBlur=0;c.shadowColor='transparent';c.shadowOffsetY=0;var P='Poppins,sans-serif';
+    function f(d,u){return Math.max(0,Math.min(1,(t-d)/(u||.6)));}function ea(d,u){return E.io(f(d,u));}
+    var R=NetScene.rr;function tx(s1,x,y,sz,col,al,w,ff){c.save();c.shadowBlur=0;c.shadowColor='transparent';c.font=(w||400)+' '+sz+'px '+(ff||F);c.fillStyle=col;c.textAlign=al||'left';c.fillText(s1,x,y);c.restore();}
+    /* ventana del navegador + consola AWS */
+    var BX=40,BY=20,BW=920,BH=440;
+    function chrome(url){K.shadow(c,function(){c.fillStyle='#fff';R(c,BX,BY,BW,BH,12);c.fill();},30);c.save();R(c,BX,BY,BW,BH,12);c.clip();
+      c.fillStyle='#dee1e6';c.fillRect(BX,BY,BW,30);c.fillStyle='#fff';R(c,BX+14,BY+6,250,30,8);c.fill();c.fillStyle='#ff9900';R(c,BX+26,BY+13,14,14,3);c.fill();
+      ['#ff5f57','#febc2e','#28c840'].forEach(function(k,i){c.fillStyle=k;c.beginPath();c.arc(BX+BW-70+i*18,BY+16,5,0,7);c.fill();});
+      c.fillStyle='#fff';c.fillRect(BX,BY+30,BW,30);c.fillStyle='#f1f3f4';R(c,BX+50,BY+35,BW-100,20,10);c.fill();c.restore();
+      tx('S3 · Consola de AWS',BX+48,BY+25,11,'#202124','left',600);tx('🔒 '+url,BX+62,BY+49,10.5,'#3c4043');}
+    function header(){c.fillStyle='#232f3e';c.fillRect(BX,BY+60,BW,32);tx('aws',BX+16,BY+82,17,'#fff','left',800,'Arial');c.strokeStyle='#ff9900';c.lineWidth=2;c.beginPath();c.moveTo(BX+17,BY+86);c.quadraticCurveTo(BX+32,BY+92,BX+46,BY+84);c.stroke();
+      c.fillStyle='#fff';R(c,BX+80,BY+67,300,19,4);c.fill();tx('🔍  Buscar',BX+90,BY+81,10.5,'#5f6b7a');tx('Norte de Virginia ▾',BX+BW-110,BY+81,11,'#fff','right',600);tx('tu-usuario ▾',BX+BW-16,BY+81,11,'#fff','right',600);}
+    function body(){c.fillStyle='#f4f4f4';c.fillRect(BX,BY+92,BW,BH-92);}
+    function btn(x,y,w,l,primary,down,danger){c.fillStyle=primary?(danger?(down?'#b91c1c':'#d13212'):(down?'#ec7211':'#ff9900')):'#fff';R(c,x,y,w,28,14);c.fill();if(!primary){c.strokeStyle='#0972d3';c.lineWidth=2;c.stroke();}tx(l,x+w/2,y+19,12,primary?(danger?'#fff':'#000716'):'#0972d3','center',800);}
+    function input(x,y,w,v,focus,ph){c.fillStyle='#fff';R(c,x,y,w,26,8);c.fill();c.strokeStyle=focus?'#0972d3':'#8c8c94';c.lineWidth=focus?2:1;c.stroke();tx(v||ph||'',x+10,y+17,11.5,v?'#000716':'#8c8c94','left',400,v&&v.indexOf('{')<0?F:M);}
+    function chk(x,y,on,l){c.fillStyle=on?'#0972d3':'#fff';R(c,x,y,14,14,3);c.fill();c.strokeStyle=on?'#0972d3':'#8c8c94';c.lineWidth=1.5;c.stroke();if(on){c.strokeStyle='#fff';c.lineWidth=2;c.beginPath();c.moveTo(x+3,y+7);c.lineTo(x+6,y+10);c.lineTo(x+11,y+3);c.stroke();}tx(l,x+22,y+12,11,'#000716');}
+    function cardW(x,y,w,h){c.fillStyle='#fff';R(c,x,y,w,h,10);c.fill();c.strokeStyle='#e9ebed';c.lineWidth=1;c.stroke();}
+    function cursor(P,T,down){var k=0;while(k<T.length-2&&t>T[k+1])k++;var u=Math.min(1,Math.max(0,(t-T[k])/(T[k+1]-T[k]))),e=E.io(u),x=P[k][0]+(P[k+1][0]-P[k][0])*e,y=P[k][1]+(P[k+1][1]-P[k][1])*e;
+      c.save();c.translate(x,y);if(down)c.scale(.85,.85);c.fillStyle='#fff';c.strokeStyle='#000';c.lineWidth=1.4;c.beginPath();c.moveTo(0,0);c.lineTo(0,20);c.lineTo(5,15);c.lineTo(9,24);c.lineTo(13,22);c.lineTo(9,14);c.lineTo(16,14);c.closePath();c.fill();c.stroke();c.restore();}
+    function typed(str,d,u){return str.slice(0,Math.floor(str.length*f(d,u||1)));}
+    function crumb(s1){tx(s1,BX+20,BY+116,10.5,'#0972d3');}
+    /* ---------- paso 1 ---------- */
+    if(st===0){chrome('us-east-1.console.aws.amazon.com/s3/bucket/create');header();body();crumb('Amazon S3  ›  Buckets  ›  Crear bucket');tx('Crear bucket',BX+20,BY+146,19,'#000716','left',800);
+      cardW(BX+20,BY+160,BW-40,230);tx('Configuración general',BX+36,BY+184,13,'#000716','left',800);
+      tx('Región de AWS',BX+36,BY+210,11,'#000716','left',700);input(BX+36,BY+216,380,t>2.2?'EE.UU. Este (Norte de Virginia) us-east-1':'',false,'Seleccione una región');
+      tx('Nombre del bucket',BX+36,BY+262,11,'#000716','left',700);input(BX+36,BY+268,380,typed('web-laura-tunombre-123',1.2,1),t>1.2&&t<2.2,'mi-bucket');
+      tx('Debe ser único en todo el mundo. Solo minúsculas, números, puntos y guiones.',BX+36,BY+310,10,'#5f6b7a');
+      K.chip(c,BX+BW-170,BY+300,'💡 nombre único en el mundo','#FFC928',ea(1.6),true);
+      cursor([[700,470],[300,300],[300,300],[300,250],[300,250]],[0,1,2.1,2.4,9],t>2.1&&t<2.3);return;}
+    /* ---------- paso 2 ---------- */
+    if(st===1){chrome('us-east-1.console.aws.amazon.com/s3/bucket/create');header();body();crumb('Amazon S3  ›  Buckets  ›  Crear bucket');
+      cardW(BX+20,BY+104,BW-40,276);tx('Configuración de bloqueo de acceso público para este bucket',BX+36,BY+130,13,'#000716','left',800);
+      var off=t>1.2;chk(BX+36,BY+146,!off,'Bloquear todo el acceso público');
+      ['…a través de nuevas ACL','…a través de cualquier ACL','…a través de nuevas políticas públicas','…a través de cualquier política pública'].forEach(function(l,i){chk(BX+60,BY+172+i*22,!off,'Bloquear el acceso público '+l);});
+      var wa=ea(1.8);if(wa>0){c.save();c.globalAlpha*=wa;c.fillStyle='#fffbeb';R(c,BX+36,BY+266,BW-72,70,8);c.fill();c.strokeStyle='#d97706';c.lineWidth=1.5;c.stroke();c.restore();
+        tx('⚠️ Desactivar el bloqueo de todo el acceso público podría hacer que este bucket y sus objetos se vuelvan públicos.',BX+50,BY+288,10.5,'#7c2d12','left',600);chk(BX+50,BY+302,t>3,'Reconozco que la configuración actual podría hacer que este bucket y sus objetos se vuelvan públicos.');}
+      btn(BX+BW-140,BY+BH-46,120,'Crear bucket',true,t>3.5&&t<3.8);
+      K.chip(c,BX+BW-200,BY+112,'⚠ como el mockup de FONEEDAM','#ff6b6b',ea(3.2),true);
+      cursor([[700,470],[86,186],[86,186],[96,342],[96,342],[880,440],[880,440]],[0,1,1.3,2.9,3.1,3.5,9],(t>1.2&&t<1.35)||(t>3&&t<3.15)||(t>3.5&&t<3.8));return;}
+    /* ---------- paso 3 ---------- */
+    if(st===2){chrome('us-east-1.console.aws.amazon.com/s3/upload/web-laura-tunombre-123');header();body();crumb('Amazon S3  ›  Buckets  ›  web-laura-tunombre-123  ›  Cargar');tx('Cargar',BX+20,BY+146,19,'#000716','left',800);
+      cardW(BX+20,BY+160,BW-40,200);tx('Archivos y carpetas',BX+36,BY+184,13,'#000716','left',800);btn(BX+BW-300,BY+170,140,'Agregar archivos',false,t>.9&&t<1.1);
+      var a=ea(1.2);if(a>0){c.save();c.globalAlpha*=a;c.fillStyle='#f2f8fd';c.fillRect(BX+36,BY+214,BW-72,30);c.restore();tx('📄 index.html',BX+50,BY+234,12,'#000716','left',700);tx('text/html · 1,2 KB',BX+BW-60,BY+234,11,'#5f6b7a','right');}
+      var u=f(2.2,1);if(u>0){c.fillStyle='#e9ebed';R(c,BX+36,BY+270,BW-72,10,5);c.fill();c.fillStyle=u>=1?'#037f0c':'#0972d3';R(c,BX+36,BY+270,(BW-72)*u,10,5);c.fill();if(u>=1){c.fillStyle='#037f0c';R(c,BX+36,BY+296,BW-72,32,6);c.fill();tx('✓ Carga correcta: 1 archivo, 1,2 KB',BX+52,BY+317,12,'#fff','left',700);}}
+      btn(BX+BW-140,BY+BH-46,120,'Cargar',true,t>2&&t<2.3);
+      if(t>3.2)K.chip(c,BX+BW/2,BY+BH-40,'adentro… pero nadie puede verla todavía','#FFC928',ea(3.2),true);
+      cursor([[700,470],[720,205],[720,205],[880,440],[880,440]],[0,.8,1.9,2.1,9],(t>.9&&t<1.1)||(t>2&&t<2.3));return;}
+    /* ---------- paso 4 ---------- */
+    if(st===3){chrome('us-east-1.console.aws.amazon.com/s3/bucket/web-laura-tunombre-123/property/policy/edit');header();body();crumb('Amazon S3  ›  Buckets  ›  web-laura-tunombre-123  ›  Editar política del bucket');tx('Política del bucket',BX+20,BY+146,19,'#000716','left',800);
+      c.fillStyle='#0f1b2a';R(c,BX+20,BY+160,BW-40,190,8);c.fill();
+      var L=['{','  "Version": "2012-10-17",','  "Statement": [{','    "Effect": "Allow",','    "Principal": "*",','    "Action": "s3:GetObject",','    "Resource": "arn:aws:s3:::web-laura-tunombre-123/*"','  }]','}'],n=Math.floor(L.length*f(1.2,1));
+      L.slice(0,n).forEach(function(l,i){tx(l,BX+36,BY+182+i*18,12,i===4&&t>2.2?'#FFC928':'#e6edf3','left',i===4?700:400,M);});
+      if(t>2.2)K.chip(c,BX+BW-150,BY+244,'← cualquier persona de internet','#FFC928',ea(2.2),true);
+      btn(BX+BW-160,BY+BH-46,140,'Guardar cambios',true,t>3&&t<3.3);
+      if(t>3.4){c.fillStyle='#d13212';R(c,BX+20,BY+BH-44,90,24,12);c.fill();tx('⚠ Público',BX+65,BY+BH-28,11.5,'#fff','center',800);}
+      cursor([[700,470],[480,280],[480,280],[860,440],[860,440]],[0,1,2.8,3,9],t>3&&t<3.3);return;}
+    /* ---------- paso 5 ---------- */
+    if(st===4){var bad=t>3;var url=bad?'https://web-laura-tunombre-123.s3.us-east-1.amazonaws.com/':'https://web-laura-tunombre-123.s3.us-east-1.amazonaws.com/index.html';
+      K.shadow(c,function(){c.fillStyle='#fff';R(c,BX,BY,BW,BH,12);c.fill();},30);c.fillStyle='#dee1e6';c.fillRect(BX,BY,BW,30);c.fillStyle='#fff';c.fillRect(BX,BY+30,BW,32);c.fillStyle='#f1f3f4';R(c,BX+50,BY+36,BW-100,22,11);c.fill();
+      K.lock(c,BX+66,BY+48,12,1,'#16a34a',1);tx(url,BX+80,BY+52,11,'#334155','left',600,M);
+      if(t>2.2&&t<3){var sel=(t-2.2)/.8;c.fillStyle='rgba(9,114,211,.25)';var w0=c.measureText?0:0;c.save();c.font='600 11px '+M;var wf=c.measureText('https://web-laura-tunombre-123.s3.us-east-1.amazonaws.com/').width,wi=c.measureText('index.html').width;c.restore();c.fillRect(BX+80+wf,BY+40,wi*Math.min(1,sel),16);}
+      if(!bad){var a=ea(1.2);c.save();c.globalAlpha*=a;var g=c.createLinearGradient(BX,BY+62,BX+BW,BY+BH);g.addColorStop(0,'#0e2841');g.addColorStop(1,'#1d4f80');c.fillStyle=g;c.fillRect(BX,BY+62,BW,BH-62);c.restore();
+        tx('🔒',BX+BW/2,BY+200,44,'#fff','center',400);tx('Mi web en S3',BX+BW/2,BY+256,26,'#fff','center',800,P);tx('Hecha por: TU NOMBRE',BX+BW/2,BY+290,14,'#cfe3f1','center',600);
+        K.chip(c,BX+BW/2,BY+330,'✓ candado y tu página (200)','#34c38f',a,true);}
+      else{c.fillStyle='#fafafa';c.fillRect(BX,BY+62,BW,BH-62);['<?xml version="1.0" encoding="UTF-8"?>','<Error>','  <Code>AccessDenied</Code>','  <Message>Access Denied</Message>','</Error>'].forEach(function(l,i){tx(l,BX+40,BY+110+i*24,13,i===2?'#dc2626':'#475569','left',600,M);});
+        K.chip(c,BX+BW/2,BY+290,'sin /index.html → 403: esta forma no busca la página sola','#ff6b6b',ea(3.2),true);}
+      return;}
+    /* ---------- paso 6 ---------- */
+    chrome('us-east-1.console.aws.amazon.com/s3/buckets');header();body();crumb('Amazon S3  ›  Buckets');tx('Buckets de uso general',BX+20,BY+146,19,'#000716','left',800);
+    var gone=t>2.6;cardW(BX+20,BY+160,BW-40,140);c.fillStyle='#f4f4f4';c.fillRect(BX+30,BY+172,BW-60,24);tx('Nombre',BX+60,BY+188,11,'#000716','left',700);tx('Región',BX+460,BY+188,11,'#000716','left',700);tx('Acceso',BX+680,BY+188,11,'#000716','left',700);
+    if(!gone){c.save();c.globalAlpha*=1-f(2.2,.4);c.fillStyle='#f2f8fd';c.fillRect(BX+30,BY+198,BW-60,30);c.restore();chk(BX+38,BY+206,t>.6,'');tx('web-laura-tunombre-123',BX+60,BY+218,11.5,'#0972d3','left',700);tx('us-east-1',BX+460,BY+218,11,'#000716');tx('⚠ Público',BX+680,BY+218,11,'#d13212','left',700);}
+    else tx('No hay buckets públicos ✓',BX+BW/2,BY+240,14,'#037f0c','center',800);
+    btn(BX+BW-310,BY+110,90,'Vaciar',false,t>.9&&t<1.1);btn(BX+BW-210,BY+110,90,'Eliminar',false,t>1.9&&t<2.1);
+    var d=ea(1.1);if(d>0&&!gone){c.save();c.globalAlpha*=d;c.fillStyle='#fff';R(c,BX+200,BY+320,BW-400,90,10);c.fill();c.strokeStyle='#d13212';c.stroke();c.restore();tx(t<2?'Para confirmar, escriba: borrar de forma permanente':'Para confirmar, escriba el nombre del bucket',BX+BW/2,BY+346,11.5,'#000716','center',700);input(BX+300,BY+356,BW-600,t<2?typed('borrar de forma permanente',1.2,.8):typed('web-laura-tunombre-123',2.1,.5),true,'');}
+    if(gone)K.chip(c,BX+BW/2,BY+340,'➡ ahora sí: la forma 3, con Terraform','#34c38f',ea(2.8),true);
+    cursor([[700,470],[86,212],[86,212],[700,135],[700,135],[790,135],[790,135]],[0,.5,.7,.9,1.8,1.9,9],(t>.6&&t<.75)||(t>.9&&t<1.1)||(t>1.9&&t<2.1));
+  });
+  </script>
+</section>
+
+<!-- 12c · LAB CONSOLA: LO QUE SE COPIA AL CHAT -->
+<section class="slide" id="labC2">
+  <span class="k"><span class="act-chip">🧪 LAB A · CONSOLA</span> Lo que se copia al chat</span>
+  <h2 style="font-size:clamp(1.15rem,2.3vw,1.6rem)">Tu página y la <span class="grad">política pública</span></h2>
+  <div class="grid2" style="align-items:start">
+    <ul class="cmdlist">
+      <li><span>Consola → <b>S3</b> → <b>Crear bucket</b></span><span>nombre <code>web-laura-TUNOMBRE-123</code> · <b>us-east-1</b></span></li>
+      <li><span>Desmarca <b>Bloquear todo el acceso público</b></span><span>marca “Reconozco…” → <b>Crear bucket</b></span></li>
+      <li><span>Entra al bucket → <b>Cargar</b></span><span>sube <b>index.html</b> (cambia TU NOMBRE)</span></li>
+      <li><span><b>Permisos</b> → <b>Política del bucket</b> → <b>Editar</b></span><span>pega la política (cambia el nombre del bucket) → <b>Guardar</b></span></li>
+      <li><span>Clic en <b>index.html</b> → <b>URL del objeto</b></span><span>ábrela: 🔒 200 · sin <b>/index.html</b>: 403</span></li>
+      <li><span>Al terminar: <b>Vaciar</b> y <b>Eliminar</b></span><span>un bucket público no se deja olvidado</span></li>
+    </ul>
+    <div class="snips">
+      <div class="snip"><div class="top"><span>Política del bucket (cambia web-laura-TUNOMBRE-123)</span><button type="button">📋 Copiar</button></div><pre>{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Sid": "LecturaPublica",
+    "Effect": "Allow",
+    "Principal": "*",
+    "Action": "s3:GetObject",
+    "Resource": "arn:aws:s3:::web-laura-TUNOMBRE-123/*"
+  }]
+}</pre></div>
+      <div class="snip"><div class="top"><span>index.html (guárdalo en tu PC y súbelo)</span><button type="button">📋 Copiar</button></div><pre>&lt;!doctype html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;title&gt;Mi web en S3&lt;/title&gt;
+  &lt;style&gt;
+    body { margin:0; min-height:100vh; display:grid; place-items:center; font-family:system-ui,sans-serif;
+           background:linear-gradient(135deg,#0e2841,#1d4f80); color:#fff; text-align:center; }
+    h1 { font-size:2.6rem; margin:0 0 .4rem; }
+    p  { font-size:1.15rem; opacity:.9; }
+    .candado { font-size:4rem; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;main&gt;
+    &lt;div class=&quot;candado&quot;&gt;🔒&lt;/div&gt;
+    &lt;h1&gt;Hola desde S3 + CloudFront&lt;/h1&gt;
+    &lt;p&gt;Esta página vive en un bucket privado y llega a ti por HTTPS.&lt;/p&gt;
+    &lt;p&gt;&lt;b&gt;Hecha por:&lt;/b&gt; TU NOMBRE&lt;/p&gt;
+  &lt;/main&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre></div>
+    </div>
+  </div>
+  <p class="sub" style="margin-top:8px">Checkpoint ✅ al chat: pantallazo de tu página con el <b>candado</b> y del <b>403</b> sin /index.html. Luego <b>borra el bucket</b>.</p>
+  <script>wireSnips(document.getElementById('labC2'));</script>
+</section>
+
+<!-- 13 · LAB 2: TU WEB CON TERRAFORM -->
+<section class="slide" id="labS2">
+  <span class="k"><span class="act-chip">🧪 LAB B · TERRAFORM</span> La forma 3: tu web en S3 con HTTPS, desde Terraform</span>
+  <h2 style="font-size:clamp(1.15rem,2.3vw,1.6rem)">Copia, guarda y <span class="grad">terraform apply</span></h2>
+  
 
   <div class="grid2" style="align-items:start;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)">
     <ul class="cmdlist">
@@ -1302,7 +1452,7 @@ terraform apply</pre></div>
 
 <!-- 14 · LAB 3: PRUEBA Y DESTROY -->
 <section class="slide" id="labS3">
-  <span class="k"><span class="act-chip">🧪 PASO 3</span> La prueba del candado y el destroy</span>
+  <span class="k"><span class="act-chip">🧪 LAB B · TERRAFORM</span> La prueba del candado y el destroy</span>
   <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem)">¿Quedó <span class="grad">bien protegida</span>?</h2>
   <div class="grid2" style="align-items:start">
     <div class="demo term lab" id="labS3t" style="min-height:300px"></div>
