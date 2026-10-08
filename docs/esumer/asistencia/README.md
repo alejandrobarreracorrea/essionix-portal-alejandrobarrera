@@ -27,6 +27,8 @@ Se filtra por **Grupo** + **N° de clase** + **Marca temporal** (la hora delata 
 | 5 | 2026-09-23 | Redes AWS a fondo (VPC/subredes/IGW/NAT/EIP) + montar servidor web (NGINX + index.html, LAB) | 19 | 5 | [RED-02/clase-05.md](RED-02/clase-05.md) |
 | 6 | 2026-09-25 | Red empresarial: IPv4, RFC 1918, /16–/28, subnetting, LAB VPC + subredes + IGW + EC2 | 17 | 7 | [RED-02/clase-06.md](RED-02/clase-06.md) |
 | 7 | 2026-09-30 | Virtualización: data centers, hipervisor/Nitro, Docker, x86/ARM, snapshot y AMI (LABs) | 19 | 5 | [RED-02/clase-07.md](RED-02/clase-07.md) |
+| 8 | 2026-10-02 | Terraform: API, CLI de AWS, llave IAM, init/plan/apply/destroy y LAB pyme-vpc + EC2 desde código | 17 | 7 | [RED-02/clase-08.md](RED-02/clase-08.md) |
+| 9 | 2026-10-07 | Almacenamiento: bloque, archivos y objetos (EBS, EFS, FSx, S3, Glacier) y web en S3 por consola y Terraform | 17 | 7 | [RED-02/clase-09.md](RED-02/clase-09.md) |
 
 ## Convenciones
 - Presentes por **# de roster**; ausentes por # + nombre. **Sin correos** (repo público).
