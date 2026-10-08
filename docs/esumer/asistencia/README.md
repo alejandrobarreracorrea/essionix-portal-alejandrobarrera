@@ -16,6 +16,7 @@ Se filtra por **Grupo** + **N° de clase** + **Marca temporal** (la hora delata 
 | 6 | 2026-09-24 | Redes AWS (VPC/subredes/IGW/NAT/EIP) + montar servidor web (NGINX + index.html, LAB) | 32 | 11 | [RED-01/clase-06.md](RED-01/clase-06.md) |
 | 7 | 2026-09-29 | Red empresarial: IPv4, RFC 1918, /16–/28, subnetting, LAB VPC + subredes + IGW + EC2 | 33 | 10 | [RED-01/clase-07.md](RED-01/clase-07.md) |
 | 8 | 2026-10-01 | Cierre de networking (IGW + EC2) + virtualización: data centers, hipervisor/Nitro, Docker, x86/ARM, snapshot y AMI | 33 | 10 | [RED-01/clase-08.md](RED-01/clase-08.md) |
+| 9 | 2026-10-06 | Despliegue moderno: API, CLI de AWS, llave IAM, Terraform (init/plan/apply/destroy) y LAB pyme-vpc + EC2 desde código | 33 | 10 | [RED-01/clase-09.md](RED-01/clase-09.md) |
 
 ## RED-02 (Mié/Vie)
 | Clase | Fecha | Tema | Pres. | Aus. | Registro |
