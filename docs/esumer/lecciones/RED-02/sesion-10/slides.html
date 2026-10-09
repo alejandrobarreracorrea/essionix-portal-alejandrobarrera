@@ -647,6 +647,28 @@ window.wireSnips=window.wireSnips||function(sec){sec.querySelectorAll('.snip').f
   </div>
   <div class="mviz"><canvas data-mu="excel2" aria-label="El archivo crece hasta 50.000 pedidos, tarda en abrir y se daña"></canvas></div>
 </section>
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>1.7</b>parte 1 · Excel vs. base de datos</div>
+    <h2>Un Excel <span class="g">no es una base de datos</span></h2>
+    <div class="mnote"><span>// como</span> la libreta de apuntes vs. el sistema del banco</div>
+    <p class="msub">Excel es una <b>hoja de cálculo</b>: un archivo que una persona abre y edita a mano. Una base de datos la maneja un <b>SGBD</b> (sistema gestor de bases de datos, como MySQL): un programa que <b>guarda, protege y comparte</b> los datos con reglas, permisos y copias, para muchas personas y aplicaciones a la vez.</p>
+    <p class="muse">Excel no es malo: sirve para <b>analizar</b>. Para <b>operar</b> un negocio se necesita un SGBD</p>
+  </div>
+  <div class="mviz"><canvas data-mu="vs" aria-label="Tabla comparativa entre Excel y una base de datos: cantidad de datos, personas a la vez, reglas, relaciones, seguridad, fallas y quién lo usa"></canvas></div>
+</section>
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>1.8</b>parte 1 · ACID</div>
+    <h2>ACID: las 4 promesas <span class="g">de un SGBD</span></h2>
+    <div class="mnote"><span>// como</span> el contrato que firma el banco con tu plata</div>
+    <p class="msub">Un SGBD transaccional (MySQL, PostgreSQL, Oracle…) garantiza <b>ACID</b>: <b>A</b>tomicidad (todo o nada), <b>C</b>onsistencia (siempre cumple las reglas), a<b>I</b>slamiento (dos a la vez no se mezclan) y <b>D</b>urabilidad (lo guardado sobrevive a un apagón). Excel <b>no cumple ninguna</b>: por eso <b>no es una base de datos</b>.</p>
+    <p class="muse">Ojo: algunas NoSQL relajan parte de ACID para escalar a millones (parte 2) y <b>siguen siendo bases de datos</b></p>
+  </div>
+  <div class="mviz"><canvas data-mu="acid4" aria-label="Cuatro tarjetas animadas: atomicidad, consistencia, aislamiento y durabilidad, comparadas con Excel"></canvas></div>
+</section>
+
+
 <section class="slide mu dark sep">
   <div>
     <div class="mtag" style="color:#7f9bb5"><b>Parte 2</b>de 4</div>
@@ -1933,6 +1955,45 @@ S.arqrds=function(c,t){var A=E.out(P(t,.1,.5)),st=Math.floor(Math.max(0,t-1.4)/2
     if(st===1){var q=along(c,pSSH,E.io(u));dot(c,q[0],q[1],6,C.o,1,14)}
     if(st===2){var q2=along(c,pSQL,E.io(u));dot(c,q2[0],q2[1],6,C.o,1,14)}
     if(st===3){var q3=along(c,pBAD,Math.min(1,E.io(u)*1.3));dot(c,q3[0],q3[1],6,C.red,1,12);if(u>.7)pill(c,'TcpTestSucceeded : False',80,392,C.red,E.out(P(u,.7,.2)),{s:9.5,f:FM,f2:'#fff0f0'})}}};
+/* 1.7 · Excel vs base de datos (SGBD) */
+var VS=[['¿Cuántos datos?','máx. 1.048.576 filas por hoja; se pone lento mucho antes','millones o miles de millones de filas'],
+  ['¿Cuántas personas a la vez?','uno edita; los demás se pisan','miles: el motor los pone en fila'],
+  ['¿Reglas para los datos?','se escribe cualquier cosa ("talla: azul")','tipos y reglas: talla solo S, M o L'],
+  ['¿Relaciones?','copiar y pegar nombres en cada hoja','tablas unidas por llaves'],
+  ['¿Seguridad?','quien tiene el archivo lo ve todo','usuarios y permisos por tabla'],
+  ['¿Si algo falla?','archivo dañado, ¿y la copia?','transacciones + copias automáticas'],
+  ['¿Quién lo usa?','una persona, a mano','apps y páginas web, con SQL'],
+  ['¿Cumple ACID?','no: ninguna de las 4 promesas','sí: A · C · I · D (siguiente)']];
+S.vs=function(c,t){var A=E.out(P(t,.1,.5)),x1=150,x2=356,w=194,rh=46,y0=68,hi=t>.6+VS.length*.55+.6?Math.floor((t-(.6+VS.length*.55+.6))/2.2)%VS.length:-1;
+  box(c,x1,14,w,46,{r:12,f:'#e9f4ec',s:rgba('#1f7a45',.5),al:A});gl(c,'sheet',x1+24,37,20,'#1f7a45',A);tx(c,'Excel (hoja de cálculo)',x1+42,37,{s:12.5,w:800,f:FD,c:'#1f7a45',al:A});
+  box(c,x2,14,w,46,{r:12,f:'#e6f2f8',s:rgba(C.p,.5),al:A});gl(c,'db',x2+24,37,20,C.p,A);tx(c,'Base de datos (SGBD)',x2+42,37,{s:12.5,w:800,f:FD,c:C.p,al:A});
+  VS.forEach(function(r,i){var a=E.out(P(t,.6+i*.55,.45));if(a<=0)return;var y=y0+i*rh,on=i===hi,dx=(1-a)*30;
+    if(on){c.save();c.globalAlpha*=a;rr(c,4,y-2,552,rh-2,12);c.fillStyle='rgba(233,113,50,.08)';c.fill();c.strokeStyle=rgba(C.o,.6);c.lineWidth=1.5;c.stroke();c.restore()}
+    wrap(c,r[0],12,y+16,134,15,{s:11.5,w:800,f:FD,c:on?C.o:C.ink,al:a});
+    box(c,x1+dx,y,w,rh-8,{r:10,f:'#fff4f2',s:rgba(C.red,.25),al:a});tx(c,'✕',x1+16+dx,y+(rh-8)/2,{s:13,w:800,a:'center',c:C.red,al:a});wrap(c,r[1],x1+30+dx,y+15,w-38,14,{s:10.5,w:500,c:C.ink,al:a});
+    var b=E.back(P(t,.85+i*.55,.4));if(b>0){var bl=Math.min(1,b);box(c,x2,y,w,rh-8,{r:10,f:'#ecfbf3',s:rgba(C.g,.35),al:bl});tx(c,'✓',x2+16,y+(rh-8)/2,{s:13,w:800,a:'center',c:C.g,al:bl});wrap(c,r[2],x2+30,y+15,w-38,14,{s:10.5,w:600,c:C.ink,al:bl})}});
+  pill(c,'Excel: para analizar y presentar · SGBD: para guardar y operar',280,460,C.p,E.out(P(t,.6+VS.length*.55+.3,.5)),{s:11})};
+/* 1.8 · ACID: las 4 promesas del SGBD */
+S.acid4=function(c,t){var K=[['A','Atomicidad','todo o nada',C.p,'Excel: si se cae a mitad, queda a medias'],['C','Consistencia','siempre cumple las reglas',C.t,'Excel: acepta "talla: azul"'],['I','Aislamiento','dos a la vez no se mezclan',C.o,'Excel: el último que guarda gana'],['D','Durabilidad','lo guardado sobrevive','#12a15a','Excel: sin guardar, se pierde']];
+  K.forEach(function(k,i){var a=E.back(P(t,.3+i*.5,.5));if(a<=0)return;var al=Math.min(1,a),x=10+(i%2)*275,y=10+Math.floor(i/2)*232,w=265,h=222,u=((t-.8-i*.5)%4+4)%4,col=k[3];
+    box(c,x,y,w,h,{r:16,al:al,sh:'rgba(14,40,65,.08)'});c.save();c.globalAlpha*=al;rr(c,x+14,y+14,44,44,12);c.fillStyle=rgba(col,.14);c.fill();c.restore();
+    tx(c,k[0],x+36,y+37,{s:26,w:800,a:'center',f:FD,c:col,al:al});tx(c,k[1],x+70,y+30,{s:15,w:800,f:FD,al:al});tx(c,k[2],x+70,y+49,{s:11,w:600,c:C.mut,al:al});
+    var bx=x+14,by=y+70,bw=w-28,bh=100;box(c,bx,by,bw,bh,{r:12,f:C.soft,s:false,al:al});
+    if(t>.8+i*.5){
+    if(i===0){/* transferencia */var fail=Math.floor((t-.8)/4)%2===0,k1=E.io(P(u,.3,.8)),bk=fail?E.io(P(u,1.6,.7)):0;tx(c,'Camila',bx+34,by+24,{s:10.5,w:700,a:'center',f:FD,al:al});tx(c,'Pedro',bx+bw-34,by+24,{s:10.5,w:700,a:'center',f:FD,al:al});
+      tx(c,'$'+(500-100*k1+100*bk|0),bx+34,by+46,{s:15,w:800,a:'center',f:FD,al:al});var pk=fail?0:E.io(P(u,1.2,.6));tx(c,'$'+(200+100*pk|0),bx+bw-34,by+46,{s:15,w:800,a:'center',f:FD,al:al});
+      if(k1>0&&k1<1||(!fail&&u<1.8&&u>.3)){var px=bx+60+(bw-120)*(fail?Math.min(.5,P(u,.3,1.2)):P(u,.3,1.5));dot(c,px,by+40,7,C.o,al,10)}
+      if(fail&&u>1.1&&u<1.6)gl(c,'bolt',bx+bw/2,by+40,22,C.red,al);
+      tx(c,fail?(u>2.2?'↩ ROLLBACK: nadie pierde':''):(u>1.9?'✓ COMMIT: las dos cosas':''),bx+bw/2,by+80,{s:11,w:800,a:'center',f:FD,c:fail?C.o:C.g,al:al})}
+    if(i===1){/* reglas */var bad=u<2,typ=bad?'talla = "azul"':'talla = "L"',sh=bad&&u>1&&u<1.5?Math.sin(u*60)*4:0;box(c,bx+20+sh,by+16,bw-40,30,{r:8,f:'#fff',s:bad&&u>1?C.red:(!bad&&u>3?C.g:C.line),lw:1.5,al:al});tx(c,typed(typ,u%2,.1,.6),bx+32+sh,by+31,{s:12,w:600,f:FM,al:al});
+      tx(c,'regla: talla solo S, M o L',bx+bw/2,by+64,{s:10,w:600,a:'center',f:FM,c:C.mut,al:al});if(bad&&u>1)tx(c,'✕ rechazado',bx+bw/2,by+84,{s:11.5,w:800,a:'center',f:FD,c:C.red,al:al});if(!bad&&u>3)tx(c,'✓ guardado',bx+bw/2,by+84,{s:11.5,w:800,a:'center',f:FD,c:C.g,al:al})}
+    if(i===2){/* aislamiento */var aD=E.io(P(u,.3,.7)),lD=E.io(P(u,1.8,.7));av(c,bx+28,by+30,14,C.p,al,'');av(c,bx+28,by+72,14,C.t,al,'');tx(c,'Ana',bx+50,by+30,{s:10,w:700,f:FD,al:al});tx(c,'Luis',bx+50,by+72,{s:10,w:700,f:FD,al:al});
+      box(c,bx+bw-86,by+30,72,40,{r:8,f:'#fff',s:C.line,al:al});tx(c,'pedido 57',bx+bw-50,by+42,{s:9.5,w:700,a:'center',f:FM,c:C.mut,al:al});tx(c,u>2.4?'L + gorra':u>1?'L':'M',bx+bw-50,by+58,{s:11,w:800,a:'center',f:FM,al:al});
+      dot(c,bx+80+(bw-170)*aD,by+30,6,C.p,al*(1-P(u,1.1,.2)),8);if(u>.4&&u<1.8){tx(c,'🔒 espera',bx+86,by+72,{s:10,w:700,f:FM,c:C.o,al:al})}else dot(c,bx+80+(bw-170)*lD,by+72,6,C.t,al*(1-P(u,2.5,.2)),8);
+      if(u>2.6)tx(c,'✓ en fila, nadie pisa a nadie',bx+bw/2,by+92,{s:10,w:800,a:'center',f:FD,c:C.g,al:al})}
+    if(i===3){/* durabilidad */var off=u>1.2&&u<2.2;box(c,bx+bw/2-60,by+14,120,56,{r:10,f:off?'#0E2841':'#fff',s:C.line,al:al});if(!off){gl(c,'db',bx+bw/2-34,by+42,22,'#12a15a',al);tx(c,'pedido 57 ✓',bx+bw/2+12,by+42,{s:11,w:700,a:'center',f:FM,al:al})}else{gl(c,'bolt',bx+bw/2,by+42,24,'#f59e5b',al);}
+      tx(c,u<1.2?'COMMIT guardado':off?'⚡ se va la luz…':'vuelve: el pedido sigue ahí ✓',bx+bw/2,by+86,{s:11,w:800,a:'center',f:FD,c:off?C.o:C.g,al:al})}}
+    tx(c,'✕ '+k[4],x+16,y+h-26,{s:10.5,w:700,c:C.red,al:al})})};
 
 /* motor: corre la escena de la diapositiva visible */
 var raf=0,cur=null,TOFF=parseFloat((location.search.match(/[?&]mt=([\d.]+)/)||[])[1])||0;function tick(){return document.hidden?setTimeout(function(){frame(performance.now())},33):requestAnimationFrame(frame)}
