@@ -283,6 +283,7 @@ ul.clean li:first-child { border-top:0; }
     <li><span class="t">Capítulo 2 · ¿EC2 o RDS?<small>hacerlo tú o una base administrada</small></span><span class="m">concepto</span></li>
     <li><span class="t">Capítulo 3 · RDS en la red privada<small>subredes privadas, DB subnet group, portero 3306, endpoint</small></span><span class="m">concepto</span></li>
     <li><span class="t">Capítulo 4 · Proteger los pedidos<small>copias, máquina del tiempo, Multi-AZ, réplicas de lectura</small></span><span class="m">concepto</span></li>
+    <li><span class="t">El mapa: todas las bases de AWS con casos de uso<small>RDS · Aurora · DynamoDB · ElastiCache · MemoryDB · DocumentDB · Neptune · Timestream · Redshift · OpenSearch</small></span><span class="m">concepto</span></li>
     <li><span class="t">LAB · RDS con Terraform + SQL desde la tienda<small>permisos · terraform apply · MobaXterm · mysql · prueba de seguridad · destroy</small></span><span class="m">lab</span></li>
   </ul>
 </section>
@@ -666,25 +667,87 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   </script>
 </section>
 
-<!-- 8 · LA FAMILIA DE BASES DE DATOS DE AWS -->
+<!-- 8 · TODAS LAS BASES DE AWS, CON CASOS DE USO -->
 <section class="slide" id="scD6">
-  <span class="k"><span class="act-chip">📖 EL MAPA</span> La familia de bases de datos de AWS · clic o → para avanzar</span>
-  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">Una base para cada necesidad</h2>
-  <div class="scene"><canvas aria-label="RDS con 5 motores, Aurora, DynamoDB y ElastiCache, con para qué sirve cada uno y la capa gratuita de RDS"></canvas></div>
+  <span class="k"><span class="act-chip">📖 EL MAPA</span> Una base para cada caso de la tienda · clic o → para avanzar</span>
+  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">Todas las bases de AWS, <span class="grad">con los casos de Laura</span></h2>
+  <div class="scene"><canvas aria-label="Ocho casos de la tienda de Laura y la base de AWS que resuelve cada uno: relacional, llave-valor, memoria, documentos, grafos, series de tiempo, analítica y búsqueda; resumen final"></canvas></div>
   <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
   <script>
   NetScene.make('scD6',1000,480,[
-    '<b>RDS</b> te da 5 motores: {@.6}MySQL, PostgreSQL, MariaDB, SQL Server y Oracle. {@1.4}<b>Aurora</b> es la versión “turbo” de AWS: {@2.0}compatible con MySQL y PostgreSQL, más rápida y con 6 copias en 3 zonas.',
-    '<b>DynamoDB</b> es NoSQL: {@.6}sin servidores que escoger, responde en milisegundos aunque tengas millones de usuarios (ej. el carrito de compras). {@1.8}<b>ElastiCache</b> guarda datos en <b>memoria</b> para que la tienda vuele (ej. el catálogo más visto).',
-    'Lo importante para hoy: {@.4}RDS MySQL en <b>db.t3.micro</b> con <b>20 GB</b> entra en la <b>capa gratuita</b> (750 horas al mes). {@1.6}Pero es una base <b>encendida 24/7</b>: {@2.2}al terminar el laboratorio, <b>terraform destroy</b>. Siempre.'
+    '<b>Caso 1 · Los pedidos y las facturas.</b> {@.4}Un pedido pertenece a un cliente y tiene productos: {@1.2}son tablas <b>relacionadas</b> entre sí. {@2.0}Para esto: bases <b>relacionales</b> con SQL → <b>RDS</b> (MySQL, PostgreSQL, MariaDB, SQL Server, Oracle) {@3.2}o <b>Aurora</b>, la versión de AWS: más rápida y con 6 copias en 3 zonas.',
+    '<b>Caso 2 · El carrito del Black Friday.</b> {@.4}Un millón de clientes agregando productos <b>al mismo tiempo</b>. {@1.4}Solo se necesita “dame el carrito del cliente 123”, rapidísimo. {@2.2}Para esto: <b>llave-valor</b> → <b>DynamoDB</b>: {@2.8}sin servidores que escoger, responde en milisegundos con 10 o con 10 millones de usuarios.',
+    '<b>Caso 3 · El catálogo más visto.</b> {@.4}Todos piden las mismas 10 camisetas. {@1.0}Ir a la base cada vez tarda <b>20 ms</b>; {@1.8}guardarlas en <b>memoria</b> tarda <b>medio milisegundo</b>. {@2.6}Para esto: <b>ElastiCache</b> (Redis/Valkey) como caché {@3.4}y <b>MemoryDB</b> si además necesitas que no se pierda nada.',
+    '<b>Caso 4 · Las fichas de producto.</b> {@.4}Cada producto tiene datos distintos: {@1.0}la camiseta tiene talla y color; {@1.6}la gorra, si es ajustable; {@2.2}el buzo, si trae capucha. {@2.8}Para esto: <b>documentos</b> flexibles (JSON) → <b>DocumentDB</b>, compatible con MongoDB.',
+    '<b>Caso 5 · “Quienes compraron esto, también compraron…”.</b> {@.6}Clientes, productos y compras forman una <b>red de conexiones</b>. {@1.8}Seguir esas líneas en una tabla es lentísimo; {@2.4}en una base de <b>grafos</b> es natural → <b>Neptune</b>. {@3.2}Así funcionan las recomendaciones y la detección de fraude.',
+    '<b>Caso 6 · Los sensores de la bodega y las visitas por minuto.</b> {@.6}Datos que llegan <b>cada segundo</b>, siempre con su hora. {@1.8}Para esto: <b>series de tiempo</b> → <b>Timestream</b>: {@2.6}guarda millones de medidas y te responde “¿cuál fue el promedio de la última hora?”.',
+    '<b>Caso 7 · El informe de ventas de 5 años.</b> {@.4}Laura quiere saber qué se vende más por mes, ciudad y talla. {@1.4}Eso es leer <b>millones de filas</b> de golpe: {@2.0}trabajo de una <b>bodega de datos</b> → <b>Redshift</b>, {@2.8}hecha para análisis y tableros, no para guardar un pedido a la vez.',
+    '<b>Caso 8 · El buscador de la tienda.</b> {@.4}Un cliente escribe “camiseta azul talla L”, {@1.4}con errores o en desorden, y espera los mejores resultados primero. {@2.4}Para esto: un motor de <b>búsqueda</b> → <b>OpenSearch</b> (también analiza logs).',
+    'En resumen: {@.3}<b>no existe una base para todo</b>. {@1.0}Cada caso tiene la suya, y una empresa real usa <b>varias a la vez</b>. {@1.6}(Falta una: <b>Keyspaces</b>, compatible con Cassandra, para eventos masivos como clics de millones de usuarios.) {@2.4}La pregunta del arquitecto: <b>¿cómo es el dato y cómo lo voy a usar?</b> {@3.4}Hoy en el laboratorio montamos la primera: <b>RDS MySQL</b> (capa gratuita: db.t3.micro, 20 GB).'
   ],function(c,s){
-    var V=Viz,K=Kit,E=s.E,st=s.step,t=s.t;V.bg(c,1000,480);
+    var V=Viz,K=Kit,E=s.E,st=s.step,t=s.t,M='"JetBrains Mono",monospace';V.bg(c,1000,480);
     function f(d,u){return Math.max(0,Math.min(1,(t-d)/(u||.6)));}function ea(d,u){return E.io(f(d,u));}function pop(d){return E.back(f(d,.5));}
-    var BL='#3b9ae1',GR='#34c38f',PU='#a67af4',OR='#f08a4b',YE='#FFC928',RD='#ff6b6b';
-    var C=[['RDS','5 motores relacionales','MySQL · PostgreSQL · MariaDB · SQL Server · Oracle',BL,0,0],['Aurora','la versión “turbo” de AWS','MySQL/PostgreSQL · 6 copias en 3 zonas',OR,0,1.4],['DynamoDB','NoSQL sin servidores','millones de usuarios · milisegundos · ej. carrito',PU,1,.2],['ElastiCache','datos en memoria','que la tienda vuele · ej. catálogo más visto',GR,1,1.6]];
-    C.forEach(function(k,i){if(k[4]>st)return;var a=k[4]===st?pop(k[5]):1;if(!(a>0))return;var al=Math.min(1,a),x=30+(i%2)*480,y=30+Math.floor(i/2)*170;
-      K.card(c,x,y,460,150,k[3],al,{glow:k[4]===st});V.tx(c,k[0],x+28,y+50,24,'#fff','left',800,al);V.tx(c,k[1],x+28,y+80,14,k[3],'left',800,al);V.tx(c,k[2],x+28,y+112,12,'#cfe3f1','left',600,al);});
-    if(st===2){K.card(c,140,370,720,90,YE,ea(.4),{glow:true});V.tx(c,'💵 db.t3.micro · 20 GB · capa gratuita (750 h/mes)',500,404,16,'#fff','center',800,ea(.4));V.tx(c,'encendida 24/7 → al terminar: terraform destroy',500,436,14,'#ffb0b0','center',800,ea(1.6));}
+    var BL='#3b9ae1',GR='#34c38f',PU='#a67af4',OR='#f08a4b',YE='#FFC928',RD='#ff6b6b',CY='#38bdf8',PK='#f472b6';
+    var INFO=[['Relacional','RDS · Aurora','tablas + SQL + relaciones','pedidos · facturas · inventario',BL,2.0],['Llave-valor','DynamoDB','una llave → su dato, al instante','carritos · sesiones · juegos',PU,2.2],['En memoria','ElastiCache · MemoryDB','datos en RAM: sub-milisegundos','caché · rankings · sesiones',GR,2.6],['Documentos','DocumentDB','JSON flexible, cada uno distinto','catálogos · perfiles · contenido',OR,2.8],['Grafos','Neptune','nodos y conexiones','recomendaciones · fraude · redes',PK,2.4],['Series de tiempo','Timestream','medidas con su hora','sensores · métricas · IoT',CY,1.8],['Bodega de datos','Redshift','analizar millones de filas','informes · tableros · BI',YE,2.0],['Búsqueda','OpenSearch','texto, relevancia, errores','buscadores · logs',RD,2.4]];
+    function card(i){var k=INFO[i],a=pop(k[5]);if(!(a>0))return;var al=Math.min(1,a);K.card(c,610,40,360,300,k[4],al,{glow:true});
+      V.tx(c,k[0].toUpperCase(),630,74,12,k[4],'left',800,al);V.tx(c,k[1],630,114,k[1].length>16?20:26,'#fff','left',800,al);V.tx(c,k[2],630,152,13,'#cfe3f1','left',600,al);
+      c.save();c.globalAlpha*=al;c.fillStyle='rgba(255,255,255,.08)';c.fillRect(630,172,320,1);c.restore();V.tx(c,'casos típicos:',630,200,12,k[4],'left',800,al);V.tx(c,k[3],630,224,13,'#fff','left',700,al);}
+    function caseTitle(txt,col){K.chip(c,300,24,txt,col,ea(.1),true);}
+    if(st<8){K.card(c,30,60,560,330,'#94a3b8',1,{fill:'rgba(20,34,56,.85)',fill2:'rgba(10,20,36,.9)'});card(st);}
+    /* 1 · relacional */
+    if(st===0){caseTitle('Caso 1 · pedidos y facturas',BL);
+      function tb(x,y,name,rows,hl){K.card(c,x,y,220,150,BL,ea(.4),{r:10});V.tx(c,name,x+14,y+24,12.5,'#9fd8f0','left',800,ea(.4),M);rows.forEach(function(r,j){var on=hl!=null&&j===hl&&t>1.2;c.save();c.globalAlpha*=ea(.6);c.fillStyle=on?'rgba(255,201,40,.22)':'rgba(255,255,255,.05)';NetScene.rr(c,x+10,y+36+j*26,200,22,5);c.fill();c.restore();V.tx(c,r,x+18,y+52+j*26,11,on?YE:'#e6edf3','left',600,ea(.6),M);});}
+      tb(50,100,'clientes',['7 · Camila','8 · Pedro','9 · Sofía','10 · Andrés'],0);tb(330,100,'pedidos',['57 · cliente 7','58 · cliente 8','59 · cliente 9','60 · cliente 7'],0);
+      var r=ea(1.2);c.save();c.globalAlpha*=r;c.strokeStyle=YE;c.lineWidth=2.5;c.beginPath();c.moveTo(270,148);c.bezierCurveTo(300,148,300,148,340,148);c.stroke();c.restore();K.chip(c,300,280,'relación: cada pedido apunta a su cliente',YE,r,true);
+      K.chip(c,300,330,'Aurora = la misma idea, más rápida, 6 copias',OR,ea(3.2),true);return;}
+    /* 2 · llave-valor */
+    if(st===1){caseTitle('Caso 2 · el carrito del Black Friday',PU);
+      for(var k=0;k<10;k++){var x=70+(k%5)*60,y=110+Math.floor(k/5)*70;K.device(c,x,y,'phone',ea(.3+k*.05),.7);var u=((t*.8)+k*.13)%1;K.packet(c,[x,y+20],[x+140,260],[420,250],u,PU,ea(1));}
+      K.card(c,380,210,190,90,PU,ea(1.4),{r:12});V.tx(c,'llave: carrito#123',475,240,11.5,YE,'center',700,ea(1.4),M);V.tx(c,'→ [camiseta L, gorra]',475,264,11.5,'#fff','center',600,ea(1.4),M);V.tx(c,'⚡ 4 ms',475,288,12,'#9ff0c8','center',800,ea(2.2));
+      var n=Math.floor(Math.pow(10,1+5*f(1,2.5)));V.tx(c,n.toLocaleString('es-CO')+' clientes a la vez',300,360,18,YE,'center',800,ea(.4),M);return;}
+    /* 3 · memoria */
+    if(st===2){caseTitle('Caso 3 · el catálogo más visto',GR);
+      K.device(c,90,200,'laptop',1,1.1);K.disk(c,420,110,140,1,'base de datos',{chip:BL});
+      c.save();c.globalAlpha*=ea(1.8);K.shadow(c,function(){c.fillStyle='#14532d';NetScene.rr(c,300,250,140,60,10);c.fill();},18,'rgba(52,195,143,.5)');c.restore();V.tx(c,'⚡ caché (RAM)',370,286,13,'#fff','center',800,ea(1.8));
+      var u1=(t*.35)%1,u2=(t*1.4)%1;if(t<1.8||t>2.6){K.road(c,[130,190],[300,120],[420,140],BL,ea(1));K.packet(c,[130,190],[300,120],[420,140],u1,BL,ea(1),'20 ms');}
+      if(t>1.8){K.road(c,[130,215],[220,250],[300,275],GR,ea(1.8));K.packet(c,[130,215],[220,250],[300,275],u2,GR,ea(1.8),'0,5 ms');}
+      K.bar(c,80,330,420,14,1,'#38bdf8',ea(1));V.tx(c,'base: 20 ms',80,322,11.5,'#9fd8f0','left',700,ea(1));K.bar(c,80,370,420*.03,14,1,GR,ea(1.8));V.tx(c,'caché en memoria: 0,5 ms (40 veces más rápido)',80,362,11.5,'#9ff0c8','left',700,ea(1.8));return;}
+    /* 4 · documentos */
+    if(st===3){caseTitle('Caso 4 · fichas de producto distintas',OR);
+      var D=[['👕 camiseta','{ "talla": "L",','  "color": "azul" }',1.0],['🧢 gorra','{ "ajustable": true }','',1.6],['🧥 buzo','{ "talla": "M",','  "capucha": true }',2.2]];
+      D.forEach(function(d,i){var a=pop(d[3]),x=50+i*178;if(!(a>0))return;var al=Math.min(1,a);K.card(c,x,110,166,170,OR,al,{r:12});V.tx(c,d[0],x+83,144,15,'#fff','center',800,al);V.tx(c,d[1],x+12,186,11,'#ffd0b0','left',600,al,M);V.tx(c,d[2],x+12,206,11,'#ffd0b0','left',600,al,M);});
+      K.chip(c,300,330,'cada documento con sus propios campos · sin tabla fija',OR,ea(2.8),true);return;}
+    /* 5 · grafos */
+    if(st===4){caseTitle('Caso 5 · quienes compraron esto, también…',PK);
+      var N=[[110,140,'Camila','c'],[110,300,'Pedro','c'],[300,110,'👕','p'],[300,220,'🧢','p'],[300,330,'🧥','p'],[480,170,'Sofía','c'],[480,290,'Andrés','c']];
+      var Ed=[[0,2],[0,3],[1,2],[1,4],[5,2],[5,3],[6,4],[6,3]],hl=t>2.4;
+      Ed.forEach(function(e,i){var A=N[e[0]],B=N[e[1]],on=hl&&((e[0]===0)||(e[1]===3&&e[0]===5));c.save();c.globalAlpha*=ea(.6+i*.08);c.strokeStyle=on?PK:'rgba(159,182,201,.45)';c.lineWidth=on?3.5:1.5;if(on){c.shadowColor=PK;c.shadowBlur=12;}c.beginPath();c.moveTo(A[0],A[1]);c.lineTo(B[0],B[1]);c.stroke();c.restore();});
+      N.forEach(function(n,i){var a=pop(.3+i*.1);if(!(a>0))return;if(n[3]==='c')K.avatar(c,n[0],n[1],20,['#f08a4b','#3b9ae1','#a67af4','#34c38f'][i%4],n[2],Math.min(1,a));else{K.card(c,n[0]-26,n[1]-26,52,52,PK,Math.min(1,a),{r:26});V.tx(c,n[2],n[0],n[1]+8,22,'#fff','center',400,Math.min(1,a));}});
+      K.chip(c,300,370,'Camila compró 👕 → otros que compraron 👕 también compraron 🧢',PK,ea(3.2),true);return;}
+    /* 6 · series de tiempo */
+    if(st===5){caseTitle('Caso 6 · sensores y visitas por minuto',CY);
+      var X0=60,X1=560,Y0=320,H=170,n=Math.floor(60*f(.6,2.4));c.save();c.strokeStyle='rgba(159,182,201,.25)';c.beginPath();c.moveTo(X0,Y0);c.lineTo(X1,Y0);c.stroke();c.restore();
+      c.save();c.strokeStyle=CY;c.lineWidth=2.5;c.shadowColor=CY;c.shadowBlur=10;c.beginPath();for(var i=0;i<=n;i++){var x=X0+(X1-X0)*i/60,y=Y0-60-40*Math.sin(i*.35)-20*Math.sin(i*.9);i?c.lineTo(x,y):c.moveTo(x,y);}c.stroke();c.restore();
+      if(n>0){var lx=X0+(X1-X0)*n/60,ly=Y0-60-40*Math.sin(n*.35)-20*Math.sin(n*.9);c.save();c.fillStyle=YE;c.beginPath();c.arc(lx,ly,6,0,7);c.fill();c.restore();}
+      V.tx(c,'🌡️ temperatura bodega · 👀 visitas / minuto',X0,120,13,'#9fd8f0','left',800,ea(.4));V.tx(c,'18:00',X0,Y0+20,11,'#9fb3c8','left',600,1,M);V.tx(c,'18:59',X1,Y0+20,11,'#9fb3c8','right',600,1,M);
+      K.chip(c,300,370,'promedio de la última hora → en un instante',CY,ea(2.6),true);return;}
+    /* 7 · bodega de datos */
+    if(st===6){caseTitle('Caso 7 · el informe de ventas de 5 años',YE);
+      ['2022','2023','2024','2025','2026'].forEach(function(y,i){K.disk(c,60,100+i*44,90,ea(.4+i*.1),'');V.tx(c,y,170,128+i*44,12,'#cfe3f1','left',700,ea(.4+i*.1),M);var u=((t*.6)+i*.2)%1;K.packet(c,[150,118+i*44],[230,200],[290,210],u,YE,ea(1.4));});
+      K.card(c,290,150,110,120,YE,ea(2.0),{r:12,glow:true});V.tx(c,'Redshift',345,200,14,'#fff','center',800,ea(2.0));V.tx(c,'millones de filas',345,224,10.5,'#ffe9a8','center',600,ea(2.0));
+      var b=ea(2.6);[['ene',.5],['feb',.65],['mar',.4],['abr',.8],['may',.95]].forEach(function(m,i){var h=110*m[1]*b;c.save();c.fillStyle=YE;c.shadowColor=YE;c.shadowBlur=10;NetScene.rr(c,430+i*26,300-h,18,h,4);c.fill();c.restore();V.tx(c,m[0],439+i*26,318,9.5,'#cfe3f1','center',600,b);});
+      V.tx(c,'📊 tablero de ventas',495,170,12,'#ffe9a8','center',800,b);return;}
+    /* 8 · búsqueda */
+    if(st===7){caseTitle('Caso 8 · el buscador de la tienda',RD);
+      var q='camisetta azul L',n=Math.ceil(q.length*f(.4,1));K.card(c,60,90,500,52,'#e2e8f0',1,{fill:'rgba(248,250,252,.97)',fill2:'rgba(226,232,240,.97)',r:26});V.tx(c,'🔍 '+q.slice(0,n),84,123,15,'#0f172a','left',600,1,M);
+      var R=[['👕 Camiseta azul · talla L','98% relevante',GR],['👕 Camiseta azul marino · L','91%',GR],['🧥 Buzo azul · L','64%',YE]];
+      R.forEach(function(r,i){var a=pop(2.4+i*.25);if(!(a>0))return;K.card(c,60,166+i*62,500,50,r[2],Math.min(1,a),{r:12});V.tx(c,r[0],84,197+i*62,14,'#fff','left',800,Math.min(1,a));V.tx(c,r[1],540,197+i*62,12,r[2],'right',800,Math.min(1,a));});
+      K.chip(c,300,374,'entiende “camisetta” con error · ordena por relevancia',RD,ea(1.4),true);return;}
+    /* 9 · resumen */
+    var G=[['RDS · Aurora','pedidos',BL],['DynamoDB','carrito',PU],['ElastiCache','catálogo veloz',GR],['MemoryDB','memoria durable',GR],['DocumentDB','fichas de producto',OR],['Neptune','recomendaciones',PK],['Timestream','sensores',CY],['Redshift','informes',YE],['OpenSearch','buscador',RD],['Keyspaces','Cassandra',PU]];
+    G.forEach(function(g,i){var a=pop(.2+i*.12),x=30+(i%5)*190,y=40+Math.floor(i/5)*130;if(!(a>0))return;var al=Math.min(1,a);K.card(c,x,y,176,112,g[2],al,{r:14,glow:i===0&&t>3});V.tx(c,g[0],x+88,y+50,15,'#fff','center',800,al);V.tx(c,g[1],x+88,y+76,12,g[2],'center',700,al);});
+    K.chip(c,500,322,'no existe una base para todo: una empresa usa varias',YE,ea(1),true);K.chip(c,500,366,'¿cómo es el dato y cómo lo voy a usar?',GR,ea(2),true);
+    K.card(c,230,400,540,56,BL,ea(3),{glow:true,r:14});V.tx(c,'hoy en el lab: RDS MySQL · db.t3.micro · 20 GB · capa gratuita',500,434,14,'#fff','center',800,ea(3));
   });
   </script>
 </section>
