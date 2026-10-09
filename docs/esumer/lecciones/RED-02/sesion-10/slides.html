@@ -281,8 +281,8 @@ ul.clean li:first-child { border-top:0; }
     <li><span class="t">Parte 1 · ¿Qué es una base de datos?<small>tablas, filas, el motor, SQL (SELECT, INSERT, UPDATE) y por qué un Excel no alcanza</small></span><span class="m">concepto</span></li>
     <li><span class="t">Parte 2 · Los tipos de bases<small>SQL y NoSQL · relacional, llave-valor, memoria, documentos, grafos, series de tiempo, analítica, búsqueda</small></span><span class="m">concepto</span></li>
     <li><span class="t">Parte 3 · Las bases de AWS, a detalle<small>RDS (red privada, endpoint, copias, Multi-AZ, réplicas) · DynamoDB · ElastiCache · DocumentDB · Neptune · Timestream · Redshift · OpenSearch · juego</small></span><span class="m">concepto</span></li>
-    <li><span class="t">Parte 4 · LAB A: tienda web en S3 que guarda en DynamoDB<small>S3 + API Gateway + Lambda + DynamoDB con terraform apply · PutItem · Query vs Scan · destroy</small></span><span class="m">lab</span></li>
-    <li><span class="t">LAB B (si alcanzamos): RDS con Terraform + SQL desde la tienda<small>terraform apply · MobaXterm · mysql · prueba de seguridad · destroy</small></span><span class="m">bonus</span></li>
+    <li><span class="t">Parte 4 · LAB A: DynamoDB con la AWS CLI<small>create-table · put-item · query vs scan · delete-table</small></span><span class="m">lab</span></li>
+    <li><span class="t">LAB B: RDS con Terraform + SQL desde la tienda<small>terraform apply · MobaXterm · mysql · prueba de seguridad · destroy</small></span><span class="m">lab</span></li>
   </ul>
 </section>
 
@@ -937,345 +937,95 @@ window.wireSnips=window.wireSnips||function(sec){sec.querySelectorAll('.snip').f
 <section class="slide mu dark sep">
   <div>
     <div class="mtag" style="color:#7f9bb5"><b>Parte 4</b>de 4</div>
-    <h2 style="max-width:14ch">Manos a la obra: <span class="g">S3 + DynamoDB</span></h2>
-    <p class="msub"><b>LAB A</b> (primero): una tienda web en S3 que guarda los pedidos en DynamoDB. <b>LAB B</b> (si alcanzamos): la base de pedidos en RDS con Terraform.</p>
+    <h2 style="max-width:14ch">Manos a la obra: <span class="g">DynamoDB y RDS</span></h2>
+    <p class="msub"><b>LAB A</b> (10 min): guardar y leer pedidos en DynamoDB con la AWS CLI. <b>LAB B</b>: la base de pedidos de Laura en RDS con Terraform.</p>
   </div>
   <div class="mviz"><canvas data-mu="ruta" data-part="4" aria-label="Ruta de la clase: parte 4 de 4"></canvas></div>
 </section>
 
 <section class="slide mu">
   <div>
-    <div class="mtag"><b>4.1</b>parte 4 · LAB A · lo que vamos a construir</div>
-    <h2>La tienda web: <span class="g">S3 + DynamoDB</span></h2>
-    <div class="mnote"><span>// como</span> vitrina, puerta, cajero y archivador</div>
-    <p class="msub">La página vive en <b>S3</b>. Cuando alguien hace un pedido, viaja a <b>API Gateway</b> (la puerta), que despierta una <b>Lambda</b> (el cerebro, en Python) y esta lo guarda en <b>DynamoDB</b>. Sin un solo servidor encendido: es <b>serverless</b>.</p>
-    <p class="muse">Todo con <b>terraform apply</b>: 12 recursos en ~1 minuto</p>
+    <div class="mtag"><b>4.1</b>parte 4 · LAB A · lo que vamos a hacer</div>
+    <h2>Tu PC le habla a <span class="g">DynamoDB</span></h2>
+    <div class="mnote"><span>// como</span> llamar al archivador por teléfono y dictarle la ficha</div>
+    <p class="msub">Desde la terminal de VS Code, la <b>AWS CLI</b> firma cada orden con tu llave de <b>terraform-lab</b> y la envía por HTTPS a DynamoDB. Creas la tabla, guardas dos pedidos y los lees con <b>Query</b> y con <b>Scan</b>. Sin servidores: <b>10 minutos</b>.</p>
+    <p class="muse">Después seguimos con el <b>LAB B: la base de pedidos en RDS</b></p>
   </div>
-  <div class="mviz"><canvas data-mu="arq" aria-label="Diagrama: navegador, S3 con la página, API Gateway, Lambda con rol IAM y DynamoDB"></canvas></div>
+  <div class="mviz"><canvas data-mu="arq" aria-label="Diagrama: tu PC con la AWS CLI envía órdenes por HTTPS a la tabla DynamoDB en us-east-1"></canvas></div>
 </section>
 <section class="slide" id="labA0">
-  <span class="k"><span class="act-chip">🧪 LAB A · PASO 0</span> Permisos y los 3 archivos</span>
-  <h2 style="font-size:clamp(1.15rem,2.3vw,1.6rem)">Copia <span class="grad">main.tf</span>, <span class="grad">app.py</span> e <span class="grad">index.html</span></h2>
+  <span class="k"><span class="act-chip">🧪 LAB A · PASO 0</span> Permiso y 3 archivos</span>
+  <h2 style="font-size:clamp(1.15rem,2.3vw,1.6rem)">Tu usuario <span class="grad">terraform-lab</span> + 3 pedidos en JSON</h2>
   <div class="grid2" style="align-items:start;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)">
     <ul class="cmdlist">
-      <li><span>IAM → <b>terraform-lab</b> → Agregar permisos</span><span>adjuntar políticas directamente</span></li>
-      <li><span><code>AmazonDynamoDBFullAccess</code> · <code>AWSLambda_FullAccess</code> · <code>AmazonAPIGatewayAdministrator</code> · <code>IAMFullAccess</code></span><span>(y <code>AmazonS3FullAccess</code> si no la tienes)</span></li>
-      <li><span><code>mkdir $HOME\tienda-web</code><br><code>code $HOME\tienda-web</code></span><span>carpeta nueva, abierta en VS Code</span></li>
+      <li><span>IAM → <b>terraform-lab</b> → Agregar permisos → <code>AmazonDynamoDBFullAccess</code></span><span>(aprovecha y agrega <code>AmazonRDSFullAccess</code> para el LAB B)</span></li>
+      <li><span><code>mkdir $HOME\lab-dynamo</code><br><code>code $HOME\lab-dynamo</code></span><span>carpeta nueva, abierta en VS Code</span></li>
       <li><span>Crea los <b>3 archivos</b> de la derecha</span><span>mismo nombre, pega y <b>Ctrl+S</b></span></li>
-      <li><span>¿Límite de 10 políticas?</span><span>quita las que no uses de clases pasadas</span></li>
+      <li><span>Fíjate: Pedro trae <b>regalo</b> y Camila <b>talla</b></span><span>cada ítem con sus propios atributos</span></li>
+      <li><span>Abre la terminal (<b>Ctrl+ñ</b>)</span><span>debe quedar <b>dentro</b> de lab-dynamo</span></li>
     </ul>
     <div class="snips">
-      <div class="snip"><div class="top"><span>main.tf  (la infraestructura: 12 recursos)</span><button type="button">📋 Copiar</button></div><pre># =====================================================================
-#  La tienda web de Laura: página en S3 que guarda pedidos en DynamoDB
-#  Esumer · Cloud Computing, Redes y Ciberseguridad
-#
-#  Navegador → S3 (index.html) → API Gateway → Lambda → DynamoDB
-#
-#  Uso (terminal de VS Code, en la carpeta con main.tf, app.py e index.html):
-#    terraform init
-#    terraform apply      (1 minuto)
-#    terraform destroy    (al final)
-# =====================================================================
-
-terraform {
-  required_providers {
-    aws     = { source = &quot;hashicorp/aws&quot;, version = &quot;~&gt; 6.0&quot; }
-    archive = { source = &quot;hashicorp/archive&quot;, version = &quot;~&gt; 2.0&quot; }
-  }
-}
-
-provider &quot;aws&quot; {
-  region = &quot;us-east-1&quot;
-}
-
-data &quot;aws_caller_identity&quot; &quot;yo&quot; {}
-
-# ---------- 1 · La base: tabla DynamoDB (llave de partición + llave de orden)
-resource &quot;aws_dynamodb_table&quot; &quot;pedidos&quot; {
-  name         = &quot;pedidos-web&quot;
-  billing_mode = &quot;PAY_PER_REQUEST&quot; # sin servidores: pagas por petición
-  hash_key     = &quot;cliente&quot;         # llave de partición: reparte los datos
-  range_key    = &quot;fecha&quot;           # llave de orden: ordena los pedidos de cada cliente
-
-  attribute {
-    name = &quot;cliente&quot;
-    type = &quot;S&quot;
-  }
-  attribute {
-    name = &quot;fecha&quot;
-    type = &quot;S&quot;
-  }
-}
-
-# ---------- 2 · El permiso de la Lambda: solo escribir y leer ESTA tabla
-resource &quot;aws_iam_role&quot; &quot;lambda&quot; {
-  name = &quot;tienda-web-lambda&quot;
-  assume_role_policy = jsonencode({
-    Version   = &quot;2012-10-17&quot;
-    Statement = [{ Effect = &quot;Allow&quot;, Principal = { Service = &quot;lambda.amazonaws.com&quot; }, Action = &quot;sts:AssumeRole&quot; }]
-  })
-}
-
-resource &quot;aws_iam_role_policy&quot; &quot;tabla&quot; {
-  name = &quot;solo-tabla-pedidos&quot;
-  role = aws_iam_role.lambda.id
-  policy = jsonencode({
-    Version   = &quot;2012-10-17&quot;
-    Statement = [{ Effect = &quot;Allow&quot;, Action = [&quot;dynamodb:PutItem&quot;, &quot;dynamodb:Query&quot;, &quot;dynamodb:Scan&quot;], Resource = aws_dynamodb_table.pedidos.arn }]
-  })
-}
-
-resource &quot;aws_iam_role_policy_attachment&quot; &quot;logs&quot; {
-  role       = aws_iam_role.lambda.name
-  policy_arn = &quot;arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole&quot;
-}
-
-# ---------- 3 · El cerebro: Lambda en Python (app.py)
-data &quot;archive_file&quot; &quot;app&quot; {
-  type        = &quot;zip&quot;
-  source_file = &quot;${path.module}/app.py&quot;
-  output_path = &quot;${path.module}/app.zip&quot;
-}
-
-resource &quot;aws_lambda_function&quot; &quot;app&quot; {
-  function_name    = &quot;tienda-web&quot;
-  role             = aws_iam_role.lambda.arn
-  runtime          = &quot;python3.12&quot;
-  handler          = &quot;app.handler&quot;
-  filename         = data.archive_file.app.output_path
-  source_code_hash = data.archive_file.app.output_base64sha256
-  environment {
-    variables = { TABLA = aws_dynamodb_table.pedidos.name }
-  }
-}
-
-# ---------- 4 · La puerta: API Gateway (HTTP API) que llama a la Lambda
-resource &quot;aws_apigatewayv2_api&quot; &quot;api&quot; {
-  name          = &quot;tienda-web-api&quot;
-  protocol_type = &quot;HTTP&quot;
-  target        = aws_lambda_function.app.arn # crea la ruta y la etapa por defecto
-  cors_configuration {
-    allow_origins = [&quot;*&quot;]
-    allow_methods = [&quot;GET&quot;, &quot;POST&quot;]
-    allow_headers = [&quot;content-type&quot;]
-  }
-}
-
-resource &quot;aws_lambda_permission&quot; &quot;api&quot; {
-  statement_id  = &quot;api-gateway&quot;
-  action        = &quot;lambda:InvokeFunction&quot;
-  function_name = aws_lambda_function.app.function_name
-  principal     = &quot;apigateway.amazonaws.com&quot;
-  source_arn    = &quot;${aws_apigatewayv2_api.api.execution_arn}/*&quot;
-}
-
-# ---------- 5 · La vitrina: bucket S3 con la página web
-resource &quot;aws_s3_bucket&quot; &quot;web&quot; {
-  bucket        = &quot;tienda-web-${data.aws_caller_identity.yo.account_id}&quot;
-  force_destroy = true
-}
-
-resource &quot;aws_s3_bucket_website_configuration&quot; &quot;web&quot; {
-  bucket = aws_s3_bucket.web.id
-  index_document { suffix = &quot;index.html&quot; }
-}
-
-resource &quot;aws_s3_bucket_public_access_block&quot; &quot;web&quot; {
-  bucket                  = aws_s3_bucket.web.id
-  block_public_acls       = true
-  ignore_public_acls      = true
-  block_public_policy     = false
-  restrict_public_buckets = false
-}
-
-resource &quot;aws_s3_bucket_policy&quot; &quot;web&quot; {
-  bucket     = aws_s3_bucket.web.id
-  depends_on = [aws_s3_bucket_public_access_block.web]
-  policy = jsonencode({
-    Version   = &quot;2012-10-17&quot;
-    Statement = [{ Effect = &quot;Allow&quot;, Principal = &quot;*&quot;, Action = &quot;s3:GetObject&quot;, Resource = &quot;${aws_s3_bucket.web.arn}/*&quot; }]
-  })
-}
-
-resource &quot;aws_s3_object&quot; &quot;index&quot; {
-  bucket       = aws_s3_bucket.web.id
-  key          = &quot;index.html&quot;
-  content_type = &quot;text/html; charset=utf-8&quot;
-  content      = templatefile(&quot;${path.module}/index.html&quot;, { api = aws_apigatewayv2_api.api.api_endpoint })
-}
-
-# ---------- Lo que necesitas al terminar
-output &quot;url_tienda&quot; {
-  value = &quot;http://${aws_s3_bucket_website_configuration.web.website_endpoint}&quot;
-}
-output &quot;api&quot; {
-  value = aws_apigatewayv2_api.api.api_endpoint
+      <div class="snip"><div class="top"><span>camila.json</span><button type="button">📋 Copiar</button></div><pre>{
+  &quot;cliente&quot;:  { &quot;S&quot;: &quot;camila&quot; },
+  &quot;fecha&quot;:    { &quot;S&quot;: &quot;2026-10-09 10:00&quot; },
+  &quot;producto&quot;: { &quot;S&quot;: &quot;camiseta&quot; },
+  &quot;talla&quot;:    { &quot;S&quot;: &quot;L&quot; }
 }</pre></div>
-      <div class="snip"><div class="top"><span>app.py  (la Lambda: guarda y lee pedidos)</span><button type="button">📋 Copiar</button></div><pre># La Lambda de la tienda: recibe pedidos de la página y los guarda en DynamoDB
-import base64, json, os
-from datetime import datetime, timezone
-
-import boto3
-from boto3.dynamodb.conditions import Key
-
-tabla = boto3.resource(&quot;dynamodb&quot;).Table(os.environ[&quot;TABLA&quot;])
-
-
-def responder(codigo, datos):
-    return {&quot;statusCode&quot;: codigo, &quot;headers&quot;: {&quot;content-type&quot;: &quot;application/json&quot;}, &quot;body&quot;: json.dumps(datos, default=str)}
-
-
-def handler(event, context):
-    metodo = event[&quot;requestContext&quot;][&quot;http&quot;][&quot;method&quot;]
-
-    if metodo == &quot;POST&quot;:  # guardar un pedido
-        cuerpo = event.get(&quot;body&quot;) or &quot;{}&quot;
-        if event.get(&quot;isBase64Encoded&quot;):
-            cuerpo = base64.b64decode(cuerpo).decode()
-        datos = json.loads(cuerpo)
-        cliente = datos.get(&quot;cliente&quot;, &quot;&quot;).strip().lower()
-        if not cliente:
-            return responder(400, {&quot;error&quot;: &quot;falta el cliente&quot;})
-        pedido = {
-            &quot;cliente&quot;: cliente,                                          # llave de partición
-            &quot;fecha&quot;: datetime.now(timezone.utc).isoformat(timespec=&quot;seconds&quot;),  # llave de orden
-            &quot;producto&quot;: datos.get(&quot;producto&quot;, &quot;camiseta&quot;),
-            &quot;talla&quot;: datos.get(&quot;talla&quot;, &quot;M&quot;),
-        }
-        tabla.put_item(Item=pedido)  # PutItem
-        return responder(200, pedido)
-
-    # GET: ?cliente=camila → Query (solo su partición) · sin cliente → Scan (toda la tabla)
-    cliente = ((event.get(&quot;queryStringParameters&quot;) or {}).get(&quot;cliente&quot;) or &quot;&quot;).strip().lower()
-    if cliente:
-        items = tabla.query(KeyConditionExpression=Key(&quot;cliente&quot;).eq(cliente))[&quot;Items&quot;]
-        return responder(200, {&quot;operacion&quot;: &quot;Query&quot;, &quot;pedidos&quot;: items})
-    items = tabla.scan()[&quot;Items&quot;]
-    return responder(200, {&quot;operacion&quot;: &quot;Scan&quot;, &quot;pedidos&quot;: items})</pre></div>
-      <div class="snip"><div class="top"><span>index.html  (la página: Terraform le pone la URL de la API)</span><button type="button">📋 Copiar</button></div><pre>&lt;!doctype html&gt;
-&lt;html lang=&quot;es&quot;&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;utf-8&quot;&gt;
-&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
-&lt;title&gt;Tienda de Laura&lt;/title&gt;
-&lt;style&gt;
-  body { font-family: system-ui, sans-serif; background: #f4f8fb; color: #0E2841; max-width: 720px; margin: 0 auto; padding: 24px 16px; }
-  h1 { color: #156082; margin-bottom: 4px; }
-  form, table { background: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 4px 16px rgba(14,40,65,.08); }
-  form { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; margin: 16px 0; }
-  label { display: flex; flex-direction: column; font-size: 13px; gap: 4px; }
-  input, select, button { font-size: 15px; padding: 8px 10px; border: 1px solid #dfe5ee; border-radius: 8px; }
-  button { background: #156082; color: #fff; border: 0; cursor: pointer; }
-  button.sec { background: #0F9ED5; }
-  table { width: 100%; border-collapse: collapse; }
-  th, td { text-align: left; padding: 8px; border-bottom: 1px solid #dfe5ee; font-size: 14px; }
-  #estado { font-size: 13px; color: #44546A; }
-&lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;h1&gt;🛍️ Tienda de Laura&lt;/h1&gt;
-  &lt;p&gt;Esta página vive en &lt;b&gt;S3&lt;/b&gt;. Cada pedido viaja a &lt;b&gt;API Gateway&lt;/b&gt; → &lt;b&gt;Lambda&lt;/b&gt; → &lt;b&gt;DynamoDB&lt;/b&gt;.&lt;/p&gt;
-
-  &lt;form id=&quot;f&quot;&gt;
-    &lt;label&gt;Cliente &lt;input id=&quot;cliente&quot; required placeholder=&quot;camila&quot;&gt;&lt;/label&gt;
-    &lt;label&gt;Producto
-      &lt;select id=&quot;producto&quot;&gt;&lt;option&gt;camiseta&lt;/option&gt;&lt;option&gt;gorra&lt;/option&gt;&lt;option&gt;buzo&lt;/option&gt;&lt;/select&gt;
-    &lt;/label&gt;
-    &lt;label&gt;Talla
-      &lt;select id=&quot;talla&quot;&gt;&lt;option&gt;S&lt;/option&gt;&lt;option selected&gt;M&lt;/option&gt;&lt;option&gt;L&lt;/option&gt;&lt;/select&gt;
-    &lt;/label&gt;
-    &lt;button&gt;Guardar pedido&lt;/button&gt;
-  &lt;/form&gt;
-
-  &lt;p&gt;
-    &lt;button class=&quot;sec&quot; id=&quot;todos&quot;&gt;Ver todos (Scan)&lt;/button&gt;
-    &lt;button class=&quot;sec&quot; id=&quot;uno&quot;&gt;Ver solo este cliente (Query)&lt;/button&gt;
-    &lt;span id=&quot;estado&quot;&gt;&lt;/span&gt;
-  &lt;/p&gt;
-  &lt;table&gt;
-    &lt;thead&gt;&lt;tr&gt;&lt;th&gt;cliente&lt;/th&gt;&lt;th&gt;fecha&lt;/th&gt;&lt;th&gt;producto&lt;/th&gt;&lt;th&gt;talla&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
-    &lt;tbody id=&quot;lista&quot;&gt;&lt;/tbody&gt;
-  &lt;/table&gt;
-
-&lt;script&gt;
-  var API = &quot;${api}&quot;;
-  var estado = document.getElementById(&quot;estado&quot;);
-
-  function esc(t) { return String(t).replace(/[&amp;&lt;&gt;&quot;]/g, function (c) { return { &quot;&amp;&quot;: &quot;&amp;amp;&quot;, &quot;&lt;&quot;: &quot;&amp;lt;&quot;, &quot;&gt;&quot;: &quot;&amp;gt;&quot;, &#x27;&quot;&#x27;: &quot;&amp;quot;&quot; }[c]; }); }
-
-  function pintar(r) {
-    estado.textContent = r.operacion + &quot;: &quot; + r.pedidos.length + &quot; pedido(s)&quot;;
-    var filas = r.pedidos.map(function (p) {
-      return &quot;&lt;tr&gt;&lt;td&gt;&quot; + esc(p.cliente) + &quot;&lt;/td&gt;&lt;td&gt;&quot; + esc(p.fecha) + &quot;&lt;/td&gt;&lt;td&gt;&quot; + esc(p.producto) + &quot;&lt;/td&gt;&lt;td&gt;&quot; + esc(p.talla) + &quot;&lt;/td&gt;&lt;/tr&gt;&quot;;
-    });
-    document.getElementById(&quot;lista&quot;).innerHTML = filas.join(&quot;&quot;);
-  }
-
-  function ver(cliente) {
-    var url = API + (cliente ? &quot;/?cliente=&quot; + encodeURIComponent(cliente) : &quot;/&quot;);
-    fetch(url).then(function (r) { return r.json(); }).then(pintar);
-  }
-
-  document.getElementById(&quot;f&quot;).addEventListener(&quot;submit&quot;, function (e) {
-    e.preventDefault();
-    var pedido = {
-      cliente: document.getElementById(&quot;cliente&quot;).value,
-      producto: document.getElementById(&quot;producto&quot;).value,
-      talla: document.getElementById(&quot;talla&quot;).value
-    };
-    estado.textContent = &quot;guardando…&quot;;
-    fetch(API + &quot;/&quot;, { method: &quot;POST&quot;, headers: { &quot;content-type&quot;: &quot;application/json&quot; }, body: JSON.stringify(pedido) })
-      .then(function () { ver(); });
-  });
-
-  document.getElementById(&quot;todos&quot;).onclick = function () { ver(); };
-  document.getElementById(&quot;uno&quot;).onclick = function () { ver(document.getElementById(&quot;cliente&quot;).value); };
-  ver();
-&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;</pre></div>
+      <div class="snip"><div class="top"><span>pedro.json</span><button type="button">📋 Copiar</button></div><pre>{
+  &quot;cliente&quot;:  { &quot;S&quot;: &quot;pedro&quot; },
+  &quot;fecha&quot;:    { &quot;S&quot;: &quot;2026-10-09 10:05&quot; },
+  &quot;producto&quot;: { &quot;S&quot;: &quot;gorra&quot; },
+  &quot;regalo&quot;:   { &quot;S&quot;: &quot;si&quot; }
+}</pre></div>
+      <div class="snip"><div class="top"><span>consulta.json  (para el Query)</span><button type="button">📋 Copiar</button></div><pre>{ &quot;:c&quot;: { &quot;S&quot;: &quot;camila&quot; } }</pre></div>
     </div>
   </div>
 </section>
 <section class="slide" id="labA1">
-  <span class="k"><span class="act-chip">🧪 LAB A · PASO 1</span> Despliega y haz pedidos</span>
-  <h2 style="font-size:clamp(1.15rem,2.3vw,1.6rem)"><span class="grad">terraform apply</span> y abre tu tienda</h2>
-  <div class="grid2" style="align-items:start;grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+  <span class="k"><span class="act-chip">🧪 LAB A · PASO 1</span> Crea, guarda y lee</span>
+  <h2 style="font-size:clamp(1.15rem,2.3vw,1.6rem)">Guarda pedidos y léelos con <span class="grad">Query</span> y <span class="grad">Scan</span></h2>
+  <div class="grid2" style="align-items:start;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)">
     <ul class="cmdlist">
-      <li><span><code>terraform init</code> → <code>terraform apply</code></span><span>Plan: <b>12 to add</b> → <b>yes</b> · ~1 minuto</span></li>
-      <li><span>Al final te muestra <b>url_tienda</b> y <b>api</b></span><span>abre url_tienda en el navegador</span></li>
-      <li><span>Guarda 3 pedidos: <b>camila</b> (2) y <b>pedro</b> (1)</span><span>cada uno es un <b>PutItem</b></span></li>
-      <li><span><b>Ver todos (Scan)</b> vs. <b>Ver solo este cliente (Query)</b></span><span>Query lee solo la partición de ese cliente</span></li>
-      <li><span>Consola → DynamoDB → <b>pedidos-web</b> → Explorar elementos</span><span>ahí están tus pedidos 📸</span></li>
+      <li><span><b>$T</b> = nombre de tu tabla</span><span>cambia <b>tunombre</b> por el tuyo (sin tildes)</span></li>
+      <li><span><code>create-table</code></span><span>llave = <b>cliente</b> (partición) + <b>fecha</b> (orden)</span></li>
+      <li><span><code>put-item</code> ×2</span><span>guarda a Camila y a Pedro</span></li>
+      <li><span><code>query</code> cliente = camila</span><span>solo los de Camila · <b>"Count": 1</b></span></li>
+      <li><span><code>scan</code></span><span>toda la tabla · <b>"Count": 2</b></span></li>
+      <li><span>Reto: en camila.json cambia la fecha a <b>11:00</b> y el producto, y vuelve a hacer put-item</span><span>el Query ya trae <b>2</b>: misma partición, otra fecha</span></li>
     </ul>
     <div class="snips">
-      <div class="snip"><div class="top"><span>1 · desplegar</span><button type="button">📋 Copiar</button></div><pre>terraform init
-terraform apply</pre></div>
-      <div class="snip"><div class="top"><span>2 · mira la llave doble y cuenta los pedidos</span><button type="button">📋 Copiar</button></div><pre>aws dynamodb describe-table --table-name pedidos-web --query &quot;Table.KeySchema&quot;
-aws dynamodb scan --table-name pedidos-web --query &quot;Count&quot;</pre></div>
+      <div class="snip"><div class="top"><span>1 · crea la tabla</span><button type="button">📋 Copiar</button></div><pre>$T = &quot;pedidos-tunombre&quot;
+
+aws dynamodb create-table --table-name $T --attribute-definitions &quot;AttributeName=cliente,AttributeType=S&quot; &quot;AttributeName=fecha,AttributeType=S&quot; --key-schema &quot;AttributeName=cliente,KeyType=HASH&quot; &quot;AttributeName=fecha,KeyType=RANGE&quot; --billing-mode PAY_PER_REQUEST
+
+aws dynamodb wait table-exists --table-name $T</pre></div>
+      <div class="snip"><div class="top"><span>2 · guarda</span><button type="button">📋 Copiar</button></div><pre>aws dynamodb put-item --table-name $T --item file://camila.json
+aws dynamodb put-item --table-name $T --item file://pedro.json</pre></div>
+      <div class="snip"><div class="top"><span>3 · lee</span><button type="button">📋 Copiar</button></div><pre>aws dynamodb query --table-name $T --key-condition-expression &quot;cliente = :c&quot; --expression-attribute-values file://consulta.json
+
+aws dynamodb scan --table-name $T</pre></div>
     </div>
   </div>
 </section>
 <section class="slide" id="labA2">
   <span class="k"><span class="act-chip">🧪 LAB A · PASO 2</span> Checkpoint y limpieza</span>
-  <h2 style="font-size:clamp(1.15rem,2.3vw,1.6rem)">Pantallazos al chat y <span class="grad">terraform destroy</span></h2>
+  <h2 style="font-size:clamp(1.15rem,2.3vw,1.6rem)">Míralo en la consola y <span class="grad">borra la tabla</span></h2>
   <div class="grid2" style="align-items:start;grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
     <ul class="cmdlist">
-      <li><span>📸 1 · tu tienda con los pedidos en la lista</span><span>la URL debe decir <b>s3-website</b></span></li>
-      <li><span>📸 2 · Explorar elementos en DynamoDB</span><span>cliente + fecha + producto + talla</span></li>
-      <li><span>¿Por qué el botón Query es mejor que Scan?</span><span>lee una partición, no toda la tabla</span></li>
-      <li><span>¿Quién guarda el pedido: la página o la Lambda?</span><span>la <b>Lambda</b>: la página nunca toca la base</span></li>
-      <li><span>Limpieza →</span><span><b>Destroy complete! Resources: 12 destroyed.</b></span></li>
+      <li><span>Consola → <b>DynamoDB</b> → Tablas → tu tabla → <b>Explorar elementos</b></span><span>📸 pantallazo al chat con tus pedidos</span></li>
+      <li><span>¿Por qué el Query trajo menos que el Scan?</span><span>Query lee <b>una partición</b>; Scan lee <b>todo</b></span></li>
+      <li><span>¿Qué pasó con el atributo <b>regalo</b>?</span><span>solo existe en el ítem de Pedro: sin columnas fijas</span></li>
+      <li><span>Limpieza →</span><span><b>delete-table</b> (no cuesta casi nada, pero se deja limpio)</span></li>
     </ul>
     <div class="snips">
-      <div class="snip"><div class="top"><span>al terminar</span><button type="button">📋 Copiar</button></div><pre>terraform destroy</pre></div>
+      <div class="snip"><div class="top"><span>al terminar el LAB A</span><button type="button">📋 Copiar</button></div><pre>aws dynamodb delete-table --table-name $T</pre></div>
     </div>
   </div>
-  <p class="sub" style="margin-top:14px">¿Nos queda tiempo? 👉 seguimos con el <b>LAB B: la base de pedidos en RDS con Terraform</b>.</p>
+  <p class="sub" style="margin-top:14px">👉 Ahora el <b>LAB B</b>: la base de pedidos de Laura en <b>RDS</b> con Terraform.</p>
 </section>
 <script>['labA0','labA1','labA2'].forEach(function(id){wireSnips(document.getElementById(id))});</script>
 
-<!-- LAB B (si alcanzamos) -->
+<!-- LAB B: RDS -->
 <!-- 10 · LAB 0: PERMISOS -->
 <section class="slide" id="labD0">
   <span class="k"><span class="act-chip">🧪 LAB B · PASO 0</span> Dale permiso de RDS a tu llave</span>
@@ -1597,7 +1347,7 @@ function box(c,x,y,w,h,o){o=o||{};c.save();c.globalAlpha*=(o.al==null?1:o.al);if
 function dot(c,x,y,r,col,a,gl){c.save();c.globalAlpha*=(a==null?1:a);if(gl){c.shadowColor=col;c.shadowBlur=gl}c.fillStyle=col;c.beginPath();c.arc(x,y,r,0,7);c.fill();c.restore()}
 function qp(a,b,k,cp){var u=1-k;return[u*u*a[0]+2*u*k*cp[0]+k*k*b[0],u*u*a[1]+2*u*k*cp[1]+k*k*b[1]]}
 function curve(c,a,b,cp,k,col,lw,a2){if(k<=0)return;c.save();c.globalAlpha*=(a2==null?1:a2);c.strokeStyle=col;c.lineWidth=lw||2;c.lineCap='round';c.beginPath();c.moveTo(a[0],a[1]);for(var i=1;i<=40*k;i++){var p=qp(a,b,i/40,cp);c.lineTo(p[0],p[1])}c.stroke();c.restore()}
-var IM={};['EC2','RDS','Aurora','DynamoDB','ElastiCache','MemoryDB','DocumentDB','Neptune','Timestream','Redshift','OpenSearchService','Keyspaces','APIGateway','SimpleStorageService','AWSLambda','ResUser'].forEach(function(n){var i=new Image();i.src='aws/'+(/^(AWS|Res)/.test(n)?n:'Amazon'+n)+'.svg';IM[n]=i});
+var IM={};['EC2','RDS','Aurora','DynamoDB','ElastiCache','MemoryDB','DocumentDB','Neptune','Timestream','Redshift','OpenSearchService','Keyspaces'].forEach(function(n){var i=new Image();i.src='aws/'+(/^(AWS|Res)/.test(n)?n:'Amazon'+n)+'.svg';IM[n]=i});
 function icon(c,n,x,y,s,a){var im=IM[n];if(!im||!im.complete||!im.naturalWidth)return;c.save();c.globalAlpha*=(a==null?1:a);rr(c,x-s/2,y-s/2,s,s,s*.2);c.clip();c.drawImage(im,x-s/2,y-s/2,s,s);c.restore()}
 function nf(n){return Math.round(n).toLocaleString('es-CO')}
 var S={};
@@ -1956,7 +1706,7 @@ S.quiz=function(c,t,sec){var st=sec.__st||0,k=Math.floor(st/2),rev=st%2===1,ts=(
     tx(c,'respuesta',166,286,{s:12,w:600,c:'rgba(255,255,255,.8)',f:FM,al:al});tx(c,QZ[k][1],166,322,{s:26,w:800,f:FD,c:'#fff',al:al});tx(c,QZ[k][2],166,356,{s:14,w:600,c:'rgba(255,255,255,.9)',al:al})}
   tx(c,rev?(k<4?'clic → siguiente caso':'clic → seguimos'):'clic → ver la respuesta',280,450,{s:11.5,w:600,a:'center',f:FM,c:C.faint})};
 /* separador: la ruta de las 4 partes, con la actual encendida */
-S.ruta=function(c,t,sec){var cur=+(sec.querySelector('canvas[data-mu]').dataset.part||1),L=[['1','¿Qué es una base de datos?'],['2','Los tipos de bases'],['3','Las bases de AWS, a detalle'],['4','Lab: S3 + DynamoDB (+ RDS)']],x=70,y0=70,dy=110;
+S.ruta=function(c,t,sec){var cur=+(sec.querySelector('canvas[data-mu]').dataset.part||1),L=[['1','¿Qué es una base de datos?'],['2','Los tipos de bases'],['3','Las bases de AWS, a detalle'],['4','Lab: DynamoDB y RDS']],x=70,y0=70,dy=110;
   var g=c.createLinearGradient(0,y0,0,y0+dy*3);g.addColorStop(0,'#0F9ED5');g.addColorStop(1,'#39c8e8');
   c.save();c.strokeStyle='rgba(170,182,194,.25)';c.lineWidth=4;c.beginPath();c.moveTo(x,y0);c.lineTo(x,y0+dy*3);c.stroke();
   var k=E.io(P(t,.2,1));c.strokeStyle=g;c.beginPath();c.moveTo(x,y0);c.lineTo(x,y0+dy*(cur-1)*k);c.stroke();c.restore();
@@ -2060,7 +1810,7 @@ S.elegir=function(c,t){var A=E.out(P(t,.1,.5)),CY=5,k=Math.floor(Math.max(0,t-.6
   tx(c,'si dudas, empieza con SQL',100,470,{s:11,w:700,a:'center',f:FD,c:C.mut,al:A})};
 /* 3.9 · DynamoDB por dentro: tabla, ítems, atributos y llave primaria */
 S.dyn1=function(c,t){var A=E.out(P(t,.1,.5)),PK='#c925d1',SK=C.t;
-  box(c,10,30,540,330,{al:A,r:16,sh:'rgba(14,40,65,.08)'});icon(c,'DynamoDB',36,56,30,A);tx(c,'tabla: pedidos-web',58,52,{s:14,w:800,f:FD,al:A});tx(c,'sin columnas fijas: solo la llave es obligatoria',58,70,{s:10.5,w:600,f:FM,c:C.mut,al:A});
+  box(c,10,30,540,330,{al:A,r:16,sh:'rgba(14,40,65,.08)'});icon(c,'DynamoDB',36,56,30,A);tx(c,'tabla: pedidos',58,52,{s:14,w:800,f:FD,al:A});tx(c,'sin columnas fijas: solo la llave es obligatoria',58,70,{s:10.5,w:600,f:FM,c:C.mut,al:A});
   var hA=E.out(P(t,.6,.4));box(c,24,86,110,30,{f:rgba(PK,.12),s:PK,r:8,al:hA});tx(c,'cliente',79,101,{s:12,w:800,a:'center',f:FM,c:PK,al:hA});
   box(c,140,86,160,30,{f:rgba(SK,.12),s:SK,r:8,al:hA});tx(c,'fecha',220,101,{s:12,w:800,a:'center',f:FM,c:SK,al:hA});tx(c,'atributos (libres)',420,101,{s:11.5,w:700,a:'center',f:FM,c:C.faint,al:hA});
   var I=[['camila','2026-10-09 10:00',[['producto','camiseta'],['talla','L']]],['camila','2026-10-09 15:30',[['producto','gorra']]],['pedro','2026-10-08 09:10',[['producto','buzo'],['talla','M'],['regalo','sí']]],['sofia','2026-10-07 18:45',[['producto','gorra'],['cupón','LAURA10']]]];
@@ -2096,19 +1846,28 @@ S.dyn3=function(c,t){var A=E.out(P(t,.1,.5)),PK='#c925d1',cols=[C.p,C.t,C.o,C.g]
     tx(c,'ítems leídos: '+read,28,y+84,{s:12.5,w:800,f:FD,c:l[3],al:a});tx(c,l[2],28,y+106,{s:11,w:600,c:C.mut,al:a});
     var cost=j===2?'⚠ lento y caro con millones':j===1?'✓ rápido: una partición':'✓ el más rápido';tx(c,cost,536,y+118,{s:11,w:700,a:'right',f:FD,c:j===2?C.red:C.g,al:E.out(P(t,1.6+j*1.4,.4))})})};
 
-/* 4.1 · arquitectura del LAB A */
-S.arq=function(c,t){var A=E.out(P(t,.1,.5)),CY=13,st=Math.floor(Math.max(0,t-1)/2.6)%5,u=(Math.max(0,t-1)%2.6)/2.6;
-  var U=[52,262],S3=[210,96],GW=[210,262],LB=[340,262],DB=[480,262];
-  c.save();c.globalAlpha*=A;c.setLineDash([6,5]);c.strokeStyle=rgba(C.p,.5);c.lineWidth=1.5;rr(c,130,24,420,330,18);c.stroke();c.restore();tx(c,'AWS · us-east-1 · creado con terraform apply',540,40,{s:10.5,w:700,a:'right',f:FM,c:C.p,al:A});
-  function node(p,ic,lab,sub,on,d){var a=E.back(P(t,d,.5));if(a<=0)return;var al=Math.min(1,a);box(c,p[0]-46,p[1]-46,92,92,{r:18,f:on?'#eef6fb':'#fff',s:on?C.o:C.line,lw:on?2.5:1.2,al:al,sh:on?'rgba(233,113,50,.3)':'rgba(14,40,65,.08)'});icon(c,ic,p[0],p[1]-6,46,al);tx(c,lab,p[0],p[1]+58,{s:12.5,w:800,a:'center',f:FD,al:al});tx(c,sub,p[0],p[1]+74,{s:9.5,w:600,a:'center',f:FM,c:C.mut,al:al})}
-  function wire(a,b,on,dash){c.save();c.globalAlpha*=A;c.strokeStyle=on?C.o:C.line;c.lineWidth=on?3:2;if(dash)c.setLineDash([5,5]);c.beginPath();c.moveTo(a[0],a[1]);c.lineTo(b[0],b[1]);c.stroke();c.restore()}
-  wire([U[0]+30,U[1]-30],[S3[0]-46,S3[1]+10],st===0,true);wire([U[0]+40,U[1]],[GW[0]-46,GW[1]],st===1||st===4);wire([GW[0]+46,GW[1]],[LB[0]-46,LB[1]],st===2||st===4);wire([LB[0]+46,LB[1]],[DB[0]-46,DB[1]],st===3||st===4);
-  node(U,'ResUser','tu navegador','',st===0||st===1,.2);node(S3,'SimpleStorageService','S3','index.html (la vitrina)',st===0,.5);node(GW,'APIGateway','API Gateway','la puerta (GET/POST)',st===1,.8);node(LB,'AWSLambda','Lambda','app.py (el cerebro)',st===2,1.1);node(DB,'DynamoDB','DynamoDB','tabla pedidos-web',st===3,1.4);
-  var iA=E.out(P(t,1.6,.4));box(c,262,346,156,26,{r:13,f:'#fff7ed',s:rgba(C.o,.5),al:iA});tx(c,'🔑 rol IAM: solo esta tabla',340,359,{s:10,w:700,a:'center',f:FD,c:C.o,al:iA});
-  var PTH=[[[U[0]+30,U[1]-30],[S3[0]-46,S3[1]+10],'index.html'],[[U[0]+40,U[1]],[GW[0]-46,GW[1]],'POST pedido'],[[GW[0]+46,GW[1]],[LB[0]-46,LB[1]],'invoca'],[[LB[0]+46,LB[1]],[DB[0]-46,DB[1]],'PutItem'],[[DB[0]-46,DB[1]+14],[U[0]+40,U[1]+14],'Query → lista']];
-  if(t>1){var pp=PTH[st],back=st===0,k=E.io(u),a0=back?pp[1]:pp[0],a1=back?pp[0]:pp[1],x=a0[0]+(a1[0]-a0[0])*k,y=a0[1]+(a1[1]-a0[1])*k;box(c,x-38,y-24,76,20,{r:10,f:C.o,s:false});tx(c,pp[2],x,y-14,{s:9.5,w:800,a:'center',f:FM,c:'#fff'});dot(c,x,y,6,C.o,1,14)}
-  var T=['1 · abres la URL: S3 te entrega la página','2 · llenas el formulario: POST a API Gateway','3 · API Gateway despierta a la Lambda','4 · la Lambda guarda el pedido: PutItem','5 · “Ver pedidos”: Query/Scan y la lista vuelve'];
-  box(c,10,404,540,62,{r:14,f:'#0E2841',s:false,al:A});tx(c,t>1?T[st]:'',280,435,{s:14,w:700,a:'center',f:FD,c:'#fff',al:A});
+/* 4.1 · arquitectura del LAB A: tu PC con la AWS CLI → DynamoDB */
+S.arq=function(c,t){var A=E.out(P(t,.1,.5)),PK='#c925d1',st=Math.floor(Math.max(0,t-1)/2.8)%5,u=(Math.max(0,t-1)%2.8)/2.8;
+  var CMD=['create-table','put-item camila.json','put-item pedro.json','query cliente = camila','scan'],TXT=['1 · creas la tabla: llave = cliente + fecha','2 · guardas el pedido de Camila (PutItem)','3 · guardas el de Pedro: trae “regalo”, otro atributo','4 · Query: solo los pedidos de Camila','5 · Scan: lee toda la tabla'];
+  /* PC */
+  box(c,14,120,170,170,{r:18,al:A,sh:'rgba(14,40,65,.1)'});c.save();c.globalAlpha*=A;rr(c,28,136,142,102,8);c.fillStyle='#0E2841';c.fill();c.restore();
+  tx(c,'PS> aws dynamodb',38,156,{s:9.5,w:600,f:FM,c:'#7cc4ff',al:A});tx(c,t>1?typed(CMD[st],u,0,.35):'',38,174,{s:9.5,w:500,f:FM,c:'#e6edf3',al:A});
+  if(t>1&&u>.75)tx(c,'✓ 200 OK',38,222,{s:9.5,w:700,f:FM,c:'#7ee2a8',al:A});
+  tx(c,'tu PC · VS Code',99,258,{s:12.5,w:800,a:'center',f:FD,al:A});tx(c,'AWS CLI + llave de terraform-lab',99,276,{s:9,w:600,a:'center',f:FM,c:C.mut,al:A});
+  /* nube */
+  c.save();c.globalAlpha*=A;c.setLineDash([6,5]);c.strokeStyle=rgba(C.p,.5);c.lineWidth=1.5;rr(c,240,30,310,360,18);c.stroke();c.restore();tx(c,'AWS · us-east-1',536,48,{s:10.5,w:700,a:'right',f:FM,c:C.p,al:A});
+  /* camino */
+  c.save();c.globalAlpha*=A;c.strokeStyle=st>=0&&t>1&&u>.3&&u<.8?C.o:C.line;c.lineWidth=2.5;c.beginPath();c.moveTo(184,205);c.lineTo(262,205);c.stroke();c.restore();
+  tx(c,'HTTPS + firma',222,192,{s:9,w:700,a:'center',f:FM,c:C.mut,al:A});
+  if(t>1&&u>.3&&u<.8){var k=E.io((u-.3)/.5),x=184+78*k;dot(c,x,205,6,C.o,1,14)}
+  /* tabla */
+  box(c,262,64,272,300,{r:16,f:'#fff',s:rgba(PK,.4),lw:1.5,al:A,sh:'rgba(201,37,209,.12)'});icon(c,'DynamoDB',290,92,32,A);tx(c,'pedidos-tunombre',314,86,{s:12.5,w:800,f:FD,al:A});tx(c,'cliente (partición) + fecha (orden)',314,104,{s:9,w:600,f:FM,c:C.mut,al:A});
+  var made=t>1&&(st>0||u>.8);if(!made){tx(c,'(aún no existe)',398,220,{s:11.5,w:600,a:'center',f:FM,c:C.faint,al:A})}
+  var I=[['camila','10:00','camiseta · L',1],['pedro','10:05','gorra · regalo: si',2]];
+  I.forEach(function(it,i){var has=st>it[3]||(st===it[3]&&u>.8);if(!has||!made)return;var y=126+i*64,hl=(st===3&&i===0&&u>.8)||(st===4&&u>.8),dim=st===3&&i===1&&u>.8;var a=st===it[3]?E.back(P(u,.8,.2)):1;
+    box(c,276,y,244,54,{r:10,f:hl?'#fbf2fd':'#fff',s:hl?PK:C.line,lw:hl?2:1.2,al:A*Math.min(1,a)*(dim?.4:1)});tx(c,it[0],290,y+18,{s:12.5,w:800,f:FM,c:PK,al:A*(dim?.4:1)});tx(c,it[1],516,y+18,{s:11,w:600,a:'right',f:FM,c:C.t,al:A*(dim?.4:1)});tx(c,it[2],290,y+38,{s:10.5,w:600,f:FM,c:C.mut,al:A*(dim?.4:1)})});
+  if(st>=3&&u>.8)pill(c,st===3?'Query: 1 pedido (solo su partición)':'Scan: 2 pedidos (toda la tabla)',398,330,st===3?C.g:C.red,E.out(P(u,.8,.15)),{s:10.5,f2:st===3?'#ecfbf3':'#fff0f0'});
+  box(c,10,404,540,62,{r:14,f:'#0E2841',s:false,al:A});tx(c,t>1?TXT[st]:'tu PC le habla a DynamoDB con la AWS CLI',280,435,{s:14,w:700,a:'center',f:FD,c:'#fff',al:A});
   for(var i=0;i<5;i++)dot(c,240+i*20,456,i===st?5:3.5,i===st?C.o:'#2b4f74',A)};
 
 /* motor: corre la escena de la diapositiva visible */
