@@ -607,7 +607,17 @@ window.wireSnips=window.wireSnips||function(sec){sec.querySelectorAll('.snip').f
 </section>
 <section class="slide mu">
   <div>
-    <div class="mtag"><b>1.3</b>parte 1 · el idioma SQL</div>
+    <div class="mtag"><b>1.3</b>parte 1 · las relaciones</div>
+    <h2>Las tablas <span class="g">se relacionan</span></h2>
+    <div class="mnote"><span>// como</span> fichas que se señalan por un número</div>
+    <p class="msub">No se guarda todo en una tabla gigante: hay una tabla de <b>clientes</b> y otra de <b>pedidos</b>. El pedido no repite el nombre; guarda el <b>número del cliente</b> (su <b>llave</b>). Si Camila cambia de teléfono, se corrige en <b>un solo lugar</b>.</p>
+    <p class="muse">Por eso se llaman bases de datos <b>relacionales</b></p>
+  </div>
+  <div class="mviz"><canvas data-mu="rel" aria-label="La tabla de pedidos apunta por número a la tabla de clientes"></canvas></div>
+</section>
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>1.4</b>parte 1 · el idioma SQL</div>
     <h2>Le hablas <span class="g">en SQL</span></h2>
     <div class="mnote"><span>// como</span> pedirle algo al bibliotecario con frases exactas</div>
     <p class="msub"><b>SELECT</b> pregunta (“muéstrame los pedidos talla L”), <b>INSERT</b> agrega un pedido nuevo y <b>UPDATE</b> cambia uno: el <b>#57</b> pasa de talla M a L. En milisegundos, aunque haya millones de filas.</p>
@@ -616,7 +626,7 @@ window.wireSnips=window.wireSnips||function(sec){sec.querySelectorAll('.snip').f
 </section>
 <section class="slide mu">
   <div>
-    <div class="mtag"><b>1.4</b>parte 1 · ¿por qué no un Excel?</div>
+    <div class="mtag"><b>1.5</b>parte 1 · ¿por qué no un Excel?</div>
     <h2>Tres personas, <span class="g">un mismo Excel</span></h2>
     <div class="mnote"><span>// como</span> tres personas escribiendo en la misma hoja de papel</div>
     <p class="msub">Laura contrató a <b>Ana, Luis y Marta</b>. Los tres abren el mismo archivo de pedidos. Ana cambia una talla y guarda; Luis guarda <b>su versión vieja encima</b>… y el cambio de Ana <b>desaparece</b>.</p>
@@ -625,7 +635,7 @@ window.wireSnips=window.wireSnips||function(sec){sec.querySelectorAll('.snip').f
 </section>
 <section class="slide mu">
   <div>
-    <div class="mtag"><b>1.5</b>parte 1 · ¿por qué no un Excel?</div>
+    <div class="mtag"><b>1.6</b>parte 1 · ¿por qué no un Excel?</div>
     <h2>50.000 pedidos <span class="g">no caben en un Excel</span></h2>
     <div class="mnote"><span>// como</span> un cuaderno que ya no cierra</div>
     <p class="msub">El archivo tarda minutos en abrir, un día <b>se daña</b> y no hay copia. Laura necesita algo hecho para esto: una <b>base de datos</b>, que guarda millones de pedidos, deja trabajar a muchos a la vez y saca copias.</p>
@@ -684,14 +694,14 @@ window.wireSnips=window.wireSnips||function(sec){sec.querySelectorAll('.snip').f
 <section class="slide mu">
   <div>
     <div class="mtag"><b>3.1</b>parte 3 · Amazon RDS · relacional</div>
-    <h2>Datos que se <span class="g">relacionan</span></h2>
-    <div class="mnote"><span>// como</span> fichas que se señalan por un número</div>
-    <p class="msub">El pedido 58 no copia el nombre del cliente: solo guarda su <b>número</b>. Con SQL, la base une las dos tablas y responde “el pedido 58 es de Pedro”. Así nunca hay datos repetidos ni contradictorios.</p>
+    <h2>RDS: tu base relacional, <span class="g">administrada</span></h2>
+    <div class="mnote"><span>// como</span> alquilar el local ya amoblado y con vigilante</div>
+    <p class="msub">Todo lo de la parte 1 (tablas, relaciones, SQL) vive en <b>Amazon RDS</b>. Escoges el <b>motor</b> y el tamaño; AWS lo instala, lo parcha y lo cuida. <b>Aurora</b> es la versión propia de AWS: más rápida y con 6 copias en 3 zonas.</p>
     <div class="maws"><span><img src="aws/AmazonRDS.svg" alt=""><b>RDS</b> MySQL, PostgreSQL, SQL Server…</span><span><img src="aws/AmazonAurora.svg" alt=""><b>Aurora</b> más rápida, 6 copias</span></div>
     <p class="muse">Úsala para: <b>pedidos, facturas, inventario, notas</b></p>
     <div class="mfacts"><span><i>motores</i>MySQL, PostgreSQL, MariaDB, SQL Server, Oracle, Db2</span><span><i>Aurora</i>compatible con MySQL y PostgreSQL</span><span><i>tú escoges</i>motor + tamaño</span></div>
   </div>
-  <div class="mviz"><canvas data-mu="rel" aria-label="Tabla de pedidos que apunta por número a la tabla de clientes"></canvas></div>
+  <div class="mviz"><canvas data-mu="motores" aria-label="Motores relacionales que trae RDS y bases NoSQL de AWS"></canvas></div>
 </section>
 <section class="slide mu">
   <div>
@@ -1218,11 +1228,13 @@ S.rel=function(c,t){var a1=E.out(P(t,.2,.6)),a2=E.out(P(t,.5,.6));
     rows.forEach(function(r,i){var yy=y+70+i*42,on=i===hiRow;if(on){c.save();c.globalAlpha*=al*hl;rr(c,x+8,yy-16,w-16,34,8);c.fillStyle=rgba(ac,.1);c.fill();c.restore()}
       r.forEach(function(v,j){tx(c,v,x+16+cw[j],yy+1,{s:14,w:j===0?700:500,c:on&&((title==='pedidos'&&j===1)||(title==='clientes'&&j===0))?ac:C.ink,f:j<2?FM:FB,al:al})})})}
   table(10,40,180,'clientes',['id','nombre'],CL,[0,46],cR,C.t,a1);
+  pill(c,'🔑 id = la llave de cada cliente',100,250,C.t,E.out(P(t,1,.4)),{s:11});pill(c,'cliente = apunta a esa llave',425,290,C.p,E.out(P(t,1.3,.4)),{s:11});
+  tx(c,'el pedido guarda solo el número → la base trae el nombre',280,334,{s:12.5,w:700,a:'center',f:FD,c:C.ink,al:E.out(P(t,1.8,.4))});
   table(300,40,250,'pedidos',['#','cliente','producto'],PE,[0,52,118],cyc,C.p,a2);
   if(cyc>=0){var y1=110+cyc*42,y0=110+cR*42,k=E.io(P(u,.5,.8));
     curve(c,[300,y1],[190,y0],[245,(y0+y1)/2],k,C.p,2.6);
     if(k>0&&k<1){var p=qp([300,y1],[190,y0],k,[245,(y0+y1)/2]);dot(c,p[0],p[1],5,C.p,1,14)}
-    tx(c,'cliente = id',245,24,{s:11,w:700,c:C.p,a:'center',f:FM,al:P(u,1.1,.3)});
+    tx(c,'cliente = id',245,(y0+y1)/2-14,{s:11,w:700,c:C.p,a:'center',f:FM,al:P(u,1.1,.3)});
     var r=E.back(P(u,1.4,.5));if(r>0){c.save();c.translate(280,400);c.scale(r,r);
       var g=c.createLinearGradient(-220,0,220,0);g.addColorStop(0,'#7b2ff5');g.addColorStop(1,'#1f7fc4');rr(c,-220,-34,440,68,16);c.fillStyle=g;c.shadowColor='rgba(123,47,245,.35)';c.shadowBlur=24;c.fill();c.restore();
       tx(c,'SELECT … JOIN clientes ON cliente = id',280,384,{s:10.5,w:500,c:'rgba(255,255,255,.75)',a:'center',f:FM,al:Math.min(1,r)});
