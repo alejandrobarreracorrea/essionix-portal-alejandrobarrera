@@ -524,6 +524,10 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
 .mu .mfacts{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:12px;font-family:"JetBrains Mono",monospace;font-size:clamp(.72rem,1vw,.86rem);color:var(--mink)}
 .mu .mfacts i{font-style:normal;color:var(--mfaint);margin-right:6px}
 .slide.mu.sep h2{font-size:clamp(2.4rem,5.4vw,4.4rem)}
+.mu .msteps{list-style:none;display:flex;flex-direction:column;gap:9px;margin-top:16px;max-width:40ch}
+.mu .msteps li{display:grid;grid-template-columns:26px 1fr;gap:10px;align-items:baseline;font-size:clamp(.9rem,1.35vw,1.12rem);line-height:1.35;color:var(--mmut)}
+.mu .msteps li b{color:var(--mink)}
+.mu .msteps li span{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;border:2px solid #E97132;color:#E97132;font:800 .8rem "Plus Jakarta Sans",sans-serif}
 .mu .mviz{display:flex;align-items:center;justify-content:center;min-width:0}
 .mu .mviz canvas{display:block}
 .slide.mu.sum.on{grid-template-columns:1fr;align-content:center;gap:22px}
@@ -945,13 +949,17 @@ window.wireSnips=window.wireSnips||function(sec){sec.querySelectorAll('.snip').f
 
 <section class="slide mu">
   <div>
-    <div class="mtag"><b>4.1</b>parte 4 · LAB A · lo que vamos a hacer</div>
-    <h2>Tu PC le habla a <span class="g">DynamoDB</span></h2>
-    <div class="mnote"><span>// como</span> llamar al archivador por teléfono y dictarle la ficha</div>
-    <p class="msub">Desde la terminal de VS Code, la <b>AWS CLI</b> firma cada orden con tu llave de <b>terraform-lab</b> y la envía por HTTPS a DynamoDB. Creas la tabla, guardas dos pedidos y los lees con <b>Query</b> y con <b>Scan</b>. Sin servidores: <b>10 minutos</b>.</p>
-    <p class="muse">Después seguimos con el <b>LAB B: la base de pedidos en RDS</b></p>
+    <div class="mtag"><b>4.1</b>parte 4 · LAB A · el diagrama</div>
+    <h2>LAB A: tu PC guarda pedidos en <span class="g">DynamoDB</span></h2>
+    <ol class="msteps">
+      <li><span>1</span><p>Tu <b>AWS CLI</b> ya tiene la llave de <b>terraform-lab</b> (aws configure).</p></li>
+      <li><span>2</span><p>Cada comando viaja por <b>HTTPS</b> al endpoint de DynamoDB en <b>us-east-1</b>.</p></li>
+      <li><span>3</span><p><b>IAM</b> revisa: ¿terraform-lab tiene <b>AmazonDynamoDBFullAccess</b>? ✓</p></li>
+      <li><span>4</span><p>DynamoDB crea la tabla, <b>guarda</b> los pedidos y los <b>lee</b> (Query y Scan).</p></li>
+    </ol>
+    <p class="muse">Sin servidores ni red que crear: <b>10 minutos</b></p>
   </div>
-  <div class="mviz"><canvas data-mu="arq" aria-label="Diagrama: tu PC con la AWS CLI envía órdenes por HTTPS a la tabla DynamoDB en us-east-1"></canvas></div>
+  <div class="mviz"><canvas data-mu="arq" aria-label="Diagrama del LAB A: tu PC con la AWS CLI, HTTPS, IAM y la tabla DynamoDB en us-east-1"></canvas></div>
 </section>
 <section class="slide" id="labA0">
   <span class="k"><span class="act-chip">🧪 LAB A · PASO 0</span> Permiso y 3 archivos</span>
@@ -1026,6 +1034,21 @@ aws dynamodb scan --table-name $T</pre></div>
 <script>['labA0','labA1','labA2'].forEach(function(id){wireSnips(document.getElementById(id))});</script>
 
 <!-- LAB B: RDS -->
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>4.2</b>parte 4 · LAB B · el diagrama</div>
+    <h2>LAB B: la base de Laura, <span class="g">escondida en la VPC</span></h2>
+    <ol class="msteps">
+      <li><span>1</span><p><b>terraform apply</b> crea los 12 recursos: red, porteros, la tienda (EC2) y la base (RDS).</p></li>
+      <li><span>2</span><p>Entras a la tienda por <b>SSH (22)</b> con MobaXterm, solo desde tu IP.</p></li>
+      <li><span>3</span><p>Desde la tienda le hablas a la base: <b>mysql -h endpoint</b> (3306).</p></li>
+      <li><span>4</span><p>Desde tu PC directo a la base: <b>bloqueado ✕</b> (subred privada).</p></li>
+    </ol>
+    <p class="muse">RDS tarda <b>5–10 min</b> en crearse · al final: <b>terraform destroy</b></p>
+  </div>
+  <div class="mviz"><canvas data-mu="arqrds" aria-label="Diagrama del LAB B: VPC con subred pública para la EC2 y dos privadas para RDS; SSH 22, mysql 3306 y acceso directo bloqueado"></canvas></div>
+</section>
+
 <!-- 10 · LAB 0: PERMISOS -->
 <section class="slide" id="labD0">
   <span class="k"><span class="act-chip">🧪 LAB B · PASO 0</span> Dale permiso de RDS a tu llave</span>
@@ -1347,7 +1370,7 @@ function box(c,x,y,w,h,o){o=o||{};c.save();c.globalAlpha*=(o.al==null?1:o.al);if
 function dot(c,x,y,r,col,a,gl){c.save();c.globalAlpha*=(a==null?1:a);if(gl){c.shadowColor=col;c.shadowBlur=gl}c.fillStyle=col;c.beginPath();c.arc(x,y,r,0,7);c.fill();c.restore()}
 function qp(a,b,k,cp){var u=1-k;return[u*u*a[0]+2*u*k*cp[0]+k*k*b[0],u*u*a[1]+2*u*k*cp[1]+k*k*b[1]]}
 function curve(c,a,b,cp,k,col,lw,a2){if(k<=0)return;c.save();c.globalAlpha*=(a2==null?1:a2);c.strokeStyle=col;c.lineWidth=lw||2;c.lineCap='round';c.beginPath();c.moveTo(a[0],a[1]);for(var i=1;i<=40*k;i++){var p=qp(a,b,i/40,cp);c.lineTo(p[0],p[1])}c.stroke();c.restore()}
-var IM={};['EC2','RDS','Aurora','DynamoDB','ElastiCache','MemoryDB','DocumentDB','Neptune','Timestream','Redshift','OpenSearchService','Keyspaces'].forEach(function(n){var i=new Image();i.src='aws/'+(/^(AWS|Res)/.test(n)?n:'Amazon'+n)+'.svg';IM[n]=i});
+var IM={};['EC2','RDS','Aurora','DynamoDB','ElastiCache','MemoryDB','DocumentDB','Neptune','Timestream','Redshift','OpenSearchService','Keyspaces','AWSCommandLineInterface','AWSIdentityandAccessManagement','G_AWSCloudlogo','G_Region','G_VirtualprivatecloudVPC','G_Publicsubnet','G_Privatesubnet','R_AmazonVPCInternetGateway','R_AmazonEC2Instance','R_AmazonDynamoDBTable','R_Client','R_AWSIdentityAccessManagementLongTermSecurityCredential'].forEach(function(n){var i=new Image();i.src='aws/'+(/^(AWS|Res|G_|R_)/.test(n)?n:'Amazon'+n)+'.svg';IM[n]=i});
 function icon(c,n,x,y,s,a){var im=IM[n];if(!im||!im.complete||!im.naturalWidth)return;c.save();c.globalAlpha*=(a==null?1:a);rr(c,x-s/2,y-s/2,s,s,s*.2);c.clip();c.drawImage(im,x-s/2,y-s/2,s,s);c.restore()}
 function nf(n){return Math.round(n).toLocaleString('es-CO')}
 var S={};
@@ -1846,29 +1869,70 @@ S.dyn3=function(c,t){var A=E.out(P(t,.1,.5)),PK='#c925d1',cols=[C.p,C.t,C.o,C.g]
     tx(c,'ítems leídos: '+read,28,y+84,{s:12.5,w:800,f:FD,c:l[3],al:a});tx(c,l[2],28,y+106,{s:11,w:600,c:C.mut,al:a});
     var cost=j===2?'⚠ lento y caro con millones':j===1?'✓ rápido: una partición':'✓ el más rápido';tx(c,cost,536,y+118,{s:11,w:700,a:'right',f:FD,c:j===2?C.red:C.g,al:E.out(P(t,1.6+j*1.4,.4))})})};
 
-/* 4.1 · arquitectura del LAB A: tu PC con la AWS CLI → DynamoDB */
-S.arq=function(c,t){var A=E.out(P(t,.1,.5)),PK='#c925d1',st=Math.floor(Math.max(0,t-1)/2.8)%5,u=(Math.max(0,t-1)%2.8)/2.8;
-  var CMD=['create-table','put-item camila.json','put-item pedro.json','query cliente = camila','scan'],TXT=['1 · creas la tabla: llave = cliente + fecha','2 · guardas el pedido de Camila (PutItem)','3 · guardas el de Pedro: trae “regalo”, otro atributo','4 · Query: solo los pedidos de Camila','5 · Scan: lee toda la tabla'];
-  /* PC */
-  box(c,14,120,170,170,{r:18,al:A,sh:'rgba(14,40,65,.1)'});c.save();c.globalAlpha*=A;rr(c,28,136,142,102,8);c.fillStyle='#0E2841';c.fill();c.restore();
-  tx(c,'PS> aws dynamodb',38,156,{s:9.5,w:600,f:FM,c:'#7cc4ff',al:A});tx(c,t>1?typed(CMD[st],u,0,.35):'',38,174,{s:9.5,w:500,f:FM,c:'#e6edf3',al:A});
-  if(t>1&&u>.75)tx(c,'✓ 200 OK',38,222,{s:9.5,w:700,f:FM,c:'#7ee2a8',al:A});
-  tx(c,'tu PC · VS Code',99,258,{s:12.5,w:800,a:'center',f:FD,al:A});tx(c,'AWS CLI + llave de terraform-lab',99,276,{s:9,w:600,a:'center',f:FM,c:C.mut,al:A});
-  /* nube */
-  c.save();c.globalAlpha*=A;c.setLineDash([6,5]);c.strokeStyle=rgba(C.p,.5);c.lineWidth=1.5;rr(c,240,30,310,360,18);c.stroke();c.restore();tx(c,'AWS · us-east-1',536,48,{s:10.5,w:700,a:'right',f:FM,c:C.p,al:A});
-  /* camino */
-  c.save();c.globalAlpha*=A;c.strokeStyle=st>=0&&t>1&&u>.3&&u<.8?C.o:C.line;c.lineWidth=2.5;c.beginPath();c.moveTo(184,205);c.lineTo(262,205);c.stroke();c.restore();
-  tx(c,'HTTPS + firma',222,192,{s:9,w:700,a:'center',f:FM,c:C.mut,al:A});
-  if(t>1&&u>.3&&u<.8){var k=E.io((u-.3)/.5),x=184+78*k;dot(c,x,205,6,C.o,1,14)}
-  /* tabla */
-  box(c,262,64,272,300,{r:16,f:'#fff',s:rgba(PK,.4),lw:1.5,al:A,sh:'rgba(201,37,209,.12)'});icon(c,'DynamoDB',290,92,32,A);tx(c,'pedidos-tunombre',314,86,{s:12.5,w:800,f:FD,al:A});tx(c,'cliente (partición) + fecha (orden)',314,104,{s:9,w:600,f:FM,c:C.mut,al:A});
-  var made=t>1&&(st>0||u>.8);if(!made){tx(c,'(aún no existe)',398,220,{s:11.5,w:600,a:'center',f:FM,c:C.faint,al:A})}
-  var I=[['camila','10:00','camiseta · L',1],['pedro','10:05','gorra · regalo: si',2]];
-  I.forEach(function(it,i){var has=st>it[3]||(st===it[3]&&u>.8);if(!has||!made)return;var y=126+i*64,hl=(st===3&&i===0&&u>.8)||(st===4&&u>.8),dim=st===3&&i===1&&u>.8;var a=st===it[3]?E.back(P(u,.8,.2)):1;
-    box(c,276,y,244,54,{r:10,f:hl?'#fbf2fd':'#fff',s:hl?PK:C.line,lw:hl?2:1.2,al:A*Math.min(1,a)*(dim?.4:1)});tx(c,it[0],290,y+18,{s:12.5,w:800,f:FM,c:PK,al:A*(dim?.4:1)});tx(c,it[1],516,y+18,{s:11,w:600,a:'right',f:FM,c:C.t,al:A*(dim?.4:1)});tx(c,it[2],290,y+38,{s:10.5,w:600,f:FM,c:C.mut,al:A*(dim?.4:1)})});
-  if(st>=3&&u>.8)pill(c,st===3?'Query: 1 pedido (solo su partición)':'Scan: 2 pedidos (toda la tabla)',398,330,st===3?C.g:C.red,E.out(P(u,.8,.15)),{s:10.5,f2:st===3?'#ecfbf3':'#fff0f0'});
-  box(c,10,404,540,62,{r:14,f:'#0E2841',s:false,al:A});tx(c,t>1?TXT[st]:'tu PC le habla a DynamoDB con la AWS CLI',280,435,{s:14,w:700,a:'center',f:FD,c:'#fff',al:A});
-  for(var i=0;i<5;i++)dot(c,240+i*20,456,i===st?5:3.5,i===st?C.o:'#2b4f74',A)};
+/* diagramas de arquitectura estilo AWS */
+function grp(c,x,y,w,h,col,lab,ic,o){o=o||{};c.save();c.globalAlpha*=(o.al==null?1:o.al);if(o.fill){c.fillStyle=o.fill;c.fillRect(x,y,w,h)}c.strokeStyle=col;c.lineWidth=o.lw||1.5;if(o.dash)c.setLineDash(o.dash);c.strokeRect(x,y,w,h);c.restore();
+  if(ic)icon(c,ic,x+11,y+11,22,o.al);tx(c,lab,x+(ic?28:8),y+12,{s:o.s||10.5,w:700,f:FD,c:o.tc||col,al:o.al})}
+function badge(c,n,x,y,on,a){var pl=on?1+.12*Math.sin(performance.now()/160):1;c.save();c.globalAlpha*=(a==null?1:a);c.translate(x,y);c.scale(pl,pl);if(on){c.shadowColor=C.o;c.shadowBlur=14}c.fillStyle=on?C.o:'#fff';c.strokeStyle=C.o;c.lineWidth=2;c.beginPath();c.arc(0,0,11,0,7);c.fill();c.stroke();c.restore();tx(c,String(n),x,y+1,{s:12,w:800,a:'center',f:FD,c:on?'#fff':C.o,al:a})}
+function along(c,pts,k,col){var L=[],T=0;for(var i=1;i<pts.length;i++){var d=Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]);L.push(d);T+=d}var g=k*T;for(var j=0;j<L.length;j++){if(g<=L[j]){var f=g/L[j];return[pts[j][0]+(pts[j+1][0]-pts[j][0])*f,pts[j][1]+(pts[j+1][1]-pts[j][1])*f]}g-=L[j]}return pts[pts.length-1]}
+function poly(c,pts,col,lw,dash,a){c.save();c.globalAlpha*=(a==null?1:a);c.strokeStyle=col;c.lineWidth=lw||2;if(dash)c.setLineDash(dash);c.beginPath();pts.forEach(function(p,i){i?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1])});c.stroke();c.restore()}
+function arrowhead(c,a,b,col,al){var an=Math.atan2(b[1]-a[1],b[0]-a[0]);c.save();c.globalAlpha*=(al==null?1:al);c.fillStyle=col;c.translate(b[0],b[1]);c.rotate(an);c.beginPath();c.moveTo(0,0);c.lineTo(-9,-5);c.lineTo(-9,5);c.closePath();c.fill();c.restore()}
+
+/* 4.1 · LAB A: tu PC → (HTTPS firmado) → IAM revisa → DynamoDB */
+S.arq=function(c,t){var A=E.out(P(t,.1,.5)),st=Math.floor(Math.max(0,t-1.2)/2.4)%4,u=(Math.max(0,t-1.2)%2.4)/2.4,on=t>1.2;
+  /* tu PC */
+  box(c,8,150,128,170,{r:14,al:A,sh:'rgba(14,40,65,.1)'});icon(c,'R_Client',72,196,52,A);tx(c,'tu PC',72,238,{s:13,w:800,a:'center',f:FD,al:A});icon(c,'AWSCommandLineInterface',46,276,28,A);tx(c,'AWS CLI',64,272,{s:10,w:700,f:FM,al:A});tx(c,'VS Code',64,286,{s:9.5,w:600,f:FM,c:C.mut,al:A});
+  icon(c,'R_AWSIdentityAccessManagementLongTermSecurityCredential',40,306,20,A);tx(c,'llave terraform-lab',52,306,{s:8,w:600,f:FM,c:C.mut,al:A});
+  /* nube y región */
+  grp(c,172,14,380,452,'#242f3e','AWS Cloud','G_AWSCloudlogo',{al:A});
+  grp(c,188,44,352,410,'#00a4a6','us-east-1 (Virginia)','G_Region',{al:A,dash:[5,4]});
+  /* IAM (global) */
+  var iA=E.out(P(t,.5,.4));box(c,206,74,316,62,{r:10,f:'#fdf6f3',s:rgba('#dd344c',.4),al:iA});icon(c,'AWSIdentityandAccessManagement',234,105,32,iA);tx(c,'IAM revisa el permiso',258,96,{s:12,w:800,f:FD,al:iA});tx(c,'terraform-lab + AmazonDynamoDBFullAccess',258,116,{s:9.5,w:600,f:FM,c:C.mut,al:iA});
+  if(on&&st>=2){tx(c,'✓',508,104,{s:20,w:800,a:'center',c:C.g,al:st===2?E.back(P(u,.3,.4))>0?1:0:1})}
+  /* DynamoDB */
+  var dA=E.out(P(t,.7,.4));box(c,206,168,316,266,{r:12,f:'#fbf2fd',s:rgba('#c925d1',.35),al:dA});icon(c,'DynamoDB',232,194,32,dA);tx(c,'Amazon DynamoDB',256,188,{s:12.5,w:800,f:FD,al:dA});tx(c,'dynamodb.us-east-1.amazonaws.com',256,206,{s:9,w:600,f:FM,c:C.mut,al:dA});
+  icon(c,'R_AmazonDynamoDBTable',236,250,30,dA);tx(c,'tabla pedidos-tunombre',258,244,{s:11.5,w:800,f:FM,c:'#c925d1',al:dA});tx(c,'partición: cliente (S) · orden: fecha (S)',258,262,{s:9,w:600,f:FM,c:C.mut,al:dA});
+  var made=on&&(st===3||t>11);var I=[['camila','2026-10-09 10:00','camiseta · L'],['pedro','2026-10-09 10:05','gorra · regalo: si']];
+  I.forEach(function(it,i){var a=made?(st===3&&t<11?E.back(P(u,.4+i*.2,.4)):1):0;if(a<=0)return;var al=Math.min(1,a),y=286+i*56;box(c,222,y,284,46,{r:9,al:al});tx(c,it[0],236,y+16,{s:11.5,w:800,f:FM,c:'#c925d1',al:al});tx(c,it[1],494,y+16,{s:9.5,w:600,a:'right',f:FM,c:C.t,al:al});tx(c,it[2],236,y+33,{s:9.5,w:600,f:FM,c:C.mut,al:al})});
+  if(!made)tx(c,'(la tabla aún no existe)',364,330,{s:10.5,w:600,a:'center',f:FM,c:C.faint,al:dA});
+  /* flechas y números */
+  var p2=[[136,236],[206,236]],p3=[[364,168],[364,136]];
+  poly(c,p2,st===1&&on?C.o:'#8B98A9',2.5,null,A);arrowhead(c,p2[0],p2[1],st===1&&on?C.o:'#8B98A9',A);tx(c,'HTTPS',171,224,{s:9,w:700,a:'center',f:FM,c:C.mut,al:A});
+  poly(c,p3,st===2&&on?C.o:'#8B98A9',2,[4,4],A);
+  badge(c,1,72,140,on&&st===0,A);badge(c,2,171,252,on&&st===1,A);badge(c,3,384,152,on&&st===2,A);badge(c,4,500,200,on&&st===3,A);
+  if(on){if(st===0){c.save();c.globalAlpha*=E.out(P(u,.1,.3));c.strokeStyle=C.o;c.lineWidth=2.5;rr(c,26,296,110,22,8);c.stroke();c.restore()}
+    if(st===1){var q=along(c,p2,E.io(u),C.o);dot(c,q[0],q[1],6,C.o,1,14)}
+    if(st===2){var q2=along(c,[[364,168],[364,136],[364,168]],E.io(u),C.o);dot(c,q2[0],q2[1],5,C.o,1,12)}}};
+
+/* 4.2 · LAB B: la base de Laura escondida en la VPC */
+S.arqrds=function(c,t){var A=E.out(P(t,.1,.5)),st=Math.floor(Math.max(0,t-1.4)/2.6)%4,u=(Math.max(0,t-1.4)%2.6)/2.6,on=t>1.4;
+  /* tu PC */
+  box(c,6,150,104,190,{r:14,al:A,sh:'rgba(14,40,65,.1)'});icon(c,'R_Client',58,190,46,A);tx(c,'tu PC',58,226,{s:12.5,w:800,a:'center',f:FD,al:A});
+  tx(c,'Terraform',58,252,{s:10,w:700,a:'center',f:FM,c:'#7b42bc',al:A});tx(c,'MobaXterm',58,270,{s:10,w:700,a:'center',f:FM,c:C.t,al:A});tx(c,'.ppk',58,288,{s:9.5,w:600,a:'center',f:FM,c:C.mut,al:A});
+  /* grupos */
+  grp(c,120,6,434,468,'#242f3e','AWS Cloud','G_AWSCloudlogo',{al:A});
+  grp(c,130,32,414,434,'#00a4a6','us-east-1','G_Region',{al:A,dash:[5,4]});
+  grp(c,140,74,394,384,'#8c4fff','tienda-vpc · 10.0.0.0/16','G_VirtualprivatecloudVPC',{al:A});
+  icon(c,'R_AmazonVPCInternetGateway',300,74,30,A);tx(c,'internet gateway',320,62,{s:9,w:600,f:FM,c:C.mut,al:A});
+  grp(c,150,104,214,344,'#147eba','zona us-east-1a',null,{al:A,dash:[4,4],s:9.5});grp(c,374,104,150,344,'#147eba','zona us-east-1b',null,{al:A,dash:[4,4],s:9.5});
+  grp(c,160,126,194,116,'#7aa116','pública 10.0.1.0/24','G_Publicsubnet',{al:A,fill:'#f2f6e8',s:9.5});
+  var dg=E.out(P(t,.6,.4));c.save();c.globalAlpha*=dg;c.setLineDash([2,5]);c.strokeStyle='#c925d1';c.lineWidth=2;c.strokeRect(156,254,362,188);c.restore();tx(c,'DB subnet group',512,434,{s:9.5,w:800,a:'right',f:FD,c:'#c925d1',al:dg});
+  grp(c,160,262,194,166,'#00a4a6','privada bd-a 10.0.11.0/24','G_Privatesubnet',{al:A,fill:'#e6f6f7',s:9.5});
+  grp(c,384,262,130,166,'#00a4a6','privada bd-b .12.0/24','G_Privatesubnet',{al:A,fill:'#e6f6f7',s:9});
+  /* EC2 y RDS */
+  var eA=E.back(P(t,.8,.5));if(eA>0){var ea=Math.min(1,eA);icon(c,'R_AmazonEC2Instance',257,180,44,ea);tx(c,'tienda-laura',257,214,{s:11,w:800,a:'center',f:FD,al:ea});box(c,190,224,134,14,{r:7,f:'#fff7ed',s:rgba(C.o,.45),al:ea});tx(c,'SG: 22 solo tu IP',257,231,{s:8.5,w:700,a:'center',f:FM,c:C.o,al:ea})}
+  var rA=E.back(P(t,1,.5));if(rA>0){var ra=Math.min(1,rA);icon(c,'RDS',257,330,48,ra);tx(c,'pedidos-laura',257,368,{s:11,w:800,a:'center',f:FD,al:ra});tx(c,'MySQL · db.t3.micro',257,384,{s:9,w:600,a:'center',f:FM,c:C.mut,al:ra});box(c,180,400,154,15,{r:7,f:'#fff7ed',s:rgba(C.o,.45),al:ra});tx(c,'SG: 3306 solo desde la tienda',257,407,{s:8.5,w:700,a:'center',f:FM,c:C.o,al:ra})}
+  tx(c,'(reservada)',449,340,{s:10,w:600,a:'center',f:FM,c:C.faint,al:A});
+  /* caminos */
+  var pTF=[[110,250],[120,250]],pSSH=[[58,150],[58,56],[300,56],[300,90],[257,158]],pSQL=[[257,238],[257,306]],pBAD=[[110,322],[150,332]];
+  poly(c,pSSH,st===1&&on?C.o:'#8B98A9',2.2,null,A);arrowhead(c,pSSH[3],pSSH[4],st===1&&on?C.o:'#8B98A9',A);tx(c,'SSH :22',200,66,{s:9,w:700,f:FM,c:C.mut,al:A});
+  poly(c,pSQL,st===2&&on?C.o:'#8B98A9',2.2,null,A);arrowhead(c,pSQL[0],pSQL[1],st===2&&on?C.o:'#8B98A9',A);tx(c,'mysql :3306',266,292,{s:9,w:700,f:FM,c:C.mut,al:A});
+  poly(c,pBAD,C.red,2,[4,4],A*(st===3&&on?1:.5));tx(c,'✕',158,334,{s:20,w:800,a:'center',c:C.red,al:A*(st===3&&on?1:.5)});
+  poly(c,pTF,'#7b42bc',2,[5,4],A*(st===0&&on?1:.5));
+  badge(c,1,124,276,on&&st===0,A);badge(c,2,150,56,on&&st===1,A);badge(c,3,236,292,on&&st===2,A);badge(c,4,124,352,on&&st===3,A);
+  if(on){if(st===0){var g=E.out(P(u,.1,.5));c.save();c.globalAlpha*=g*(1-P(u,.8,.2));c.strokeStyle='#7b42bc';c.lineWidth=3;c.setLineDash([6,4]);c.strokeRect(120,6,434,468);c.restore();pill(c,'terraform apply → 12 recursos',337,460,'#7b42bc',E.out(P(u,.1,.3)),{s:11,f2:'#f4effb'})}
+    if(st===1){var q=along(c,pSSH,E.io(u));dot(c,q[0],q[1],6,C.o,1,14)}
+    if(st===2){var q2=along(c,pSQL,E.io(u));dot(c,q2[0],q2[1],6,C.o,1,14)}
+    if(st===3){var q3=along(c,pBAD,Math.min(1,E.io(u)*1.3));dot(c,q3[0],q3[1],6,C.red,1,12);if(u>.7)pill(c,'TcpTestSucceeded : False',80,392,C.red,E.out(P(u,.7,.2)),{s:9.5,f:FM,f2:'#fff0f0'})}}};
 
 /* motor: corre la escena de la diapositiva visible */
 var raf=0,cur=null,TOFF=parseFloat((location.search.match(/[?&]mt=([\d.]+)/)||[])[1])||0;function tick(){return document.hidden?setTimeout(function(){frame(performance.now())},33):requestAnimationFrame(frame)}
