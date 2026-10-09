@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tienda de Laura</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #f4f8fb; color: #0E2841; max-width: 720px; margin: 0 auto; padding: 24px 16px; }
+  h1 { color: #156082; margin-bottom: 4px; }
+  form, table { background: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 4px 16px rgba(14,40,65,.08); }
+  form { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; margin: 16px 0; }
+  label { display: flex; flex-direction: column; font-size: 13px; gap: 4px; }
+  input, select, button { font-size: 15px; padding: 8px 10px; border: 1px solid #dfe5ee; border-radius: 8px; }
+  button { background: #156082; color: #fff; border: 0; cursor: pointer; }
+  button.sec { background: #0F9ED5; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 8px; border-bottom: 1px solid #dfe5ee; font-size: 14px; }
+  #estado { font-size: 13px; color: #44546A; }
+</style>
+</head>
+<body>
+  <h1>🛍️ Tienda de Laura</h1>
+  <p>Esta página vive en <b>S3</b>. Cada pedido viaja a <b>API Gateway</b> → <b>Lambda</b> → <b>DynamoDB</b>.</p>
+
+  <form id="f">
+    <label>Cliente <input id="cliente" required placeholder="camila"></label>
+    <label>Producto
+      <select id="producto"><option>camiseta</option><option>gorra</option><option>buzo</option></select>
+    </label>
+    <label>Talla
+      <select id="talla"><option>S</option><option selected>M</option><option>L</option></select>
+    </label>
+    <button>Guardar pedido</button>
+  </form>
+
+  <p>
+    <button class="sec" id="todos">Ver todos (Scan)</button>
+    <button class="sec" id="uno">Ver solo este cliente (Query)</button>
+    <span id="estado"></span>
+  </p>
+  <table>
+    <thead><tr><th>cliente</th><th>fecha</th><th>producto</th><th>talla</th></tr></thead>
+    <tbody id="lista"></tbody>
+  </table>
+
+<script>
+  var API = "${api}";
+  var estado = document.getElementById("estado");
+
+  function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+
+  function pintar(r) {
+    estado.textContent = r.operacion + ": " + r.pedidos.length + " pedido(s)";
+    var filas = r.pedidos.map(function (p) {
+      return "<tr><td>" + esc(p.cliente) + "</td><td>" + esc(p.fecha) + "</td><td>" + esc(p.producto) + "</td><td>" + esc(p.talla) + "</td></tr>";
+    });
+    document.getElementById("lista").innerHTML = filas.join("");
+  }
+
+  function ver(cliente) {
+    var url = API + (cliente ? "/?cliente=" + encodeURIComponent(cliente) : "/");
+    fetch(url).then(function (r) { return r.json(); }).then(pintar);
+  }
+
+  document.getElementById("f").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var pedido = {
+      cliente: document.getElementById("cliente").value,
+      producto: document.getElementById("producto").value,
+      talla: document.getElementById("talla").value
+    };
+    estado.textContent = "guardando…";
+    fetch(API + "/", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(pedido) })
+      .then(function () { ver(); });
+  });
+
+  document.getElementById("todos").onclick = function () { ver(); };
+  document.getElementById("uno").onclick = function () { ver(document.getElementById("cliente").value); };
+  ver();
+</script>
+</body>
+</html>
