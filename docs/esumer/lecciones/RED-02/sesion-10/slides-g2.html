@@ -278,13 +278,10 @@ ul.clean li:first-child { border-top:0; }
   <span class="k">El plan de hoy · clase 10</span>
   <h2>Objetivo de hoy: <span class="grad">darle a Laura una base de datos de verdad</span>.</h2>
   <ul class="rows">
-    <li><span class="t">La historia: el Excel ya no da más<small>pedidos que se pisan, se dañan y se pierden</small></span><span class="m">historia</span></li>
-    <li><span class="t">Capítulo 1 · Qué es una base de datos<small>tablas, filas, SQL (SELECT, INSERT, UPDATE), motores, NoSQL</small></span><span class="m">concepto</span></li>
-    <li><span class="t">Capítulo 2 · ¿EC2 o RDS?<small>hacerlo tú o una base administrada</small></span><span class="m">concepto</span></li>
-    <li><span class="t">Capítulo 3 · RDS en la red privada<small>subredes privadas, DB subnet group, portero 3306, endpoint</small></span><span class="m">concepto</span></li>
-    <li><span class="t">Capítulo 4 · Proteger los pedidos<small>copias, máquina del tiempo, Multi-AZ, réplicas de lectura</small></span><span class="m">concepto</span></li>
-    <li><span class="t">El mapa: todas las bases de AWS con casos de uso<small>RDS · Aurora · DynamoDB · ElastiCache · MemoryDB · DocumentDB · Neptune · Timestream · Redshift · OpenSearch</small></span><span class="m">concepto</span></li>
-    <li><span class="t">LAB · RDS con Terraform + SQL desde la tienda<small>permisos · terraform apply · MobaXterm · mysql · prueba de seguridad · destroy</small></span><span class="m">lab</span></li>
+    <li><span class="t">Parte 1 · ¿Qué es una base de datos?<small>tablas, filas, el motor, SQL (SELECT, INSERT, UPDATE) y por qué un Excel no alcanza</small></span><span class="m">concepto</span></li>
+    <li><span class="t">Parte 2 · Los tipos de bases<small>SQL y NoSQL · relacional, llave-valor, memoria, documentos, grafos, series de tiempo, analítica, búsqueda</small></span><span class="m">concepto</span></li>
+    <li><span class="t">Parte 3 · Las bases de AWS, a detalle<small>RDS (red privada, endpoint, copias, Multi-AZ, réplicas) · DynamoDB · ElastiCache · DocumentDB · Neptune · Timestream · Redshift · OpenSearch · juego</small></span><span class="m">concepto</span></li>
+    <li><span class="t">Parte 4 · LAB: RDS con Terraform + SQL desde la tienda<small>permisos · terraform apply · MobaXterm · mysql · prueba de seguridad · destroy</small></span><span class="m">lab</span></li>
   </ul>
 </section>
 
@@ -496,123 +493,6 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
     .scbar .cap .w{opacity:.2;transition:opacity .18s}.scbar .cap .w.on{opacity:1}
     .scbar .shint{font-family:var(--mono);font-size:.7rem;color:var(--faint);white-space:nowrap}
   </style>
-<!-- 3 · LA HISTORIA: EL EXCEL SE QUEDÓ PEQUEÑO -->
-<section class="slide mu">
-  <div>
-    <div class="mtag"><b>0.1</b>la historia · la tienda de Laura crece</div>
-    <h2>Tres personas, <span class="g">un mismo Excel</span></h2>
-    <div class="mnote"><span>// como</span> tres personas escribiendo en la misma hoja de papel</div>
-    <p class="msub">Laura contrató a <b>Ana, Luis y Marta</b>. Los tres abren el mismo archivo de pedidos. Ana cambia una talla y guarda; Luis guarda <b>su versión vieja encima</b>… y el cambio de Ana <b>desaparece</b>.</p>
-  </div>
-  <div class="mviz"><canvas data-mu="excel1" aria-label="Tres vendedores editan el mismo Excel y uno borra el cambio del otro"></canvas></div>
-</section>
-
-<section class="slide mu">
-  <div>
-    <div class="mtag"><b>0.2</b>la historia · llegó el éxito</div>
-    <h2>50.000 pedidos <span class="g">no caben en un Excel</span></h2>
-    <div class="mnote"><span>// como</span> un cuaderno que ya no cierra</div>
-    <p class="msub">El archivo tarda minutos en abrir, un día <b>se daña</b> y no hay copia. Laura necesita algo hecho para esto: una <b>base de datos</b>, que guarda millones de pedidos, deja trabajar a muchos a la vez y saca copias.</p>
-  </div>
-  <div class="mviz"><canvas data-mu="excel2" aria-label="El archivo crece hasta 50.000 pedidos, tarda en abrir y se daña"></canvas></div>
-</section>
-
-<!-- 4 · CAPÍTULO 1 · QUÉ ES UNA BASE DE DATOS -->
-<section class="slide mu">
-  <div>
-    <div class="mtag"><b>1.1</b>capítulo 1 · la base de datos por dentro</div>
-    <h2>Tablas, filas <span class="g">y un bibliotecario</span></h2>
-    <div class="mnote"><span>// como</span> una biblioteca: tú pides, el bibliotecario busca</div>
-    <p class="msub">Los datos viven en <b>tablas</b>: cada <b>columna</b> es un dato (cliente, talla) y cada <b>fila</b> es un pedido. Nadie toca la tabla directamente: todo pasa por el <b>motor</b>, que busca, guarda y pone en fila a quienes escriben a la vez.</p>
-  </div>
-  <div class="mviz"><canvas data-mu="tabla" aria-label="Tabla de pedidos con columnas y filas; el motor atiende las peticiones"></canvas></div>
-</section>
-
-<section class="slide mu">
-  <div>
-    <div class="mtag"><b>1.2</b>capítulo 1 · el idioma SQL</div>
-    <h2>Le hablas <span class="g">en SQL</span></h2>
-    <div class="mnote"><span>// como</span> pedirle algo al bibliotecario con frases exactas</div>
-    <p class="msub"><b>SELECT</b> pregunta (“muéstrame los pedidos talla L”), <b>INSERT</b> agrega un pedido nuevo y <b>UPDATE</b> cambia uno: el <b>#57</b> pasa de talla M a L. En milisegundos, aunque haya millones de filas.</p>
-  </div>
-  <div class="mviz"><canvas data-mu="sql" aria-label="Comandos SELECT, INSERT y UPDATE aplicados sobre la tabla de pedidos"></canvas></div>
-</section>
-
-<section class="slide mu">
-  <div>
-    <div class="mtag"><b>1.3</b>capítulo 1 · los motores</div>
-    <h2>Varios bibliotecarios, <span class="g">un mismo idioma</span></h2>
-    <div class="mnote"><span>// como</span> marcas de carro: todas se manejan igual</div>
-    <p class="msub"><b>MySQL</b>, <b>PostgreSQL</b> y <b>MariaDB</b> son gratis; <b>SQL Server</b> y <b>Oracle</b> son de pago. Todos hablan SQL: son bases <b>relacionales</b>. Las <b>NoSQL</b> (como DynamoDB) guardan datos sin tablas fijas.</p>
-  </div>
-  <div class="mviz"><canvas data-mu="motores" aria-label="Motores relacionales que hablan SQL y bases NoSQL"></canvas></div>
-</section>
-
-<!-- 5 · CAPÍTULO 2 · ¿EC2 O RDS? -->
-<section class="slide mu">
-  <div>
-    <div class="mtag"><b>2.1</b>capítulo 2 · ¿dónde pone Laura su base?</div>
-    <h2>Hacerlo tú <span class="g">o que AWS lo haga</span></h2>
-    <div class="mnote"><span>// como</span> tener carro propio o pedir un taxi</div>
-    <p class="msub">En una <b>EC2</b> instalas MySQL y <b>todo te toca a ti</b>: parches, copias, vigilar el disco y levantarla a las 3 a. m. Con <b>Amazon RDS</b> escoges motor y tamaño, y AWS hace el resto. Hoy montamos <b>RDS</b>.</p>
-    <div class="maws"><span><img src="aws/AmazonEC2.svg" alt=""><b>EC2</b> tú eres el mecánico</span><span><img src="aws/AmazonRDS.svg" alt=""><b>RDS</b> base administrada</span></div>
-  </div>
-  <div class="mviz"><canvas data-mu="ec2rds" aria-label="Comparación de tareas: en EC2 las haces tú, en RDS las hace AWS"></canvas></div>
-</section>
-
-<!-- 6 · CAPÍTULO 3 · RDS EN LA RED PRIVADA -->
-<section class="slide mu">
-  <div>
-    <div class="mtag"><b>3.1</b>capítulo 3 · la base, escondida en la red</div>
-    <h2>Nadie de afuera <span class="g">la puede ver</span></h2>
-    <div class="mnote"><span>// como</span> la caja fuerte en el cuarto de atrás de la tienda</div>
-    <p class="msub">La tienda (EC2) vive en la calle <b>pública</b>. La base vive en dos calles <b>privadas</b>, en dos zonas (el <b>DB subnet group</b>). Su portero (Security Group) solo abre el <b>3306</b> a la tienda. Un robot de internet <b>ni siquiera llega</b>.</p>
-  </div>
-  <div class="mviz"><canvas data-mu="red" aria-label="VPC con subred pública para la tienda y dos privadas para la base; un robot de internet rebota"></canvas></div>
-</section>
-
-<section class="slide mu">
-  <div>
-    <div class="mtag"><b>3.2</b>capítulo 3 · cómo se le habla</div>
-    <h2>Un nombre <span class="g">que lleva a una IP privada</span></h2>
-    <div class="mnote"><span>// como</span> el número de extensión de una oficina</div>
-    <p class="msub">RDS te da un <b>endpoint</b>: un nombre largo que termina en <b>rds.amazonaws.com</b>. Desde la tienda escribes <b>mysql -h</b> + ese nombre y entras. Si preguntas qué IP es, responde una <b>10.0.x.x</b>: solo existe dentro de la red.</p>
-  </div>
-  <div class="mviz"><canvas data-mu="endpoint" aria-label="Terminal: nslookup del endpoint responde una IP privada y mysql se conecta"></canvas></div>
-</section>
-
-<!-- 7 · CAPÍTULO 4 · PROTEGER LOS PEDIDOS -->
-<section class="slide mu">
-  <div>
-    <div class="mtag"><b>4.1</b>capítulo 4 · copias y máquina del tiempo</div>
-    <h2>Volver a <span class="g">las 3:15 p. m.</span></h2>
-    <div class="mnote"><span>// como</span> el “deshacer” de Word, pero para toda la base</div>
-    <p class="msub">RDS saca una <b>copia diaria</b> y guarda <b>cada cambio</b>. A las 3:20 Luis borra por error los pedidos de la semana. Laura no llora: <b>restaura la base a las 3:15</b>, cinco minutos antes del error.</p>
-  </div>
-  <div class="mviz"><canvas data-mu="pitr" aria-label="Línea de tiempo: error a las 3:20 y restauración a las 3:15"></canvas></div>
-</section>
-
-<section class="slide mu">
-  <div>
-    <div class="mtag"><b>4.2</b>capítulo 4 · Multi-AZ</div>
-    <h2>Una gemela <span class="g">en otra zona</span></h2>
-    <div class="mnote"><span>// como</span> el arquero suplente, ya calentando</div>
-    <p class="msub">Con <b>Multi-AZ</b>, RDS mantiene una copia exacta en otra zona, al instante. Si la zona 1a falla, la gemela toma el control en <b>1 o 2 minutos</b> y la tienda sigue vendiendo. Cuesta el doble: se usa en producción.</p>
-  </div>
-  <div class="mviz"><canvas data-mu="multiaz" aria-label="Base principal en zona 1a y gemela en 1b; falla la zona y la gemela toma el control"></canvas></div>
-</section>
-
-<section class="slide mu">
-  <div>
-    <div class="mtag"><b>4.3</b>capítulo 4 · réplicas de lectura</div>
-    <h2>Muchos miran, <span class="g">una escribe</span></h2>
-    <div class="mnote"><span>// como</span> fotocopias del catálogo para los que solo miran</div>
-    <p class="msub">Miles de clientes solo están <b>mirando</b> el catálogo. RDS crea <b>réplicas de lectura</b> que responden esas preguntas (SELECT), y la base principal queda libre para lo importante: <b>guardar los pedidos</b>.</p>
-  </div>
-  <div class="mviz"><canvas data-mu="replicas" aria-label="Base principal recibe pedidos; tres réplicas responden a los clientes que miran"></canvas></div>
-</section>
-
-<!-- 8 · LAS BASES DE AWS, CON CASOS DE USO (estilo meetup: idea a la izquierda, animación a la derecha) -->
 <style>
 .slide.mu{--mink:#151D25;--mmut:#4d5d6c;--mfaint:#98a4b0;--mline:#e3e6ec;--mp:#7b2ff5;--mt:#1f7fc4;--mo:#e07600;
   background:#fff;color:var(--mink);padding:7vh clamp(34px,6vw,96px) 9vh}
@@ -640,6 +520,9 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
 .mu .maws b{color:var(--mink);font-weight:700}
 .mu .muse{margin-top:14px;font-size:clamp(.85rem,1.2vw,1rem);color:var(--mmut)}
 .mu .muse b{color:var(--mo)}
+.mu .mfacts{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:12px;font-family:"JetBrains Mono",monospace;font-size:clamp(.72rem,1vw,.86rem);color:var(--mink)}
+.mu .mfacts i{font-style:normal;color:var(--mfaint);margin-right:6px}
+.slide.mu.sep h2{font-size:clamp(2.4rem,5.4vw,4.4rem)}
 .mu .mviz{display:flex;align-items:center;justify-content:center;min-width:0}
 .mu .mviz canvas{display:block}
 .slide.mu.sum.on{grid-template-columns:1fr;align-content:center;gap:22px}
@@ -652,144 +535,30 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
 @media (max-width:860px){.slide.mu.on{grid-template-columns:1fr}.mu .sgrid{grid-template-columns:1fr}}
 </style>
 
-<section class="slide mu dark">
-  <div>
-    <div class="mtag"><b>5.0</b>capítulo 5 · el mapa</div>
-    <h2>Una base para cada <span class="g">forma de dato</span></h2>
-    <div class="mnote" style="color:#41B3FF"><span>// como</span> en una cocina: no hay una olla para todo</div>
-    <p class="msub">Laura ya tiene sus pedidos en RDS. Pero su tienda crece y aparecen datos de <b>otras formas</b>. Antes de escoger una base, el arquitecto se hace dos preguntas: <b>¿cómo es el dato?</b> y <b>¿cómo lo voy a usar?</b></p>
-  </div>
-  <div class="mviz"><canvas data-mu="intro" aria-label="Diez bases de datos de AWS alrededor de la pregunta: ¿cómo es tu dato?"></canvas></div>
-</section>
-
-<section class="slide mu">
-  <div>
-    <div class="mtag"><b>5.1</b>caso de Laura · los pedidos</div>
-    <h2>Datos que se <span class="g">relacionan</span></h2>
-    <div class="mnote"><span>// como</span> fichas que se señalan por un número</div>
-    <p class="msub">El pedido 58 no copia el nombre del cliente: solo guarda su <b>número</b>. Con SQL, la base une las dos tablas y responde “el pedido 58 es de Pedro”. Así nunca hay datos repetidos ni contradictorios.</p>
-    <div class="maws"><span><img src="aws/AmazonRDS.svg" alt=""><b>RDS</b> MySQL, PostgreSQL, SQL Server…</span><span><img src="aws/AmazonAurora.svg" alt=""><b>Aurora</b> más rápida, 6 copias</span></div>
-    <p class="muse">Úsala para: <b>pedidos, facturas, inventario, notas</b></p>
-  </div>
-  <div class="mviz"><canvas data-mu="rel" aria-label="Tabla de pedidos que apunta por número a la tabla de clientes"></canvas></div>
-</section>
-
-<section class="slide mu">
-  <div>
-    <div class="mtag"><b>5.2</b>caso de Laura · el carrito del Black Friday</div>
-    <h2>Una llave, <span class="g">su dato al instante</span></h2>
-    <div class="mnote"><span>// como</span> los casilleros de un gimnasio</div>
-    <p class="msub">Con el número del casillero vas <b>directo</b>, sin buscar entre todos. Por eso responde igual de rápido con 10 clientes que con un millón al mismo tiempo. No te preocupas por servidores.</p>
-    <div class="maws"><span><img src="aws/AmazonDynamoDB.svg" alt=""><b>DynamoDB</b> llave → valor</span></div>
-    <p class="muse">Úsala para: <b>carritos, sesiones, juegos, apps con picos</b></p>
-  </div>
-  <div class="mviz"><canvas data-mu="kv" aria-label="Casilleros numerados; una llave abre directo el casillero 107"></canvas></div>
-</section>
-
-<section class="slide mu">
-  <div>
-    <div class="mtag"><b>5.3</b>caso de Laura · el catálogo más visto</div>
-    <h2>Lo más pedido, <span class="g">a la mano</span></h2>
-    <div class="mnote"><span>// como</span> tenerlo en el mostrador y no en la bodega</div>
-    <p class="msub">La primera vez se busca en la bodega (la base en disco): <b>20 ms</b>. Se deja una copia en el mostrador (la <b>memoria RAM</b>) y las siguientes veces sale en <b>medio milisegundo</b>.</p>
-    <div class="maws"><span><img src="aws/AmazonElastiCache.svg" alt=""><b>ElastiCache</b> caché (Valkey/Redis)</span><span><img src="aws/AmazonMemoryDB.svg" alt=""><b>MemoryDB</b> memoria que no se pierde</span></div>
-    <p class="muse">Úsala para: <b>caché, rankings, contadores, sesiones</b></p>
-  </div>
-  <div class="mviz"><canvas data-mu="mem" aria-label="Cliente, mostrador y bodega: la primera vez va a la bodega, luego sale del mostrador"></canvas></div>
-</section>
-
-<section class="slide mu">
-  <div>
-    <div class="mtag"><b>5.4</b>caso de Laura · las fichas de producto</div>
-    <h2>Cada ficha <span class="g">trae lo suyo</span></h2>
-    <div class="mnote"><span>// como</span> carpetas con hojas distintas</div>
-    <p class="msub">En una tabla fija, todos los productos tienen las mismas columnas y quedan <b>huecos</b>. En una base de documentos, cada producto es un JSON con <b>solo sus campos</b>: la gorra no necesita talla.</p>
-    <div class="maws"><span><img src="aws/AmazonDocumentDB.svg" alt=""><b>DocumentDB</b> compatible con MongoDB</span></div>
-    <p class="muse">Úsala para: <b>catálogos, perfiles, contenidos</b></p>
-  </div>
-  <div class="mviz"><canvas data-mu="doc" aria-label="Tabla con huecos frente a documentos JSON con campos propios"></canvas></div>
-</section>
-
-<section class="slide mu">
-  <div>
-    <div class="mtag"><b>5.5</b>caso de Laura · “quienes compraron esto…”</div>
-    <h2>Lo importante son <span class="g">las conexiones</span></h2>
-    <div class="mnote"><span>// como</span> un mapa de amigos</div>
-    <p class="msub">Camila compró la camiseta. Sofía también, y además la gorra. Siguiendo las líneas, la base recomienda <b>la gorra a Camila</b>. Recorrer conexiones es lo que mejor hace una base de <b>grafos</b>.</p>
-    <div class="maws"><span><img src="aws/AmazonNeptune.svg" alt=""><b>Neptune</b> nodos y conexiones</span></div>
-    <p class="muse">Úsala para: <b>recomendaciones, fraude, redes sociales</b></p>
-  </div>
-  <div class="mviz"><canvas data-mu="graph" aria-label="Red de clientes y productos; un recorrido encuentra una recomendación"></canvas></div>
-</section>
-
-<section class="slide mu">
-  <div>
-    <div class="mtag"><b>5.6</b>caso de Laura · el sensor de la bodega</div>
-    <h2>Una medida <span class="g">cada minuto</span></h2>
-    <div class="mnote"><span>// como</span> el diario de un termómetro</div>
-    <p class="msub">El sensor envía la temperatura cada minuto, siempre con su <b>hora</b>. Son millones de datos y la pregunta típica es por un rango: “¿cuál fue el <b>promedio de la última hora</b>?”.</p>
-    <div class="maws"><span><img src="aws/AmazonTimestream.svg" alt=""><b>Timestream</b> series de tiempo</span></div>
-    <p class="muse">Úsala para: <b>sensores, métricas, IoT, monitoreo</b></p>
-  </div>
-  <div class="mviz"><canvas data-mu="ts" aria-label="Gráfica de temperatura minuto a minuto con el promedio de la última hora"></canvas></div>
-</section>
-
-<section class="slide mu">
-  <div>
-    <div class="mtag"><b>5.7</b>caso de Laura · el informe de 5 años</div>
-    <h2>Millones de filas, <span class="g">una respuesta</span></h2>
-    <div class="mnote"><span>// como</span> el contador que suma todo el año</div>
-    <p class="msub">Guardar un pedido es trabajo de RDS. Pero “¿qué vendí por mes en 5 años?” obliga a leer <b>millones de filas de golpe</b>. Eso lo hace una <b>bodega de datos</b> y lo convierte en un tablero.</p>
-    <div class="maws"><span><img src="aws/AmazonRedshift.svg" alt=""><b>Redshift</b> bodega de datos</span></div>
-    <p class="muse">Úsala para: <b>informes, tableros, inteligencia de negocio</b></p>
-  </div>
-  <div class="mviz"><canvas data-mu="dw" aria-label="Millones de filas que se resumen en un tablero de ventas por mes"></canvas></div>
-</section>
-
-<section class="slide mu">
-  <div>
-    <div class="mtag"><b>5.8</b>caso de Laura · el buscador de la tienda</div>
-    <h2>Encontrar aunque <span class="g">escribas mal</span></h2>
-    <div class="mnote"><span>// como</span> el índice al final de un libro</div>
-    <p class="msub">Cada palabra apunta a los productos donde aparece. El buscador cruza las listas, <b>corrige errores</b> (“camisetta”) y ordena por qué tan bien coincide cada producto.</p>
-    <div class="maws"><span><img src="aws/AmazonOpenSearchService.svg" alt=""><b>OpenSearch</b> búsqueda y logs</span></div>
-    <p class="muse">Úsala para: <b>buscadores, análisis de logs</b></p>
-  </div>
-  <div class="mviz"><canvas data-mu="search" aria-label="Buscador con un índice de palabras que ordena resultados por relevancia"></canvas></div>
-</section>
-
-<section class="slide mu sum">
-  <div>
-    <div class="mtag"><b>5.9</b>la chuleta del arquitecto</div>
-    <h2 style="max-width:none">¿Cómo es tu dato? <span class="g">Así escoges</span></h2>
-  </div>
-  <div class="sgrid">
-    <div class="srow" style="animation-delay:.15s"><img src="aws/AmazonRDS.svg" alt=""><p>Tablas que se relacionan → <b>RDS</b> / <b>Aurora</b> <i>pedidos</i></p></div>
-    <div class="srow" style="animation-delay:.45s"><img src="aws/AmazonNeptune.svg" alt=""><p>Lo importante son las conexiones → <b>Neptune</b> <i>recomendaciones</i></p></div>
-    <div class="srow" style="animation-delay:.2s"><img src="aws/AmazonDynamoDB.svg" alt=""><p>Una llave y respuesta al instante → <b>DynamoDB</b> <i>carrito</i></p></div>
-    <div class="srow" style="animation-delay:.5s"><img src="aws/AmazonTimestream.svg" alt=""><p>Medidas con hora → <b>Timestream</b> <i>sensores</i></p></div>
-    <div class="srow" style="animation-delay:.25s"><img src="aws/AmazonElastiCache.svg" alt=""><p>Lo más pedido, en memoria → <b>ElastiCache</b> <i>catálogo veloz</i></p></div>
-    <div class="srow" style="animation-delay:.55s"><img src="aws/AmazonRedshift.svg" alt=""><p>Analizar millones de filas → <b>Redshift</b> <i>informes</i></p></div>
-    <div class="srow" style="animation-delay:.3s"><img src="aws/AmazonMemoryDB.svg" alt=""><p>Memoria que no se puede perder → <b>MemoryDB</b> <i>contadores</i></p></div>
-    <div class="srow" style="animation-delay:.6s"><img src="aws/AmazonOpenSearchService.svg" alt=""><p>Buscar texto con errores → <b>OpenSearch</b> <i>buscador</i></p></div>
-    <div class="srow" style="animation-delay:.35s"><img src="aws/AmazonDocumentDB.svg" alt=""><p>Fichas con campos distintos → <b>DocumentDB</b> <i>catálogo</i></p></div>
-    <div class="srow" style="animation-delay:.65s"><img src="aws/AmazonKeyspaces.svg" alt=""><p>Eventos masivos estilo Cassandra → <b>Keyspaces</b> <i>clics</i></p></div>
-  </div>
-  <p class="msub" style="max-width:none;margin-top:0">Una empresa real usa <b>varias a la vez</b>. Hoy en el laboratorio montamos la primera: <b>RDS MySQL</b> (capa gratuita: db.t3.micro, 20 GB).</p>
-</section>
 
 
 
-<!-- 9 · RETO: ERES LA ARQUITECTA DE LAURA -->
-<section class="slide mu" id="muQuiz">
-  <div>
-    <div class="mtag"><b>🎯</b>ahora tú · eres el arquitecto de Laura</div>
-    <h2>Juego: <span class="g">¿qué base usarías?</span></h2>
-    <div class="mnote"><span>// regla</span> respondan en el chat antes de la respuesta</div>
-    <p class="msub">Cinco casos de la tienda. Clic: aparece la <b>respuesta</b>. Otro clic: el <b>siguiente caso</b>.</p>
-  </div>
-  <div class="mviz"><canvas data-mu="quiz" aria-label="Cinco casos de la tienda y la base de datos correcta para cada uno"></canvas></div>
-</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <style>
   .snips{display:flex;flex-direction:column;gap:10px;max-height:58vh;overflow:auto}
@@ -807,6 +576,288 @@ window.wireSnips=window.wireSnips||function(sec){sec.querySelectorAll('.snip').f
     function fb(){var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(_){}ta.remove();ok();}
     if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(txt).then(ok,fb);else fb();};});};
 </script>
+
+<section class="slide mu dark sep">
+  <div>
+    <div class="mtag" style="color:#71808e"><b>Parte 1</b>de 4</div>
+    <h2 style="max-width:14ch">¿Qué es una <span class="g">base de datos</span>?</h2>
+    <p class="msub">Dónde se guardan los datos, cómo se les pregunta y por qué un Excel no alcanza.</p>
+  </div>
+  <div class="mviz"><canvas data-mu="ruta" data-part="1" aria-label="Ruta de la clase: parte 1 de 4"></canvas></div>
+</section>
+
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>1.1</b>parte 1 · qué es una base de datos</div>
+    <h2>Tablas, filas <span class="g">y un bibliotecario</span></h2>
+    <div class="mnote"><span>// como</span> una biblioteca: tú pides, el bibliotecario busca</div>
+    <p class="msub">Los datos viven en <b>tablas</b>: cada <b>columna</b> es un dato (cliente, talla) y cada <b>fila</b> es un pedido. Nadie toca la tabla directamente: todo pasa por el <b>motor</b>, que busca, guarda y pone en fila a quienes escriben a la vez.</p>
+  </div>
+  <div class="mviz"><canvas data-mu="tabla" aria-label="Tabla de pedidos con columnas y filas; el motor atiende las peticiones"></canvas></div>
+</section>
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>1.2</b>parte 1 · qué es una base de datos · el idioma SQL</div>
+    <h2>Le hablas <span class="g">en SQL</span></h2>
+    <div class="mnote"><span>// como</span> pedirle algo al bibliotecario con frases exactas</div>
+    <p class="msub"><b>SELECT</b> pregunta (“muéstrame los pedidos talla L”), <b>INSERT</b> agrega un pedido nuevo y <b>UPDATE</b> cambia uno: el <b>#57</b> pasa de talla M a L. En milisegundos, aunque haya millones de filas.</p>
+  </div>
+  <div class="mviz"><canvas data-mu="sql" aria-label="Comandos SELECT, INSERT y UPDATE aplicados sobre la tabla de pedidos"></canvas></div>
+</section>
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>1.3</b>parte 1 · qué es una base de datos · ¿por qué no un Excel?</div>
+    <h2>Tres personas, <span class="g">un mismo Excel</span></h2>
+    <div class="mnote"><span>// como</span> tres personas escribiendo en la misma hoja de papel</div>
+    <p class="msub">Laura contrató a <b>Ana, Luis y Marta</b>. Los tres abren el mismo archivo de pedidos. Ana cambia una talla y guarda; Luis guarda <b>su versión vieja encima</b>… y el cambio de Ana <b>desaparece</b>.</p>
+  </div>
+  <div class="mviz"><canvas data-mu="excel1" aria-label="Tres vendedores editan el mismo Excel y uno borra el cambio del otro"></canvas></div>
+</section>
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>1.4</b>parte 1 · qué es una base de datos · ¿por qué no un Excel?</div>
+    <h2>50.000 pedidos <span class="g">no caben en un Excel</span></h2>
+    <div class="mnote"><span>// como</span> un cuaderno que ya no cierra</div>
+    <p class="msub">El archivo tarda minutos en abrir, un día <b>se daña</b> y no hay copia. Laura necesita algo hecho para esto: una <b>base de datos</b>, que guarda millones de pedidos, deja trabajar a muchos a la vez y saca copias.</p>
+  </div>
+  <div class="mviz"><canvas data-mu="excel2" aria-label="El archivo crece hasta 50.000 pedidos, tarda en abrir y se daña"></canvas></div>
+</section>
+<section class="slide mu dark sep">
+  <div>
+    <div class="mtag" style="color:#71808e"><b>Parte 2</b>de 4</div>
+    <h2 style="max-width:14ch">Los <span class="g">tipos</span> de bases de datos</h2>
+    <p class="msub">No todos los datos tienen la misma forma. Conoce las familias y para qué sirve cada una.</p>
+  </div>
+  <div class="mviz"><canvas data-mu="ruta" data-part="2" aria-label="Ruta de la clase: parte 2 de 4"></canvas></div>
+</section>
+
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>2.1</b>parte 2 · los tipos de bases</div>
+    <h2>Dos grandes familias: <span class="g">SQL y NoSQL</span></h2>
+    <div class="mnote"><span>// como</span> un archivador ordenado vs. cajas para cada cosa</div>
+    <p class="msub">Las <b>relacionales (SQL)</b> guardan todo en tablas fijas y hablan SQL: orden y relaciones. Las <b>NoSQL</b> (“no solo SQL”) dejan la tabla fija y escogen la forma que mejor sirve al dato: llaves, documentos, grafos…</p>
+    <p class="muse">Regla: <b>primero mira cómo es el dato, después escoges la base</b></p>
+  </div>
+  <div class="mviz"><canvas data-mu="familias" aria-label="Familia SQL con motores relacionales y familia NoSQL con sus formas"></canvas></div>
+</section>
+
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>2.2</b>parte 2 · los tipos de bases</div>
+    <h2>Ocho formas <span class="g">de guardar datos</span></h2>
+    <div class="mnote"><span>// como</span> en una cocina: una olla para cada plato</div>
+    <p class="msub">Cada tipo existe porque resuelve <b>una forma de dato</b> mejor que los demás. No hay una base para todo: una empresa real usa <b>varias a la vez</b>. En la parte 3 vemos cuál servicio de AWS es cada una.</p>
+    <p class="muse">La pregunta del arquitecto: <b>¿cómo es el dato y cómo lo voy a usar?</b></p>
+  </div>
+  <div class="mviz"><canvas data-mu="tipos" aria-label="Ocho tipos de bases de datos con su idea y un ejemplo"></canvas></div>
+</section>
+
+<section class="slide mu dark sep">
+  <div>
+    <div class="mtag" style="color:#71808e"><b>Parte 3</b>de 4</div>
+    <h2 style="max-width:14ch">Las bases de <span class="g">AWS</span>, a detalle</h2>
+    <p class="msub">Un servicio para cada tipo, con un caso de la tienda de Laura. Empezamos por RDS, la que montamos hoy.</p>
+  </div>
+  <div class="mviz"><canvas data-mu="ruta" data-part="3" aria-label="Ruta de la clase: parte 3 de 4"></canvas></div>
+</section>
+
+<section class="slide mu dark">
+  <div>
+    <div class="mtag"><b>3.0</b>parte 3 · las bases de AWS</div>
+    <h2>Una base para cada <span class="g">forma de dato</span></h2>
+    <div class="mnote" style="color:#41B3FF"><span>// como</span> en una cocina: no hay una olla para todo</div>
+    <p class="msub">Ya conoces los tipos. AWS tiene un servicio <b>administrado</b> para cada uno: tú escoges, AWS instala, parcha, saca copias y vigila. Vamos uno por uno, con un caso de la tienda de Laura.</p>
+  </div>
+  <div class="mviz"><canvas data-mu="intro" aria-label="Diez bases de datos de AWS alrededor de la pregunta: ¿cómo es tu dato?"></canvas></div>
+</section>
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>3.1</b>parte 3 · Amazon RDS · relacional</div>
+    <h2>Datos que se <span class="g">relacionan</span></h2>
+    <div class="mnote"><span>// como</span> fichas que se señalan por un número</div>
+    <p class="msub">El pedido 58 no copia el nombre del cliente: solo guarda su <b>número</b>. Con SQL, la base une las dos tablas y responde “el pedido 58 es de Pedro”. Así nunca hay datos repetidos ni contradictorios.</p>
+    <div class="maws"><span><img src="aws/AmazonRDS.svg" alt=""><b>RDS</b> MySQL, PostgreSQL, SQL Server…</span><span><img src="aws/AmazonAurora.svg" alt=""><b>Aurora</b> más rápida, 6 copias</span></div>
+    <p class="muse">Úsala para: <b>pedidos, facturas, inventario, notas</b></p>
+    <div class="mfacts"><span><i>motores</i>MySQL, PostgreSQL, MariaDB, SQL Server, Oracle, Db2</span><span><i>Aurora</i>compatible con MySQL y PostgreSQL</span><span><i>tú escoges</i>motor + tamaño</span></div>
+  </div>
+  <div class="mviz"><canvas data-mu="rel" aria-label="Tabla de pedidos que apunta por número a la tabla de clientes"></canvas></div>
+</section>
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>3.2</b>parte 3 · Amazon RDS · ¿por qué administrada?</div>
+    <h2>Hacerlo tú <span class="g">o que AWS lo haga</span></h2>
+    <div class="mnote"><span>// como</span> tener carro propio o pedir un taxi</div>
+    <p class="msub">En una <b>EC2</b> instalas MySQL y <b>todo te toca a ti</b>: parches, copias, vigilar el disco y levantarla a las 3 a. m. Con <b>Amazon RDS</b> escoges motor y tamaño, y AWS hace el resto. Hoy montamos <b>RDS</b>.</p>
+    <div class="maws"><span><img src="aws/AmazonEC2.svg" alt=""><b>EC2</b> tú eres el mecánico</span><span><img src="aws/AmazonRDS.svg" alt=""><b>RDS</b> base administrada</span></div>
+  </div>
+  <div class="mviz"><canvas data-mu="ec2rds" aria-label="Comparación de tareas: en EC2 las haces tú, en RDS las hace AWS"></canvas></div>
+</section>
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>3.3</b>parte 3 · Amazon RDS · en la red privada</div>
+    <h2>Nadie de afuera <span class="g">la puede ver</span></h2>
+    <div class="mnote"><span>// como</span> la caja fuerte en el cuarto de atrás de la tienda</div>
+    <p class="msub">La tienda (EC2) vive en la calle <b>pública</b>. La base vive en dos calles <b>privadas</b>, en dos zonas (el <b>DB subnet group</b>). Su portero (Security Group) solo abre el <b>3306</b> a la tienda. Un robot de internet <b>ni siquiera llega</b>.</p>
+  </div>
+  <div class="mviz"><canvas data-mu="red" aria-label="VPC con subred pública para la tienda y dos privadas para la base; un robot de internet rebota"></canvas></div>
+</section>
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>3.4</b>parte 3 · Amazon RDS · cómo se le habla</div>
+    <h2>Un nombre <span class="g">que lleva a una IP privada</span></h2>
+    <div class="mnote"><span>// como</span> el número de extensión de una oficina</div>
+    <p class="msub">RDS te da un <b>endpoint</b>: un nombre largo que termina en <b>rds.amazonaws.com</b>. Desde la tienda escribes <b>mysql -h</b> + ese nombre y entras. Si preguntas qué IP es, responde una <b>10.0.x.x</b>: solo existe dentro de la red.</p>
+  </div>
+  <div class="mviz"><canvas data-mu="endpoint" aria-label="Terminal: nslookup del endpoint responde una IP privada y mysql se conecta"></canvas></div>
+</section>
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>3.5</b>parte 3 · Amazon RDS · copias</div>
+    <h2>Volver a <span class="g">las 3:15 p. m.</span></h2>
+    <div class="mnote"><span>// como</span> el “deshacer” de Word, pero para toda la base</div>
+    <p class="msub">RDS saca una <b>copia diaria</b> y guarda <b>cada cambio</b>. A las 3:20 Luis borra por error los pedidos de la semana. Laura no llora: <b>restaura la base a las 3:15</b>, cinco minutos antes del error.</p>
+  </div>
+  <div class="mviz"><canvas data-mu="pitr" aria-label="Línea de tiempo: error a las 3:20 y restauración a las 3:15"></canvas></div>
+</section>
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>3.6</b>parte 3 · Amazon RDS · Multi-AZ</div>
+    <h2>Una gemela <span class="g">en otra zona</span></h2>
+    <div class="mnote"><span>// como</span> el arquero suplente, ya calentando</div>
+    <p class="msub">Con <b>Multi-AZ</b>, RDS mantiene una copia exacta en otra zona, al instante. Si la zona 1a falla, la gemela toma el control en <b>1 o 2 minutos</b> y la tienda sigue vendiendo. Cuesta el doble: se usa en producción.</p>
+  </div>
+  <div class="mviz"><canvas data-mu="multiaz" aria-label="Base principal en zona 1a y gemela en 1b; falla la zona y la gemela toma el control"></canvas></div>
+</section>
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>3.7</b>parte 3 · Amazon RDS · réplicas de lectura</div>
+    <h2>Muchos miran, <span class="g">una escribe</span></h2>
+    <div class="mnote"><span>// como</span> fotocopias del catálogo para los que solo miran</div>
+    <p class="msub">Miles de clientes solo están <b>mirando</b> el catálogo. RDS crea <b>réplicas de lectura</b> que responden esas preguntas (SELECT), y la base principal queda libre para lo importante: <b>guardar los pedidos</b>.</p>
+  </div>
+  <div class="mviz"><canvas data-mu="replicas" aria-label="Base principal recibe pedidos; tres réplicas responden a los clientes que miran"></canvas></div>
+</section>
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>3.8</b>parte 3 · DynamoDB · llave-valor</div>
+    <h2>Una llave, <span class="g">su dato al instante</span></h2>
+    <div class="mnote"><span>// como</span> los casilleros de un gimnasio</div>
+    <p class="msub">Con el número del casillero vas <b>directo</b>, sin buscar entre todos. Por eso responde igual de rápido con 10 clientes que con un millón al mismo tiempo. No te preocupas por servidores.</p>
+    <div class="maws"><span><img src="aws/AmazonDynamoDB.svg" alt=""><b>DynamoDB</b> llave → valor</span></div>
+    <p class="muse">Úsala para: <b>carritos, sesiones, juegos, apps con picos</b></p>
+    <div class="mfacts"><span><i>servidores</i>ninguno (serverless)</span><span><i>cobro</i>por lecturas/escrituras o capacidad</span><span><i>gratis</i>25 GB</span></div>
+  </div>
+  <div class="mviz"><canvas data-mu="kv" aria-label="Casilleros numerados; una llave abre directo el casillero 107"></canvas></div>
+</section>
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>3.9</b>parte 3 · ElastiCache y MemoryDB · en memoria</div>
+    <h2>Lo más pedido, <span class="g">a la mano</span></h2>
+    <div class="mnote"><span>// como</span> tenerlo en el mostrador y no en la bodega</div>
+    <p class="msub">La primera vez se busca en la bodega (la base en disco): <b>20 ms</b>. Se deja una copia en el mostrador (la <b>memoria RAM</b>) y las siguientes veces sale en <b>medio milisegundo</b>.</p>
+    <div class="maws"><span><img src="aws/AmazonElastiCache.svg" alt=""><b>ElastiCache</b> caché (Valkey/Redis)</span><span><img src="aws/AmazonMemoryDB.svg" alt=""><b>MemoryDB</b> memoria que no se pierde</span></div>
+    <p class="muse">Úsala para: <b>caché, rankings, contadores, sesiones</b></p>
+    <div class="mfacts"><span><i>ElastiCache</i>Valkey, Redis OSS, Memcached</span><span><i>MemoryDB</i>no pierde datos, Multi-AZ</span><span><i>ojo</i>la RAM es más cara que el disco</span></div>
+  </div>
+  <div class="mviz"><canvas data-mu="mem" aria-label="Cliente, mostrador y bodega: la primera vez va a la bodega, luego sale del mostrador"></canvas></div>
+</section>
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>3.10</b>parte 3 · DocumentDB · documentos</div>
+    <h2>Cada ficha <span class="g">trae lo suyo</span></h2>
+    <div class="mnote"><span>// como</span> carpetas con hojas distintas</div>
+    <p class="msub">En una tabla fija, todos los productos tienen las mismas columnas y quedan <b>huecos</b>. En una base de documentos, cada producto es un JSON con <b>solo sus campos</b>: la gorra no necesita talla.</p>
+    <div class="maws"><span><img src="aws/AmazonDocumentDB.svg" alt=""><b>DocumentDB</b> compatible con MongoDB</span></div>
+    <p class="muse">Úsala para: <b>catálogos, perfiles, contenidos</b></p>
+    <div class="mfacts"><span><i>compatible</i>API de MongoDB</span><span><i>datos</i>JSON con campos libres</span><span><i>copias</i>6, en 3 zonas</span></div>
+  </div>
+  <div class="mviz"><canvas data-mu="doc" aria-label="Tabla con huecos frente a documentos JSON con campos propios"></canvas></div>
+</section>
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>3.11</b>parte 3 · Neptune · grafos</div>
+    <h2>Lo importante son <span class="g">las conexiones</span></h2>
+    <div class="mnote"><span>// como</span> un mapa de amigos</div>
+    <p class="msub">Camila compró la camiseta. Sofía también, y además la gorra. Siguiendo las líneas, la base recomienda <b>la gorra a Camila</b>. Recorrer conexiones es lo que mejor hace una base de <b>grafos</b>.</p>
+    <div class="maws"><span><img src="aws/AmazonNeptune.svg" alt=""><b>Neptune</b> nodos y conexiones</span></div>
+    <p class="muse">Úsala para: <b>recomendaciones, fraude, redes sociales</b></p>
+    <div class="mfacts"><span><i>se pregunta en</i>Gremlin, openCypher, SPARQL</span><span><i>guarda</i>nodos + conexiones</span></div>
+  </div>
+  <div class="mviz"><canvas data-mu="graph" aria-label="Red de clientes y productos; un recorrido encuentra una recomendación"></canvas></div>
+</section>
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>3.12</b>parte 3 · Timestream · series de tiempo</div>
+    <h2>Una medida <span class="g">cada minuto</span></h2>
+    <div class="mnote"><span>// como</span> el diario de un termómetro</div>
+    <p class="msub">El sensor envía la temperatura cada minuto, siempre con su <b>hora</b>. Son millones de datos y la pregunta típica es por un rango: “¿cuál fue el <b>promedio de la última hora</b>?”.</p>
+    <div class="maws"><span><img src="aws/AmazonTimestream.svg" alt=""><b>Timestream</b> series de tiempo</span></div>
+    <p class="muse">Úsala para: <b>sensores, métricas, IoT, monitoreo</b></p>
+    <div class="mfacts"><span><i>cada dato</i>valor + fecha y hora</span><span><i>pregunta típica</i>rangos: “última hora”</span><span><i>compatible</i>InfluxDB</span></div>
+  </div>
+  <div class="mviz"><canvas data-mu="ts" aria-label="Gráfica de temperatura minuto a minuto con el promedio de la última hora"></canvas></div>
+</section>
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>3.13</b>parte 3 · Redshift · analítica</div>
+    <h2>Millones de filas, <span class="g">una respuesta</span></h2>
+    <div class="mnote"><span>// como</span> el contador que suma todo el año</div>
+    <p class="msub">Guardar un pedido es trabajo de RDS. Pero “¿qué vendí por mes en 5 años?” obliga a leer <b>millones de filas de golpe</b>. Eso lo hace una <b>bodega de datos</b> y lo convierte en un tablero.</p>
+    <div class="maws"><span><img src="aws/AmazonRedshift.svg" alt=""><b>Redshift</b> bodega de datos</span></div>
+    <p class="muse">Úsala para: <b>informes, tableros, inteligencia de negocio</b></p>
+    <div class="mfacts"><span><i>guarda</i>por columnas</span><span><i>se pregunta en</i>SQL</span><span><i>modos</i>serverless o clúster</span></div>
+  </div>
+  <div class="mviz"><canvas data-mu="dw" aria-label="Millones de filas que se resumen en un tablero de ventas por mes"></canvas></div>
+</section>
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>3.14</b>parte 3 · OpenSearch · búsqueda</div>
+    <h2>Encontrar aunque <span class="g">escribas mal</span></h2>
+    <div class="mnote"><span>// como</span> el índice al final de un libro</div>
+    <p class="msub">Cada palabra apunta a los productos donde aparece. El buscador cruza las listas, <b>corrige errores</b> (“camisetta”) y ordena por qué tan bien coincide cada producto.</p>
+    <div class="maws"><span><img src="aws/AmazonOpenSearchService.svg" alt=""><b>OpenSearch</b> búsqueda y logs</span></div>
+    <p class="muse">Úsala para: <b>buscadores, análisis de logs</b></p>
+    <div class="mfacts"><span><i>origen</i>derivado de Elasticsearch</span><span><i>gráficas</i>OpenSearch Dashboards</span><span><i>modos</i>serverless o dominios</span></div>
+  </div>
+  <div class="mviz"><canvas data-mu="search" aria-label="Buscador con un índice de palabras que ordena resultados por relevancia"></canvas></div>
+</section>
+<section class="slide mu sum">
+  <div>
+    <div class="mtag"><b>3.15</b>parte 3 · la chuleta del arquitecto</div>
+    <h2 style="max-width:none">¿Cómo es tu dato? <span class="g">Así escoges</span></h2>
+  </div>
+  <div class="sgrid">
+    <div class="srow" style="animation-delay:.15s"><img src="aws/AmazonRDS.svg" alt=""><p>Tablas que se relacionan → <b>RDS</b> / <b>Aurora</b> <i>pedidos</i></p></div>
+    <div class="srow" style="animation-delay:.45s"><img src="aws/AmazonNeptune.svg" alt=""><p>Lo importante son las conexiones → <b>Neptune</b> <i>recomendaciones</i></p></div>
+    <div class="srow" style="animation-delay:.2s"><img src="aws/AmazonDynamoDB.svg" alt=""><p>Una llave y respuesta al instante → <b>DynamoDB</b> <i>carrito</i></p></div>
+    <div class="srow" style="animation-delay:.5s"><img src="aws/AmazonTimestream.svg" alt=""><p>Medidas con hora → <b>Timestream</b> <i>sensores</i></p></div>
+    <div class="srow" style="animation-delay:.25s"><img src="aws/AmazonElastiCache.svg" alt=""><p>Lo más pedido, en memoria → <b>ElastiCache</b> <i>catálogo veloz</i></p></div>
+    <div class="srow" style="animation-delay:.55s"><img src="aws/AmazonRedshift.svg" alt=""><p>Analizar millones de filas → <b>Redshift</b> <i>informes</i></p></div>
+    <div class="srow" style="animation-delay:.3s"><img src="aws/AmazonMemoryDB.svg" alt=""><p>Memoria que no se puede perder → <b>MemoryDB</b> <i>contadores</i></p></div>
+    <div class="srow" style="animation-delay:.6s"><img src="aws/AmazonOpenSearchService.svg" alt=""><p>Buscar texto con errores → <b>OpenSearch</b> <i>buscador</i></p></div>
+    <div class="srow" style="animation-delay:.35s"><img src="aws/AmazonDocumentDB.svg" alt=""><p>Fichas con campos distintos → <b>DocumentDB</b> <i>catálogo</i></p></div>
+    <div class="srow" style="animation-delay:.65s"><img src="aws/AmazonKeyspaces.svg" alt=""><p>Eventos masivos estilo Cassandra → <b>Keyspaces</b> <i>clics</i></p></div>
+  </div>
+  <p class="msub" style="max-width:none;margin-top:0">Una empresa real usa <b>varias a la vez</b>. Hoy en el laboratorio montamos la primera: <b>RDS MySQL</b> (capa gratuita: db.t3.micro, 20 GB).</p>
+</section>
+<section class="slide mu" id="muQuiz">
+  <div>
+    <div class="mtag"><b>🎯</b>ahora tú · eres el arquitecto de Laura</div>
+    <h2>Juego: <span class="g">¿qué base usarías?</span></h2>
+    <div class="mnote"><span>// regla</span> respondan en el chat antes de la respuesta</div>
+    <p class="msub">Cinco casos de la tienda. Clic: aparece la <b>respuesta</b>. Otro clic: el <b>siguiente caso</b>.</p>
+  </div>
+  <div class="mviz"><canvas data-mu="quiz" aria-label="Cinco casos de la tienda y la base de datos correcta para cada uno"></canvas></div>
+</section>
+<section class="slide mu dark sep">
+  <div>
+    <div class="mtag" style="color:#71808e"><b>Parte 4</b>de 4</div>
+    <h2 style="max-width:14ch">Manos a la obra: <span class="g">RDS con Terraform</span></h2>
+    <p class="msub">Creamos la base de Laura en una red privada, le hablamos en SQL desde la tienda y la apagamos.</p>
+  </div>
+  <div class="mviz"><canvas data-mu="ruta" data-part="4" aria-label="Ruta de la clase: parte 4 de 4"></canvas></div>
+</section>
 
 <!-- 10 · LAB 0: PERMISOS -->
 <section class="slide" id="labD0">
@@ -1439,6 +1490,37 @@ S.quiz=function(c,t,sec){var st=sec.__st||0,k=Math.floor(st/2),rev=st%2===1,ts=(
     grad(c,20,240,520,160,20,1);c.fillStyle='#fff';rr(c,44,272,96,96,18);c.fill();c.restore();icon(c,QZ[k][3],92,320,80*al,al);
     tx(c,'respuesta',166,286,{s:12,w:600,c:'rgba(255,255,255,.8)',f:FM,al:al});tx(c,QZ[k][1],166,322,{s:26,w:800,f:FD,c:'#fff',al:al});tx(c,QZ[k][2],166,356,{s:14,w:600,c:'rgba(255,255,255,.9)',al:al})}
   tx(c,rev?(k<4?'clic → siguiente caso':'clic → seguimos'):'clic → ver la respuesta',280,450,{s:11.5,w:600,a:'center',f:FM,c:C.faint})};
+/* separador: la ruta de las 4 partes, con la actual encendida */
+S.ruta=function(c,t,sec){var cur=+(sec.querySelector('canvas[data-mu]').dataset.part||1),L=[['1','¿Qué es una base de datos?'],['2','Los tipos de bases'],['3','Las bases de AWS, a detalle'],['4','Laboratorio: RDS con Terraform']],x=70,y0=70,dy=110;
+  var g=c.createLinearGradient(0,y0,0,y0+dy*3);g.addColorStop(0,'#AC5BFF');g.addColorStop(1,'#41B3FF');
+  c.save();c.strokeStyle='rgba(170,182,194,.25)';c.lineWidth=4;c.beginPath();c.moveTo(x,y0);c.lineTo(x,y0+dy*3);c.stroke();
+  var k=E.io(P(t,.2,1));c.strokeStyle=g;c.beginPath();c.moveTo(x,y0);c.lineTo(x,y0+dy*(cur-1)*k);c.stroke();c.restore();
+  L.forEach(function(l,i){var y=y0+i*dy,on=i+1===cur,done=i+1<cur,a=E.out(P(t,.1+i*.12,.5)),pl=on?1+.06*Math.sin(t*3):1;
+    c.save();c.globalAlpha*=a;if(on){c.shadowColor='#AC5BFF';c.shadowBlur=30}c.beginPath();c.arc(x,y,24*pl,0,7);c.fillStyle=on?g:(done?'#2c3e52':'#1b2531');c.fill();c.lineWidth=2;c.strokeStyle=on?'#fff':(done?'#41B3FF':'#2e3a48');c.stroke();c.restore();
+    tx(c,done?'✓':l[0],x,y+1,{s:17,w:800,a:'center',f:FD,c:on?'#fff':(done?'#41B3FF':'#71808e'),al:a});
+    tx(c,'parte '+l[0],x+48,y-12,{s:11,w:600,f:FM,c:on?'#41B3FF':'#71808e',al:a});tx(c,l[1],x+48,y+12,{s:on?22:17,w:800,f:FD,c:on?'#fff':(done?'#aab6c2':'#71808e'),al:a})})};
+
+/* 2.1 · dos familias: SQL y NoSQL */
+S.familias=function(c,t){var A=E.out(P(t,.1,.5));
+  box(c,10,20,265,430,{f:'#f7f4ff',s:rgba(C.p,.3),r:18,al:A});tx(c,'SQL · relacionales',30,50,{s:15,w:800,f:FD,c:C.p,al:A});tx(c,'tablas fijas + idioma SQL',30,74,{s:11.5,w:600,f:FM,c:C.mut,al:A});
+  var gA=E.out(P(t,.5,.5));for(var r=0;r<4;r++)for(var q=0;q<3;q++){box(c,30+q*76,96+r*28,70,22,{f:r===0?rgba(C.p,.18):'#fff',s:rgba(C.p,.25),r:5,al:gA})}
+  [['MySQL','gratis'],['PostgreSQL','gratis'],['MariaDB','gratis'],['SQL Server','de pago'],['Oracle','de pago']].forEach(function(m,i){var a=E.back(P(t,.9+i*.15,.45));if(a<=0)return;var al=Math.min(1,a),y=226+i*42;
+    box(c,30,y,225,34,{r:10,al:al});tx(c,'🗄️ '+m[0],44,y+17,{s:13,w:700,f:FD,al:al});tx(c,m[1],242,y+17,{s:10.5,w:700,f:FM,a:'right',c:m[1]==='gratis'?C.g:C.o,al:al})});
+  var nA=E.out(P(t,2,.5));box(c,285,20,265,430,{f:'#f2f8ff',s:rgba(C.t,.3),r:18,al:nA});tx(c,'NoSQL · “no solo SQL”',305,50,{s:15,w:800,f:FD,c:C.t,al:nA});tx(c,'cada una con su forma de dato',305,74,{s:11.5,w:600,f:FM,c:C.mut,al:nA});
+  [['🔑','llave-valor'],['📄','documentos'],['⚡','en memoria'],['🕸️','grafos'],['📈','series de tiempo'],['🔍','búsqueda']].forEach(function(m,i){var a=E.back(P(t,2.4+i*.15,.45));if(a<=0)return;var al=Math.min(1,a),x=305,y=96+i*40;
+    box(c,x,y,225,34,{r:10,al:al,sh:'rgba(21,29,37,.06)'});tx(c,m[0],x+20,y+17,{s:16,a:'center',al:al});tx(c,m[1],x+40,y+17,{s:13,w:700,f:FD,al:al})});
+  pill(c,'escoges según la forma del dato',417,358,C.t,E.out(P(t,3.6,.4)),{s:11.5});
+  tx(c,'ej: MongoDB · Redis · Neo4j',417,402,{s:11,w:600,f:FM,a:'center',c:C.mut,al:E.out(P(t,3.9,.4))});
+  tx(c,'SQL = orden y relaciones',142,446,{s:11,w:700,a:'center',f:FD,c:C.p,al:E.out(P(t,4.2,.4))});tx(c,'NoSQL = flexibilidad y escala',417,446,{s:11,w:700,a:'center',f:FD,c:C.t,al:E.out(P(t,4.2,.4))})};
+
+/* 2.2 · las 8 formas de dato (sin marcas) */
+var TP=[['🗂️','Relacional','tablas que se relacionan','pedidos, facturas',C.p],['🔑','Llave-valor','una llave → su dato','carrito, sesiones','#c925d1'],['⚡','En memoria','todo en RAM, rapidísimo','caché, rankings',C.g],['📄','Documentos','fichas JSON flexibles','catálogo, perfiles',C.o],
+  ['🕸️','Grafos','nodos y conexiones','recomendaciones','#e0457b'],['📈','Series de tiempo','medidas con hora','sensores, métricas',C.t],['📊','Analítica','leer millones de filas','informes, tableros','#b7791f'],['🔍','Búsqueda','texto, relevancia','buscadores, logs',C.red]];
+S.tipos=function(c,t){var hi=t>3.2?Math.floor((t-3.2)/1.6)%8:-1;
+  TP.forEach(function(k,i){var a=E.back(P(t,.2+i*.18,.5));if(a<=0)return;var al=Math.min(1,a),x=10+(i%2)*275,y=10+Math.floor(i/2)*116,on=i===hi;
+    box(c,x,y,265,104,{r:16,al:al,f:on?rgba(k[4],.08):'#fff',s:on?k[4]:C.line,lw:on?2:1.2,sh:on?rgba(k[4],.25):'rgba(21,29,37,.06)'});
+    c.save();c.globalAlpha*=al;rr(c,x+14,y+18,52,52,14);c.fillStyle=rgba(k[4],.12);c.fill();c.restore();tx(c,k[0],x+40,y+45,{s:26,a:'center',al:al});
+    tx(c,k[1],x+80,y+32,{s:16,w:800,f:FD,al:al});tx(c,k[2],x+80,y+56,{s:12,w:600,c:C.mut,al:al});tx(c,'ej: '+k[3],x+80,y+80,{s:11,w:700,f:FM,c:k[4],al:al})})};
 
 /* motor: corre la escena de la diapositiva visible */
 var raf=0,cur=null;function tick(){return document.hidden?setTimeout(function(){frame(performance.now())},33):requestAnimationFrame(frame)}
