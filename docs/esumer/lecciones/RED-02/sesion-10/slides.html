@@ -664,7 +664,39 @@ window.wireSnips=window.wireSnips||function(sec){sec.querySelectorAll('.snip').f
 
 <section class="slide mu">
   <div>
-    <div class="mtag"><b>2.2</b>parte 2 · los tipos de bases</div>
+    <div class="mtag"><b>2.2</b>parte 2 · cuándo usar SQL</div>
+    <h2>SQL: cuando cada peso <span class="g">tiene que cuadrar</span></h2>
+    <div class="mnote"><span>// como</span> una transferencia del banco: o pasa completa, o no pasa</div>
+    <p class="msub">Las relacionales hacen <b>transacciones</b>: varios cambios que se guardan <b>todos juntos o ninguno</b>. Si el servidor se cae a mitad de una transferencia, la base <b>deshace</b> lo hecho (ROLLBACK) y nadie pierde plata.</p>
+    <p class="muse">Úsala para: <b>bancos, pagos, pedidos, inventario, notas</b></p>
+    <div class="mfacts"><span><i>fuerte en</i>relaciones + JOIN</span><span><i>garantía</i>ACID: todo o nada</span><span><i>esquema</i>fijo, ordenado</span></div>
+  </div>
+  <div class="mviz"><canvas data-mu="acid" aria-label="Transferencia de 100 dólares: si falla se deshace, si sale bien se guardan ambos cambios"></canvas></div>
+</section>
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>2.3</b>parte 2 · cuándo usar NoSQL</div>
+    <h2>NoSQL: cuando son <span class="g">millones a la vez</span></h2>
+    <div class="mnote"><span>// como</span> abrir más cajas en el supermercado en vez de una caja gigante</div>
+    <p class="msub">Una relacional suele crecer <b>hacia arriba</b>: un servidor más grande, hasta un techo. Muchas NoSQL crecen <b>a lo ancho</b>: reparten los datos por <b>llave</b> entre muchos servidores y siguen sumando. Además aceptan datos de <b>forma cambiante</b>.</p>
+    <p class="muse">Úsala para: <b>redes sociales, carritos, juegos, sensores, catálogos</b></p>
+    <div class="mfacts"><span><i>fuerte en</i>escala y velocidad</span><span><i>acceso</i>por llave, simple</span><span><i>esquema</i>flexible</span></div>
+  </div>
+  <div class="mviz"><canvas data-mu="escala" aria-label="SQL crece con un servidor más grande hasta un techo; NoSQL agrega servidores y reparte los datos"></canvas></div>
+</section>
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>2.4</b>parte 2 · ¿cómo escojo?</div>
+    <h2>Dos preguntas <span class="g">para escoger</span></h2>
+    <div class="mnote"><span>// como</span> un médico: primero pregunta, después receta</div>
+    <p class="msub"><b>1.</b> ¿Los datos se relacionan y deben cuadrar siempre? → <b>SQL</b>.<br><b>2.</b> Si no: ¿la forma cambia mucho o son millones de lecturas por llave? → <b>NoSQL</b>.<br>¿Ninguna de las dos? <b>Empieza con SQL</b>: es lo más conocido y lo más versátil.</p>
+    <p class="muse">Y muchas empresas usan <b>las dos a la vez</b>: SQL para pagar, NoSQL para el carrito</p>
+  </div>
+  <div class="mviz"><canvas data-mu="elegir" aria-label="Árbol de decisión: cinco casos recorren las preguntas y terminan en SQL o NoSQL"></canvas></div>
+</section>
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>2.5</b>parte 2 · los tipos de bases</div>
     <h2>Ocho formas <span class="g">de guardar datos</span></h2>
     <div class="mnote"><span>// como</span> en una cocina: una olla para cada plato</div>
     <p class="msub">Cada tipo existe porque resuelve <b>una forma de dato</b> mejor que los demás. No hay una base para todo: una empresa real usa <b>varias a la vez</b>. En la parte 3 vemos cuál servicio de AWS es cada una.</p>
@@ -1604,6 +1636,63 @@ S.defi=function(c,t){var N=[['Camila','camiseta','M'],['Pedro','gorra','L'],['So
   if(q){var qa=E.back(P(t,4.4,.5));box(c,10,150,190,58,{r:16,f:'#fff',s:rgba(C.t,.5),al:Math.min(1,qa),sh:'rgba(21,29,37,.1)'});tx(c,'tú preguntas:',26,168,{s:10.5,w:600,f:FM,c:C.mut,al:Math.min(1,qa)});tx(c,'¿el pedido de Pedro?',26,190,{s:14,w:800,f:FD,c:C.t,al:Math.min(1,qa)});
     var k2=E.io(P(t,4.8,.5));curve(c,[200,180],[318,cy0+100],[262,186],k2,C.t,2.5);if(hit>0)pill(c,'⚡ encontrado en 2 ms',105,240,C.g,hit,{f2:'#ecfbf3'})}
   ['guardar','encontrar','cambiar','proteger'].forEach(function(v,i){pill(c,v,60+i*130,448,[C.p,C.t,C.o,C.g][i],E.back(P(t,6+i*.2,.4))>0?Math.min(1,E.back(P(t,6+i*.2,.4))):0)})};
+/* 2.2 · SQL: transacciones, todo o nada */
+S.acid=function(c,t){var A=E.out(P(t,.1,.5)),CY=10,run=Math.floor(t/CY)%2,u=t%CY,fail=run===0;
+  var cam=500,ped=200,l=-1;
+  if(u>1){cam=500-100*E.io(P(u,1,.6));l=1}
+  if(u>2.4){l=2}
+  if(fail){if(u>3.2)l=-2;if(u>4.6){cam=400+100*E.io(P(u,4.6,.7));l=4}}
+  else{if(u>2.4)ped=200+100*E.io(P(u,3,.6));if(u>4)l=3}
+  tx(c,fail?'intento 1: se cae a la mitad':'intento 2: todo sale bien',280,22,{s:12.5,w:800,a:'center',f:FD,c:fail?C.red:C.g,al:A});
+  function acct(x,name,v,col){box(c,x,46,200,112,{r:16,al:A,sh:'rgba(14,40,65,.08)'});av(c,x+36,92,20,col,A,'');tx(c,name,x+66,82,{s:14,w:800,f:FD,al:A});tx(c,'saldo',x+66,102,{s:10.5,w:600,f:FM,c:C.mut,al:A});tx(c,'$'+Math.round(v),x+180,134,{s:24,w:800,f:FD,a:'right',al:A})}
+  acct(30,'Camila',cam,C.p);acct(330,'Pedro',ped,C.t);
+  var k=P(u,1.6,1.2);if(k>0&&u<3.2){var cx=fail?230+50*E.io(Math.min(1,k*1.6)):230+100*E.io(k),cy=100-30*Math.sin(Math.PI*(fail?Math.min(1,k*1.6)/2:k));dot(c,cx,cy,10,C.o,1,14);tx(c,'$100',cx,cy-20,{s:11,w:800,a:'center',f:FM,c:C.o})}
+  if(fail&&u>2.6&&u<4.6){gl(c,'bolt',280,100,34,C.red,E.out(P(u,2.6,.2)));pill(c,'⚡ se cae el servidor',280,186,C.red,E.out(P(u,2.7,.3)),{s:11.5,f2:'#fff0f0'})}
+  /* código */
+  var L=['BEGIN;','UPDATE cuentas SET saldo = saldo - 100 WHERE nombre = \'Camila\';','UPDATE cuentas SET saldo = saldo + 100 WHERE nombre = \'Pedro\';',fail?'ROLLBACK;  -- deshacer todo':'COMMIT;    -- guardar todo'];
+  box(c,10,212,540,150,{f:'#0E2841',s:false,r:14,al:A});
+  L.forEach(function(s,i){var on=(i===0&&u>.4&&u<1)||(i===1&&l===1)||(i===2&&(l===2||l===3)&&!(fail&&u>3.2))||(i===3&&(l===4||l===3&&u>4.2));
+    if(on){c.save();c.globalAlpha*=A;rr(c,18,232+i*30,524,24,6);c.fillStyle=i===3?rgba(fail?C.red:C.g,.3):'rgba(15,158,213,.25)';c.fill();c.restore()}
+    var col=i===3?(fail?'#ff9b9b':'#7ee2a8'):i===2&&fail&&u>3.2?'#5f7890':'#e6edf3';if(i===3&&!(u>(fail?4.4:4)))col='#5f7890';
+    tx(c,(i===0||i===3?'':'  ')+s,30,244+i*30,{s:10.5,w:500,f:FM,c:col,al:A})});
+  var r=E.back(P(u,fail?5.6:5,.5));if(r>0){var al=Math.min(1,r);pill(c,fail?'↩ ROLLBACK: Camila recupera sus $100 · nadie pierde plata':'✓ COMMIT: los dos cambios quedan guardados',280,392,fail?C.o:C.g,al,{s:12,f2:fail?'#fff4ec':'#ecfbf3'})}
+  pill(c,'transacción = todo o nada',280,440,C.p,E.out(P(t,1,.4)),{s:12.5})};
+
+/* 2.3 · NoSQL: crecer a lo ancho */
+S.escala=function(c,t){var A=E.out(P(t,.1,.5)),g=E.io(P(t,.8,5)),users=1000*Math.pow(1000,g);
+  tx(c,'usuarios a la vez: '+nf(users),280,22,{s:14,w:800,a:'center',f:FD,al:A});
+  box(c,10,44,255,400,{f:'#f1f7fb',s:rgba(C.p,.3),r:18,al:A});box(c,295,44,255,400,{f:'#f2f9fd',s:rgba(C.t,.3),r:18,al:A});
+  tx(c,'SQL: crece hacia arriba',137,70,{s:13.5,w:800,a:'center',f:FD,c:C.p,al:A});tx(c,'un servidor cada vez más grande',137,90,{s:10.5,w:600,a:'center',f:FM,c:C.mut,al:A});
+  tx(c,'NoSQL: crece a lo ancho',422,70,{s:13.5,w:800,a:'center',f:FD,c:C.t,al:A});tx(c,'más servidores, cada uno con una parte',422,90,{s:10.5,w:600,a:'center',f:FM,c:C.mut,al:A});
+  /* SQL vertical */
+  var top=130,hmax=260,h=60+(hmax-60)*Math.min(1,g*1.25),bx=77,by=420-h;c.save();c.globalAlpha*=A;c.setLineDash([6,5]);c.strokeStyle=C.red;c.lineWidth=1.5;c.beginPath();c.moveTo(30,top+28);c.lineTo(245,top+28);c.stroke();c.restore();
+  tx(c,'techo: el servidor más grande que existe',137,432,{s:10,w:700,a:'center',f:FM,c:C.red,al:A*E.out(P(t,2,.4))});
+  box(c,bx,by,120,h,{f:'#fff',s:C.p,lw:1.8,r:12,al:A,sh:'rgba(21,96,130,.2)'});var nl=Math.floor(h/26);for(var i=0;i<nl;i++){c.save();c.globalAlpha*=A;rr(c,bx+14,by+12+i*26,92,14,4);c.fillStyle=rgba(C.p,.15);c.fill();c.fillStyle=C.g;c.beginPath();c.arc(bx+96,by+19+i*26,3,0,7);c.fill();c.restore()}
+  var sz=g<.3?'pequeño':g<.6?'grande':g<.8?'gigante':'¡al límite!';pill(c,sz,137,by-18,g>.8?C.red:C.p,A,{s:11});
+  /* NoSQL horizontal */
+  var n=g<.2?1:g<.45?2:g<.7?4:8,L=['A–Z','A–M','N–Z','A–F','G–M','N–S','T–Z'],labs=n===1?['A–Z']:n===2?['A–M','N–Z']:n===4?['A–F','G–M','N–S','T–Z']:['A–C','D–F','G–I','J–M','N–P','Q–S','T–V','W–Z'];
+  for(var j=0;j<n;j++){var cx=322+(j%4)*56,cy=n>4?(j<4?250:340):300,w=48,hh=70;var a=E.back(P(t,.8+(j>=n/2?0:0),.4));box(c,cx,cy-hh/2,w,hh,{f:'#fff',s:C.t,lw:1.6,r:10,al:A,sh:'rgba(15,158,213,.2)'});
+    for(var q=0;q<3;q++){c.save();c.globalAlpha*=A;rr(c,cx+8,cy-24+q*16,32,9,3);c.fillStyle=rgba(C.t,.2);c.fill();c.restore()}tx(c,labs[j],cx+w/2,cy+hh/2+12,{s:9.5,w:700,a:'center',f:FM,c:C.t,al:A})}
+  for(var d=0;d<10;d++){var uu=((t*.6)+d/10)%1,tj=d%n,cx2=322+(tj%4)*56+24,cy2=n>4?(tj<4?250:340):300;var p=qp([422,110],[cx2,cy2-40],uu,[422,170]);dot(c,p[0],p[1],3.5,C.t,.85,8)}
+  tx(c,'la llave decide el servidor',422,420,{s:10.5,w:700,a:'center',f:FM,c:C.t,al:E.out(P(t,3,.4))});
+  pill(c,'NoSQL nació para escalar a millones',280,466,C.t,E.out(P(t,5.6,.4)),{s:12})};
+
+/* 2.4 · ¿cómo escojo? árbol de decisión */
+var CAS=[['💳 Pagos de la tienda',['sí'],'SQL','relacional · transacciones'],['🛒 Carrito del Black Friday',['no','sí'],'NoSQL','llave-valor'],['📄 Fichas de productos distintas',['no','sí'],'NoSQL','documentos'],['📒 Notas y materias de estudiantes',['sí'],'SQL','relacional · tablas cruzadas'],['🏸 Lista de socios de un club',['no','no'],'SQL','por defecto: empieza con SQL']];
+S.elegir=function(c,t){var A=E.out(P(t,.1,.5)),CY=5,k=Math.floor(Math.max(0,t-.6)/CY)%CAS.length,u=Math.max(0,t-.6)%CY,cs=CAS[k];
+  var Q1=[280,92],Q2=[390,236],LS=[105,236],LN=[460,380],LD=[260,380];
+  function q(p,txt,on){box(c,p[0]-130,p[1]-34,260,68,{r:14,f:on?'#eef6fb':'#fff',s:on?C.p:C.line,lw:on?2:1.2,al:A,sh:'rgba(14,40,65,.07)'});wrap(c,txt,p[0]-114,p[1]-10,228,18,{s:12.5,w:700,f:FD,al:A})}
+  function leaf(p,lab,sub,col,on){var r=on?E.back(P(u,2.6,.5)):0;box(c,p[0]-92,p[1]-28,184,56,{r:28,f:on?rgba(col,.14):'#fff',s:col,lw:on?2.5:1.4,al:A,sh:on?rgba(col,.35):'rgba(14,40,65,.05)'});tx(c,lab,p[0],p[1]-6,{s:16,w:800,a:'center',f:FD,c:col,al:A});if(on&&r>0)tx(c,sub,p[0],p[1]+12,{s:10,w:600,a:'center',f:FM,c:C.mut,al:Math.min(1,r)})}
+  function edge(a,b,lab,on,kk){c.save();c.globalAlpha*=A;c.strokeStyle=on?C.o:C.line;c.lineWidth=on?3:1.5;c.beginPath();c.moveTo(a[0],a[1]+34);c.lineTo(b[0],b[1]-30);c.stroke();c.restore();tx(c,lab,(a[0]+b[0])/2+(b[0]<a[0]?-14:14),(a[1]+34+b[1]-30)/2,{s:11.5,w:800,a:'center',f:FD,c:on?C.o:C.faint,al:A})}
+  var path=cs[1],s1=path[0]==='sí',s2=path.length>1?path[1]==='sí':null,p1=u>.9,p2=u>1.8;
+  edge(Q1,LS,'sí',p1&&s1);edge(Q1,Q2,'no',p1&&!s1);edge(Q2,LN,'sí',p2&&s2===true);edge(Q2,LD,'no',p2&&s2===false);
+  q(Q1,'¿Datos con relaciones que siempre deben cuadrar? (dinero, pedidos, notas)',u<.9);q(Q2,'¿La forma cambia mucho o son millones de lecturas por llave?',!s1&&u>.9&&u<1.8);
+  var end=s1?LS:(s2?LN:LD);leaf(LS,'SQL',cs[3],C.p,s1&&u>1);leaf(LN,'NoSQL',cs[3],C.t,!s1&&s2&&u>1.9);leaf(LD,'SQL',cs[3],C.p,!s1&&s2===false&&u>1.9);
+  /* la ficha del caso viaja */
+  var pts=[[280,14]].concat([Q1]).concat(s1?[LS]:[Q2,end]),seg=Math.min(pts.length-1,u/0.9),i0=Math.floor(seg),f=seg-i0,a0=pts[Math.min(i0,pts.length-1)],a1=pts[Math.min(i0+1,pts.length-1)],x=a0[0]+(a1[0]-a0[0])*E.io(f),y=a0[1]+(a1[1]-a0[1])*E.io(f);
+  var tw=cs[0].length*7.4+30;var ty=i0===0&&f<1?y:(seg>=pts.length-1?y+48:y-52);box(c,x-tw/2,ty-14,tw,28,{r:14,f:'#0E2841',s:false,al:A*(1-P(u,4.6,.3))});tx(c,cs[0],x,ty,{s:12,w:700,a:'center',f:FD,c:'#fff',al:A*(1-P(u,4.6,.3))});
+  CAS.forEach(function(_,i){dot(c,230+i*25,470,i===k?6:4,i===k?C.o:C.line,A)});
+  tx(c,'si dudas, empieza con SQL',100,470,{s:11,w:700,a:'center',f:FD,c:C.mut,al:A})};
 
 /* motor: corre la escena de la diapositiva visible */
 var raf=0,cur=null,TOFF=parseFloat((location.search.match(/[?&]mt=([\d.]+)/)||[])[1])||0;function tick(){return document.hidden?setTimeout(function(){frame(performance.now())},33):requestAnimationFrame(frame)}
