@@ -2,7 +2,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- deck-meta: grupo=RED-02 sesion=10 clase=10 -->
 <title>Sesión {{SESION}} · Grupo {{G_NUM}} · Cloud, Redes y Ciberseguridad — Esumer</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root { --bg:#ffffff; --line:#dfe5ee; --text:#0E2841; --muted:#44546A; --faint:#8B98A9;
   --a1:#156082; --a2:#0F9ED5; --naranja:#E97132; --grad:linear-gradient(100deg,#156082,#0F9ED5);
@@ -667,90 +667,340 @@ function isLand(lon,lat){for(var k=0;k<LAND.length;k++)if(inPoly(lon,lat,LAND[k]
   </script>
 </section>
 
-<!-- 8 · TODAS LAS BASES DE AWS, CON CASOS DE USO -->
-<section class="slide" id="scD6">
-  <span class="k"><span class="act-chip">📖 EL MAPA</span> Una base para cada caso de la tienda · clic o → para avanzar</span>
-  <h2 style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-bottom:4px">Todas las bases de AWS, <span class="grad">con los casos de Laura</span></h2>
-  <div class="scene"><canvas aria-label="Ocho casos de la tienda de Laura y la base de AWS que resuelve cada uno: relacional, llave-valor, memoria, documentos, grafos, series de tiempo, analítica y búsqueda; resumen final"></canvas></div>
-  <div class="scbar"><div class="cap"></div><div class="dots"></div><span class="shint">clic / → paso a paso</span></div>
-  <script>
-  NetScene.make('scD6',1000,480,[
-    '<b>Caso 1 · Los pedidos y las facturas.</b> {@.4}Un pedido pertenece a un cliente y tiene productos: {@1.2}son tablas <b>relacionadas</b> entre sí. {@2.0}Para esto: bases <b>relacionales</b> con SQL → <b>RDS</b> (MySQL, PostgreSQL, MariaDB, SQL Server, Oracle) {@3.2}o <b>Aurora</b>, la versión de AWS: más rápida y con 6 copias en 3 zonas.',
-    '<b>Caso 2 · El carrito del Black Friday.</b> {@.4}Un millón de clientes agregando productos <b>al mismo tiempo</b>. {@1.4}Solo se necesita “dame el carrito del cliente 123”, rapidísimo. {@2.2}Para esto: <b>llave-valor</b> → <b>DynamoDB</b>: {@2.8}sin servidores que escoger, responde en milisegundos con 10 o con 10 millones de usuarios.',
-    '<b>Caso 3 · El catálogo más visto.</b> {@.4}Todos piden las mismas 10 camisetas. {@1.0}Ir a la base cada vez tarda <b>20 ms</b>; {@1.8}guardarlas en <b>memoria</b> tarda <b>medio milisegundo</b>. {@2.6}Para esto: <b>ElastiCache</b> (Redis/Valkey) como caché {@3.4}y <b>MemoryDB</b> si además necesitas que no se pierda nada.',
-    '<b>Caso 4 · Las fichas de producto.</b> {@.4}Cada producto tiene datos distintos: {@1.0}la camiseta tiene talla y color; {@1.6}la gorra, si es ajustable; {@2.2}el buzo, si trae capucha. {@2.8}Para esto: <b>documentos</b> flexibles (JSON) → <b>DocumentDB</b>, compatible con MongoDB.',
-    '<b>Caso 5 · “Quienes compraron esto, también compraron…”.</b> {@.6}Clientes, productos y compras forman una <b>red de conexiones</b>. {@1.8}Seguir esas líneas en una tabla es lentísimo; {@2.4}en una base de <b>grafos</b> es natural → <b>Neptune</b>. {@3.2}Así funcionan las recomendaciones y la detección de fraude.',
-    '<b>Caso 6 · Los sensores de la bodega y las visitas por minuto.</b> {@.6}Datos que llegan <b>cada segundo</b>, siempre con su hora. {@1.8}Para esto: <b>series de tiempo</b> → <b>Timestream</b>: {@2.6}guarda millones de medidas y te responde “¿cuál fue el promedio de la última hora?”.',
-    '<b>Caso 7 · El informe de ventas de 5 años.</b> {@.4}Laura quiere saber qué se vende más por mes, ciudad y talla. {@1.4}Eso es leer <b>millones de filas</b> de golpe: {@2.0}trabajo de una <b>bodega de datos</b> → <b>Redshift</b>, {@2.8}hecha para análisis y tableros, no para guardar un pedido a la vez.',
-    '<b>Caso 8 · El buscador de la tienda.</b> {@.4}Un cliente escribe “camiseta azul talla L”, {@1.4}con errores o en desorden, y espera los mejores resultados primero. {@2.4}Para esto: un motor de <b>búsqueda</b> → <b>OpenSearch</b> (también analiza logs).',
-    'En resumen: {@.3}<b>no existe una base para todo</b>. {@1.0}Cada caso tiene la suya, y una empresa real usa <b>varias a la vez</b>. {@1.6}(Falta una: <b>Keyspaces</b>, compatible con Cassandra, para eventos masivos como clics de millones de usuarios.) {@2.4}La pregunta del arquitecto: <b>¿cómo es el dato y cómo lo voy a usar?</b> {@3.4}Hoy en el laboratorio montamos la primera: <b>RDS MySQL</b> (capa gratuita: db.t3.micro, 20 GB).'
-  ],function(c,s){
-    var V=Viz,K=Kit,E=s.E,st=s.step,t=s.t,M='"JetBrains Mono",monospace';V.bg(c,1000,480);
-    function f(d,u){return Math.max(0,Math.min(1,(t-d)/(u||.6)));}function ea(d,u){return E.io(f(d,u));}function pop(d){return E.back(f(d,.5));}
-    var BL='#3b9ae1',GR='#34c38f',PU='#a67af4',OR='#f08a4b',YE='#FFC928',RD='#ff6b6b',CY='#38bdf8',PK='#f472b6';
-    var INFO=[['Relacional','RDS · Aurora','tablas + SQL + relaciones','pedidos · facturas · inventario',BL,2.0],['Llave-valor','DynamoDB','una llave → su dato, al instante','carritos · sesiones · juegos',PU,2.2],['En memoria','ElastiCache · MemoryDB','datos en RAM: sub-milisegundos','caché · rankings · sesiones',GR,2.6],['Documentos','DocumentDB','JSON flexible, cada uno distinto','catálogos · perfiles · contenido',OR,2.8],['Grafos','Neptune','nodos y conexiones','recomendaciones · fraude · redes',PK,2.4],['Series de tiempo','Timestream','medidas con su hora','sensores · métricas · IoT',CY,1.8],['Bodega de datos','Redshift','analizar millones de filas','informes · tableros · BI',YE,2.0],['Búsqueda','OpenSearch','texto, relevancia, errores','buscadores · logs',RD,2.4]];
-    function card(i){var k=INFO[i],a=pop(k[5]);if(!(a>0))return;var al=Math.min(1,a);K.card(c,610,40,360,300,k[4],al,{glow:true});
-      V.tx(c,k[0].toUpperCase(),630,74,12,k[4],'left',800,al);V.tx(c,k[1],630,114,k[1].length>16?20:26,'#fff','left',800,al);V.tx(c,k[2],630,152,13,'#cfe3f1','left',600,al);
-      c.save();c.globalAlpha*=al;c.fillStyle='rgba(255,255,255,.08)';c.fillRect(630,172,320,1);c.restore();V.tx(c,'casos típicos:',630,200,12,k[4],'left',800,al);V.tx(c,k[3],630,224,13,'#fff','left',700,al);}
-    function caseTitle(txt,col){K.chip(c,300,24,txt,col,ea(.1),true);}
-    if(st<8){K.card(c,30,60,560,330,'#94a3b8',1,{fill:'rgba(20,34,56,.85)',fill2:'rgba(10,20,36,.9)'});card(st);}
-    /* 1 · relacional */
-    if(st===0){caseTitle('Caso 1 · pedidos y facturas',BL);
-      function tb(x,y,name,rows,hl){K.card(c,x,y,220,150,BL,ea(.4),{r:10});V.tx(c,name,x+14,y+24,12.5,'#9fd8f0','left',800,ea(.4),M);rows.forEach(function(r,j){var on=hl!=null&&j===hl&&t>1.2;c.save();c.globalAlpha*=ea(.6);c.fillStyle=on?'rgba(255,201,40,.22)':'rgba(255,255,255,.05)';NetScene.rr(c,x+10,y+36+j*26,200,22,5);c.fill();c.restore();V.tx(c,r,x+18,y+52+j*26,11,on?YE:'#e6edf3','left',600,ea(.6),M);});}
-      tb(50,100,'clientes',['7 · Camila','8 · Pedro','9 · Sofía','10 · Andrés'],0);tb(330,100,'pedidos',['57 · cliente 7','58 · cliente 8','59 · cliente 9','60 · cliente 7'],0);
-      var r=ea(1.2);c.save();c.globalAlpha*=r;c.strokeStyle=YE;c.lineWidth=2.5;c.beginPath();c.moveTo(270,148);c.bezierCurveTo(300,148,300,148,340,148);c.stroke();c.restore();K.chip(c,300,280,'relación: cada pedido apunta a su cliente',YE,r,true);
-      K.chip(c,300,330,'Aurora = la misma idea, más rápida, 6 copias',OR,ea(3.2),true);return;}
-    /* 2 · llave-valor */
-    if(st===1){caseTitle('Caso 2 · el carrito del Black Friday',PU);
-      for(var k=0;k<10;k++){var x=70+(k%5)*60,y=110+Math.floor(k/5)*70;K.device(c,x,y,'phone',ea(.3+k*.05),.7);var u=((t*.8)+k*.13)%1;K.packet(c,[x,y+20],[x+140,260],[420,250],u,PU,ea(1));}
-      K.card(c,380,210,190,90,PU,ea(1.4),{r:12});V.tx(c,'llave: carrito#123',475,240,11.5,YE,'center',700,ea(1.4),M);V.tx(c,'→ [camiseta L, gorra]',475,264,11.5,'#fff','center',600,ea(1.4),M);V.tx(c,'⚡ 4 ms',475,288,12,'#9ff0c8','center',800,ea(2.2));
-      var n=Math.floor(Math.pow(10,1+5*f(1,2.5)));V.tx(c,n.toLocaleString('es-CO')+' clientes a la vez',300,360,18,YE,'center',800,ea(.4),M);return;}
-    /* 3 · memoria */
-    if(st===2){caseTitle('Caso 3 · el catálogo más visto',GR);
-      K.device(c,90,200,'laptop',1,1.1);K.disk(c,420,110,140,1,'base de datos',{chip:BL});
-      c.save();c.globalAlpha*=ea(1.8);K.shadow(c,function(){c.fillStyle='#14532d';NetScene.rr(c,300,250,140,60,10);c.fill();},18,'rgba(52,195,143,.5)');c.restore();V.tx(c,'⚡ caché (RAM)',370,286,13,'#fff','center',800,ea(1.8));
-      var u1=(t*.35)%1,u2=(t*1.4)%1;if(t<1.8||t>2.6){K.road(c,[130,190],[300,120],[420,140],BL,ea(1));K.packet(c,[130,190],[300,120],[420,140],u1,BL,ea(1),'20 ms');}
-      if(t>1.8){K.road(c,[130,215],[220,250],[300,275],GR,ea(1.8));K.packet(c,[130,215],[220,250],[300,275],u2,GR,ea(1.8),'0,5 ms');}
-      K.bar(c,80,330,420,14,1,'#38bdf8',ea(1));V.tx(c,'base: 20 ms',80,322,11.5,'#9fd8f0','left',700,ea(1));K.bar(c,80,370,420*.03,14,1,GR,ea(1.8));V.tx(c,'caché en memoria: 0,5 ms (40 veces más rápido)',80,362,11.5,'#9ff0c8','left',700,ea(1.8));return;}
-    /* 4 · documentos */
-    if(st===3){caseTitle('Caso 4 · fichas de producto distintas',OR);
-      var D=[['👕 camiseta','{ "talla": "L",','  "color": "azul" }',1.0],['🧢 gorra','{ "ajustable": true }','',1.6],['🧥 buzo','{ "talla": "M",','  "capucha": true }',2.2]];
-      D.forEach(function(d,i){var a=pop(d[3]),x=50+i*178;if(!(a>0))return;var al=Math.min(1,a);K.card(c,x,110,166,170,OR,al,{r:12});V.tx(c,d[0],x+83,144,15,'#fff','center',800,al);V.tx(c,d[1],x+12,186,11,'#ffd0b0','left',600,al,M);V.tx(c,d[2],x+12,206,11,'#ffd0b0','left',600,al,M);});
-      K.chip(c,300,330,'cada documento con sus propios campos · sin tabla fija',OR,ea(2.8),true);return;}
-    /* 5 · grafos */
-    if(st===4){caseTitle('Caso 5 · quienes compraron esto, también…',PK);
-      var N=[[110,140,'Camila','c'],[110,300,'Pedro','c'],[300,110,'👕','p'],[300,220,'🧢','p'],[300,330,'🧥','p'],[480,170,'Sofía','c'],[480,290,'Andrés','c']];
-      var Ed=[[0,2],[0,3],[1,2],[1,4],[5,2],[5,3],[6,4],[6,3]],hl=t>2.4;
-      Ed.forEach(function(e,i){var A=N[e[0]],B=N[e[1]],on=hl&&((e[0]===0)||(e[1]===3&&e[0]===5));c.save();c.globalAlpha*=ea(.6+i*.08);c.strokeStyle=on?PK:'rgba(159,182,201,.45)';c.lineWidth=on?3.5:1.5;if(on){c.shadowColor=PK;c.shadowBlur=12;}c.beginPath();c.moveTo(A[0],A[1]);c.lineTo(B[0],B[1]);c.stroke();c.restore();});
-      N.forEach(function(n,i){var a=pop(.3+i*.1);if(!(a>0))return;if(n[3]==='c')K.avatar(c,n[0],n[1],20,['#f08a4b','#3b9ae1','#a67af4','#34c38f'][i%4],n[2],Math.min(1,a));else{K.card(c,n[0]-26,n[1]-26,52,52,PK,Math.min(1,a),{r:26});V.tx(c,n[2],n[0],n[1]+8,22,'#fff','center',400,Math.min(1,a));}});
-      K.chip(c,300,370,'Camila compró 👕 → otros que compraron 👕 también compraron 🧢',PK,ea(3.2),true);return;}
-    /* 6 · series de tiempo */
-    if(st===5){caseTitle('Caso 6 · sensores y visitas por minuto',CY);
-      var X0=60,X1=560,Y0=320,H=170,n=Math.floor(60*f(.6,2.4));c.save();c.strokeStyle='rgba(159,182,201,.25)';c.beginPath();c.moveTo(X0,Y0);c.lineTo(X1,Y0);c.stroke();c.restore();
-      c.save();c.strokeStyle=CY;c.lineWidth=2.5;c.shadowColor=CY;c.shadowBlur=10;c.beginPath();for(var i=0;i<=n;i++){var x=X0+(X1-X0)*i/60,y=Y0-60-40*Math.sin(i*.35)-20*Math.sin(i*.9);i?c.lineTo(x,y):c.moveTo(x,y);}c.stroke();c.restore();
-      if(n>0){var lx=X0+(X1-X0)*n/60,ly=Y0-60-40*Math.sin(n*.35)-20*Math.sin(n*.9);c.save();c.fillStyle=YE;c.beginPath();c.arc(lx,ly,6,0,7);c.fill();c.restore();}
-      V.tx(c,'🌡️ temperatura bodega · 👀 visitas / minuto',X0,120,13,'#9fd8f0','left',800,ea(.4));V.tx(c,'18:00',X0,Y0+20,11,'#9fb3c8','left',600,1,M);V.tx(c,'18:59',X1,Y0+20,11,'#9fb3c8','right',600,1,M);
-      K.chip(c,300,370,'promedio de la última hora → en un instante',CY,ea(2.6),true);return;}
-    /* 7 · bodega de datos */
-    if(st===6){caseTitle('Caso 7 · el informe de ventas de 5 años',YE);
-      ['2022','2023','2024','2025','2026'].forEach(function(y,i){K.disk(c,60,100+i*44,90,ea(.4+i*.1),'');V.tx(c,y,170,128+i*44,12,'#cfe3f1','left',700,ea(.4+i*.1),M);var u=((t*.6)+i*.2)%1;K.packet(c,[150,118+i*44],[230,200],[290,210],u,YE,ea(1.4));});
-      K.card(c,290,150,110,120,YE,ea(2.0),{r:12,glow:true});V.tx(c,'Redshift',345,200,14,'#fff','center',800,ea(2.0));V.tx(c,'millones de filas',345,224,10.5,'#ffe9a8','center',600,ea(2.0));
-      var b=ea(2.6);[['ene',.5],['feb',.65],['mar',.4],['abr',.8],['may',.95]].forEach(function(m,i){var h=110*m[1]*b;c.save();c.fillStyle=YE;c.shadowColor=YE;c.shadowBlur=10;NetScene.rr(c,430+i*26,300-h,18,h,4);c.fill();c.restore();V.tx(c,m[0],439+i*26,318,9.5,'#cfe3f1','center',600,b);});
-      V.tx(c,'📊 tablero de ventas',495,170,12,'#ffe9a8','center',800,b);return;}
-    /* 8 · búsqueda */
-    if(st===7){caseTitle('Caso 8 · el buscador de la tienda',RD);
-      var q='camisetta azul L',n=Math.ceil(q.length*f(.4,1));K.card(c,60,90,500,52,'#e2e8f0',1,{fill:'rgba(248,250,252,.97)',fill2:'rgba(226,232,240,.97)',r:26});V.tx(c,'🔍 '+q.slice(0,n),84,123,15,'#0f172a','left',600,1,M);
-      var R=[['👕 Camiseta azul · talla L','98% relevante',GR],['👕 Camiseta azul marino · L','91%',GR],['🧥 Buzo azul · L','64%',YE]];
-      R.forEach(function(r,i){var a=pop(2.4+i*.25);if(!(a>0))return;K.card(c,60,166+i*62,500,50,r[2],Math.min(1,a),{r:12});V.tx(c,r[0],84,197+i*62,14,'#fff','left',800,Math.min(1,a));V.tx(c,r[1],540,197+i*62,12,r[2],'right',800,Math.min(1,a));});
-      K.chip(c,300,374,'entiende “camisetta” con error · ordena por relevancia',RD,ea(1.4),true);return;}
-    /* 9 · resumen */
-    var G=[['RDS · Aurora','pedidos',BL],['DynamoDB','carrito',PU],['ElastiCache','catálogo veloz',GR],['MemoryDB','memoria durable',GR],['DocumentDB','fichas de producto',OR],['Neptune','recomendaciones',PK],['Timestream','sensores',CY],['Redshift','informes',YE],['OpenSearch','buscador',RD],['Keyspaces','Cassandra',PU]];
-    G.forEach(function(g,i){var a=pop(.2+i*.12),x=30+(i%5)*190,y=40+Math.floor(i/5)*130;if(!(a>0))return;var al=Math.min(1,a);K.card(c,x,y,176,112,g[2],al,{r:14,glow:i===0&&t>3});V.tx(c,g[0],x+88,y+50,15,'#fff','center',800,al);V.tx(c,g[1],x+88,y+76,12,g[2],'center',700,al);});
-    K.chip(c,500,322,'no existe una base para todo: una empresa usa varias',YE,ea(1),true);K.chip(c,500,366,'¿cómo es el dato y cómo lo voy a usar?',GR,ea(2),true);
-    K.card(c,230,400,540,56,BL,ea(3),{glow:true,r:14});V.tx(c,'hoy en el lab: RDS MySQL · db.t3.micro · 20 GB · capa gratuita',500,434,14,'#fff','center',800,ea(3));
-  });
-  </script>
+<!-- 8 · LAS BASES DE AWS, CON CASOS DE USO (estilo meetup: idea a la izquierda, animación a la derecha) -->
+<style>
+.slide.mu{--mink:#151D25;--mmut:#4d5d6c;--mfaint:#98a4b0;--mline:#e3e6ec;--mp:#7b2ff5;--mt:#1f7fc4;--mo:#e07600;
+  background:#fff;color:var(--mink);padding:7vh clamp(34px,6vw,96px) 9vh}
+.slide.mu.on{display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(24px,4vw,60px);align-items:center}
+.slide.mu.dark{background:#151D25;color:#fff}
+.slide.mu.dark::before{content:"";position:absolute;right:-12%;top:-20%;width:62vw;height:62vw;pointer-events:none;background:radial-gradient(closest-side,rgba(172,91,255,.22),transparent 70%)}
+.slide.mu.dark::after{content:"";position:absolute;left:-12%;bottom:-28%;width:50vw;height:50vw;pointer-events:none;background:radial-gradient(closest-side,rgba(65,179,255,.15),transparent 70%)}
+.slide.mu>*{position:relative;z-index:1}
+.slide.mu.on>*{opacity:0;transform:translateY(14px);animation:muRise .55s cubic-bezier(.2,.7,.2,1) forwards}
+.slide.mu.on>*:nth-child(2){animation-delay:.12s}
+@keyframes muRise{to{opacity:1;transform:none}}
+.mu .mtag{font-family:"JetBrains Mono",monospace;font-size:clamp(.78rem,1.15vw,.95rem);color:var(--mfaint);margin-bottom:14px}
+.mu .mtag b{font-family:"Plus Jakarta Sans",sans-serif;font-size:1.3em;margin-right:8px;background:linear-gradient(105deg,#7b2ff5,#1f7fc4);-webkit-background-clip:text;background-clip:text;color:transparent}
+.mu h2{font-family:"Plus Jakarta Sans",sans-serif;font-weight:800;font-size:clamp(1.9rem,4vw,3.3rem);line-height:1.08;letter-spacing:-.025em;margin:0;max-width:16ch}
+.mu .g{background:linear-gradient(105deg,#7b2ff5,#1f7fc4);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-box-decoration-break:clone;box-decoration-break:clone;padding-bottom:.1em}
+.mu.dark .g{background:linear-gradient(105deg,#AC5BFF,#41B3FF);-webkit-background-clip:text;background-clip:text}
+.mu .mnote{font-family:"JetBrains Mono",monospace;font-size:clamp(.92rem,1.45vw,1.18rem);color:#0d6a95;margin-top:16px}
+.mu .mnote span{color:var(--mfaint)}
+.mu .msub{color:var(--mmut);font-size:clamp(1rem,1.55vw,1.3rem);line-height:1.5;margin-top:16px;max-width:36ch}
+.mu.dark .msub{color:#aab6c2}
+.mu .msub b{color:var(--mink)} .mu.dark .msub b{color:#fff}
+.mu .maws{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.mu .maws span{display:inline-flex;align-items:center;gap:10px;padding:7px 14px 7px 7px;border:1px solid var(--mline);border-radius:12px;font-size:clamp(.85rem,1.2vw,1rem);color:var(--mmut);background:#fff}
+.mu .maws img{width:34px;height:34px;border-radius:7px}
+.mu .maws b{color:var(--mink);font-weight:700}
+.mu .muse{margin-top:14px;font-size:clamp(.85rem,1.2vw,1rem);color:var(--mmut)}
+.mu .muse b{color:var(--mo)}
+.mu .mviz{display:flex;align-items:center;justify-content:center;min-width:0}
+.mu .mviz canvas{display:block}
+.slide.mu.sum.on{grid-template-columns:1fr;align-content:center;gap:22px}
+.mu .sgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 34px;max-width:1150px}
+.mu .srow{display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:center;padding:9px 0;border-top:1px solid var(--mline);opacity:0;transform:translateX(-10px);animation:muRise .5s cubic-bezier(.2,.7,.2,1) forwards}
+.mu .srow img{width:44px;height:44px;border-radius:9px}
+.mu .srow p{font-size:clamp(.9rem,1.35vw,1.15rem);line-height:1.3;color:var(--mmut)}
+.mu .srow p b{color:var(--mink);font-family:"Plus Jakarta Sans",sans-serif}
+.mu .srow p i{font-style:normal;color:var(--mo);font-weight:600}
+@media (max-width:860px){.slide.mu.on{grid-template-columns:1fr}.mu .sgrid{grid-template-columns:1fr}}
+</style>
+
+<section class="slide mu dark">
+  <div>
+    <div class="mtag"><b>00</b>el mapa · capítulo 5</div>
+    <h2>Una base para cada <span class="g">forma de dato</span></h2>
+    <div class="mnote" style="color:#41B3FF"><span>// como</span> en una cocina: no hay una olla para todo</div>
+    <p class="msub">Laura ya tiene sus pedidos en RDS. Pero su tienda crece y aparecen datos de <b>otras formas</b>. Antes de escoger una base, el arquitecto se hace dos preguntas: <b>¿cómo es el dato?</b> y <b>¿cómo lo voy a usar?</b></p>
+  </div>
+  <div class="mviz"><canvas data-mu="intro" aria-label="Diez bases de datos de AWS alrededor de la pregunta: ¿cómo es tu dato?"></canvas></div>
 </section>
+
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>01</b>caso de Laura · los pedidos</div>
+    <h2>Datos que se <span class="g">relacionan</span></h2>
+    <div class="mnote"><span>// como</span> fichas que se señalan por un número</div>
+    <p class="msub">El pedido 58 no copia el nombre del cliente: solo guarda su <b>número</b>. Con SQL, la base une las dos tablas y responde “el pedido 58 es de Pedro”. Así nunca hay datos repetidos ni contradictorios.</p>
+    <div class="maws"><span><img src="aws/AmazonRDS.svg" alt=""><b>RDS</b> MySQL, PostgreSQL, SQL Server…</span><span><img src="aws/AmazonAurora.svg" alt=""><b>Aurora</b> más rápida, 6 copias</span></div>
+    <p class="muse">Úsala para: <b>pedidos, facturas, inventario, notas</b></p>
+  </div>
+  <div class="mviz"><canvas data-mu="rel" aria-label="Tabla de pedidos que apunta por número a la tabla de clientes"></canvas></div>
+</section>
+
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>02</b>caso de Laura · el carrito del Black Friday</div>
+    <h2>Una llave, <span class="g">su dato al instante</span></h2>
+    <div class="mnote"><span>// como</span> los casilleros de un gimnasio</div>
+    <p class="msub">Con el número del casillero vas <b>directo</b>, sin buscar entre todos. Por eso responde igual de rápido con 10 clientes que con un millón al mismo tiempo. No te preocupas por servidores.</p>
+    <div class="maws"><span><img src="aws/AmazonDynamoDB.svg" alt=""><b>DynamoDB</b> llave → valor</span></div>
+    <p class="muse">Úsala para: <b>carritos, sesiones, juegos, apps con picos</b></p>
+  </div>
+  <div class="mviz"><canvas data-mu="kv" aria-label="Casilleros numerados; una llave abre directo el casillero 107"></canvas></div>
+</section>
+
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>03</b>caso de Laura · el catálogo más visto</div>
+    <h2>Lo más pedido, <span class="g">a la mano</span></h2>
+    <div class="mnote"><span>// como</span> tenerlo en el mostrador y no en la bodega</div>
+    <p class="msub">La primera vez se busca en la bodega (la base en disco): <b>20 ms</b>. Se deja una copia en el mostrador (la <b>memoria RAM</b>) y las siguientes veces sale en <b>medio milisegundo</b>.</p>
+    <div class="maws"><span><img src="aws/AmazonElastiCache.svg" alt=""><b>ElastiCache</b> caché (Valkey/Redis)</span><span><img src="aws/AmazonMemoryDB.svg" alt=""><b>MemoryDB</b> memoria que no se pierde</span></div>
+    <p class="muse">Úsala para: <b>caché, rankings, contadores, sesiones</b></p>
+  </div>
+  <div class="mviz"><canvas data-mu="mem" aria-label="Cliente, mostrador y bodega: la primera vez va a la bodega, luego sale del mostrador"></canvas></div>
+</section>
+
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>04</b>caso de Laura · las fichas de producto</div>
+    <h2>Cada ficha <span class="g">trae lo suyo</span></h2>
+    <div class="mnote"><span>// como</span> carpetas con hojas distintas</div>
+    <p class="msub">En una tabla fija, todos los productos tienen las mismas columnas y quedan <b>huecos</b>. En una base de documentos, cada producto es un JSON con <b>solo sus campos</b>: la gorra no necesita talla.</p>
+    <div class="maws"><span><img src="aws/AmazonDocumentDB.svg" alt=""><b>DocumentDB</b> compatible con MongoDB</span></div>
+    <p class="muse">Úsala para: <b>catálogos, perfiles, contenidos</b></p>
+  </div>
+  <div class="mviz"><canvas data-mu="doc" aria-label="Tabla con huecos frente a documentos JSON con campos propios"></canvas></div>
+</section>
+
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>05</b>caso de Laura · “quienes compraron esto…”</div>
+    <h2>Lo importante son <span class="g">las conexiones</span></h2>
+    <div class="mnote"><span>// como</span> un mapa de amigos</div>
+    <p class="msub">Camila compró la camiseta. Sofía también, y además la gorra. Siguiendo las líneas, la base recomienda <b>la gorra a Camila</b>. Recorrer conexiones es lo que mejor hace una base de <b>grafos</b>.</p>
+    <div class="maws"><span><img src="aws/AmazonNeptune.svg" alt=""><b>Neptune</b> nodos y conexiones</span></div>
+    <p class="muse">Úsala para: <b>recomendaciones, fraude, redes sociales</b></p>
+  </div>
+  <div class="mviz"><canvas data-mu="graph" aria-label="Red de clientes y productos; un recorrido encuentra una recomendación"></canvas></div>
+</section>
+
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>06</b>caso de Laura · el sensor de la bodega</div>
+    <h2>Una medida <span class="g">cada minuto</span></h2>
+    <div class="mnote"><span>// como</span> el diario de un termómetro</div>
+    <p class="msub">El sensor envía la temperatura cada minuto, siempre con su <b>hora</b>. Son millones de datos y la pregunta típica es por un rango: “¿cuál fue el <b>promedio de la última hora</b>?”.</p>
+    <div class="maws"><span><img src="aws/AmazonTimestream.svg" alt=""><b>Timestream</b> series de tiempo</span></div>
+    <p class="muse">Úsala para: <b>sensores, métricas, IoT, monitoreo</b></p>
+  </div>
+  <div class="mviz"><canvas data-mu="ts" aria-label="Gráfica de temperatura minuto a minuto con el promedio de la última hora"></canvas></div>
+</section>
+
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>07</b>caso de Laura · el informe de 5 años</div>
+    <h2>Millones de filas, <span class="g">una respuesta</span></h2>
+    <div class="mnote"><span>// como</span> el contador que suma todo el año</div>
+    <p class="msub">Guardar un pedido es trabajo de RDS. Pero “¿qué vendí por mes en 5 años?” obliga a leer <b>millones de filas de golpe</b>. Eso lo hace una <b>bodega de datos</b> y lo convierte en un tablero.</p>
+    <div class="maws"><span><img src="aws/AmazonRedshift.svg" alt=""><b>Redshift</b> bodega de datos</span></div>
+    <p class="muse">Úsala para: <b>informes, tableros, inteligencia de negocio</b></p>
+  </div>
+  <div class="mviz"><canvas data-mu="dw" aria-label="Millones de filas que se resumen en un tablero de ventas por mes"></canvas></div>
+</section>
+
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>08</b>caso de Laura · el buscador de la tienda</div>
+    <h2>Encontrar aunque <span class="g">escribas mal</span></h2>
+    <div class="mnote"><span>// como</span> el índice al final de un libro</div>
+    <p class="msub">Cada palabra apunta a los productos donde aparece. El buscador cruza las listas, <b>corrige errores</b> (“camisetta”) y ordena por qué tan bien coincide cada producto.</p>
+    <div class="maws"><span><img src="aws/AmazonOpenSearchService.svg" alt=""><b>OpenSearch</b> búsqueda y logs</span></div>
+    <p class="muse">Úsala para: <b>buscadores, análisis de logs</b></p>
+  </div>
+  <div class="mviz"><canvas data-mu="search" aria-label="Buscador con un índice de palabras que ordena resultados por relevancia"></canvas></div>
+</section>
+
+<section class="slide mu sum">
+  <div>
+    <div class="mtag"><b>09</b>la chuleta del arquitecto</div>
+    <h2 style="max-width:none">¿Cómo es tu dato? <span class="g">Así escoges</span></h2>
+  </div>
+  <div class="sgrid">
+    <div class="srow" style="animation-delay:.15s"><img src="aws/AmazonRDS.svg" alt=""><p>Tablas que se relacionan → <b>RDS</b> / <b>Aurora</b> <i>pedidos</i></p></div>
+    <div class="srow" style="animation-delay:.45s"><img src="aws/AmazonNeptune.svg" alt=""><p>Lo importante son las conexiones → <b>Neptune</b> <i>recomendaciones</i></p></div>
+    <div class="srow" style="animation-delay:.2s"><img src="aws/AmazonDynamoDB.svg" alt=""><p>Una llave y respuesta al instante → <b>DynamoDB</b> <i>carrito</i></p></div>
+    <div class="srow" style="animation-delay:.5s"><img src="aws/AmazonTimestream.svg" alt=""><p>Medidas con hora → <b>Timestream</b> <i>sensores</i></p></div>
+    <div class="srow" style="animation-delay:.25s"><img src="aws/AmazonElastiCache.svg" alt=""><p>Lo más pedido, en memoria → <b>ElastiCache</b> <i>catálogo veloz</i></p></div>
+    <div class="srow" style="animation-delay:.55s"><img src="aws/AmazonRedshift.svg" alt=""><p>Analizar millones de filas → <b>Redshift</b> <i>informes</i></p></div>
+    <div class="srow" style="animation-delay:.3s"><img src="aws/AmazonMemoryDB.svg" alt=""><p>Memoria que no se puede perder → <b>MemoryDB</b> <i>contadores</i></p></div>
+    <div class="srow" style="animation-delay:.6s"><img src="aws/AmazonOpenSearchService.svg" alt=""><p>Buscar texto con errores → <b>OpenSearch</b> <i>buscador</i></p></div>
+    <div class="srow" style="animation-delay:.35s"><img src="aws/AmazonDocumentDB.svg" alt=""><p>Fichas con campos distintos → <b>DocumentDB</b> <i>catálogo</i></p></div>
+    <div class="srow" style="animation-delay:.65s"><img src="aws/AmazonKeyspaces.svg" alt=""><p>Eventos masivos estilo Cassandra → <b>Keyspaces</b> <i>clics</i></p></div>
+  </div>
+  <p class="msub" style="max-width:none;margin-top:0">Una empresa real usa <b>varias a la vez</b>. Hoy en el laboratorio montamos la primera: <b>RDS MySQL</b> (capa gratuita: db.t3.micro, 20 GB).</p>
+</section>
+
+<script>
+(function(){
+var DPR=Math.min(2,window.devicePixelRatio||1),W=560,H=480;
+var C={ink:'#151D25',mut:'#5b6b78',faint:'#98a4b0',line:'#e3e6ec',soft:'#f4f6fa',p:'#7b2ff5',p2:'#AC5BFF',t:'#1f7fc4',t2:'#41B3FF',o:'#e07600',o2:'#FF9900',g:'#12a15a',red:'#e5484d'};
+var FD='"Plus Jakarta Sans",Poppins,sans-serif',FB='Inter,sans-serif',FM='"JetBrains Mono",monospace';
+function cl(x,a,b){return x<a?a:x>b?b:x}function P(t,a,d){return cl((t-a)/d,0,1)}
+var E={io:function(x){return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2},out:function(x){return 1-Math.pow(1-x,3)},back:function(x){var c1=1.70158,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)}};
+function rgba(h,a){var n=parseInt(h.slice(1),16);return'rgba('+(n>>16&255)+','+(n>>8&255)+','+(n&255)+','+a+')'}
+function rr(c,x,y,w,h,r){c.beginPath();c.roundRect(x,y,w,h,r)}
+function tx(c,s,x,y,o){o=o||{};c.save();c.font=(o.w||500)+' '+(o.s||14)+'px '+(o.f||FB);c.fillStyle=o.c||C.ink;c.textAlign=o.a||'left';c.textBaseline=o.b||'middle';c.globalAlpha*=(o.al==null?1:o.al);c.fillText(s,x,y);c.restore()}
+function box(c,x,y,w,h,o){o=o||{};c.save();c.globalAlpha*=(o.al==null?1:o.al);if(o.sh){c.shadowColor=o.sh;c.shadowBlur=o.sb||22;c.shadowOffsetY=6}rr(c,x,y,w,h,o.r||12);c.fillStyle=o.f||'#fff';c.fill();c.shadowBlur=0;c.shadowOffsetY=0;if(o.s!==false){c.lineWidth=o.lw||1.2;c.strokeStyle=o.s||C.line;c.stroke()}c.restore()}
+function dot(c,x,y,r,col,a,gl){c.save();c.globalAlpha*=(a==null?1:a);if(gl){c.shadowColor=col;c.shadowBlur=gl}c.fillStyle=col;c.beginPath();c.arc(x,y,r,0,7);c.fill();c.restore()}
+function qp(a,b,k,cp){var u=1-k;return[u*u*a[0]+2*u*k*cp[0]+k*k*b[0],u*u*a[1]+2*u*k*cp[1]+k*k*b[1]]}
+function curve(c,a,b,cp,k,col,lw,a2){if(k<=0)return;c.save();c.globalAlpha*=(a2==null?1:a2);c.strokeStyle=col;c.lineWidth=lw||2;c.lineCap='round';c.beginPath();c.moveTo(a[0],a[1]);for(var i=1;i<=40*k;i++){var p=qp(a,b,i/40,cp);c.lineTo(p[0],p[1])}c.stroke();c.restore()}
+var IM={};['RDS','Aurora','DynamoDB','ElastiCache','MemoryDB','DocumentDB','Neptune','Timestream','Redshift','OpenSearchService','Keyspaces'].forEach(function(n){var i=new Image();i.src='aws/Amazon'+n+'.svg';IM[n]=i});
+function icon(c,n,x,y,s,a){var im=IM[n];if(!im||!im.complete||!im.naturalWidth)return;c.save();c.globalAlpha*=(a==null?1:a);rr(c,x-s/2,y-s/2,s,s,s*.2);c.clip();c.drawImage(im,x-s/2,y-s/2,s,s);c.restore()}
+function nf(n){return Math.round(n).toLocaleString('es-CO')}
+var S={};
+
+/* 00 · el mapa: diez bases alrededor de "tu dato" */
+S.intro=function(c,t){var cx=280,cy=240,R=180,L=[['RDS','RDS'],['Aurora','Aurora'],['DynamoDB','DynamoDB'],['ElastiCache','ElastiCache'],['MemoryDB','MemoryDB'],['DocumentDB','DocumentDB'],['Neptune','Neptune'],['Timestream','Timestream'],['Redshift','Redshift'],['OpenSearchService','OpenSearch']];
+  var hi=t>3?Math.floor((t-3)/1.1)%L.length:-1;
+  L.forEach(function(l,i){var an=-Math.PI/2+i*2*Math.PI/L.length,x=cx+Math.cos(an)*R,y=cy+Math.sin(an)*R*.92,a=E.out(P(t,.5+i*.12,.5));
+    curve(c,[cx,cy],[x,y],[(cx+x)/2,(cy+y)/2],E.io(P(t,1.6+i*.05,.6)),i===hi?'#41B3FF':'rgba(170,182,194,.22)',i===hi?2.5:1.2);
+    if(t>2.2){var u=((t*.35)+i*.1)%1,p=qp([cx,cy],[x,y],u,[(cx+x)/2,(cy+y)/2]);dot(c,p[0],p[1],2.4,i%2?'#AC5BFF':'#41B3FF',.8*P(t,2.2,.5),8)}
+    var s=(i===hi?58:48)*E.back(P(t,.5+i*.12,.55));if(s>1){c.save();if(i===hi){c.shadowColor='#41B3FF';c.shadowBlur=26}icon(c,l[0],x,y,s,a);c.restore()}
+    tx(c,l[1],x,y+38,{s:11.5,w:600,c:i===hi?'#fff':'#aab6c2',a:'center',al:a,f:FD})});
+  var k=E.back(P(t,.1,.6)),pl=1+.04*Math.sin(t*2.4);c.save();c.translate(cx,cy);c.scale(k*pl,k*pl);
+  var g=c.createLinearGradient(-70,0,70,0);g.addColorStop(0,'#AC5BFF');g.addColorStop(1,'#41B3FF');c.shadowColor='rgba(172,91,255,.6)';c.shadowBlur=40;c.fillStyle=g;c.beginPath();c.arc(0,0,64,0,7);c.fill();c.shadowBlur=0;
+  c.fillStyle='#151D25';c.beginPath();c.arc(0,0,60,0,7);c.fill();c.restore();
+  tx(c,'tu dato',cx,cy-10,{s:19,w:800,c:'#fff',a:'center',al:k,f:FD});tx(c,'¿cómo es?',cx,cy+14,{s:11.5,w:500,c:'#aab6c2',a:'center',al:k,f:FM})};
+
+/* 01 · relacional */
+S.rel=function(c,t){var a1=E.out(P(t,.2,.6)),a2=E.out(P(t,.5,.6));
+  var CL=[['7','Camila'],['8','Pedro'],['9','Sofía']],PE=[['57','7','camiseta L'],['58','8','gorra'],['59','9','buzo M'],['60','7','gorra']],MAP=[0,1,2,0];
+  var cyc=t>1.6?Math.floor((t-1.6)/3.2)%4:-1,u=t>1.6?((t-1.6)%3.2):0;
+  var cR=cyc>=0?MAP[cyc]:-1,hl=E.io(P(u,.1,.4));
+  function table(x,y,w,title,cols,rows,cw,hiRow,ac,al){box(c,x,y,w,46+rows.length*42+10,{al:al,sh:'rgba(21,29,37,.08)',r:14});
+    tx(c,title,x+16,y+24,{s:14,w:800,f:FD,al:al});cols.forEach(function(h,j){tx(c,h,x+16+cw[j],y+50,{s:10.5,w:600,c:C.faint,f:FM,al:al})});
+    rows.forEach(function(r,i){var yy=y+70+i*42,on=i===hiRow;if(on){c.save();c.globalAlpha*=al*hl;rr(c,x+8,yy-16,w-16,34,8);c.fillStyle=rgba(ac,.1);c.fill();c.restore()}
+      r.forEach(function(v,j){tx(c,v,x+16+cw[j],yy+1,{s:14,w:j===0?700:500,c:on&&((title==='pedidos'&&j===1)||(title==='clientes'&&j===0))?ac:C.ink,f:j<2?FM:FB,al:al})})})}
+  table(10,40,180,'clientes',['id','nombre'],CL,[0,46],cR,C.t,a1);
+  table(300,40,250,'pedidos',['#','cliente','producto'],PE,[0,52,118],cyc,C.p,a2);
+  if(cyc>=0){var y1=110+cyc*42,y0=110+cR*42,k=E.io(P(u,.5,.8));
+    curve(c,[300,y1],[190,y0],[245,(y0+y1)/2],k,C.p,2.6);
+    if(k>0&&k<1){var p=qp([300,y1],[190,y0],k,[245,(y0+y1)/2]);dot(c,p[0],p[1],5,C.p,1,14)}
+    tx(c,'cliente = id',245,24,{s:11,w:700,c:C.p,a:'center',f:FM,al:P(u,1.1,.3)});
+    var r=E.back(P(u,1.4,.5));if(r>0){c.save();c.translate(280,400);c.scale(r,r);
+      var g=c.createLinearGradient(-220,0,220,0);g.addColorStop(0,'#7b2ff5');g.addColorStop(1,'#1f7fc4');rr(c,-220,-34,440,68,16);c.fillStyle=g;c.shadowColor='rgba(123,47,245,.35)';c.shadowBlur=24;c.fill();c.restore();
+      tx(c,'SELECT … JOIN clientes ON cliente = id',280,384,{s:10.5,w:500,c:'rgba(255,255,255,.75)',a:'center',f:FM,al:Math.min(1,r)});
+      tx(c,'pedido '+PE[cyc][0]+'  →  '+CL[cR][1]+' · '+PE[cyc][2],280,408,{s:17,w:800,c:'#fff',a:'center',f:FD,al:Math.min(1,r)})}}};
+
+/* 02 · llave-valor */
+S.kv=function(c,t){var cols=4,rows=3,w=112,h=78,gx=14,gy=16,x0=(W-(cols*w+(cols-1)*gx))/2,y0=46,T=6;
+  var key=[x0-0,440],tgt=6,open=E.io(P(t,2.4,.5))*(1-E.io(P(t,6,.5)));
+  var flash={};if(t>3.4){for(var q=0;q<9;q++){var ph=(t*1.3+q*.37)%1,idx=Math.floor((Math.sin(q*91.7+Math.floor(t*1.3+q*.37)*13.1)*.5+.5)*12)%12;flash[idx]=Math.max(flash[idx]||0,1-ph)}}
+  for(var i=0;i<12;i++){var cx=x0+(i%cols)*(w+gx),cy=y0+Math.floor(i/cols)*(h+gy),a=E.out(P(t,.2+i*.04,.5)),isT=i===tgt,f=flash[i]||0;
+    box(c,cx,cy,w,h,{al:a,f:isT&&open>0?'#f3ecff':(f>0?rgba(C.p,.06+.12*f):'#fff'),s:isT&&t>2.2?C.p:(f>.3?rgba(C.p,.5):C.line),lw:isT&&t>2.2?2:1.2,r:10,sh:'rgba(21,29,37,.06)'});
+    tx(c,'carrito',cx+12,cy+18,{s:9.5,w:600,c:C.faint,f:FM,al:a});tx(c,String(101+i),cx+12,cy+40,{s:20,w:800,f:FD,al:a,c:isT&&t>2.2?C.p:C.ink});
+    if(!(isT&&open>0)){c.save();c.globalAlpha*=a;c.fillStyle=C.line;c.beginPath();c.arc(cx+w-16,cy+h/2,4,0,7);c.fill();c.restore()}
+    if(isT&&open>0){tx(c,'👕 L · 🧢',cx+w-12,cy+40,{s:14,w:700,a:'right',al:open});tx(c,'abierto',cx+12,cy+62,{s:9.5,w:700,c:C.p,f:FM,al:open})}}
+  var mk=E.io(P(t,1.2,1.1)),tx0=x0+(tgt%cols)*(w+gx)+w/2,ty0=y0+Math.floor(tgt/cols)*(h+gy)+h+4;
+  if(t<6.2){var kx=key[0]+(tx0-key[0])*mk,ky=key[1]+(ty0-key[1])*mk,ka=E.out(P(t,.9,.3))*(1-P(t,2.5,.4));
+    if(ka>0){c.save();c.globalAlpha*=ka;var g=c.createLinearGradient(kx-60,0,kx+60,0);g.addColorStop(0,'#7b2ff5');g.addColorStop(1,'#1f7fc4');rr(c,kx-62,ky-16,124,32,16);c.fillStyle=g;c.shadowColor='rgba(123,47,245,.4)';c.shadowBlur=16;c.fill();c.restore();
+      tx(c,'🔑 llave: 107',kx,ky+1,{s:13,w:700,c:'#fff',a:'center',f:FD,al:ka})}}
+  tx(c,'sin buscar: directo a la llave',W/2,350,{s:13,w:700,c:C.p,a:'center',f:FD,al:E.out(P(t,2.7,.4))});
+  var n=10*Math.pow(1e5,E.io(P(t,3.6,3)));var ca=E.out(P(t,3.4,.4));
+  box(c,40,378,230,74,{al:ca,f:C.soft,s:false,r:14});tx(c,'clientes a la vez',58,400,{s:11,w:600,c:C.mut,al:ca});tx(c,nf(n),58,428,{s:24,w:800,f:FD,al:ca});
+  box(c,290,378,230,74,{al:ca,f:C.soft,s:false,r:14});tx(c,'tiempo de respuesta',308,400,{s:11,w:600,c:C.mut,al:ca});tx(c,'≈ 5 ms  (igual)',308,428,{s:24,w:800,f:FD,c:C.g,al:ca})};
+
+/* 03 · en memoria */
+S.mem=function(c,t){var A=E.out(P(t,.1,.5));
+  /* cliente */ dot(c,70,200,30,'#eef3fb',A);c.save();c.globalAlpha*=A;c.fillStyle=C.t;c.beginPath();c.arc(70,190,9,0,7);c.fill();c.beginPath();c.arc(70,214,15,Math.PI,0);c.fill();c.restore();tx(c,'cliente',70,248,{s:12,w:700,a:'center',f:FD,al:A});
+  /* mostrador */ var mA=E.out(P(t,.3,.5));box(c,180,150,130,100,{al:mA,f:'#ecfbf3',s:rgba(C.g,.6),lw:1.6,r:14});tx(c,'⚡ mostrador',245,172,{s:13,w:800,a:'center',f:FD,c:C.g,al:mA});tx(c,'memoria RAM',245,268,{s:11,w:600,a:'center',c:C.mut,f:FM,al:mA});
+  /* bodega */ var bA=E.out(P(t,.5,.5));c.save();c.globalAlpha*=bA;c.fillStyle='#f4f6fa';c.strokeStyle=C.line;c.lineWidth=1.4;c.beginPath();c.moveTo(390,140);c.lineTo(460,100);c.lineTo(530,140);c.lineTo(530,250);c.lineTo(390,250);c.closePath();c.fill();c.stroke();c.restore();
+  tx(c,'🏭 bodega',460,170,{s:13,w:800,a:'center',f:FD,al:bA});tx(c,'base en disco',460,268,{s:11,w:600,a:'center',c:C.mut,f:FM,al:bA});
+  for(var j=0;j<6;j++){box(c,404+(j%3)*40,190+Math.floor(j/3)*26,32,20,{al:bA,f:'#fff',r:4})}
+  var per=2.8,k=t>1?Math.floor((t-1)/per):-1,u=t>1?((t-1)%per)/per:0,miss=k===0;
+  if(k>=0){var far=miss?460:245,go=u<.5?E.io(u/.5):1-E.io((u-.5)/.5),x=100+(far-100)*go,y=200-Math.sin(go*Math.PI)*(miss?50:24);
+    dot(c,x,y,7,miss?C.o:C.g,1,16);if(u>.5)tx(c,'👕',x,y-18,{s:14,a:'center'})}
+  var stocked=t>1+per*.5;if(stocked){[0,1,2].forEach(function(j){tx(c,['👕','🧢','🧥'][j],215+j*30,212,{s:20,a:'center',al:E.back(P(t,1+per*.5+j*.1,.4))})})}
+  var r1=P(t,1+per*.5,.3),r2=P(t,1+per*1.5,.3);
+  box(c,40,320,480,58,{al:r1,f:C.soft,s:false,r:12});tx(c,'1ª vez: ir a la bodega',58,338,{s:11.5,w:600,c:C.mut,al:r1});c.save();c.globalAlpha*=r1;rr(c,58,352,400*E.out(r1),12,6);c.fillStyle=C.o;c.fill();c.restore();tx(c,'20 ms',505,358,{s:15,w:800,a:'right',f:FD,c:C.o,al:r1});
+  box(c,40,392,480,58,{al:r2,f:C.soft,s:false,r:12});tx(c,'siguientes veces: el mostrador',58,410,{s:11.5,w:600,c:C.mut,al:r2});c.save();c.globalAlpha*=r2;rr(c,58,424,Math.max(6,10*E.out(r2)),12,6);c.fillStyle=C.g;c.fill();c.restore();tx(c,'0,5 ms · 40× más rápido',505,430,{s:15,w:800,a:'right',f:FD,c:C.g,al:r2})};
+
+/* 04 · documentos */
+S.doc=function(c,t){var A=E.out(P(t,.2,.5)),cols=['producto','talla','color','ajustable','capucha'],cx=[0,92,152,214,296],R=[['camiseta','L','azul','—','—'],['gorra','—','—','sí','—'],['buzo','M','—','—','sí']],hz=E.out(P(t,1.4,.5));
+  box(c,30,24,500,182,{al:A,sh:'rgba(21,29,37,.07)',r:14});tx(c,'tabla fija: las mismas columnas para todos',48,46,{s:12.5,w:800,f:FD,al:A});
+  cols.forEach(function(h,j){tx(c,h,48+cx[j],76,{s:10.5,w:600,c:C.faint,f:FM,al:A})});
+  R.forEach(function(r,i){r.forEach(function(v,j){var y=108+i*32,emp=v==='—';if(emp&&hz>0){c.save();c.globalAlpha*=hz;rr(c,42+cx[j],y-12,j===3?72:56,24,6);c.fillStyle=rgba(C.red,.1);c.fill();c.restore()}
+    tx(c,v,48+cx[j],y,{s:13,w:j===0?700:500,c:emp?C.red:C.ink,f:j===0?FB:FM,al:A})})});
+  tx(c,'6 huecos de 12',512,46,{s:12,w:800,a:'right',c:C.red,f:FD,al:hz});
+  var D=[['camiseta',[['talla','"L"'],['color','"azul"']]],['gorra',[['ajustable','true']]],['buzo',[['talla','"M"'],['capucha','true']]]];
+  tx(c,'documentos: cada uno con solo sus campos',30,236,{s:12.5,w:800,f:FD,c:C.p,al:E.out(P(t,2.4,.4))});
+  D.forEach(function(d,i){var k=E.out(P(t,2.6+i*.35,.6)),x=30+i*172+(1-k)*40,y=254;box(c,x,y,160,150,{al:k,f:'#fbf8ff',s:rgba(C.p,.35),r:12,sh:'rgba(123,47,245,.12)'});
+    tx(c,'{',x+14,y+22,{s:13,w:600,f:FM,c:C.faint,al:k});tx(c,'"tipo": "'+d[0]+'",',x+24,y+46,{s:10.5,w:600,f:FM,al:k});
+    d[1].forEach(function(f,j){tx(c,'"'+f[0]+'"',x+24,y+70+j*22,{s:10.5,w:700,f:FM,c:C.p,al:k});tx(c,': '+f[1],x+24+(f[0].length+2)*6.6,y+70+j*22,{s:10.5,w:500,f:FM,al:k})});
+    tx(c,'}',x+14,y+130,{s:13,w:600,f:FM,c:C.faint,al:k})});
+  tx(c,'0 huecos',530,236,{s:12,w:800,a:'right',c:C.g,f:FD,al:E.out(P(t,3.8,.4))})};
+
+/* 05 · grafos */
+S.graph=function(c,t){var N={Camila:[80,110,'c'],Pedro:[80,350,'c'],'Sofía':[480,110,'c'],'Andrés':[480,350,'c'],'👕':[280,80,'p'],'🧢':[280,230,'p'],'🧥':[280,380,'p']};
+  var Ed=[['Camila','👕'],['Sofía','👕'],['Sofía','🧢'],['Pedro','🧥'],['Andrés','🧢'],['Andrés','🧥'],['Pedro','👕']];
+  var W1=[['Camila','👕'],['👕','Sofía'],['Sofía','🧢']],W2=[['Pedro','🧥'],['🧥','Andrés'],['Andrés','🧢']];
+  var lp=t>2?Math.floor((t-2)/5):-1,u=t>2?(t-2)%5:0,walk=lp<0?null:(lp%2?W2:W1),who=lp%2?'Pedro':'Camila';
+  function on(a,b){if(!walk)return 0;for(var i=0;i<walk.length;i++){var w=walk[i];if((w[0]===a&&w[1]===b)||(w[0]===b&&w[1]===a))return P(u,i*.7,.7)}return 0}
+  Ed.forEach(function(e,i){var A=N[e[0]],B=N[e[1]],a=E.out(P(t,.8+i*.08,.5)),h=on(e[0],e[1]);c.save();c.globalAlpha*=a;c.strokeStyle=C.line;c.lineWidth=2;c.beginPath();c.moveTo(A[0],A[1]);c.lineTo(B[0],B[1]);c.stroke();c.restore();
+    if(h>0){var w=walk.filter(function(x){return(x[0]===e[0]&&x[1]===e[1])||(x[0]===e[1]&&x[1]===e[0])})[0],S0=N[w[0]],S1=N[w[1]];c.save();c.strokeStyle=C.p;c.lineWidth=4;c.shadowColor=C.p;c.shadowBlur=12;c.beginPath();c.moveTo(S0[0],S0[1]);c.lineTo(S0[0]+(S1[0]-S0[0])*h,S0[1]+(S1[1]-S0[1])*h);c.stroke();c.restore();
+      if(h<1)dot(c,S0[0]+(S1[0]-S0[0])*h,S0[1]+(S1[1]-S0[1])*h,6,C.p,1,14)}
+    tx(c,'compró',(A[0]+B[0])/2,(A[1]+B[1])/2-8,{s:9.5,w:600,c:C.faint,a:'center',f:FM,al:a*.9*(i<3?1:.0)})});
+  Object.keys(N).forEach(function(k,i){var n=N[k],a=E.back(P(t,.2+i*.08,.5));if(a<=0)return;c.save();c.translate(n[0],n[1]);c.scale(a,a);
+    var act=walk&&k===who&&u<4.6;if(n[2]==='c'){c.fillStyle=act?C.p:'#eef3fb';c.strokeStyle=act?C.p:rgba(C.t,.4);c.lineWidth=1.5;c.beginPath();c.arc(0,0,28,0,7);c.fill();c.stroke();
+      c.fillStyle=act?'#fff':C.t;c.beginPath();c.arc(0,-6,7,0,7);c.fill();c.beginPath();c.arc(0,13,12,Math.PI,0);c.fill()}
+    else{c.fillStyle='#fff';c.strokeStyle=C.line;c.lineWidth=1.5;rr(c,-30,-30,60,60,16);c.fill();c.stroke()}c.restore();
+    if(n[2]==='p')tx(c,k,n[0],n[1]+2,{s:26,a:'center',al:Math.min(1,a)});else tx(c,k,n[0],n[1]+44,{s:13,w:700,a:'center',f:FD,al:Math.min(1,a)})});
+  if(walk){var r=E.back(P(u,2.2,.5))*(1-P(u,4.6,.3));if(r>0){var cap=N['🧢'];c.save();c.strokeStyle=C.o2;c.lineWidth=3;c.shadowColor=C.o2;c.shadowBlur=18;rr(c,cap[0]-36,cap[1]-36,72,72,20);c.globalAlpha*=Math.min(1,r);c.stroke();c.restore();
+    box(c,cap[0]-110,cap[1]+44,220,34,{f:'#fff6e8',s:rgba(C.o,.5),r:17,al:Math.min(1,r)});tx(c,'✨ recomendado para '+who,cap[0],cap[1]+61,{s:12.5,w:800,a:'center',f:FD,c:C.o,al:Math.min(1,r)})}}};
+
+/* 06 · series de tiempo */
+S.ts=function(c,t){var A=E.out(P(t,.1,.5)),x0=50,x1=530,y0=330,yT=120,M=60;
+  function v(i){return 18+2.4*Math.sin(i*.21)+1.1*Math.sin(i*.9+1)+.5*Math.sin(i*2.3)}
+  var n=Math.floor(Math.max(0,t-.6)*8),s=Math.max(0,n-M);
+  box(c,20,30,520,410,{al:A,sh:'rgba(21,29,37,.07)',r:16});tx(c,'🌡️ temperatura bodega · 1 medida / minuto',40,60,{s:13,w:800,f:FD,al:A});
+  for(var g=0;g<4;g++){var gy=yT+g*(y0-yT)/3;c.save();c.globalAlpha*=A;c.strokeStyle=C.line;c.setLineDash([3,5]);c.beginPath();c.moveTo(x0,gy);c.lineTo(x1,gy);c.stroke();c.restore();tx(c,(22-g*2.5).toFixed(0)+'°',x0-8,gy,{s:10,c:C.faint,a:'right',f:FM,al:A})}
+  function X(i){return x0+(i-s)/M*(x1-x0)}function Y(val){return y0-(val-14.5)/7.5*(y0-yT)}
+  var avgN=20,from=Math.max(s,n-avgN);if(n>avgN){var bx=X(from),bw=X(n)-bx;c.save();c.fillStyle=rgba(C.t,.08);c.fillRect(bx,yT-10,bw,y0-yT+10);c.restore()}
+  c.save();c.strokeStyle=C.t;c.lineWidth=2.6;c.lineJoin='round';c.beginPath();for(var i=s;i<=n;i++){var px=X(i),py=Y(v(i));i===s?c.moveTo(px,py):c.lineTo(px,py)}c.stroke();c.restore();
+  if(n>0){var lx=X(n),ly=Y(v(n));dot(c,lx,ly,6,C.o2,1,14);var hh=18+Math.floor(n/60),mm=n%60;tx(c,v(n).toFixed(1).replace('.',',')+' °C · '+hh+':'+(mm<10?'0':'')+mm,Math.min(lx,440),ly-22,{s:12,w:800,f:FM,a:'center',c:C.o})}
+  if(n>avgN){var sum=0;for(var j=from;j<=n;j++)sum+=v(j);var av=sum/(n-from+1);c.save();c.strokeStyle=C.p;c.lineWidth=2;c.setLineDash([6,5]);c.beginPath();c.moveTo(X(from),Y(av));c.lineTo(X(n),Y(av));c.stroke();c.restore();
+    box(c,40,366,480,52,{f:'#f6f1ff',s:false,r:12});tx(c,'¿promedio de la última hora?',58,392,{s:13,w:700,c:C.mut});tx(c,av.toFixed(1).replace('.',',')+' °C',502,392,{s:20,w:800,a:'right',f:FD,c:C.p})}
+  tx(c,'medidas guardadas: '+nf(n*1440),x1,60,{s:11,w:600,a:'right',f:FM,c:C.faint,al:A})};
+
+/* 07 · bodega de datos */
+S.dw=function(c,t){var A=E.out(P(t,.1,.5));
+  tx(c,'SELECT mes, SUM(total) FROM ventas GROUP BY mes',W/2,30,{s:11.5,w:500,f:FM,a:'center',c:C.mut,al:A});
+  box(c,24,60,170,330,{al:A,f:C.soft,s:false,r:14});tx(c,'ventas 2022–2026',109,82,{s:12,w:800,a:'center',f:FD,al:A});
+  for(var i=0;i<18;i++){var y=104+((i*16+t*60)%272);c.save();c.globalAlpha*=A*(.35+.65*Math.sin(Math.PI*(y-104)/272));rr(c,40,y,138,9,4);c.fillStyle=i%3?'#c8d3e0':'#a9b8ca';c.fill();c.restore()}
+  var rows=12e6*E.io(P(t,.6,3.2));tx(c,nf(rows)+' filas',109,412,{s:15,w:800,a:'center',f:FD,al:A});
+  for(var q=0;q<6;q++){var u=((t*.9)+q/6)%1,p=qp([194,140+q*40],[262,226],u,[230,150+q*30]);dot(c,p[0],p[1],3.5,C.o2,A*(t<4.2?1:.5),8)}
+  var rA=E.back(P(t,.4,.5));if(rA>0){c.save();c.translate(296,226);c.scale(rA,rA);rr(c,-36,-36,72,72,16);c.fillStyle='#fff';c.shadowColor='rgba(224,118,0,.35)';c.shadowBlur=26;c.fill();c.restore();icon(c,'Redshift',296,226,56*Math.min(1,rA))}
+  var b=E.out(P(t,2,1.8)),M=[['ene',.55],['feb',.62],['mar',.48],['abr',.74],['may',.9],['jun',.8]];
+  tx(c,'📊 ventas por mes',450,82,{s:12,w:800,a:'center',f:FD,al:P(t,1.8,.4)});
+  M.forEach(function(m,i){var h=230*m[1]*b,x=360+i*30;c.save();var g=c.createLinearGradient(0,380-h,0,380);g.addColorStop(0,C.o2);g.addColorStop(1,C.o);rr(c,x,380-h,22,Math.max(0,h),6);c.fillStyle=g;c.fill();c.restore();tx(c,m[0],x+11,398,{s:10,w:600,a:'center',f:FM,c:C.mut,al:P(t,1.8,.4)})});
+  tx(c,'mayo: el mejor mes',450,430,{s:13,w:800,a:'center',f:FD,c:C.o,al:E.out(P(t,4,.4))})};
+
+/* 08 · búsqueda */
+S.search=function(c,t){var q='camisetta azul L',n=Math.ceil(q.length*P(t,.3,1.4));
+  box(c,30,24,500,54,{r:27,sh:'rgba(21,29,37,.1)',s:rgba(C.t,.5),lw:1.6});tx(c,'🔍  '+q.slice(0,n)+(t<1.9&&Math.floor(t*3)%2?'|':''),56,51,{s:16,w:600,f:FM});
+  var fx=E.back(P(t,2,.45));if(fx>0){box(c,300,86,230,30,{f:'#fff6e8',s:rgba(C.o,.5),r:15,al:Math.min(1,fx)});tx(c,'camisetta → camiseta',415,101,{s:12,w:800,a:'center',f:FM,c:C.o,al:Math.min(1,fx)})}
+  var IX=[['camiseta',[3,5,7]],['azul',[3,7,9]],['L',[3,7,8]]],common={3:1,7:1};
+  tx(c,'el índice: cada palabra → sus productos',30,140,{s:12.5,w:800,f:FD,c:C.t,al:E.out(P(t,2.4,.4))});
+  IX.forEach(function(r,i){var a=E.out(P(t,2.6+i*.25,.4)),y=170+i*38;tx(c,r[0],40,y,{s:14,w:700,f:FM,al:a});tx(c,'→',130,y,{s:14,c:C.faint,al:a});
+    r[1].forEach(function(id,j){var hit=common[id]&&t>3.8,x=160+j*58;box(c,x,y-14,48,28,{f:hit?rgba(C.p,.12):'#fff',s:hit?C.p:C.line,r:8,al:a});tx(c,'#'+id,x+24,y,{s:12,w:700,a:'center',f:FM,c:hit?C.p:C.mut,al:a})})});
+  tx(c,'#3 y #7 están en las tres listas',360,208,{s:12,w:700,f:FD,c:C.p,al:E.out(P(t,3.9,.4))});
+  var R=[['#3 Camiseta azul · talla L',.98,C.g],['#7 Camiseta azul marino · L',.91,C.g],['#9 Buzo azul · M',.58,C.o]];
+  R.forEach(function(r,i){var a=E.out(P(t,4.4+i*.25,.45)),y=300+i*52;box(c,30,y,500,42,{al:a,r:12,sh:'rgba(21,29,37,.06)'});tx(c,r[0],48,y+21,{s:13.5,w:700,f:FD,al:a});
+    c.save();c.globalAlpha*=a;rr(c,370,y+15,110,12,6);c.fillStyle=C.soft;c.fill();rr(c,370,y+15,110*r[1]*E.out(P(t,4.6+i*.25,.6)),12,6);c.fillStyle=r[2];c.fill();c.restore();tx(c,Math.round(r[1]*100)+'%',516,y+21,{s:12,w:800,a:'right',f:FM,c:r[2],al:a})})};
+
+/* motor: corre la escena de la diapositiva visible */
+var raf=0,cur=null;function tick(){return document.hidden?setTimeout(function(){frame(performance.now())},33):requestAnimationFrame(frame)}
+function fit(cv){var box=cv.parentElement,bw=box.clientWidth||W,mh=innerHeight*.74,s=Math.min(bw/W,mh/H);cv.style.width=W*s+'px';cv.style.height=H*s+'px';cv.width=Math.round(W*s*DPR);cv.height=Math.round(H*s*DPR);cv.__k=s*DPR}
+function frame(now){raf=0;if(!cur||!cur.sec.classList.contains('on'))return;var c=cur.cv.getContext('2d');c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,cur.cv.width,cur.cv.height);c.setTransform(cur.cv.__k,0,0,cur.cv.__k,0,0);
+  try{S[cur.cv.dataset.mu](c,(now-cur.t0)/1000)}catch(e){console.error(e)}raf=tick()}
+document.querySelectorAll('.slide.mu').forEach(function(sec){sec.__enter=function(){var cv=sec.querySelector('canvas[data-mu]');if(!cv){cur=null;return}
+  setTimeout(function(){fit(cv);cur={sec:sec,cv:cv,t0:performance.now()};if(!raf)raf=tick()},0)}});
+addEventListener('resize',function(){if(cur)fit(cur.cv)});
+})();
+</script>
 
 <!-- 9 · RETO: ERES LA ARQUITECTA DE LAURA -->
 <section class="slide" id="scDQ">
