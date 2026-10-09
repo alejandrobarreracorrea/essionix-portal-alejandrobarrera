@@ -589,6 +589,16 @@ window.wireSnips=window.wireSnips||function(sec){sec.querySelectorAll('.snip').f
 <section class="slide mu">
   <div>
     <div class="mtag"><b>1.1</b>parte 1 · qué es una base de datos</div>
+    <h2>Un lugar ordenado para <span class="g">guardar y encontrar</span> datos</h2>
+    <div class="mnote"><span>// como</span> un archivador con alguien que sabe dónde está todo</div>
+    <p class="msub">Una <b>base de datos</b> es un <b>programa</b> que guarda información de forma <b>organizada</b>, para poder <b>encontrarla, cambiarla y protegerla</b> en milisegundos, aunque sean millones de datos y muchas personas a la vez.</p>
+    <p class="muse">La usan tu banco, WhatsApp, Netflix… y desde hoy <b>la tienda de Laura</b></p>
+  </div>
+  <div class="mviz"><canvas data-mu="defi" aria-label="Datos sueltos que se ordenan dentro de una base de datos y se encuentran al instante"></canvas></div>
+</section>
+<section class="slide mu">
+  <div>
+    <div class="mtag"><b>1.2</b>parte 1 · por dentro</div>
     <h2>Tablas, filas <span class="g">y un bibliotecario</span></h2>
     <div class="mnote"><span>// como</span> una biblioteca: tú pides, el bibliotecario busca</div>
     <p class="msub">Los datos viven en <b>tablas</b>: cada <b>columna</b> es un dato (cliente, talla) y cada <b>fila</b> es un pedido. Nadie toca la tabla directamente: todo pasa por el <b>motor</b>, que busca, guarda y pone en fila a quienes escriben a la vez.</p>
@@ -597,7 +607,7 @@ window.wireSnips=window.wireSnips||function(sec){sec.querySelectorAll('.snip').f
 </section>
 <section class="slide mu">
   <div>
-    <div class="mtag"><b>1.2</b>parte 1 · qué es una base de datos · el idioma SQL</div>
+    <div class="mtag"><b>1.3</b>parte 1 · el idioma SQL</div>
     <h2>Le hablas <span class="g">en SQL</span></h2>
     <div class="mnote"><span>// como</span> pedirle algo al bibliotecario con frases exactas</div>
     <p class="msub"><b>SELECT</b> pregunta (“muéstrame los pedidos talla L”), <b>INSERT</b> agrega un pedido nuevo y <b>UPDATE</b> cambia uno: el <b>#57</b> pasa de talla M a L. En milisegundos, aunque haya millones de filas.</p>
@@ -606,7 +616,7 @@ window.wireSnips=window.wireSnips||function(sec){sec.querySelectorAll('.snip').f
 </section>
 <section class="slide mu">
   <div>
-    <div class="mtag"><b>1.3</b>parte 1 · qué es una base de datos · ¿por qué no un Excel?</div>
+    <div class="mtag"><b>1.4</b>parte 1 · ¿por qué no un Excel?</div>
     <h2>Tres personas, <span class="g">un mismo Excel</span></h2>
     <div class="mnote"><span>// como</span> tres personas escribiendo en la misma hoja de papel</div>
     <p class="msub">Laura contrató a <b>Ana, Luis y Marta</b>. Los tres abren el mismo archivo de pedidos. Ana cambia una talla y guarda; Luis guarda <b>su versión vieja encima</b>… y el cambio de Ana <b>desaparece</b>.</p>
@@ -615,7 +625,7 @@ window.wireSnips=window.wireSnips||function(sec){sec.querySelectorAll('.snip').f
 </section>
 <section class="slide mu">
   <div>
-    <div class="mtag"><b>1.4</b>parte 1 · qué es una base de datos · ¿por qué no un Excel?</div>
+    <div class="mtag"><b>1.5</b>parte 1 · ¿por qué no un Excel?</div>
     <h2>50.000 pedidos <span class="g">no caben en un Excel</span></h2>
     <div class="mnote"><span>// como</span> un cuaderno que ya no cierra</div>
     <p class="msub">El archivo tarda minutos en abrir, un día <b>se daña</b> y no hay copia. Laura necesita algo hecho para esto: una <b>base de datos</b>, que guarda millones de pedidos, deja trabajar a muchos a la vez y saca copias.</p>
@@ -1521,6 +1531,21 @@ S.tipos=function(c,t){var hi=t>3.2?Math.floor((t-3.2)/1.6)%8:-1;
     box(c,x,y,265,104,{r:16,al:al,f:on?rgba(k[4],.08):'#fff',s:on?k[4]:C.line,lw:on?2:1.2,sh:on?rgba(k[4],.25):'rgba(21,29,37,.06)'});
     c.save();c.globalAlpha*=al;rr(c,x+14,y+18,52,52,14);c.fillStyle=rgba(k[4],.12);c.fill();c.restore();tx(c,k[0],x+40,y+45,{s:26,a:'center',al:al});
     tx(c,k[1],x+80,y+32,{s:16,w:800,f:FD,al:al});tx(c,k[2],x+80,y+56,{s:12,w:600,c:C.mut,al:al});tx(c,'ej: '+k[3],x+80,y+80,{s:11,w:700,f:FM,c:k[4],al:al})})};
+
+/* 1.1 · qué es: datos sueltos → ordenados → encontrados al instante */
+S.defi=function(c,t){var N=[['Camila','camiseta','M'],['Pedro','gorra','L'],['Sofía','buzo','M'],['Andrés','camiseta','L'],['Valentina','buzo','S'],['Mateo','gorra','M']],
+  SC=[[20,70,-.2],[120,130,.16],[30,200,.12],[130,260,-.15],[10,330,.2],[110,380,-.08]],cx=300,cy0=70,cw=240,ch=300;
+  var lab=E.out(P(t,.3,.4))*(1-P(t,2,.4));if(lab>0)pill(c,'datos sueltos: ¿dónde está el de Pedro?',150,30,C.red,lab,{s:11.5,f2:'#fff0f0'});
+  var dA=E.out(P(t,1.6,.6));if(dA>0){c.save();c.globalAlpha*=dA;var g=c.createLinearGradient(cx,0,cx+cw,0);g.addColorStop(0,'#f3ecff');g.addColorStop(1,'#e8f3ff');c.fillStyle=g;c.strokeStyle=rgba(C.p,.45);c.lineWidth=1.6;
+    c.beginPath();c.ellipse(cx+cw/2,cy0+ch,cw/2,22,0,0,Math.PI);c.lineTo(cx,cy0);c.ellipse(cx+cw/2,cy0,cw/2,22,0,Math.PI,0,true);c.closePath();c.fill();c.stroke();
+    c.beginPath();c.ellipse(cx+cw/2,cy0,cw/2,22,0,0,7);c.fillStyle='#fff';c.fill();c.stroke();c.restore();tx(c,'base de datos',cx+cw/2,cy0+2,{s:13,w:800,a:'center',f:FD,c:C.p,al:dA})}
+  var q=t>4.4,hit=E.out(P(t,5.2,.4));
+  N.forEach(function(n,i){var k=E.io(P(t,2+i*.15,.9)),s0=SC[i],x=s0[0]+(cx+20-s0[0])*k,y=s0[1]+(cy0+44+i*40-s0[1])*k,r=s0[2]*(1-k),w=160+(cw-200)*k,wob=(1-k)*Math.sin(t*2+i)*3;
+    c.save();c.translate(x,y+wob);c.rotate(r);var on=i===1&&hit>0;rr(c,0,0,w,32,8);c.fillStyle=on?'#f6f1ff':'#fff';c.shadowColor='rgba(21,29,37,.12)';c.shadowBlur=10;c.shadowOffsetY=3;c.fill();c.shadowBlur=0;c.shadowOffsetY=0;c.strokeStyle=on?C.p:C.line;c.lineWidth=on?2:1;c.stroke();
+    tx(c,n[0],10,17,{s:12,w:700,f:FD});tx(c,n[1]+' · '+n[2],w-10,17,{s:11,w:500,a:'right',f:FM,c:C.mut});c.restore()});
+  if(q){var qa=E.back(P(t,4.4,.5));box(c,10,150,190,58,{r:16,f:'#fff',s:rgba(C.t,.5),al:Math.min(1,qa),sh:'rgba(21,29,37,.1)'});tx(c,'tú preguntas:',26,168,{s:10.5,w:600,f:FM,c:C.mut,al:Math.min(1,qa)});tx(c,'¿el pedido de Pedro?',26,190,{s:14,w:800,f:FD,c:C.t,al:Math.min(1,qa)});
+    var k2=E.io(P(t,4.8,.5));curve(c,[200,180],[318,cy0+100],[262,186],k2,C.t,2.5);if(hit>0)pill(c,'⚡ encontrado en 2 ms',105,240,C.g,hit,{f2:'#ecfbf3'})}
+  ['guardar','encontrar','cambiar','proteger'].forEach(function(v,i){pill(c,v,60+i*130,448,[C.p,C.t,C.o,C.g][i],E.back(P(t,6+i*.2,.4))>0?Math.min(1,E.back(P(t,6+i*.2,.4))):0)})};
 
 /* motor: corre la escena de la diapositiva visible */
 var raf=0,cur=null;function tick(){return document.hidden?setTimeout(function(){frame(performance.now())},33):requestAnimationFrame(frame)}
