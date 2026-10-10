@@ -7,7 +7,7 @@
 #   cd terraform/bootstrap
 #   terraform init \
 #     -backend-config="bucket=essionix-s3-pdn-us-east-1-remotestates" \
-#     -backend-config="key=essionix-portal-alejandrobarrera/bootstrap/terraform.tfstate" \
+#     -backend-config="key=ab-web/bootstrap/terraform.tfstate" \
 #     -backend-config="region=us-east-1"
 #   terraform apply
 # ---------------------------------------------------------------------------

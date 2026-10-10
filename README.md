@@ -1,4 +1,4 @@
-# essionix-portal-alejandrobarrera
+# ab-web
 
 Sitio personal de **Alejandro Barrera** (Cloud Architect, Bogotá). One-page estático
 **bilingüe ES/EN**, estilo marca personal/creator, desplegado en **AWS (cuenta Essionix
@@ -51,7 +51,7 @@ distribuciones a la vez**, por eso el despliegue es en dos fases vía `enable_cu
   cd terraform
   terraform init \
     -backend-config="bucket=essionix-s3-pdn-us-east-1-remotestates" \
-    -backend-config="key=essionix-portal-alejandrobarrera/pdn/terraform.tfstate" \
+    -backend-config="key=ab-web/pdn/terraform.tfstate" \
     -backend-config="region=us-east-1"
   terraform apply
   aws s3 sync ../site s3://$(terraform output -raw bucket_name)/ --delete --profile essionix
